@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -35,5 +35,7 @@ namespace Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) => //options.UseSqlite(@"Data Source=mydb.db;");
         options.UseSqlServer(_configuration.GetConnectionString("ClanDatabase"));
+
+        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.SuspicionIndex > 0).ToListAsync();
     }
 }

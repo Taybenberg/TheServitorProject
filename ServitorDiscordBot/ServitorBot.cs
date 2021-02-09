@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Discord;
 using Discord.WebSocket;
 using Database;
+using BungieNetApi;
 
 namespace ServitorDiscordBot
 {
@@ -16,14 +17,15 @@ namespace ServitorDiscordBot
         private readonly ILogger _logger;
 
         private readonly ClanDatabase _database;
+        private readonly BungieNetApiClient _apiClient;
 
         private readonly DiscordSocketClient _client;
-        //private readonly Voicer _voicer = new();
 
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger)
         {
             _logger = logger;
 
+            _apiClient = new(configuration);
             _database = new(configuration, null);
 
             _client = new DiscordSocketClient();

@@ -114,6 +114,7 @@ namespace BungieNetApi
                     {
                         CharacterId = long.Parse(rawActivity.entries[i].characterId),
                         MembershipId = long.Parse(rawActivity.entries[i].player.destinyUserInfo.membershipId),
+                        MembershipType = (MembershipType)rawActivity.entries[i].player.destinyUserInfo.membershipType,
                         DisplayName = rawActivity.entries[i].player.destinyUserInfo.displayName,
                         ActivityDurationSeconds = rawActivity.entries[i].values.activityDurationSeconds.basic.value,
                         Completed = rawActivity.entries[i].values.completed.basic.value > 0,

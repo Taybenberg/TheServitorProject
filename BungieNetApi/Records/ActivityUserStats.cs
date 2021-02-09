@@ -6,6 +6,8 @@
 
         public long MembershipId { get; set; }
 
+        public MembershipType MembershipType { get; set; }
+
         public string DisplayName { get; set; }
 
         public float ActivityDurationSeconds { get; set; }
