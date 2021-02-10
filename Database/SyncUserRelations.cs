@@ -17,7 +17,7 @@ namespace Database
 
             var users = await Users.Include(u => u.Characters).ToListAsync();
 
-            var activities = await Activities.Include(s => s.ActivityUserStats).Where(a => a.Period >= currDay.AddDays(-1) && a.Period <= currDay).ToListAsync();
+            var activities = await Activities.Include(s => s.ActivityUserStats).Where(a => currDay.AddDays(-1) < a.Period && a.Period <= currDay).ToListAsync();
 
             var existingRelations = await UserRelations.ToListAsync();
 

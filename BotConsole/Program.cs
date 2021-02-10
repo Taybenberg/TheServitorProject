@@ -18,19 +18,19 @@ namespace BotConsole
                 scheduler.ScheduleAsync(async () =>
                 {
                     await host.Services.GetService<ClanDatabase>().SyncUserRelationsAsync();
-                }).DailyAt(5, 0).Zoned(TimeZoneInfo.Local);
+                }).DailyAt(5, 30).Zoned(TimeZoneInfo.Local);
 
                 scheduler.ScheduleAsync(async () =>
                 {
                     await host.Services.GetService<ClanDatabase>().SyncUsersAsync();
-                }).DailyAt(5, 5).Zoned(TimeZoneInfo.Local);
+                }).DailyAt(5, 0).Zoned(TimeZoneInfo.Local);
 
                 scheduler.ScheduleAsync(async () =>
                 {
                     Console.WriteLine(host.Services.GetService<ClanDatabase>().Activities.Count());
                     await host.Services.GetService<ClanDatabase>().SyncActivitiesAsync();
                     Console.WriteLine(host.Services.GetService<ClanDatabase>().Activities.Count());
-                }).DailyAt(5, 15).Zoned(TimeZoneInfo.Local);
+                }).DailyAt(5, 10).Zoned(TimeZoneInfo.Local);
             });
 
             host.Run();
