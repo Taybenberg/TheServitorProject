@@ -2,7 +2,6 @@
 using System.Web;
 using System.Linq;
 using System.Collections.Concurrent;
-using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;

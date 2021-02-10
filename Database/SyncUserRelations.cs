@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -18,9 +17,7 @@ namespace Database
 
             var users = await Users.Include(u => u.Characters).ToListAsync();
 
-            var activities = await Activities.Include(s => s.ActivityUserStats).Where(a => a.Period < currDay).ToListAsync();
-
-            Console.WriteLine(activities.Count() + " " + activities.Count);
+            var activities = await Activities.Include(s => s.ActivityUserStats).Where(a => a.Period >= currDay.AddDays(-1) && a.Period <= currDay).ToListAsync();
 
             var existingRelations = await UserRelations.ToListAsync();
 
@@ -44,7 +41,7 @@ namespace Database
                 }
                 else
                 {
-                    relation.Count = userActivities.Count;
+                    relation.Count += userActivities.Count;
                     updRelations.Add(relation);
                 }
 
@@ -65,7 +62,7 @@ namespace Database
                     }
                     else
                     {
-                        relation.Count = pairedActivities.Count;
+                        relations.Count += pairedActivities.Count;
                         updRelations.Add(relation);
                     }
 
@@ -82,7 +79,7 @@ namespace Database
                     }
                     else
                     {
-                        relation.Count = pairedActivities.Count;
+                        relations.Count += pairedActivities.Count;
                         updRelations.Add(relation);
                     }
                 });
