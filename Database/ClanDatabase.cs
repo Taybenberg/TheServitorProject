@@ -29,12 +29,16 @@ namespace Database
 
             _apiClient = new BungieNetApiClient(configuration);
 
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options) => //options.UseSqlite(@"Data Source=mydb.db;");
-        options.UseSqlServer(_configuration.GetConnectionString("ClanDatabase"));
+        protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite(_configuration.GetConnectionString("ClanDatabase"));
+
+        public bool IsDiscordUserRegisteredAsync(ulong discordID) => Users.Any(x => x.DiscordUserID == discordID);
+
+        public async Task<User> GetUserByDiscordIdAsync(ulong discordID) => await Users.Include(x => x.UserRelations).FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+
+        public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) => await Users.Where(x => x.UserName.ToLower().Contains(userName)).ToListAsync();
 
         public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.SuspicionIndex > 0).ToListAsync();
     }

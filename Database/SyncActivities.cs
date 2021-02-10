@@ -15,13 +15,12 @@ namespace Database
         {
             _logger.LogInformation($"{DateTime.Now} Syncing Activities");
 
-            var currDate = DateTime.Now.Date;
-            DateTime date = currDate.AddDays(-(int)currDate.DayOfWeek - 6);
+            DateTime date = DateTime.Now.AddDays(-7);
 
             ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
 
             var lastKnownActivities = Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity)
-                .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault() }).ToList();
+                .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.ActivityID).FirstOrDefault() }).ToList();
 
             Parallel.ForEach(lastKnownActivities, (last) =>
             {

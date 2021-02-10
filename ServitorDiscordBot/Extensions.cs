@@ -11,5 +11,10 @@ namespace ServitorDiscordBot
         {
             return await apiClient.GetActivityDetailsAsync(activity.ActivityID.ToString());
         }
+
+        public static Database.User GetUser2Async(this Database.UserRelations relation, ClanDatabase database)
+        {
+            return database.Users.Find(relation.User2ID);
+        }
     }
 }

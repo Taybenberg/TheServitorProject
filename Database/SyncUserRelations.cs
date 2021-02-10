@@ -14,13 +14,13 @@ namespace Database
         {
             _logger.LogInformation($"{DateTime.Now} Syncing UserRelations");
 
-            var currDate = DateTime.Now.Date;
-            DateTime mondayOfLastWeek = currDate.AddDays(-(int)currDate.DayOfWeek - 6);
-            DateTime mondayOfCurrWeek = mondayOfLastWeek.AddDays(7);
+            DateTime currDay = DateTime.Now.Date;
 
             var users = await Users.Include(u => u.Characters).ToListAsync();
 
-            var activities = await Activities.Where(a => a.Period >= mondayOfLastWeek && a.Period < mondayOfCurrWeek).Include(s => s.ActivityUserStats).ToListAsync();
+            var activities = await Activities.Include(s => s.ActivityUserStats).Where(a => a.Period < currDay).ToListAsync();
+
+            Console.WriteLine(activities.Count() + " " + activities.Count);
 
             var existingRelations = await UserRelations.ToListAsync();
 
@@ -39,12 +39,12 @@ namespace Database
                     {
                         User1ID = users[i].UserID,
                         User2ID = null,
-                        Count = userActivities.Count()
+                        Count = userActivities.Count
                     });
                 }
                 else
                 {
-                    relation.Count += userActivities.Count();
+                    relation.Count = userActivities.Count;
                     updRelations.Add(relation);
                 }
 
@@ -60,12 +60,12 @@ namespace Database
                         {
                             User1ID = users[i].UserID,
                             User2ID = users[j].UserID,
-                            Count = pairedActivities.Count()
+                            Count = pairedActivities.Count
                         });
                     }
                     else
                     {
-                        relation.Count += pairedActivities.Count();
+                        relation.Count = pairedActivities.Count;
                         updRelations.Add(relation);
                     }
 
@@ -77,12 +77,12 @@ namespace Database
                         {
                             User1ID = users[j].UserID,
                             User2ID = users[i].UserID,
-                            Count = pairedActivities.Count()
+                            Count = pairedActivities.Count
                         });
                     }
                     else
                     {
-                        relation.Count += pairedActivities.Count();
+                        relation.Count = pairedActivities.Count;
                         updRelations.Add(relation);
                     }
                 });

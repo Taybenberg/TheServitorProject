@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Coravel;
@@ -16,15 +15,13 @@ namespace BotConsole
     {
         static void Main(string[] args)
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-
             IHost host = CreateHostBuilder(args).Build();
             
             host.Services.UseScheduler(scheduler => {
                 scheduler.ScheduleAsync(async () =>
                 {
                     await host.Services.GetService<ClanDatabase>().SyncUserRelationsAsync();
-                }).DailyAt(5, 0).Tuesday().Zoned(TimeZoneInfo.Local);
+                }).DailyAt(5, 0).Zoned(TimeZoneInfo.Local);
 
                 scheduler.ScheduleAsync(async () =>
                 {
