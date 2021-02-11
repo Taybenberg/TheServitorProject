@@ -15,13 +15,12 @@ namespace BungieNetApi
         private readonly ApiKey _xApiKey;
 
         private readonly long _clanId;
+
         public BungieNetApiClient(IConfiguration configuration)
         {
-            var section = configuration.GetSection("Destiny2");
+            _clanId = configuration.GetSection("Destiny2:ClanID").Get<long>();
 
-            _clanId = long.Parse(section["ClanID"]);
-
-            _xApiKey = section.GetSection("BugieApiKey").Get<ApiKey>();
+            _xApiKey = configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>();
         }
 
         public async Task<IEnumerable<(string sign, string name)>> GetUserClansAsync(MembershipType membershipType, long membershipId)

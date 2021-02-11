@@ -21,12 +21,12 @@ namespace ServitorDiscordBot
 
         private readonly DiscordSocketClient _client;
 
-        public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger)
+        public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, ClanDatabase database, BungieNetApiClient apiClient)
         {
             _logger = logger;
 
-            _apiClient = new(configuration);
-            _database = new(configuration, null);
+            _apiClient = apiClient;
+            _database = database;
 
             _client = new DiscordSocketClient();
 

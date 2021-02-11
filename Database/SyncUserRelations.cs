@@ -26,7 +26,7 @@ namespace Database
 
             Parallel.For(0, users.Count, (i) =>
             {
-                var userActivities = users[i].Characters.SelectMany(c => activities.Where(a => a.ActivityUserStats.Where(s => s.CharacterID == c.CharacterID).Any())).Distinct().ToList();
+                var userActivities = users[i].Characters.SelectMany(c => activities.Where(a => a.ActivityUserStats.Where(s => s.CharacterID == c.CharacterID).Any())).Distinct();
 
                 var relation = existingRelations.FirstOrDefault(x => x.User1ID == users[i].UserID && x.User2ID == null);
 
@@ -36,18 +36,18 @@ namespace Database
                     {
                         User1ID = users[i].UserID,
                         User2ID = null,
-                        Count = userActivities.Count
+                        Count = userActivities.Count()
                     });
                 }
                 else
                 {
-                    relation.Count += userActivities.Count;
+                    relation.Count += userActivities.Count();
                     updRelations.Add(relation);
                 }
 
                 Parallel.For(i + 1, users.Count, (j) =>
                 {
-                    var pairedActivities = users[j].Characters.SelectMany(c => userActivities.Where(a => a.ActivityUserStats.Where(s => s.CharacterID == c.CharacterID).Any())).Distinct().ToList();
+                    var pairedActivities = users[j].Characters.SelectMany(c => userActivities.Where(a => a.ActivityUserStats.Where(s => s.CharacterID == c.CharacterID).Any())).Distinct();
 
                     var relations = existingRelations.FirstOrDefault(x => x.User1ID == users[i].UserID && x.User2ID == users[j].UserID);
 
@@ -57,12 +57,12 @@ namespace Database
                         {
                             User1ID = users[i].UserID,
                             User2ID = users[j].UserID,
-                            Count = pairedActivities.Count
+                            Count = pairedActivities.Count()
                         });
                     }
                     else
                     {
-                        relations.Count += pairedActivities.Count;
+                        relations.Count += pairedActivities.Count();
                         updRelations.Add(relation);
                     }
 
@@ -74,12 +74,12 @@ namespace Database
                         {
                             User1ID = users[j].UserID,
                             User2ID = users[i].UserID,
-                            Count = pairedActivities.Count
+                            Count = pairedActivities.Count()
                         });
                     }
                     else
                     {
-                        relations.Count += pairedActivities.Count;
+                        relations.Count += pairedActivities.Count();
                         updRelations.Add(relation);
                     }
                 });

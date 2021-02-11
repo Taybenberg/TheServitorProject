@@ -2,19 +2,17 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using BungieNetApi;
 
 namespace Database
 {
-    public partial class ClanDatabase : DbContext
+    public partial class ClanDatabase : DbContext, IDisposable
     {
-        private IConfiguration _configuration;
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
-        private BungieNetApiClient _apiClient;
+        private readonly BungieNetApiClient _apiClient;
 
         public DbSet<User> Users { get; set; }
         public DbSet<Character> Characters { get; set; }
@@ -22,24 +20,28 @@ namespace Database
         public DbSet<ActivityUserStats> ActivityUserStats { get; set; }
         public DbSet<UserRelations> UserRelations { get; set; }
 
-        public ClanDatabase(IConfiguration configuration, ILogger<ClanDatabase> logger) : base()
+        public ClanDatabase(ILogger<ClanDatabase> logger, DbContextOptions<ClanDatabase> options, BungieNetApiClient apiClient) : base(options)
         {
-            _configuration = configuration;
             _logger = logger;
 
-            _apiClient = new BungieNetApiClient(configuration);
+            _apiClient = apiClient;
 
             Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite(_configuration.GetConnectionString("ClanDatabase"));
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
 
-        public bool IsDiscordUserRegisteredAsync(ulong discordID) => Users.Any(x => x.DiscordUserID == discordID);
+        public bool IsDiscordUserRegistered(ulong discordID) => Users.Any(x => x.DiscordUserID == discordID);
 
         public async Task<User> GetUserByDiscordIdAsync(ulong discordID) => await Users.Include(x => x.UserRelations).FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
         public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) => await Users.Where(x => x.UserName.ToLower().Contains(userName)).ToListAsync();
 
-        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.SuspicionIndex > 0).ToListAsync();
+        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.ActivityType != ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
+
+        public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.ActivityType == ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
     }
 }

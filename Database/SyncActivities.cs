@@ -19,8 +19,8 @@ namespace Database
 
             ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
 
-            var lastKnownActivities = Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity)
-                .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault() }).ToList();
+            var lastKnownActivities = await Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity)
+                .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault() }).ToListAsync();
 
             Parallel.ForEach(lastKnownActivities, (last) =>
             {
@@ -45,9 +45,9 @@ namespace Database
                         {
                             int? suspicionIndex = null;
 
-                            var clanmateStats = act.ActivityUserStats.Where(x => lastKnownActivities.Any(y => y.Character.UserID == x.MembershipId)).ToList();
+                            var clanmateStats = act.ActivityUserStats.Where(x => lastKnownActivities.Any(y => y.Character.CharacterID == x.CharacterId));
 
-                            if (act.ActivityUserStats.Count() > clanmateStats.Count &&
+                            if (act.ActivityUserStats.Count() > clanmateStats.Count() &&
                             act.ActivityType switch
                             {
                                 ActivityType.TrialsOfOsiris or
@@ -57,7 +57,7 @@ namespace Database
                                 _ => false
                             })
                             {
-                                suspicionIndex = act.ActivityUserStats.Count() - clanmateStats.Count - (act.ActivityType == ActivityType.TrialsOfOsiris ? 3 : 0);
+                                suspicionIndex = act.ActivityUserStats.Count() - clanmateStats.Count() - (act.ActivityType == ActivityType.TrialsOfOsiris ? 3 : 0);
 
                                 if (suspicionIndex <= 0)
                                     suspicionIndex = null;
@@ -87,7 +87,7 @@ namespace Database
                 }
             });
 
-            await Activities.AddRangeAsync(newActivitiesDictionary.Select(x => x.Value));
+            Activities.AddRange(newActivitiesDictionary.Select(x => x.Value).OrderBy(y => y.Period));
 
             await SaveChangesAsync();
 

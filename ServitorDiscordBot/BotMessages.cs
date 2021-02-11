@@ -32,31 +32,14 @@ namespace ServitorDiscordBot
                     $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*" +
                     $"\n***мої партнери*** - *список партнерів ґардіана*" +
                     $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*" +
-                    $"\n***відступники*** - *виявити потенційно небезпечні активності*");
+                    $"\n***відступники*** - *виявити потенційно небезпечні активності*" +
+                    $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*");
             }
             else if (command == "мої активності")
             {
-                if (_database.IsDiscordUserRegisteredAsync(message.Author.Id))
+                if (_database.IsDiscordUserRegistered(message.Author.Id))
                 {
-                    var user = await _database.GetUserByDiscordIdAsync(message.Author.Id);
-
-                    if (user is null)
-                    {
-                        await message.Channel.SendMessageAsync("Сталася помилка. Можливо ви не зареєстровані.");
-                    }
-                    else
-                    {
-                        var relation = user.UserRelations.Where(x => x.User2ID is null).FirstOrDefault();
-
-                        if (relation is null)
-                        {
-                            await message.Channel.SendMessageAsync("Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ж не грали у цьому році.");
-                        }
-                        else
-                        {
-                            await message.Channel.SendMessageAsync($"Неймовірно! {relation.Count} активностей на рахунку {message.Author.Mention}! Так тримати!");
-                        }
-                    }
+                    await GetUserActivitiesAsync(message);
                 }
                 else
                 {
@@ -65,37 +48,9 @@ namespace ServitorDiscordBot
             }
             else if (command == "мої партнери")
             {
-                if (_database.IsDiscordUserRegisteredAsync(message.Author.Id))
+                if (_database.IsDiscordUserRegistered(message.Author.Id))
                 {
-                    var user = await _database.GetUserByDiscordIdAsync(message.Author.Id);
-
-                    if (user is null)
-                    {
-                        await message.Channel.SendMessageAsync("Сталася помилка. Можливо ви не зареєстровані.");
-                    }
-                    else
-                    {
-                        var relations = user.UserRelations.Where(x => x.User2ID is not null && x.Count > 0);
-
-                        if (!relations.Any())
-                        {
-                            await message.Channel.SendMessageAsync("Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.");
-                        }
-                        else
-                        {
-                            string list = $"Отже, {message.Author.Mention} грає у активності з наступними ґардіанами:";
-
-                            foreach (var relation in relations.OrderByDescending(x => x.Count))
-                            {
-                                var user2 = relation.GetUser2Async(_database);
-
-                                if (user2 is not null)
-                                    list += $"\n{user2.UserName} - {relation.Count}";
-                            }
-
-                            await message.Channel.SendMessageAsync(list);
-                        }
-                    }
+                    await GetUserPartnersAsync(message);
                 }
                 else
                 {
@@ -104,7 +59,7 @@ namespace ServitorDiscordBot
             }
             else if (command == "реєстрація")
             {
-                if (_database.IsDiscordUserRegisteredAsync(message.Author.Id))
+                if (_database.IsDiscordUserRegistered(message.Author.Id))
                 {
                     await message.Channel.SendMessageAsync("Ґардіане, ви вже зареєстровані…");
                 }
@@ -116,65 +71,21 @@ namespace ServitorDiscordBot
                         $"Регістр літер не має значення, можете написати лише фрагмент нікнейму, але він має містити достатню кількіть символів для точної ідентифікації профілю.");
                 }
             }
+            else if (command is "100k" or "100к")
+            {
+                await FindSuspiciousAsync(message, true);
+            }    
             else if (command == "відступники")
             {
-                var notification = await message.Channel.SendMessageAsync("Шукаю інформацію, на це мені знадобиться трохи часу…");
-
-                ConcurrentDictionary<DateTime, string> activityDetails = new();
-
-                var activities = await _database.GetSuspiciousActivitiesAsync(DateTime.Now.AddDays(-7));
-
-                Parallel.ForEach(activities, (activity) =>
-                {
-                    string details = $" {activity.ActivityType}";
-
-                    var act = activity.GetActivityAdditionalDetailsAsync(_apiClient).Result;
-
-                    if (activity.ActivityType == BungieNetApi.ActivityType.ScoredNightfall)
-                        details += $" {act.ActivityUserStats.First().TeamScore}";
-
-                    foreach (var u in act.ActivityUserStats)
-                    {
-                        var clans = _apiClient.GetUserClansAsync(u.MembershipType, u.MembershipId).Result;
-
-                        details += $"\n{u.DisplayName} {HttpUtility.HtmlDecode(string.Join(",", clans))}";
-                    }
-
-                    activityDetails.TryAdd(activity.Period, details);
-                });
-
-                await message.Channel.SendMessageAsync($"За останні 7 днів знайдено активностей: {activityDetails.Count}. Увага, чутливим не читати!\n" +
-                    $"||{string.Join("\n\n", activityDetails.OrderByDescending(x => x.Key))}||");
-
-                await notification.DeleteAsync();
+                await FindSuspiciousAsync(message, false);
             }
             else if (command.Contains("зареєструвати"))
             {
                 var nickname = command.Replace("зареєструватися ", "").Replace("зареєструватись ", "").Replace("зареєструвати ", "");
 
-                if (!_database.IsDiscordUserRegisteredAsync(message.Author.Id) && nickname.Length > 0)
+                if (!_database.IsDiscordUserRegistered(message.Author.Id) && nickname.Length > 0)
                 {
-                    var users = (await _database.GetUsersByUserNameAsync(nickname)).Where(x => x.DiscordUserID is null);
-
-                    if (users.Count() < 1)
-                    {
-                        await message.Channel.SendMessageAsync("Не можу знайти гравця. Перевірте запит.");
-                    }
-                    else if (users.Count() > 1)
-                    {
-                        await message.Channel.SendMessageAsync($"Уточніть нікнейм, бо за цим шаблоном знайдено кілька гравців: {string.Join(", ", users.Select(x => x.UserName))}");
-                    }
-                    else
-                    {
-                        var user = users.First();
-
-                        user.DiscordUserID = message.Author.Id;
-
-                        _database.Users.Update(user);
-                        await _database.SaveChangesAsync();
-                        
-                        await message.Channel.SendMessageAsync($"Зареєстровано {message.Author.Mention} як гравця {user.UserName}");
-                    }
+                    await RegisterAsync(message, nickname);
                 }
                 else
                 {
