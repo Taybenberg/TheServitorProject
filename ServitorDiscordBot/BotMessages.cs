@@ -12,8 +12,13 @@ namespace ServitorDiscordBot
     {
         private async Task MessageReceivedAsync(SocketMessage message)
         {
-            if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || (message.Channel.Name.ToLower() != "destiny_bot" && message.Channel.Name.ToLower() != "servitor_beta"))
+#if DEBUG
+            if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "servitor_beta")
                 return;
+#else
+            if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "destiny_bot")
+                return;
+#endif
 
             var command = message.Content.ToLower();
 
@@ -32,7 +37,7 @@ namespace ServitorDiscordBot
                     $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*" +
                     $"\n***мої партнери*** - *список партнерів ґардіана*" +
                     $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*" +
-                    $"\n***відступники*** - *виявити потенційно небезпечні активності*" +
+                    $"\n***відступники*** - *виявити потенційно небезпечні активності окрім нальотів*" +
                     $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*");
             }
             else if (command == "мої активності")
