@@ -20,11 +20,13 @@ namespace BotConsole
             host.Services.UseScheduler(scheduler => {
                 scheduler.ScheduleAsync(async () =>
                 {
-                    await host.Services.GetService<ClanDatabase>().SyncUsersAsync();
+                    var db = host.Services.GetService<ClanDatabase>();
 
-                    await host.Services.GetService<ClanDatabase>().SyncActivitiesAsync();
+                    await db.SyncUsersAsync();
 
-                    await host.Services.GetService<ClanDatabase>().SyncUserRelationsAsync();
+                    await db.SyncActivitiesAsync();
+
+                    await db.SyncUserRelationsAsync();
                 }).DailyAt(5, 0).Zoned(TimeZoneInfo.Local);
             });
 
@@ -37,7 +39,7 @@ namespace BotConsole
                 {
                     services.AddScheduler();
 
-                    services.AddSingleton<BungieNetApiClient>();
+                    services.AddScoped<BungieNetApiClient>();
 
                     services.AddDbContext<ClanDatabase>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
                     

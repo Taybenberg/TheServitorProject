@@ -42,39 +42,15 @@ namespace ServitorDiscordBot
             }
             else if (command == "мої активності")
             {
-                if (_database.IsDiscordUserRegistered(message.Author.Id))
-                {
-                    await GetUserActivitiesAsync(message);
-                }
-                else
-                {
-                    await message.Channel.SendMessageAsync("Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***");
-                }
+                await GetUserActivitiesAsync(message);
             }
             else if (command == "мої партнери")
             {
-                if (_database.IsDiscordUserRegistered(message.Author.Id))
-                {
-                    await GetUserPartnersAsync(message);
-                }
-                else
-                {
-                    await message.Channel.SendMessageAsync("Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***");
-                }
+                await GetUserPartnersAsync(message);
             }
             else if (command == "реєстрація")
             {
-                if (_database.IsDiscordUserRegistered(message.Author.Id))
-                {
-                    await message.Channel.SendMessageAsync("Ґардіане, ви вже зареєстровані…");
-                }
-                else
-                {
-                    await message.Channel.SendMessageAsync($"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**. " +
-                        $"Якщо це так, можемо продовжити.\nВведіть команду ***зареєструватися [ваш ігровий нікнейм]***\n" +
-                        $"Приклад команди: ***зареєструватися {_client.CurrentUser.Username}***\n" +
-                        $"Регістр літер не має значення, можете написати лише фрагмент нікнейму, але він має містити достатню кількіть символів для точної ідентифікації профілю.");
-                }
+                await RegisterAsync(message);
             }
             else if (command is "100k" or "100к")
             {
@@ -88,14 +64,7 @@ namespace ServitorDiscordBot
             {
                 var nickname = command.Replace("зареєструватися ", "").Replace("зареєструватись ", "").Replace("зареєструвати ", "");
 
-                if (!_database.IsDiscordUserRegistered(message.Author.Id) && nickname.Length > 0)
-                {
-                    await RegisterAsync(message, nickname);
-                }
-                else
-                {
-                    await message.Channel.SendMessageAsync("Ґардіане, ви вже зареєстровані…");
-                }
+                await RegisterUserAsync(message, nickname);
             }
             else if (message.MentionedUsers.Where(x => x.Username == _client.CurrentUser.Username).Count() > 0 && command.Contains("привітайся"))
             {

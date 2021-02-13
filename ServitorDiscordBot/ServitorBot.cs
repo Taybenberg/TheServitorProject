@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.WebSocket;
-using Database;
-using BungieNetApi;
 
 namespace ServitorDiscordBot
 {
@@ -16,17 +15,15 @@ namespace ServitorDiscordBot
     {
         private readonly ILogger _logger;
 
-        private readonly ClanDatabase _database;
-        private readonly BungieNetApiClient _apiClient;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly DiscordSocketClient _client;
 
-        public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, ClanDatabase database, BungieNetApiClient apiClient)
+        public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
 
-            _apiClient = apiClient;
-            _database = database;
+            _scopeFactory = scopeFactory;
 
             _client = new DiscordSocketClient();
 
