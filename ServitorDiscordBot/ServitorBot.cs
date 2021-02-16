@@ -19,6 +19,8 @@ namespace ServitorDiscordBot
 
         private readonly DiscordSocketClient _client;
 
+        private readonly string clanIconUrl, clanUrl, clanName;
+
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
@@ -32,6 +34,10 @@ namespace ServitorDiscordBot
             _client.MessageReceived += MessageReceivedAsync;
 
             _client.LoginAsync(TokenType.Bot, configuration["DiscordBotToken"]).Wait();
+
+            clanIconUrl = configuration["Destiny2:ClanIconURL"];
+            clanUrl = configuration["Destiny2:ClanURL"];
+            clanName = configuration["Destiny2:ClanName"];
 
             _client.SetGameAsync("Destiny 2").Wait();
         }
@@ -65,6 +71,16 @@ namespace ServitorDiscordBot
             _logger.Log(logLevel, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
 
             return Task.CompletedTask;
+        }
+
+        private EmbedFooterBuilder GetFooter()
+        {
+            var footer = new EmbedFooterBuilder();
+
+            footer.IconUrl = _client.CurrentUser.GetAvatarUrl();
+            footer.Text = $"Ваш відданий {_client.CurrentUser.Username}";
+
+            return footer;
         }
     }
 }
