@@ -19,8 +19,6 @@ namespace Database
 
             ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
 
-            var activityIDs = await Activities.Where(x => x.Period > date).Select(y => y.ActivityID).ToListAsync();
-
             var lastKnownActivities = await Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity)
                 .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault() }).ToListAsync();
 
@@ -47,7 +45,7 @@ namespace Database
                         {
                             int? suspicionIndex = null;
 
-                            var clanmateStats = act.ActivityUserStats.Where(x => lastKnownActivities.Any(y => y.Character.CharacterID == x.CharacterId));
+                            var clanmateStats = act.ActivityUserStats.Where(x => lastKnownActivities.Any(y => y.Character.UserID == x.MembershipId));
 
                             if (act.ActivityUserStats.Count() > clanmateStats.Count() &&
                             act.ActivityType switch
@@ -89,7 +87,7 @@ namespace Database
                 }
             });
 
-            Activities.AddRange(newActivitiesDictionary.Where(a => !activityIDs.Contains(a.Key)).Select(x => x.Value).OrderBy(y => y.Period));
+            Activities.AddRange(newActivitiesDictionary.Select(x => x.Value).OrderBy(y => y.Period));
 
             await SaveChangesAsync();
 
