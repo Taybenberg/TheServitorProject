@@ -41,7 +41,7 @@ namespace Database
                     while ((newActivitiesBuffer = _apiClient.GetUserActivitiesAsync(last.Character.User.MembershipType, last.Character.UserID, last.Character.CharacterID, count, page++)
                     .Result.Select(x => x.Value).Where(newActivitiesFilter)).Any())
                     {
-                        Parallel.ForEach(newActivitiesBuffer.Where(x => !newActivitiesDictionary.ContainsKey(x.InstanceId)), (act) =>
+                        foreach(var act in newActivitiesBuffer.Where(x => !newActivitiesDictionary.ContainsKey(x.InstanceId)))
                         {
                             int? suspicionIndex = null;
 
@@ -69,7 +69,8 @@ namespace Database
                                 Period = act.Period,
                                 ActivityType = act.ActivityType,
                                 SuspicionIndex = suspicionIndex,
-                                ActivityUserStats = clanmateStats.Select(y =>
+                                ActivityUserStats = clanmateStats
+                                .Where(x => lastKnownActivities.Any(y => y.Character.CharacterID == x.CharacterId)).Select(y =>
                                 new ActivityUserStats
                                 {
                                     ActivityID = act.InstanceId,
@@ -82,7 +83,7 @@ namespace Database
                                     StandingDisplayValue = y.StandingDisplayValue
                                 }).ToList()
                             });
-                        });
+                        }
                     }
                 }
             });
