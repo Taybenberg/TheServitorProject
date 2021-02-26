@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,12 +37,47 @@ namespace Database
 
         public bool IsDiscordUserRegistered(ulong discordID) => Users.Any(x => x.DiscordUserID == discordID);
 
-        public async Task<User> GetUserByDiscordIdAsync(ulong discordID) => await Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+        public async Task<User> GetUserActivitiesAsync(ulong discordID) => await Users.Include(x => x.Characters).ThenInclude(y => y.ActivityUserStats).ThenInclude(a => a.Activity).FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
         public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) => await Users.Where(x => x.UserName.ToLower().Contains(userName)).ToListAsync();
 
         public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.ActivityType != ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
 
         public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.ActivityType == ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
+
+        public async Task RegisterUserAsync(long userID, ulong discordID)
+        {
+            var user = Users.Find(userID);
+
+            if (user is not null)
+            {
+                user.DiscordUserID = discordID;
+
+                Users.Update(user);
+
+                await SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<(string UserName, int Count)>> GetUserPartnersAsync(ulong discordID)
+        {
+            var user = await Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+
+            ConcurrentBag<(string userName, int count)> relations = new();
+
+            if (user is not null)
+            {
+                var acts = await Activities.Include(a => a.ActivityUserStats).ThenInclude(c => c.Character).Where(x => x.ActivityUserStats.Any(y => y.Character.UserID == user.UserID)).ToListAsync();
+
+                var users = Users.Where(x => x.UserID != user.UserID);
+
+                Parallel.ForEach(users, usr =>
+                {
+                    relations.Add((usr.UserName, acts.Where(x => x.ActivityUserStats.Any(x => x.Character.UserID == usr.UserID)).Count()));
+                });
+            }
+
+            return relations.Where(x => x.count > 0).OrderByDescending(x => x.count);
+        }
     }
 }

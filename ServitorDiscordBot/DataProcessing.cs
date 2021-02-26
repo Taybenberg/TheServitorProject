@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Linq;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,18 +86,7 @@ namespace ServitorDiscordBot
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
             if (database.IsDiscordUserRegistered(message.Author.Id))
-            {
-                var builder = new EmbedBuilder();
-
-                builder.Color = Color.Orange;
-
-                builder.Title = "Реєстрація";
-                builder.Description = "Ґардіане, ви вже зареєстровані…";
-
-                builder.Footer = GetFooter();
-
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-            }
+                await UserAlreadyRegisteredAsync(message);
             else
             {
                 var builder = new EmbedBuilder();
@@ -125,66 +115,39 @@ namespace ServitorDiscordBot
             {
                 var users = (await database.GetUsersByUserNameAsync(nickname)).Where(x => x.DiscordUserID is null);
 
+                var builder = new EmbedBuilder();
+
+                builder.Title = "Реєстрація";
+
+                builder.Footer = GetFooter();
+
                 if (users.Count() < 1)
                 {
-                    var builder = new EmbedBuilder();
+                    builder.Color = Color.DarkMagenta;
 
-                    builder.Color = Color.Magenta;
-
-                    builder.Title = "Реєстрація";
                     builder.Description = "Не можу знайти гравця. Перевірте запит.";
-
-                    builder.Footer = GetFooter();
-
-                    await message.Channel.SendMessageAsync(embed: builder.Build());
                 }
                 else if (users.Count() > 1)
                 {
-                    var builder = new EmbedBuilder();
+                    builder.Color = Color.DarkMagenta;
 
-                    builder.Color = Color.Magenta;
-
-                    builder.Title = "Реєстрація";
                     builder.Description = $"Уточніть нікнейм, бо за цим шаблоном знайдено кілька гравців: {string.Join(", ", users.Select(x => x.UserName))}";
-
-                    builder.Footer = GetFooter();
-
-                    await message.Channel.SendMessageAsync(embed: builder.Build());
                 }
                 else
                 {
                     var user = users.First();
 
-                    user.DiscordUserID = message.Author.Id;
-
-                    database.Users.Update(user);
-                    await database.SaveChangesAsync();
-
-                    var builder = new EmbedBuilder();
+                    await database.RegisterUserAsync(user.UserID, message.Author.Id);
 
                     builder.Color = Color.DarkGreen;
 
-                    builder.Title = "Реєстрація";
                     builder.Description = $"Зареєстровано {message.Author.Mention} як гравця {user.UserName}";
-
-                    builder.Footer = GetFooter();
-
-                    await message.Channel.SendMessageAsync(embed: builder.Build());
                 }
-            }
-            else
-            {
-                var builder = new EmbedBuilder();
-
-                builder.Color = Color.Orange;
-
-                builder.Title = "Реєстрація";
-                builder.Description = "Ґардіане, ви вже зареєстровані…";
-
-                builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
+            else
+                await UserAlreadyRegisteredAsync(message);
         }
 
         private async Task GetUserPartnersAsync(SocketMessage message)
@@ -193,78 +156,33 @@ namespace ServitorDiscordBot
 
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
-            if (database.IsDiscordUserRegistered(message.Author.Id))
+            if (!database.IsDiscordUserRegistered(message.Author.Id))
+                await UserIsNotRegisteredAsync(message);
+            else
             {
-                var user = await database.GetUserByDiscordIdAsync(message.Author.Id);
+                var partners = await database.GetUserPartnersAsync(message.Author.Id);
 
-                if (user is null)
+                var builder = new EmbedBuilder();
+
+                builder.Title = $"Партнери {message.Author.Username}";
+
+                builder.Footer = GetFooter();
+
+                if (!partners.Any())
                 {
-                    var builder = new EmbedBuilder();
-
                     builder.Color = Color.Red;
-
-                    builder.Title = $"Партнери {message.Author.Username}";
-                    builder.Description = "Сталася помилка. Можливо ви не зареєстровані.";
-
-                    builder.Footer = GetFooter();
-
-                    await message.Channel.SendMessageAsync(embed: builder.Build());
+                
+                    builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    builder.Color = Color.Green;
 
-                    /*
-                    var relations = user.UserRelations.Where(x => x.User2ID is not null && x.Count > 0);
+                    builder.Description = string.Empty;
 
-                    if (!relations.Any())
-                    {
-                        var builder = new EmbedBuilder();
-
-                        builder.Color = Color.Red;
-
-                        builder.Title = $"Партнери {message.Author.Username}";
-                        builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
-
-                        builder.Footer = GetFooter();
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    else
-                    {
-                        string list = string.Empty;
-
-                        foreach (var relation in relations.OrderByDescending(x => x.Count))
-                        {
-                            var user2 = relation.GetUser2(database);
-
-                            if (user2 is not null)
-                                list += $"{user2.UserName} - {relation.Count}\n";
-                        }
-
-                        var builder = new EmbedBuilder();
-
-                        builder.Color = Color.Green;
-
-                        builder.Title = $"Партнери {message.Author.Username}";
-                        builder.Description = list;
-
-                        builder.Footer = GetFooter();
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }*/
+                    foreach (var p in partners)
+                        builder.Description += $"{p.UserName} - {p.Count}\n";
                 }
-            }
-            else
-            {
-                var builder = new EmbedBuilder();
-
-                builder.Color = Color.Orange;
-
-                builder.Title = "Реєстрація";
-                builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
-
-                builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
@@ -276,71 +194,97 @@ namespace ServitorDiscordBot
 
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
-            if (database.IsDiscordUserRegistered(message.Author.Id))
-            {
-                var user = await database.GetUserByDiscordIdAsync(message.Author.Id);
+            var user = await database.GetUserActivitiesAsync(message.Author.Id);
 
-                if (user is null)
-                {
-                    var builder = new EmbedBuilder();
-
-                    builder.Color = Color.Red;
-
-                    builder.Title = $"Активності {message.Author.Username}";
-                    builder.Description = "Сталася помилка. Можливо ви не зареєстровані.";
-
-                    builder.Footer = GetFooter();
-
-                    await message.Channel.SendMessageAsync(embed: builder.Build());
-                }
-                else
-                {
-                    throw new NotImplementedException();
-
-                    /*
-                    var relation = user.UserRelations.Where(x => x.User2ID is null).FirstOrDefault();
-
-                    if (relation is null)
-                    {
-                        var builder = new EmbedBuilder();
-
-                        builder.Color = Color.Red;
-
-                        builder.Title = $"Активності {message.Author.Username}";
-                        builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ж не грали у цьому році.";
-
-                        builder.Footer = GetFooter();
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    else
-                    {
-                        var builder = new EmbedBuilder();
-
-                        builder.Color = Color.Gold;
-
-                        builder.Title = $"Активності {message.Author.Username}";
-                        builder.Description = $"Неймовірно! {relation.Count} активностей на рахунку {message.Author.Mention}! Так тримати!";
-
-                        builder.Footer = GetFooter();
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }*/
-                }
-            }
+            if (user is null)
+                await UserIsNotRegisteredAsync(message);
             else
             {
                 var builder = new EmbedBuilder();
 
-                builder.Color = Color.Orange;
+                builder.Color = Color.Gold;
 
-                builder.Title = "Реєстрація";
-                builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
+                builder.Title = $"Активності {message.Author.Username}";
+
+                var acts = user.Characters.SelectMany(c => c.ActivityUserStats);
+
+                builder.Description = $"Неймовірно! **{acts.Count()}** активностей на рахунку {message.Author.Mention}! Так тримати!\n\n***По класах:***";
+
+                foreach (var c in user.Characters)
+                    builder.Description += $"\n{c.Class} - {c.ActivityUserStats.Count}";
+
+                builder.Description += "\n\n***По типу активності:***";
+
+                List<(BungieNetApi.ActivityType ActivityType, int Count)> counter = new();
+
+                foreach (var type in acts.Select(x => x.Activity.ActivityType).Distinct())
+                    counter.Add((type, acts.Count(x => x.Activity.ActivityType == type)));
+
+                foreach (var count in counter.OrderByDescending(x => x.Count))
+                    builder.Description += $"\n{count.ActivityType} - {count.Count}";
 
                 builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
+        }
+
+        private async Task GetClanActivitiesAsync(SocketMessage message)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+
+            var builder = new EmbedBuilder();
+
+            builder.Color = Color.Magenta;
+
+            builder.Title = $"Активності клану {clanName}";
+
+            var acts = await database.Activities.ToListAsync();
+
+            builder.Description = $"Нічого собі! **{acts.Count}** активностей на рахунку клану!\n\n***По типу активності:***";
+
+            List<(BungieNetApi.ActivityType ActivityType, int Count)> counter = new();
+
+            foreach (var type in acts.Select(x => x.ActivityType).Distinct())
+                counter.Add((type, acts.Count(x => x.ActivityType == type)));
+
+            foreach (var count in counter.OrderByDescending(x => x.Count))
+                builder.Description += $"\n{count.ActivityType} - {count.Count}";
+
+            builder.Footer = GetFooter();
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
+        }
+
+
+        private async Task UserIsNotRegisteredAsync(SocketMessage message)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = Color.Orange;
+
+            builder.Title = "Реєстрація";
+            builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
+
+            builder.Footer = GetFooter();
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
+        }
+
+        private async Task UserAlreadyRegisteredAsync(SocketMessage message)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = Color.Orange;
+
+            builder.Title = "Реєстрація";
+            builder.Description = "Ґардіане, ви вже зареєстровані…";
+
+            builder.Footer = GetFooter();
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
     }
 }
