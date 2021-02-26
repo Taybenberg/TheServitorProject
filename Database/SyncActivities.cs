@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BungieNetApi;
 
@@ -14,6 +15,10 @@ namespace Database
         public async Task SyncActivitiesAsync()
         {
             _logger.LogInformation($"{DateTime.Now} Syncing Activities");
+
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
             DateTime date = DateTime.Now.AddDays(-7);
 
@@ -31,14 +36,14 @@ namespace Database
                 else
                     newActivitiesFilter = x => x.Period > last.Character.User.ClanJoinDate && x.Period > date;
 
-                if (_apiClient.GetUserActivitiesAsync(last.Character.User.MembershipType, last.Character.UserID, last.Character.CharacterID, 1, 0)
+                if (apiClient.GetUserActivitiesAsync(last.Character.User.MembershipType, last.Character.UserID, last.Character.CharacterID, 1, 0)
                 .Result.Select(x => x.Value).Where(newActivitiesFilter).Any())
                 {
                     int page = 0, count = 25;
 
                     IEnumerable<BungieNetApi.Activity> newActivitiesBuffer;
 
-                    while ((newActivitiesBuffer = _apiClient.GetUserActivitiesAsync(last.Character.User.MembershipType, last.Character.UserID, last.Character.CharacterID, count, page++)
+                    while ((newActivitiesBuffer = apiClient.GetUserActivitiesAsync(last.Character.User.MembershipType, last.Character.UserID, last.Character.CharacterID, count, page++)
                     .Result.Select(x => x.Value).Where(newActivitiesFilter)).Any())
                     {
                         foreach(var act in newActivitiesBuffer.Where(x => !newActivitiesDictionary.ContainsKey(x.InstanceId)))

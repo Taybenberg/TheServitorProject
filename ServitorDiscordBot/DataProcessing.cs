@@ -78,7 +78,7 @@ namespace ServitorDiscordBot
             await notification.DeleteAsync();
         }
 
-        private async Task RegisterAsync(SocketMessage message)
+        private async Task RegisterMessageAsync(SocketMessage message)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -105,7 +105,7 @@ namespace ServitorDiscordBot
 
                 builder.Title = "Реєстрація";
                 builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**. " +
-                    $"Якщо це так, можемо продовжити.\nВведіть команду ***зареєструватися [ваш ігровий нікнейм]***\n" +
+                    $"Якщо це так, можемо продовжити.\nВведіть команду ***зареєструватися [ваш нікнейм у Steam]*** (або іншій платформі, з якої ви вступили до клану)\n" +
                     $"Приклад команди: ***зареєструватися {message.Author.Username}***\n" +
                     $"Регістр літер не має значення, можете написати лише фрагмент нікнейму, але він має містити достатню кількіть символів для точної ідентифікації профілю.";
 
@@ -115,7 +115,7 @@ namespace ServitorDiscordBot
             }
         }
 
-        private async Task RegisterUserAsync(SocketMessage message, string nickname)
+        private async Task TryRegisterUserAsync(SocketMessage message, string nickname)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -212,6 +212,9 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
+                    throw new NotImplementedException();
+
+                    /*
                     var relations = user.UserRelations.Where(x => x.User2ID is not null && x.Count > 0);
 
                     if (!relations.Any())
@@ -249,7 +252,7 @@ namespace ServitorDiscordBot
                         builder.Footer = GetFooter();
 
                         await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
+                    }*/
                 }
             }
             else
@@ -292,6 +295,9 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
+                    throw new NotImplementedException();
+
+                    /*
                     var relation = user.UserRelations.Where(x => x.User2ID is null).FirstOrDefault();
 
                     if (relation is null)
@@ -319,7 +325,7 @@ namespace ServitorDiscordBot
                         builder.Footer = GetFooter();
 
                         await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
+                    }*/
                 }
             }
             else

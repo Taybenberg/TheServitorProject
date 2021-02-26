@@ -25,9 +25,6 @@ namespace Database
 
         public ICollection<Character> Characters { get; set; }
 
-        [InverseProperty("User1")]
-        public ICollection<UserRelations> UserRelations { get; set; }
-
         public ulong? DiscordUserID { get; set; }
     }
 }

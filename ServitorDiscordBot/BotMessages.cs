@@ -32,96 +32,6 @@ namespace ServitorDiscordBot
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
-            else if (command == "colors")
-            {
-                var builder = new EmbedBuilder();
-
-
-                builder.Color = Color.Blue;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkBlue;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkerGrey;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkGreen;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkGrey;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkMagenta;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkOrange;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkPurple;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkRed;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.DarkTeal;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Default;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Gold;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Green;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.LighterGrey;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.LightGrey;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.LightOrange;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Magenta;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Orange;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Purple;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Red;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-                builder.Color = Color.Teal;
-                builder.Description = builder.Color.ToString();
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-
-            }
             else if (command == "допомога")
             {
                 var builder = new EmbedBuilder();
@@ -160,7 +70,7 @@ namespace ServitorDiscordBot
             }
             else if (command == "реєстрація")
             {
-                await RegisterAsync(message);
+                await RegisterMessageAsync(message);
             }
             else if (command is "100k" or "100к")
             {
@@ -174,7 +84,7 @@ namespace ServitorDiscordBot
             {
                 var nickname = command.Replace("зареєструватися ", "").Replace("зареєструватись ", "").Replace("зареєструвати ", "");
 
-                await RegisterUserAsync(message, nickname);
+                await TryRegisterUserAsync(message, nickname);
             }
         }
     }

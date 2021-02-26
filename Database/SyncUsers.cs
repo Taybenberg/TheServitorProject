@@ -3,7 +3,9 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using BungieNetApi;
 
 namespace Database
 {
@@ -13,16 +15,16 @@ namespace Database
         {
             _logger.LogInformation($"{DateTime.Now} Syncing Users");
 
-            var usersBuffer = await _apiClient.GetUsersAsync();
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+            var usersBuffer = await apiClient.GetUsersAsync();
 
             var dbUsers = await Users.Include("Characters").ToListAsync();
 
             var diffDbUsers = dbUsers.Where(x => !usersBuffer.Any(y => y.Key == x.UserID));
             Users.RemoveRange(diffDbUsers);
-
-            var dbRelations = await UserRelations.ToListAsync();
-            var diffRelations = dbRelations.Where(x => diffDbUsers.Any(y => y.UserID == x.User1ID || y.UserID == x.User2ID));
-            UserRelations.RemoveRange(diffRelations);
 
             ConcurrentBag<User> newUsers = new();
             ConcurrentBag<User> updUsers = new();
