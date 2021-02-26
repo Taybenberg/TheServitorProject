@@ -62,7 +62,14 @@ namespace Database
                                 _ => false
                             })
                             {
-                                suspicionIndex = act.ActivityUserStats.Count() - clanmateStats.Count() - (act.ActivityType == ActivityType.TrialsOfOsiris ? 3 : 0);
+                                if (act.ActivityType == ActivityType.TrialsOfOsiris)
+                                {
+                                    suspicionIndex = act.ActivityUserStats.Select(x => x.MembershipId).Distinct().Count() - clanmateStats.Count() - 3;
+                                }
+                                else
+                                {
+                                    suspicionIndex = act.ActivityUserStats.Count() - clanmateStats.Count();
+                                }
 
                                 if (suspicionIndex <= 0)
                                     suspicionIndex = null;
