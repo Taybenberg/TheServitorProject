@@ -25,7 +25,7 @@ namespace BotConsole
                     await db.SyncUsersAsync();
 
                     await db.SyncActivitiesAsync();
-                }).Cron("0 */6 * * *");
+                }).DailyAtHour(5).Zoned(TimeZoneInfo.Local);
             });
 
             host.Run();
