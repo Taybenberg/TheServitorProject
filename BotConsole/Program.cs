@@ -26,6 +26,13 @@ namespace BotConsole
 
                     await db.SyncActivitiesAsync();
                 }).DailyAtHour(5).Zoned(TimeZoneInfo.Local);
+
+                scheduler.ScheduleAsync(async () =>
+                {
+                    var bot = host.Services.GetService<ServitorBot>();
+
+                    await bot.XurNotificationAsync();
+                }).DailyAtHour(19).Zoned(TimeZoneInfo.Local).Friday();
             });
 
             host.Run();
@@ -40,8 +47,9 @@ namespace BotConsole
                     services.AddScoped<BungieNetApiClient>();
 
                     services.AddDbContext<ClanDatabase>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
-                    
-                    services.AddHostedService<ServitorBot>();
+
+                    services.AddSingleton<ServitorBot>();
+                    services.AddHostedService(p => p.GetRequiredService<ServitorBot>());
                 });
     }
 }

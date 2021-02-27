@@ -21,6 +21,8 @@ namespace ServitorDiscordBot
 
         private readonly string clanIconUrl, clanUrl, clanName;
 
+        private readonly ulong channelId;
+
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
@@ -38,6 +40,8 @@ namespace ServitorDiscordBot
             clanIconUrl = configuration["Destiny2:ClanIconURL"];
             clanUrl = configuration["Destiny2:ClanURL"];
             clanName = configuration["Destiny2:ClanName"];
+
+            channelId = configuration.GetSection("DiscordChannelID").Get<ulong>();
 
             _client.SetGameAsync("Destiny 2").Wait();
         }
@@ -63,8 +67,8 @@ namespace ServitorDiscordBot
             {
                 LogSeverity.Critical => LogLevel.Critical,
                 LogSeverity.Warning => LogLevel.Warning,
-                LogSeverity.Debug =>  LogLevel.Debug,
-                LogSeverity.Error =>  LogLevel.Error,
+                LogSeverity.Debug => LogLevel.Debug,
+                LogSeverity.Error => LogLevel.Error,
                 _ => LogLevel.Information
             };
 
