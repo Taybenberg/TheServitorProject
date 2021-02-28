@@ -24,7 +24,7 @@ namespace Database
 
             ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
 
-            var lastKnownActivities = await Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity).Where(d => d.DateLastPlayed > date)
+            var lastKnownActivities = await Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity)
                 .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault() }).ToListAsync();
 
             Parallel.ForEach(lastKnownActivities, (last) =>
@@ -100,7 +100,7 @@ namespace Database
                 }
             });
 
-            Activities.AddRange(newActivitiesDictionary.Select(x => x.Value).OrderBy(y => y.Period));
+            Activities.AddRange(newActivitiesDictionary.Select(x => x.Value));
 
             await SaveChangesAsync();
 
