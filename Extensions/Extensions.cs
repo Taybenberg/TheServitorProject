@@ -2,7 +2,7 @@
 using BungieNetApi;
 using Database;
 
-namespace ServitorDiscordBot
+namespace Extensions
 {
     public static class Extensions
     {

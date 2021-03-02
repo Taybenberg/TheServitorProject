@@ -5,13 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.30" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BungieNetApi\BungieNetApi.csproj" />
     <ProjectReference Include="..\Database\Database.csproj" />
-    <ProjectReference Include="..\Extensions\Extensions.csproj" />
   </ItemGroup>
 
 </Project>

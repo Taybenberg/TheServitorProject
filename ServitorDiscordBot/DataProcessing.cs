@@ -9,6 +9,7 @@ using Discord;
 using Discord.WebSocket;
 using BungieNetApi;
 using Database;
+using Extensions;
 
 namespace ServitorDiscordBot
 {
