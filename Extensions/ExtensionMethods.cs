@@ -4,7 +4,7 @@ using Database;
 
 namespace Extensions
 {
-    public static class Extensions
+    public static class ExtensionMethods
     {
         public static async Task<BungieNetApi.Activity> GetActivityAdditionalDetailsAsync(this Database.Activity activity, BungieNetApiClient apiClient)
         {
