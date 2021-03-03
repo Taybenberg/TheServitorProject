@@ -68,7 +68,7 @@ namespace BungieNetApi
                 users.TryAdd(userProfile.MembershipId, userProfile);
             });
 
-            return users.OrderByDescending(x => x.Value.DateLastPlayed);
+            return users;
         }
 
         public async Task<IEnumerable<KeyValuePair<long, Activity>>> GetUserActivitiesAsync(MembershipType membershipType, long membershipId, long characterId, int count, int page)
@@ -90,7 +90,7 @@ namespace BungieNetApi
                 }
             });
 
-            return activities.OrderByDescending(x => x.Value.Period);
+            return activities;
         }
 
         public async Task<Activity> GetActivityDetailsAsync(string instanceId)
