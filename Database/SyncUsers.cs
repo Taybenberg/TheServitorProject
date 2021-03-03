@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -19,12 +20,12 @@ namespace Database
 
             var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            var usersBuffer = await apiClient.GetUsersAsync();
+            var usersBuffer = new Dictionary<long, BungieNetApi.User>(await apiClient.GetUsersAsync());
 
-            var dbUsers = await Users.Include("Characters").ToListAsync();
+            var dbUsers = await Users.Include("Characters").ToDictionaryAsync(x => x.UserID, x => x);
 
-            var diffDbUsers = dbUsers.Where(x => !usersBuffer.Any(y => y.Key == x.UserID));
-            Users.RemoveRange(diffDbUsers);
+            var diffDbUsers = dbUsers.Where(x => !usersBuffer.ContainsKey(x.Key));
+            Users.RemoveRange(diffDbUsers.Select(x => x.Value));
 
             ConcurrentBag<User> newUsers = new();
             ConcurrentBag<User> updUsers = new();
@@ -35,7 +36,7 @@ namespace Database
 
             Parallel.ForEach(usersBuffer, (usr) =>
             {
-                var dbUsr = dbUsers.FirstOrDefault(x => x.UserID == usr.Key);
+                var dbUsr = dbUsers.GetValueOrDefault(usr.Key);
 
                 if (dbUsr is null)
                 {

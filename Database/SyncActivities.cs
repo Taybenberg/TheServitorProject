@@ -24,15 +24,18 @@ namespace Database
 
             ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
 
-            var lastKnownActivities = await Characters.Include(x => x.User).Include(y => y.ActivityUserStats).ThenInclude(z => z.Activity)
-                .Select(c => new { Character = c, ActivityUserStats = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault() }).ToListAsync();
+            var lastKnownActivities = await Characters.Include(x => x.User).Select(c => new { Character = c,
+                Activity = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault().Activity }).ToListAsync();
 
-            Parallel.ForEach(lastKnownActivities, new ParallelOptions{ MaxDegreeOfParallelism = 2 }, (last) =>
+            var userIDs = lastKnownActivities.Select(x => x.Character.UserID).ToHashSet();
+            var charIDs = lastKnownActivities.Select(x => x.Character.CharacterID).ToHashSet();
+
+            Parallel.ForEach(lastKnownActivities, (last) =>
             {
                 Func<BungieNetApi.Activity, bool> newActivitiesFilter;
 
-                if (last.ActivityUserStats is not null)
-                    newActivitiesFilter = x => x.Period > last.Character.User.ClanJoinDate && x.Period > last.ActivityUserStats.Activity.Period;
+                if (last.Activity is not null)
+                    newActivitiesFilter = x => x.Period > last.Character.User.ClanJoinDate && x.Period > last.Activity.Period;
                 else
                     newActivitiesFilter = x => x.Period > last.Character.User.ClanJoinDate && x.Period > date;
 
@@ -50,7 +53,7 @@ namespace Database
                         {
                             int? suspicionIndex = null;
 
-                            var clanmateStats = act.ActivityUserStats.Where(x => lastKnownActivities.Any(y => y.Character.UserID == x.MembershipId));
+                            var clanmateStats = act.ActivityUserStats.Where(x => userIDs.Contains(x.MembershipId));
 
                             if (act.ActivityUserStats.Count() > clanmateStats.Count() &&
                             act.ActivityType switch
@@ -63,13 +66,9 @@ namespace Database
                             })
                             {
                                 if (act.ActivityType == ActivityType.TrialsOfOsiris)
-                                {
                                     suspicionIndex = act.ActivityUserStats.Select(x => x.MembershipId).Distinct().Count() - clanmateStats.Count() - 3;
-                                }
                                 else
-                                {
                                     suspicionIndex = act.ActivityUserStats.Count() - clanmateStats.Count();
-                                }
 
                                 if (suspicionIndex <= 0)
                                     suspicionIndex = null;
@@ -82,7 +81,7 @@ namespace Database
                                 ActivityType = act.ActivityType,
                                 SuspicionIndex = suspicionIndex,
                                 ActivityUserStats = clanmateStats
-                                .Where(x => lastKnownActivities.Any(y => y.Character.CharacterID == x.CharacterId)).Select(y =>
+                                .Where(x => charIDs.Contains(x.CharacterId)).Select(y =>
                                 new ActivityUserStats
                                 {
                                     ActivityID = act.InstanceId,
