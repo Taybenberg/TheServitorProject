@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace API.Destiny2.DestinyComponentType.Components100
 {
     public class Rootobject
     {
         public Response Response { get; set; }
+
+        [IgnoreDataMember]
         public int ErrorCode { get; set; }
+        [IgnoreDataMember]
         public int ThrottleSeconds { get; set; }
+        [IgnoreDataMember]
         public string ErrorStatus { get; set; }
+        [IgnoreDataMember]
         public string Message { get; set; }
+        [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
     }
 
@@ -20,17 +27,28 @@ namespace API.Destiny2.DestinyComponentType.Components100
     public class Profile
     {
         public Data data { get; set; }
+
+        [IgnoreDataMember]
         public int privacy { get; set; }
     }
 
     public class Data
     {
+        [IgnoreDataMember]
         public Userinfo userInfo { get; set; }
+
         public DateTime dateLastPlayed { get; set; }
+
+        [IgnoreDataMember]
         public int versionsOwned { get; set; }
+
         public string[] characterIds { get; set; }
+
+        [IgnoreDataMember]
         public long[] seasonHashes { get; set; }
+        [IgnoreDataMember]
         public long currentSeasonHash { get; set; }
+        [IgnoreDataMember]
         public int currentSeasonRewardPowerCap { get; set; }
     }
 

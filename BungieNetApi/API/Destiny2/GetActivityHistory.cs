@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace API.Destiny2.GetActivityHistory
 {
     public class Rootobject
     {
         public Response Response { get; set; }
+
+        [IgnoreDataMember]
         public int ErrorCode { get; set; }
+        [IgnoreDataMember]
         public int ThrottleSeconds { get; set; }
+        [IgnoreDataMember]
         public string ErrorStatus { get; set; }
+        [IgnoreDataMember]
         public string Message { get; set; }
+        [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
     }
 
@@ -19,19 +26,31 @@ namespace API.Destiny2.GetActivityHistory
 
     public class Activity
     {
+        [IgnoreDataMember]
         public DateTime period { get; set; }
+
         public Activitydetails activityDetails { get; set; }
+
+        [IgnoreDataMember]
         public Values values { get; set; }
     }
 
     public class Activitydetails
     {
+        [IgnoreDataMember]
         public long referenceId { get; set; }
+        [IgnoreDataMember]
         public long directorActivityHash { get; set; }
+
         public string instanceId { get; set; }
+
+        [IgnoreDataMember]
         public int mode { get; set; }
+        [IgnoreDataMember]
         public int[] modes { get; set; }
+        [IgnoreDataMember]
         public bool isPrivate { get; set; }
+        [IgnoreDataMember]
         public int membershipType { get; set; }
     }
 

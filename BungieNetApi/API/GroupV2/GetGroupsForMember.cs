@@ -1,24 +1,38 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace API.GroupV2.GetGroupsForMember
 {
     public class Rootobject
     {
         public Response Response { get; set; }
+
+        [IgnoreDataMember]
         public int ErrorCode { get; set; }
+        [IgnoreDataMember]
         public int ThrottleSeconds { get; set; }
+        [IgnoreDataMember]
         public string ErrorStatus { get; set; }
+        [IgnoreDataMember]
         public string Message { get; set; }
+        [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
     }
 
     public class Response
     {
+        [IgnoreDataMember]
         public Areallmembershipsinactive areAllMembershipsInactive { get; set; }
+
         public Result[] results { get; set; }
+
+        [IgnoreDataMember]
         public int totalResults { get; set; }
+        [IgnoreDataMember]
         public bool hasMore { get; set; }
+        [IgnoreDataMember]
         public Query query { get; set; }
+        [IgnoreDataMember]
         public bool useTotalResults { get; set; }
     }
 
@@ -35,7 +49,9 @@ namespace API.GroupV2.GetGroupsForMember
 
     public class Result
     {
+        [IgnoreDataMember]
         public Member member { get; set; }
+
         public Group group { get; set; }
     }
 
@@ -64,33 +80,62 @@ namespace API.GroupV2.GetGroupsForMember
 
     public class Group
     {
+        [IgnoreDataMember]
         public string groupId { get; set; }
+
         public string name { get; set; }
+
+        [IgnoreDataMember]
         public int groupType { get; set; }
+        [IgnoreDataMember]
         public string membershipIdCreated { get; set; }
+        [IgnoreDataMember]
         public DateTime creationDate { get; set; }
+        [IgnoreDataMember]
         public DateTime modificationDate { get; set; }
+        [IgnoreDataMember]
         public string about { get; set; }
+        [IgnoreDataMember]
         public object[] tags { get; set; }
+        [IgnoreDataMember]
         public int memberCount { get; set; }
+        [IgnoreDataMember]
         public bool isPublic { get; set; }
+        [IgnoreDataMember]
         public bool isPublicTopicAdminOnly { get; set; }
+        [IgnoreDataMember]
         public string motto { get; set; }
+        [IgnoreDataMember]
         public bool allowChat { get; set; }
+        [IgnoreDataMember]
         public bool isDefaultPostPublic { get; set; }
+        [IgnoreDataMember]
         public int chatSecurity { get; set; }
+        [IgnoreDataMember]
         public string locale { get; set; }
+        [IgnoreDataMember]
         public int avatarImageIndex { get; set; }
+        [IgnoreDataMember]
         public int homepage { get; set; }
+        [IgnoreDataMember]
         public int membershipOption { get; set; }
+        [IgnoreDataMember]
         public int defaultPublicity { get; set; }
+        [IgnoreDataMember]
         public string theme { get; set; }
+        [IgnoreDataMember]
         public string bannerPath { get; set; }
+        [IgnoreDataMember]
         public string avatarPath { get; set; }
+        [IgnoreDataMember]
         public string conversationId { get; set; }
+        [IgnoreDataMember]
         public bool enableInvitationMessagingForAdmins { get; set; }
+        [IgnoreDataMember]
         public DateTime banExpireDate { get; set; }
+        [IgnoreDataMember]
         public Features features { get; set; }
+
         public Claninfo clanInfo { get; set; }
     }
 
@@ -109,8 +154,12 @@ namespace API.GroupV2.GetGroupsForMember
 
     public class Claninfo
     {
+        [IgnoreDataMember]
         public D2clanprogressions d2ClanProgressions { get; set; }
+
         public string clanCallsign { get; set; }
+
+        [IgnoreDataMember]
         public Clanbannerdata clanBannerData { get; set; }
     }
 

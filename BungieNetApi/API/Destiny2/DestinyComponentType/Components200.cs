@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace API.Destiny2.DestinyComponentType.Components200
 {
@@ -6,10 +7,16 @@ namespace API.Destiny2.DestinyComponentType.Components200
     public class Rootobject
     {
         public Response Response { get; set; }
+
+        [IgnoreDataMember]
         public int ErrorCode { get; set; }
+        [IgnoreDataMember]
         public int ThrottleSeconds { get; set; }
+        [IgnoreDataMember]
         public string ErrorStatus { get; set; }
+        [IgnoreDataMember]
         public string Message { get; set; }
+        [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
     }
 
@@ -21,32 +28,55 @@ namespace API.Destiny2.DestinyComponentType.Components200
     public class Character
     {
         public Data data { get; set; }
+
+        [IgnoreDataMember]
         public int privacy { get; set; }
     }
 
     public class Data
     {
         public string membershipId { get; set; }
+
+        [IgnoreDataMember]
         public int membershipType { get; set; }
+
         public string characterId { get; set; }
         public DateTime dateLastPlayed { get; set; }
+
+        [IgnoreDataMember]
         public string minutesPlayedThisSession { get; set; }
+        [IgnoreDataMember]
         public string minutesPlayedTotal { get; set; }
+        [IgnoreDataMember]
         public int light { get; set; }
+        [IgnoreDataMember]
         public Stats stats { get; set; }
+        [IgnoreDataMember]
         public long raceHash { get; set; }
+        [IgnoreDataMember]
         public long genderHash { get; set; }
+        [IgnoreDataMember]
         public long classHash { get; set; }
+
         public int raceType { get; set; }
         public int classType { get; set; }
         public int genderType { get; set; }
+
+        [IgnoreDataMember]
         public string emblemPath { get; set; }
+        [IgnoreDataMember]
         public string emblemBackgroundPath { get; set; }
+        [IgnoreDataMember]
         public long emblemHash { get; set; }
+        [IgnoreDataMember]
         public Emblemcolor emblemColor { get; set; }
+        [IgnoreDataMember]
         public Levelprogression levelProgression { get; set; }
+        [IgnoreDataMember]
         public int baseCharacterLevel { get; set; }
+        [IgnoreDataMember]
         public float percentToNextLevel { get; set; }
+        [IgnoreDataMember]
         public long titleRecordHash { get; set; }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace API.Destiny2.GetPostGameCarnageReport
 {
@@ -6,40 +7,63 @@ namespace API.Destiny2.GetPostGameCarnageReport
     public class Rootobject
     {
         public Response Response { get; set; }
+
+        [IgnoreDataMember]
         public int ErrorCode { get; set; }
+        [IgnoreDataMember]
         public int ThrottleSeconds { get; set; }
+        [IgnoreDataMember]
         public string ErrorStatus { get; set; }
+        [IgnoreDataMember]
         public string Message { get; set; }
+        [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
     }
 
     public class Response
     {
         public DateTime period { get; set; }
+
+        [IgnoreDataMember]
         public int startingPhaseIndex { get; set; }
+
         public Activitydetails activityDetails { get; set; }
         public Entry[] entries { get; set; }
+
+        [IgnoreDataMember]
         public object[] teams { get; set; }
     }
 
     public class Activitydetails
     {
+        [IgnoreDataMember]
         public long referenceId { get; set; }
+        [IgnoreDataMember]
         public long directorActivityHash { get; set; }
+
         public string instanceId { get; set; }
         public int mode { get; set; }
+
+        [IgnoreDataMember]
         public int[] modes { get; set; }
+        [IgnoreDataMember]
         public bool isPrivate { get; set; }
+        [IgnoreDataMember]
         public int membershipType { get; set; }
     }
 
     public class Entry
     {
+        [IgnoreDataMember]
         public int standing { get; set; }
+        [IgnoreDataMember]
         public Score score { get; set; }
+
         public Player player { get; set; }
         public string characterId { get; set; }
         public Values values { get; set; }
+
+        [IgnoreDataMember]
         public Extended extended { get; set; }
     }
 
@@ -57,21 +81,34 @@ namespace API.Destiny2.GetPostGameCarnageReport
     public class Player
     {
         public Destinyuserinfo destinyUserInfo { get; set; }
+
+        [IgnoreDataMember]
         public string characterClass { get; set; }
+        [IgnoreDataMember]
         public long classHash { get; set; }
+        [IgnoreDataMember]
         public long raceHash { get; set; }
+        [IgnoreDataMember]
         public long genderHash { get; set; }
+        [IgnoreDataMember]
         public int characterLevel { get; set; }
+        [IgnoreDataMember]
         public int lightLevel { get; set; }
+        [IgnoreDataMember]
         public long emblemHash { get; set; }
     }
 
     public class Destinyuserinfo
     {
+        [IgnoreDataMember]
         public string iconPath { get; set; }
+        [IgnoreDataMember]
         public int crossSaveOverride { get; set; }
+        [IgnoreDataMember]
         public int[] applicableMembershipTypes { get; set; }
+        [IgnoreDataMember]
         public bool isPublic { get; set; }
+
         public int membershipType { get; set; }
         public string membershipId { get; set; }
         public string displayName { get; set; }
@@ -79,21 +116,37 @@ namespace API.Destiny2.GetPostGameCarnageReport
 
     public class Values
     {
+        [IgnoreDataMember]
         public Assists assists { get; set; }
+
         public Completed completed { get; set; }
+
+        [IgnoreDataMember]
         public Deaths deaths { get; set; }
+        [IgnoreDataMember]
         public Kills kills { get; set; }
+        [IgnoreDataMember]
         public Opponentsdefeated opponentsDefeated { get; set; }
+        [IgnoreDataMember]
         public Efficiency efficiency { get; set; }
+        [IgnoreDataMember]
         public Killsdeathsratio killsDeathsRatio { get; set; }
+        [IgnoreDataMember]
         public Killsdeathsassists killsDeathsAssists { get; set; }
+
         public Score score { get; set; }
         public Activitydurationseconds activityDurationSeconds { get; set; }
         public Completionreason completionReason { get; set; }
+
+        [IgnoreDataMember]
         public Fireteamid fireteamId { get; set; }
+        [IgnoreDataMember]
         public Startseconds startSeconds { get; set; }
+        [IgnoreDataMember]
         public Timeplayedseconds timePlayedSeconds { get; set; }
+        [IgnoreDataMember]
         public Playercount playerCount { get; set; }
+
         public Teamscore teamScore { get; set; }
         public Standing standing { get; set; }
     }
