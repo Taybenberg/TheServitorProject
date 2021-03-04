@@ -10,7 +10,7 @@ using BungieNetApi;
 
 namespace Database
 {
-    public partial class ClanDatabase : DbContext, IDisposable
+    public partial class ClanDatabase : DbContext
     {
         private readonly ILogger _logger;
 
@@ -28,11 +28,6 @@ namespace Database
             _scopeFactory = scopeFactory;
 
             Database.EnsureCreated();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
 
         public bool IsDiscordUserRegistered(ulong discordID) => Users.Any(x => x.DiscordUserID == discordID);
