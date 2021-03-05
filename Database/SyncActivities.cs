@@ -30,7 +30,7 @@ namespace Database
             var userIDs = lastKnownActivities.Select(x => x.Character.UserID).ToHashSet();
             var charIDs = lastKnownActivities.Select(x => x.Character.CharacterID).ToHashSet();
 
-            Parallel.ForEach(lastKnownActivities, (last) =>
+            Parallel.ForEach(lastKnownActivities, new ParallelOptions { MaxDegreeOfParallelism = 3 }, (last) =>
             {
                 Func<BungieNetApi.Activity, bool> newActivitiesFilter;
 
@@ -49,7 +49,7 @@ namespace Database
                     while ((newActivitiesBuffer = apiClient.GetUserActivitiesAsync(last.Character.User.MembershipType, last.Character.UserID, last.Character.CharacterID, count, page++)
                     .Result.Select(x => x.Value).Where(newActivitiesFilter)).Any())
                     {
-                        foreach(var act in newActivitiesBuffer.Where(x => !newActivitiesDictionary.ContainsKey(x.InstanceId)))
+                        Parallel.ForEach(newActivitiesBuffer.Where(x => !newActivitiesDictionary.ContainsKey(x.InstanceId)), (act) =>
                         {
                             int? suspicionIndex = null;
 
@@ -94,7 +94,7 @@ namespace Database
                                     StandingDisplayValue = y.StandingDisplayValue
                                 }).ToList()
                             });
-                        }
+                        });
                     }
                 }
             });
