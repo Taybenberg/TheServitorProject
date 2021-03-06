@@ -211,7 +211,7 @@ namespace ServitorDiscordBot
 
                 builder.Description = $"Неймовірно! **{acts.Count()}** активностей на рахунку {message.Author.Mention}! Так тримати!\n\n***По класах:***";
 
-                foreach (var c in user.Characters)
+                foreach (var c in user.Characters.OrderByDescending(x => x.ActivityUserStats.Count))
                     builder.Description += $"\n{c.Class} - {c.ActivityUserStats.Count}";
 
                 builder.Description += "\n\n***По типу активності:***";
