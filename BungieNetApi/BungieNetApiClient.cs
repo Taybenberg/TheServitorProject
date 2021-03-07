@@ -22,6 +22,31 @@ namespace BungieNetApi
             _xApiKey = configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>();
         }
 
+        public async Task<IEnumerable<Item>> GetXurItemsAsync()
+        {
+            ConcurrentBag<Item> items = new();
+
+            var rawXurItems = await getRawXurItemsAsync();
+
+            foreach (var rawItem in rawXurItems.saleItems.Values.Skip(1).SkipLast(1))
+            {
+                var rawItemDetails = getRawItemDetailsAsync(rawItem.itemHash).Result;
+
+                if (rawItemDetails is not null)
+                {
+                    items.Add(new Item
+                    {
+                        ItemName = rawItemDetails.displayProperties.name,
+                        ItemIcon = rawItemDetails.displayProperties.icon,
+                        ItemTypeAndTier = rawItemDetails.itemTypeAndTierDisplayName,
+                        UniqueLabel = rawItemDetails.equippingBlock.uniqueLabel
+                    });
+                }
+            }
+
+            return items;
+        }
+
         public async Task<IEnumerable<(string sign, string name)>> GetUserClansAsync(MembershipType membershipType, long membershipId)
         {
             var rawClans = await getRawUserClansAsync((int)membershipType, membershipId.ToString());

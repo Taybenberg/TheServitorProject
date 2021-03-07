@@ -13,7 +13,7 @@ namespace BungieNetApi
         /// Path: /Destiny2/Manifest/{entityType}/{hashIdentifier}/
         /// </summary>
         /// <returns>Returns the static definition of an entity of the given Type and hash identifier. Examine the API Documentation for the Type Names of entities that have their own definitions. Note that the return type will always *inherit from* DestinyDefinition, but the specific type returned will be the requested entity type if it can be found. Please don't use this as a chatty alternative to the Manifest database if you require large sets of data, but for simple and one-off accesses this should be handy.</returns>
-        private async Task<API.Destiny2.GetDestinyEntityDefinition.Response> GetItemDetailsAsync(string itemHash)
+        private async Task<API.Destiny2.GetDestinyEntityDefinition.Response> getRawItemDetailsAsync(long itemHash)
         {
             var itemRequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Manifest")
@@ -40,7 +40,7 @@ namespace BungieNetApi
         /// Path: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/Vendors/
         /// </summary>
         /// <returns>Get currently available vendors from the list of vendors that can possibly have rotating inventory. Note that this does not include things like preview vendors and vendors-as-kiosks, neither of whom have rotating/dynamic inventories. Use their definitions as-is for those.</returns>
-        private async Task<API.Destiny2.DestinyComponentType.Components402.Vendor> GetRawXurItemsAsync()
+        private async Task<API.Destiny2.DestinyComponentType.Components402.Vendor> getRawXurItemsAsync()
         {
             var xurRequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Vendors")

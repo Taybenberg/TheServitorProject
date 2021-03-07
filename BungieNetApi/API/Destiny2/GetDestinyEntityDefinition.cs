@@ -51,7 +51,6 @@ namespace API.Destiny2.GetDestinyEntityDefinition
         public Inventory inventory { get; set; }
         [IgnoreDataMember]
         public Stats stats { get; set; }
-        [IgnoreDataMember]
 
         public Equippingblock equippingBlock { get; set; }
 
