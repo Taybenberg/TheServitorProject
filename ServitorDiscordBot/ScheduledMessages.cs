@@ -3,10 +3,12 @@ using System.Web;
 using System.Linq;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Discord;
 using Discord.WebSocket;
 using Extensions;
+using BungieNetApi;
 
 namespace ServitorDiscordBot
 {
@@ -22,18 +24,15 @@ namespace ServitorDiscordBot
 
             builder.Color = Color.DarkPurple;
 
-            var xur = await Xur.GetXurAsync();
+            builder.Title = $"Зур привіз свіжий крам";
 
-            builder.Title = $"Зур привіз крам на {xur.LocationName}";
-            builder.ThumbnailUrl = xur.LocationIcon;
-
-            builder.Fields = new();
-            foreach (var item in xur.Items)
-                builder.Fields.Add(new EmbedFieldBuilder{ Name = item.ItemName, Value = "WIP", IsInline = false});
-            
             builder.Footer = GetFooter();
 
-            await channel.SendMessageAsync(embed: builder.Build());
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+            await channel.SendFileAsync(await apiClient.GetXurInventoryAsync(), "Inventory.png", embed: builder.Build());
         }
     }
 }

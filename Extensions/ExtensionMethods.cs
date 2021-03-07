@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using BungieNetApi;
 using Database;
 
@@ -9,6 +10,11 @@ namespace Extensions
         public static async Task<BungieNetApi.Activity> GetActivityAdditionalDetailsAsync(this Database.Activity activity, BungieNetApiClient apiClient)
         {
             return await apiClient.GetActivityDetailsAsync(activity.ActivityID.ToString());
+        }
+
+        public static async Task<Stream> GetXurInventoryAsync(this BungieNetApiClient apiClient)
+        {
+            return new MemoryStream(ExtensionsRes.XurItemsBackground);
         }
     }
 }

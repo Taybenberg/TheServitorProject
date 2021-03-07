@@ -13,4 +13,20 @@
     <ProjectReference Include="..\Database\Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="ExtensionsRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExtensionsRes.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ExtensionsRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtensionsRes.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -25,7 +25,7 @@ namespace BungieNetApi
 
         public async Task<IEnumerable<(string sign, string name)>> GetUserClansAsync(MembershipType membershipType, long membershipId)
         {
-            var rawClans = await getRawUserClans((int)membershipType, membershipId.ToString());
+            var rawClans = await getRawUserClansAsync((int)membershipType, membershipId.ToString());
 
             return rawClans.Select(x=> (x.group.clanInfo.clanCallsign, x.group.name));
         }

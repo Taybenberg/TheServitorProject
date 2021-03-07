@@ -9,11 +9,28 @@ namespace BungieNetApi
     public partial class BungieNetApiClient
     {
         /// <summary>
+        /// Destiny2.GetVendors
+        /// Path: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/Character/{characterId}/Vendors/
+        /// </summary>
+        /// <returns>Get currently available vendors from the list of vendors that can possibly have rotating inventory. Note that this does not include things like preview vendors and vendors-as-kiosks, neither of whom have rotating/dynamic inventories. Use their definitions as-is for those.</returns>
+        public async Task<API.Destiny2.DestinyComponentType.Components402.Vendor> GetRawXurItemsAsync()
+        {
+            var xurRequest = API.Destiny2.Url.BaseURL
+                .AppendPathSegment("Vendors")
+                .SetQueryParam("components", 402)
+                .WithHeader(_xApiKey.Name, _xApiKey.Value);
+
+            var result = await JsonSerializer.DeserializeAsync<API.Destiny2.DestinyComponentType.Components402.Rootobject>(await xurRequest.GetStreamAsync());
+
+            return result.Response.sales.data["2190858386"];
+        }
+
+        /// <summary>
         /// GroupV2.GetGroupsForMember
         /// Path: /GroupV2/User/{membershipType}/{membershipId}/{filter}/{groupType}/
         /// </summary>
         /// <returns>Get information about the groups that a given member has joined.</returns>
-        private async Task<API.GroupV2.GetGroupsForMember.Result[]> getRawUserClans(int membershipType, string membershipId)
+        private async Task<API.GroupV2.GetGroupsForMember.Result[]> getRawUserClansAsync(int membershipType, string membershipId)
         {
             var groupsRequest = API.GroupV2.Url.BaseURL
                 .AppendPathSegment("User")
