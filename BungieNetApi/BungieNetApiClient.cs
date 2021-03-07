@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BungieNetApi
 {
@@ -27,7 +26,7 @@ namespace BungieNetApi
         {
             var rawClans = await getRawUserClansAsync((int)membershipType, membershipId.ToString());
 
-            return rawClans.Select(x=> (x.group.clanInfo.clanCallsign, x.group.name));
+            return rawClans.Select(x => (x.group.clanInfo.clanCallsign, x.group.name));
         }
 
         public async Task<IEnumerable<KeyValuePair<long, User>>> GetUsersAsync()

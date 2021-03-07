@@ -1,10 +1,6 @@
-﻿using System;
-using System.Web;
-using System.Linq;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {
@@ -80,7 +76,7 @@ namespace ServitorDiscordBot
             else if (command is "100k" or "100к")
             {
                 await FindSuspiciousAsync(message, true);
-            }    
+            }
             else if (command == "відступники")
             {
                 await FindSuspiciousAsync(message, false);

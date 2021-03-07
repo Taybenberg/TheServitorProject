@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Flurl;
+﻿using Flurl;
 using Flurl.Http;
+using System;
+using System.Threading.Tasks;
 using Utf8Json;
 
 namespace BungieNetApi

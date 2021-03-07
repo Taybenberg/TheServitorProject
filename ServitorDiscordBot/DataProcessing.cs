@@ -1,15 +1,15 @@
-﻿using System;
-using System.Web;
-using System.Linq;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using BungieNetApi;
+using Database;
 using Discord;
 using Discord.WebSocket;
-using BungieNetApi;
-using Database;
 using Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace ServitorDiscordBot
 {
@@ -48,7 +48,7 @@ namespace ServitorDiscordBot
                     if (u is not null)
                         details += $" {u.TeamScore}";
                 }
-                
+
                 foreach (var u in act.ActivityUserStats)
                 {
                     var clans = apiClient.GetUserClansAsync(u.MembershipType, u.MembershipId).Result;
@@ -172,7 +172,7 @@ namespace ServitorDiscordBot
                 if (!partners.Any())
                 {
                     builder.Color = Color.Red;
-                
+
                     builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
                 }
                 else

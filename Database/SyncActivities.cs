@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
+﻿using BungieNetApi;
 using Microsoft.EntityFrameworkCore;
-using BungieNetApi;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Database
 {
@@ -24,8 +24,11 @@ namespace Database
 
             ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
 
-            var lastKnownActivities = await Characters.Include(x => x.User).Select(c => new { Character = c,
-                Activity = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault().Activity }).ToListAsync();
+            var lastKnownActivities = await Characters.Include(x => x.User).Select(c => new
+            {
+                Character = c,
+                Activity = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault().Activity
+            }).ToListAsync();
 
             var userIDs = lastKnownActivities.Select(x => x.Character.UserID).ToHashSet();
             var charIDs = lastKnownActivities.Select(x => x.Character.CharacterID).ToHashSet();

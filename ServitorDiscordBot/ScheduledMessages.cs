@@ -1,14 +1,10 @@
-﻿using System;
-using System.Web;
-using System.Linq;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
+﻿using BungieNetApi;
+using Discord;
+using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Discord;
-using Discord.WebSocket;
-using Extensions;
-using BungieNetApi;
+using System;
+using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

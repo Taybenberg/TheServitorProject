@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+﻿using BungieNetApi;
 using Coravel;
-using ServitorDiscordBot;
-using BungieNetApi;
 using Database;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using ServitorDiscordBot;
+using System;
 
 namespace BotConsole
 {
@@ -17,7 +16,8 @@ namespace BotConsole
         {
             IHost host = CreateHostBuilder(args).Build();
 
-            host.Services.UseScheduler(scheduler => {
+            host.Services.UseScheduler(scheduler =>
+            {
                 scheduler.ScheduleAsync(async () =>
                 {
                     var db = host.Services.GetService<ClanDatabase>();

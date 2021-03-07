@@ -1,7 +1,6 @@
-﻿using System.IO;
+﻿using BungieNetApi;
+using System.IO;
 using System.Threading.Tasks;
-using BungieNetApi;
-using Database;
 
 namespace Extensions
 {
