@@ -4,7 +4,7 @@
     {
         public string ItemName { get; set; }
 
-        public string ItemIcon { get; set; }
+        public string ItemIconUrl { get; set; }
 
         public string ItemTypeAndTier { get; set; }
 

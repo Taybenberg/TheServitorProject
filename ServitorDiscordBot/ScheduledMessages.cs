@@ -26,9 +26,12 @@ namespace ServitorDiscordBot
 
             using var scope = _scopeFactory.CreateScope();
 
-            var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            await channel.SendFileAsync(await apiClient.GetXurInventoryAsync(), "Inventory.png", embed: builder.Build());
+            using var inventory = await apiCient.GetXurInventoryAsync();
+
+            await channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendFileAsync(inventory, "Inventory.png");
         }
     }
 }

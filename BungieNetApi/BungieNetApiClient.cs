@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Flurl;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace BungieNetApi
     /// </summary>
     public partial class BungieNetApiClient
     {
+        private const string _bungieNetUrl = "https://bungie.net";
+
         private readonly ApiKey _xApiKey;
 
         private readonly long _clanId;
@@ -37,7 +40,7 @@ namespace BungieNetApi
                     items.Add(new Item
                     {
                         ItemName = rawItemDetails.displayProperties.name,
-                        ItemIcon = rawItemDetails.displayProperties.icon,
+                        ItemIconUrl = _bungieNetUrl.AppendPathSegment(rawItemDetails.displayProperties.icon),
                         ItemTypeAndTier = rawItemDetails.itemTypeAndTierDisplayName,
                         UniqueLabel = rawItemDetails.equippingBlock.uniqueLabel
                     });
