@@ -18,7 +18,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.DarkPurple;
+            builder.Color = (Color?)System.Drawing.ColorTranslator.FromHtml("#ADC8D1");
 
             builder.Title = $"Зур привіз свіжий крам";
 

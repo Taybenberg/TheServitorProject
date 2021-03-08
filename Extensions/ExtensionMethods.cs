@@ -25,24 +25,29 @@ namespace Extensions
 
             using (var g = Graphics.FromImage(image))
             {
-                int x = 0;
-                int y = 0;
+                int Xi = 30, Yi = 30;
+                int Xt1 = 145, Yt1 = 43;
+                int Xt2 = 152, Yt2 = 87;
+
+                int interval = 136;
 
                 Brush brush = new SolidBrush(Color.Black);
 
-                Font itemName = new Font("Times New Roman", 20);
-                Font itemType = new Font("Times New Roman", 14);
+                Font itemName = new Font("Arial", 25);
+                Font itemType = new Font("Arial", 16);
 
                 foreach (var item in items.Reverse())
                 {
                     using var stream = await item.ItemIconUrl.GetStreamAsync();
 
-                    g.DrawImageUnscaled(new Bitmap(stream), x, y);
+                    g.DrawImageUnscaled(new Bitmap(stream), Xi, Yi);
 
-                    g.DrawString(item.ItemName, itemName, brush, x + 110, y + 30);
-                    g.DrawString(item.ItemTypeAndTier, itemType, brush, x + 110, y + 60);
+                    g.DrawString(item.ItemName, itemName, brush, Xt1, Yt1);
+                    g.DrawString(item.ItemTypeAndTier, itemType, brush, Xt2, Yt2);
 
-                    y += 96;
+                    Yi += interval;
+                    Yt1 += interval;
+                    Yt2 += interval;
                 }
             }
 
