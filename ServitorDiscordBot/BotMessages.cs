@@ -81,6 +81,14 @@ namespace ServitorDiscordBot
             {
                 await FindSuspiciousAsync(message, false);
             }
+            else if (command == "my_id")
+            {
+                var m = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
+
+                await Task.Delay(5000);
+
+                await m.DeleteAsync();
+            }
             else if (command.Contains("зареєструвати"))
             {
                 var nickname = command.Replace("зареєструватися ", "").Replace("зареєструватись ", "").Replace("зареєструвати ", "");
