@@ -18,7 +18,7 @@ namespace ServitorDiscordBot
 
             var command = message.Content.ToLower();
 
-            if (command == "біп")
+            if (command is "біп")
             {
                 var builder = new EmbedBuilder();
 
@@ -28,7 +28,7 @@ namespace ServitorDiscordBot
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
-            else if (command == "допомога")
+            else if (command is "допомога")
             {
                 var builder = new EmbedBuilder();
 
@@ -46,30 +46,31 @@ namespace ServitorDiscordBot
                     $"Наразі Авангард надав мені роль обчислювальної машини для збору статистичних даних про діяльність вашого [клану]({clanUrl})." +
                     $"\n\n**Зараз я вмію виконувати наступні функції:**" +
                     $"\n***біп*** - *запит на перевірку моєї працездатності*" +
-                    $"\n***кланові активності*** - *кількість активностей клану в цьому році*" +
+                    $"\n***зур*** - *переглянути інвентар Зура*" +
                     $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*" +
                     $"\n***мої партнери*** - *список партнерів ґардіана*" +
-                    $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*" +
+                    $"\n***кланові активності*** - *кількість активностей клану в цьому році*" +
                     $"\n***відступники*** - *виявити потенційно небезпечні активності окрім нальотів*" +
-                    $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*";
+                    $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*" +
+                    $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*";
 
                 builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
-            else if (command == "кланові активності")
+            else if (command is "кланові активності")
             {
                 await GetClanActivitiesAsync(message);
             }
-            else if (command == "мої активності")
+            else if (command is "мої активності")
             {
                 await GetUserActivitiesAsync(message);
             }
-            else if (command == "мої партнери")
+            else if (command is "мої партнери")
             {
                 await GetUserPartnersAsync(message);
             }
-            else if (command == "реєстрація")
+            else if (command is "реєстрація")
             {
                 await RegisterMessageAsync(message);
             }
@@ -77,11 +78,15 @@ namespace ServitorDiscordBot
             {
                 await FindSuspiciousAsync(message, true);
             }
-            else if (command == "відступники")
+            else if (command is "відступники")
             {
                 await FindSuspiciousAsync(message, false);
             }
-            else if (command == "my_id")
+            else if (command is "зур" or "xur")
+            {
+                await XurNotificationAsync(message);
+            }
+            else if (command is "my_id")
             {
                 var m = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
 
