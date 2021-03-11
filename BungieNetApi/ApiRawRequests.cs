@@ -66,7 +66,16 @@ namespace BungieNetApi
                 .AppendPathSegments("0", "1")
                 .WithHeader(_xApiKey.Name, _xApiKey.Value);
 
-            var result = await JsonSerializer.DeserializeAsync<API.GroupV2.GetGroupsForMember.Rootobject>(await groupsRequest.GetStreamAsync());
+            API.GroupV2.GetGroupsForMember.Rootobject result;
+
+            try
+            {
+                result = await JsonSerializer.DeserializeAsync<API.GroupV2.GetGroupsForMember.Rootobject>(await groupsRequest.GetStreamAsync());
+            }
+            catch (Exception)
+            {
+                return new API.GroupV2.GetGroupsForMember.Result[0];
+            }
 
             return result.Response.results;
         }
