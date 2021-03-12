@@ -9,6 +9,34 @@ namespace BungieNetApi
     public partial class BungieNetApiClient
     {
         /// <summary>
+        /// Destiny2.GetClanAggregateStats
+        /// Path: /Destiny2/Stats/AggregateClanStats/{groupId}/
+        /// </summary>
+        /// <returns>Gets aggregated stats for a clan using the same categories as the clan leaderboards. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.</returns>
+        private async Task<API.Destiny2.GetClanAggregateStats.Response[]> getRawClanStatsAsync(string clanID, int mode)
+        {
+            var leaderboardRequest = API.Destiny2.Url.BaseURL
+                .AppendPathSegment("Stats")
+                .AppendPathSegment("AggregateClanStats")
+                .AppendPathSegment(clanID)
+                .SetQueryParam("modes", mode)
+                .WithHeader(_xApiKey.Name, _xApiKey.Value);
+
+            API.Destiny2.GetClanAggregateStats.Rootobject result;
+
+            try
+            {
+                result = await JsonSerializer.DeserializeAsync<API.Destiny2.GetClanAggregateStats.Rootobject>(await leaderboardRequest.GetStreamAsync());
+            }
+            catch (Exception)
+            {
+                return Array.Empty<API.Destiny2.GetClanAggregateStats.Response>();
+            }
+
+            return result.Response;
+        }
+
+        /// <summary>
         /// Destiny2.GetDestinyEntityDefinition
         /// Path: /Destiny2/Manifest/{entityType}/{hashIdentifier}/
         /// </summary>
@@ -74,7 +102,7 @@ namespace BungieNetApi
             }
             catch (Exception)
             {
-                return new API.GroupV2.GetGroupsForMember.Result[0];
+                return Array.Empty<API.GroupV2.GetGroupsForMember.Result>();
             }
 
             return result.Response.results;

@@ -25,6 +25,13 @@ namespace BungieNetApi
             _xApiKey = configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>();
         }
 
+        public async Task<IEnumerable<(string stat, string value)>> GetClanStatsAsync(ActivityType activityType)
+        {
+            var rawLeaderboard = await getRawClanStatsAsync(_clanId.ToString(), (int)activityType);
+
+            return rawLeaderboard.Select(x => (x.statId, x.value.basic.displayValue));
+        }
+
         public async Task<IEnumerable<Item>> GetXurItemsAsync()
         {
             ConcurrentBag<Item> items = new();
