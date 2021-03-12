@@ -15,6 +15,76 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private async Task GetModesAsync(SocketMessage message)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = Color.DarkBlue;
+
+            builder.Title = $"Режими";
+
+            builder.Fields = new List<EmbedFieldBuilder>();
+
+            builder.Description = string.Join("\n", Localization.ActivityNames.Select(x => x.Value).OrderBy(y => y));
+
+            builder.Footer = GetFooter();
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
+        }
+
+        private async Task ClanStatsAsync(SocketMessage message, string mode)
+        {
+            var pair = Localization.ActivityNames.FirstOrDefault(x => mode.ToLower() == x.Value.ToLower());
+
+            var builder = new EmbedBuilder();
+
+            builder.Title = $"БЕТА | Статистика клану {clanName}";
+
+            builder.Footer = GetFooter();
+
+            if (!pair.Equals(default(KeyValuePair<BungieNetApi.ActivityType, string>)))
+            {
+                using var scope = _scopeFactory.CreateScope();
+
+                var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+                builder.Title += $". { pair.Value}";
+
+                builder.Fields = new List<EmbedFieldBuilder>();
+
+                var clanStats = await apiClient.GetClanStatsAsync(pair.Key);
+
+                if (clanStats.Count() > 0)
+                {
+                    builder.Color = Color.Blue;
+
+                    foreach (var clanStat in clanStats)
+                    {
+                        builder.Fields.Add(new EmbedFieldBuilder
+                        {
+                            Name = Localization.StatNames[clanStat.stat],
+                            Value = clanStat.value,
+                            IsInline = false
+                        });
+                    }
+                }
+                else
+                {
+                    builder.Color = Color.Red;
+
+                    builder.Description = "Сталася помилка при обробці вашого запиту сервером Bungie.net. Спробуйте пізніше.";
+                }
+            }
+            else
+            {
+                builder.Color = Color.Red;
+
+                builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
+            }
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
+        }
+
         private async Task FindSuspiciousAsync(SocketMessage message, bool nigthfalls)
         {
             using var scope = _scopeFactory.CreateScope();

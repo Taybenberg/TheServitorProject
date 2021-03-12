@@ -50,6 +50,8 @@ namespace ServitorDiscordBot
                     $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*" +
                     $"\n***мої партнери*** - *список партнерів ґардіана*" +
                     $"\n***кланові активності*** - *кількість активностей клану в цьому році*" +
+                    $"\n***статистика клану %режим%*** - *агрегована статистика клану в типі активності*" +
+                    $"\n***режими*** - *список типів активностей*" +
                     $"\n***відступники*** - *виявити потенційно небезпечні активності окрім нальотів*" +
                     $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*" +
                     $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*";
@@ -57,6 +59,10 @@ namespace ServitorDiscordBot
                 builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
+            }
+            else if (command is "режими")
+            {
+                await GetModesAsync(message);
             }
             else if (command is "кланові активності")
             {
@@ -99,6 +105,12 @@ namespace ServitorDiscordBot
                 var nickname = command.Replace("зареєструватися ", "").Replace("зареєструватись ", "").Replace("зареєструвати ", "");
 
                 await TryRegisterUserAsync(message, nickname);
+            }
+            else if (command.Contains("статистика клану"))
+            {
+                var mode = command.Replace("статистика клану ", "");
+
+                await ClanStatsAsync(message, mode);
             }
         }
     }
