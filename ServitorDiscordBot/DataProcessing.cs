@@ -34,7 +34,7 @@ namespace ServitorDiscordBot
 
         private async Task ClanStatsAsync(SocketMessage message, string mode)
         {
-            var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode.ToLower() == x.Value.ToLower());
+            var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode == x.Value.ToLower());
 
             var builder = new EmbedBuilder();
 
@@ -48,7 +48,7 @@ namespace ServitorDiscordBot
 
                 var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-                builder.Title += $". { pair.Value}";
+                builder.Title += $" | { pair.Value}";
 
                 builder.Fields = new List<EmbedFieldBuilder>();
 
@@ -292,7 +292,7 @@ namespace ServitorDiscordBot
                     counter.Add((type, acts.Count(x => x.Activity.ActivityType == type)));
 
                 foreach (var count in counter.OrderByDescending(x => x.Count))
-                    builder.Description += $"\n{count.ActivityType} - {count.Count}";
+                    builder.Description += $"\n{Localization.ActivityNames[count.ActivityType]} - {count.Count}";
 
                 builder.Footer = GetFooter();
 
@@ -322,7 +322,7 @@ namespace ServitorDiscordBot
                 counter.Add((type, acts.Count(x => x.ActivityType == type)));
 
             foreach (var count in counter.OrderByDescending(x => x.Count))
-                builder.Description += $"\n{count.ActivityType} - {count.Count}";
+                builder.Description += $"\n{Localization.ActivityNames[count.ActivityType]} - {count.Count}";
 
             builder.Footer = GetFooter();
 

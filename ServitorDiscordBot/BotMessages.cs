@@ -15,7 +15,7 @@ namespace ServitorDiscordBot
             if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "destiny_bot")
                 return;
 #endif
-
+            
             var command = message.Content.ToLower();
 
             if (command is "біп")
@@ -95,6 +95,14 @@ namespace ServitorDiscordBot
             else if (command is "my_id")
             {
                 var m = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
+
+                await Task.Delay(5000);
+
+                await m.DeleteAsync();
+            }
+            else if (command is "channel_id")
+            {
+                var m = await message.Channel.SendMessageAsync(message.Channel.Id.ToString());
 
                 await Task.Delay(5000);
 
