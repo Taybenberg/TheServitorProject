@@ -13,7 +13,7 @@ namespace BungieNetApi
         /// Path: /Destiny2/Stats/Leaderboards/Clans/{groupId}/
         /// </summary>
         /// <returns>Gets leaderboards with the signed in user's friends and the supplied destinyMembershipId as the focus. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.</returns>
-        public async Task<API.Destiny2.GetClanLeaderboards.Response> getRawClanLeaderboardAsync(string clanID, int mode)
+        private async Task<API.Destiny2.GetClanLeaderboards.Rootobject> getRawClanLeaderboardAsync(string clanID, int mode)
         {
             var clanLeaderboardRequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Stats")
@@ -23,18 +23,14 @@ namespace BungieNetApi
                 .SetQueryParam("modes", mode)
                 .WithHeader(_xApiKey.Name, _xApiKey.Value);
 
-            API.Destiny2.GetClanLeaderboards.Rootobject result;
-
             try
             {
-                result = await JsonSerializer.DeserializeAsync<API.Destiny2.GetClanLeaderboards.Rootobject>(await clanLeaderboardRequest.GetStreamAsync());
+                return await JsonSerializer.DeserializeAsync<API.Destiny2.GetClanLeaderboards.Rootobject>(await clanLeaderboardRequest.GetStreamAsync());
             }
             catch (Exception)
             {
                 return null;
             }
-
-            return result.Response;
         }
 
         /// <summary>

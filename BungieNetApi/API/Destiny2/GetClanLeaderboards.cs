@@ -5,7 +5,7 @@ namespace API.Destiny2.GetClanLeaderboards
 {
     public class Rootobject
     {
-        public Response Response { get; set; }
+        public Dictionary<string, Dictionary<string, Stat>> Response { get; set; }
 
         [IgnoreDataMember]
         public int ErrorCode { get; set; }
@@ -17,16 +17,6 @@ namespace API.Destiny2.GetClanLeaderboards
         public string Message { get; set; }
         [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
-    }
-
-    public class Response
-    {
-        public Dictionary<string, Mode> modes { get; set; }
-    }
-
-    public class Mode
-    {
-        public Dictionary<string, Stat> stats { get; set; }
     }
 
     public class Stat
@@ -81,9 +71,9 @@ namespace API.Destiny2.GetClanLeaderboards
 
     public class Basic
     {
+        [IgnoreDataMember]
         public float value { get; set; }
 
-        [IgnoreDataMember]
         public string displayValue { get; set; }
     }
 

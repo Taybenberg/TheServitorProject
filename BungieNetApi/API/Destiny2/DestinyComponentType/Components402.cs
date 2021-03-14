@@ -28,6 +28,7 @@ namespace API.Destiny2.DestinyComponentType.Components402
     public class Sales
     {
         public Dictionary<string, Vendor> data { get; set; }
+
         [IgnoreDataMember]
         public int privacy { get; set; }
     }
