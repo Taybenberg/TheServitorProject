@@ -9,13 +9,42 @@ namespace BungieNetApi
     public partial class BungieNetApiClient
     {
         /// <summary>
+        /// Destiny2.GetClanLeaderboards
+        /// Path: /Destiny2/Stats/Leaderboards/Clans/{groupId}/
+        /// </summary>
+        /// <returns>Gets leaderboards with the signed in user's friends and the supplied destinyMembershipId as the focus. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.</returns>
+        public async Task<API.Destiny2.GetClanLeaderboards.Response> getRawClanLeaderboardAsync(string clanID, int mode)
+        {
+            var clanLeaderboardRequest = API.Destiny2.Url.BaseURL
+                .AppendPathSegment("Stats")
+                .AppendPathSegment("Leaderboards")
+                .AppendPathSegment("Clans")
+                .AppendPathSegment(clanID)
+                .SetQueryParam("modes", mode)
+                .WithHeader(_xApiKey.Name, _xApiKey.Value);
+
+            API.Destiny2.GetClanLeaderboards.Rootobject result;
+
+            try
+            {
+                result = await JsonSerializer.DeserializeAsync<API.Destiny2.GetClanLeaderboards.Rootobject>(await clanLeaderboardRequest.GetStreamAsync());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return result.Response;
+        }
+
+        /// <summary>
         /// Destiny2.GetClanAggregateStats
         /// Path: /Destiny2/Stats/AggregateClanStats/{groupId}/
         /// </summary>
         /// <returns>Gets aggregated stats for a clan using the same categories as the clan leaderboards. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.</returns>
         private async Task<API.Destiny2.GetClanAggregateStats.Response[]> getRawClanStatsAsync(string clanID, int mode)
         {
-            var leaderboardRequest = API.Destiny2.Url.BaseURL
+            var clanStatsRequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Stats")
                 .AppendPathSegment("AggregateClanStats")
                 .AppendPathSegment(clanID)
@@ -26,7 +55,7 @@ namespace BungieNetApi
 
             try
             {
-                result = await JsonSerializer.DeserializeAsync<API.Destiny2.GetClanAggregateStats.Rootobject>(await leaderboardRequest.GetStreamAsync());
+                result = await JsonSerializer.DeserializeAsync<API.Destiny2.GetClanAggregateStats.Rootobject>(await clanStatsRequest.GetStreamAsync());
             }
             catch (Exception)
             {

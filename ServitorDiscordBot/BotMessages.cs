@@ -15,7 +15,7 @@ namespace ServitorDiscordBot
             if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "destiny_bot")
                 return;
 #endif
-            
+
             var command = message.Content.ToLower();
 
             if (command is "біп")
