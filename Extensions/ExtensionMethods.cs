@@ -21,7 +21,7 @@ namespace Extensions
 
             using var background = new MemoryStream(ExtensionsRes.XurItemsBackground);
 
-            Image image = new Bitmap(background);
+            using Image image = new Bitmap(background);
 
             using (var g = Graphics.FromImage(image))
             {
@@ -39,8 +39,9 @@ namespace Extensions
                 foreach (var item in items.Reverse())
                 {
                     using var stream = await item.ItemIconUrl.GetStreamAsync();
+                    using Image icon = new Bitmap(stream);
 
-                    g.DrawImageUnscaled(new Bitmap(stream), Xi, Yi);
+                    g.DrawImageUnscaled(icon, Xi, Yi);
 
                     g.DrawString(item.ItemName, itemName, brush, Xt1, Yt1);
                     g.DrawString(item.ItemTypeAndTier, itemType, brush, Xt2, Yt2);

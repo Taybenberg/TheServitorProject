@@ -40,7 +40,7 @@ namespace ServitorDiscordBot
             else
                 channel = message.Channel;
 
-            await channel.SendFileAsync(inventory, "Inventory.png");
+            await channel.SendFileAsync(inventory, "XurInventory.png");
         }
     }
 }

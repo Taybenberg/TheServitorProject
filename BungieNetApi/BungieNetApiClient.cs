@@ -32,7 +32,7 @@ namespace BungieNetApi
             if (rawLeaderboard is null)
                 return null;
 
-            return rawLeaderboard.Response.FirstOrDefault().Value.Select(x => 
+            return rawLeaderboard.Response.FirstOrDefault().Value.Select(x =>
             (
                 x.Key, x.Value.entries.Select(y => (y.rank, long.Parse(y.player.destinyUserInfo.membershipId), y.player.characterClass, y.value.basic.displayValue))
             ));

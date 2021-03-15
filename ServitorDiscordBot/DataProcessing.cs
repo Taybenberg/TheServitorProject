@@ -15,6 +15,17 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private async Task GetOsirisInventoryAsync(SocketMessage message)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+            using var inventory = await TrialsOfOsirisParser.GetOsirisInventoryAsync();
+
+            await message.Channel.SendFileAsync(inventory, "OsirisInventory.png");
+        }
+
         private async Task GetModesAsync(SocketMessage message)
         {
             var builder = new EmbedBuilder();
