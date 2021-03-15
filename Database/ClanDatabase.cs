@@ -32,6 +32,8 @@ namespace Database
 
         public bool IsDiscordUserRegistered(ulong discordID) => Users.Any(x => x.DiscordUserID == discordID);
 
+        public async Task<User> GetUserByDiscordId(ulong discordID) => await Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+
         public async Task<User> GetUserActivitiesAsync(ulong discordID) => await Users.Include(x => x.Characters).ThenInclude(y => y.ActivityUserStats).ThenInclude(a => a.Activity).FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
         public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) => await Users.Where(x => x.UserName.ToLower().Contains(userName)).ToListAsync();

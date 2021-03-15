@@ -25,17 +25,25 @@ namespace BungieNetApi
             _xApiKey = configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>();
         }
 
-        public async Task<IEnumerable<(string stat, IEnumerable<(int rank, long userId, string className, string value)> users)>> GetClanLeaderboardAsync(ActivityType activityType)
+        public async Task<IEnumerable<(string stat, IEnumerable<(int rank, long userId, string className, string value)> users)>> GetClanLeaderboardAsync(ActivityType activityType, string[] modes)
         {
-            var rawLeaderboard = await getRawClanLeaderboardAsync(_clanId.ToString(), (int)activityType);
+            ConcurrentDictionary<string, IEnumerable<(int, long, string, string)>> leaderboard = new();
 
-            if (rawLeaderboard is null)
-                return null;
+            Parallel.ForEach(modes, (mode) =>
+            {
+                var rawLeaderboard = getRawClanLeaderboardAsync(_clanId.ToString(), (int)activityType, 100, mode).Result;
 
-            return rawLeaderboard.Response.FirstOrDefault().Value.Select(x =>
-            (
-                x.Key, x.Value.entries.Select(y => (y.rank, long.Parse(y.player.destinyUserInfo.membershipId), y.player.characterClass, y.value.basic.displayValue))
-            ));
+                if (rawLeaderboard is not null && rawLeaderboard.Response.Any())
+                {
+                    var value = rawLeaderboard.Response.FirstOrDefault().Value;
+
+                    if (value.ContainsKey(mode))
+                        leaderboard.TryAdd(mode, value[mode].entries.Select(x =>
+                        (x.rank, long.Parse(x.player.destinyUserInfo.membershipId), x.player.characterClass, x.value.basic.displayValue)));
+                }
+            });
+
+            return leaderboard.OrderBy(y => y.Key).Select(x => (x.Key, x.Value));
         }
 
         public async Task<IEnumerable<(string stat, string value)>> GetClanStatsAsync(ActivityType activityType)

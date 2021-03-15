@@ -11,7 +11,9 @@ namespace Extensions
     {
         public static async Task<Stream> GetOsirisInventoryAsync()
         {
-            using Image image = ExtensionsRes.TrialsItemsBackground;
+            using var background = new MemoryStream(ExtensionsRes.TrialsItemsBackground);
+
+            using Image image = new Bitmap(background);
 
             using (var g = Graphics.FromImage(image))
             {

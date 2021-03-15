@@ -13,14 +13,16 @@ namespace BungieNetApi
         /// Path: /Destiny2/Stats/Leaderboards/Clans/{groupId}/
         /// </summary>
         /// <returns>Gets leaderboards with the signed in user's friends and the supplied destinyMembershipId as the focus. PREVIEW: This endpoint is still in beta, and may experience rough edges. The schema is in final form, but there may be bugs that prevent desirable operation.</returns>
-        private async Task<API.Destiny2.GetClanLeaderboards.Rootobject> getRawClanLeaderboardAsync(string clanID, int mode)
+        private async Task<API.Destiny2.GetClanLeaderboards.Rootobject> getRawClanLeaderboardAsync(string clanID, int mode, int maxtop, string statid)
         {
             var clanLeaderboardRequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Stats")
                 .AppendPathSegment("Leaderboards")
                 .AppendPathSegment("Clans")
                 .AppendPathSegment(clanID)
+                .SetQueryParam("maxtop", maxtop)
                 .SetQueryParam("modes", mode)
+                .SetQueryParam("statid", statid)
                 .WithHeader(_xApiKey.Name, _xApiKey.Value);
 
             try

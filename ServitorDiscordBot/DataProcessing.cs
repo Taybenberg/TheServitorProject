@@ -52,7 +52,9 @@ namespace ServitorDiscordBot
 
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
-            if (!database.IsDiscordUserRegistered(message.Author.Id))
+            var currUser = await database.GetUserActivitiesAsync(message.Author.Id);
+
+            if (currUser is null)
             {
                 await UserIsNotRegisteredAsync(message);
 
@@ -73,9 +75,9 @@ namespace ServitorDiscordBot
 
                 builder.Title += $" | { pair.Value[0]}";
 
-                var leaderboard = await apiClient.GetClanLeaderboardAsync(pair.Key);
+                var leaderboard = await apiClient.GetClanLeaderboardAsync(pair.Key, Localization.StatNames.Keys.ToArray());
 
-                if (leaderboard is not null)
+                if (leaderboard.Any())
                 {
                     builder.Fields = new List<EmbedFieldBuilder>();
 
@@ -90,14 +92,31 @@ namespace ServitorDiscordBot
 
                         string usrs = string.Empty;
 
-                        foreach (var user in entry.users)
+                        bool userFound = false;
+
+                        foreach (var user in entry.users.Take(3))
                         {
                             var u = users.FirstOrDefault(x => x.UserID == user.userId);
 
-                            if (u is not null)
-                                usrs += $"{user.rank}, {u.UserName}, {Localization.ClassStrNames[user.className]}, {user.value}\n";
+                            if (u is null)
+                                continue;
+
+                            if (u.UserID == currUser.UserID)
+                            {
+                                usrs += $"***{user.rank}, {u.UserName}, {Localization.ClassStrNames[user.className]}, {user.value}***\n";
+
+                                userFound = true;
+                            }
                             else
-                                usrs += $"{user.rank}, -, {user.value}\n";
+                                usrs += $"{user.rank}, {u.UserName}, {Localization.ClassStrNames[user.className]}, {user.value}\n";
+                        }
+
+                        if (!userFound)
+                        {
+                            var u = entry.users.FirstOrDefault(x => x.userId == currUser.UserID);
+
+                            if (!u.Equals(default))
+                                usrs += $"***{u.rank}, {currUser.UserName}, {Localization.ClassStrNames[u.className]}, {u.value}***\n";
                         }
 
                         builder.Fields.Add(new EmbedFieldBuilder
