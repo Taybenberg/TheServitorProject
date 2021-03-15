@@ -39,7 +39,7 @@ namespace ServitorDiscordBot
             builder.Description = string.Empty;
 
             foreach (var mode in Localization.StatsActivityNames.Values.OrderBy(x => x[0]))
-                builder.Description += $"**{mode[0]}** / {mode[1]}\n";
+                builder.Description += $"**{mode[0]}** | {mode[1]}\n";
 
             builder.Footer = GetFooter();
 
@@ -393,7 +393,7 @@ namespace ServitorDiscordBot
             {
                 var mode = Localization.ActivityNames[count.ActivityType];
 
-                builder.Description += $"\n**{mode[0]}** / {mode[1]} – ***{count.Count}***";
+                builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
             }
 
             builder.Footer = GetFooter();
@@ -426,7 +426,7 @@ namespace ServitorDiscordBot
             {
                 var mode = Localization.ActivityNames[count.ActivityType];
 
-                builder.Description += $"\n**{mode[0]}** / {mode[1]} – ***{count.Count}***";
+                builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
             }
 
             builder.Footer = GetFooter();

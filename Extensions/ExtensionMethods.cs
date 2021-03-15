@@ -19,9 +19,7 @@ namespace Extensions
         {
             var items = await apiClient.GetXurItemsAsync();
 
-            using var background = new MemoryStream(ExtensionsRes.XurItemsBackground);
-
-            using Image image = new Bitmap(background);
+            using Image image = ExtensionsRes.XurItemsBackground;
 
             using (var g = Graphics.FromImage(image))
             {

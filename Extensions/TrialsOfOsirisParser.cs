@@ -11,9 +11,7 @@ namespace Extensions
     {
         public static async Task<Stream> GetOsirisInventoryAsync()
         {
-            using var background = new MemoryStream(ExtensionsRes.XurItemsBackground);
-
-            using Image image = new Bitmap(background);
+            using Image image = ExtensionsRes.TrialsItemsBackground;
 
             using (var g = Graphics.FromImage(image))
             {
@@ -23,8 +21,8 @@ namespace Extensions
 
                 var trialsBillboard = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"trials-billboard\"]/div[2]/div[2]");
 
-                int Xi = 30, Yi = 30;
-                int intervalX = 104, intervalY = 136;
+                int Xi = 252, Yi = 30;
+                int intervalX = 121, intervalY = 136;
 
                 if (trialsBillboard is not null)
                 {

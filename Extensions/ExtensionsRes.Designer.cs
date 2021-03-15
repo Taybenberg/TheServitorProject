@@ -61,12 +61,22 @@ namespace Extensions {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] XurItemsBackground {
+        internal static System.Drawing.Bitmap TrialsItemsBackground {
+            get {
+                object obj = ResourceManager.GetObject("TrialsItemsBackground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap XurItemsBackground {
             get {
                 object obj = ResourceManager.GetObject("XurItemsBackground", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
