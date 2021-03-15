@@ -141,6 +141,13 @@ namespace Extensions
             [TrialsOfOsiris] = "Випробування Осіріса"
         };
 
+        public readonly static Dictionary<string, string> ClassStrNames = new()
+        {
+            ["Titan"] = "Титан",
+            ["Hunter"] = "Хантер",
+            ["Warlock"] = "Варлок"
+        };
+
         public readonly static Dictionary<DestinyClass, string> ClassNames = new()
         {
             [Titan] = "Титан",

@@ -25,11 +25,24 @@ namespace BungieNetApi
             _xApiKey = configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>();
         }
 
+        public async Task<IEnumerable<(string stat, IEnumerable<(int rank, long userId, string className, string value)> users)>> GetClanLeaderboardAsync(ActivityType activityType)
+        {
+            var rawLeaderboard = await getRawClanLeaderboardAsync(_clanId.ToString(), (int)activityType);
+
+            if (rawLeaderboard is null)
+                return null;
+
+            return rawLeaderboard.Response.FirstOrDefault().Value.Select(x => 
+            (
+                x.Key, x.Value.entries.Select(y => (y.rank, long.Parse(y.player.destinyUserInfo.membershipId), y.player.characterClass, y.value.basic.displayValue))
+            ));
+        }
+
         public async Task<IEnumerable<(string stat, string value)>> GetClanStatsAsync(ActivityType activityType)
         {
-            var rawLeaderboard = await getRawClanStatsAsync(_clanId.ToString(), (int)activityType);
+            var rawStats = await getRawClanStatsAsync(_clanId.ToString(), (int)activityType);
 
-            return rawLeaderboard.Select(x => (x.statId, x.value.basic.displayValue));
+            return rawStats.Select(x => (x.statId, x.value.basic.displayValue));
         }
 
         public async Task<IEnumerable<Item>> GetXurItemsAsync()

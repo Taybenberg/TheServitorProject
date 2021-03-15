@@ -32,6 +32,78 @@ namespace ServitorDiscordBot
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
+        private async Task LeaderboardAsync(SocketMessage message, string mode)
+        {
+            var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode == x.Value.ToLower());
+
+            var builder = new EmbedBuilder();
+
+            builder.Title = $"БЕТА | Дошка лідерів";
+
+            builder.Footer = GetFooter();
+
+            if (!pair.Equals(default(KeyValuePair<BungieNetApi.ActivityType, string>)))
+            {
+                using var scope = _scopeFactory.CreateScope();
+
+                var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+                var leaderboard = await apiClient.GetClanLeaderboardAsync(pair.Key);
+
+                if (leaderboard is not null)
+                {
+                    var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+
+                    builder.Title += $" | { pair.Value}";
+
+                    builder.Fields = new List<EmbedFieldBuilder>();
+
+                    builder.Color = Color.Blue;
+
+                    var users = await database.GetUsersAsync();
+
+                    foreach (var entry in leaderboard)
+                    {
+                        if (entry.users.Count() == 0)
+                            continue;
+
+                        string usrs = string.Empty;
+
+                        foreach (var user in entry.users)
+                        {
+                            var u = users.FirstOrDefault(x => x.UserID == user.userId);
+
+                            if (u is not null)
+                                usrs += $"{user.rank}, {u.UserName}, {Localization.ClassStrNames[user.className]}, {user.value}\n";
+                            else
+                                usrs += $"{user.rank}, -, {user.value}\n";
+                        }
+
+                        builder.Fields.Add(new EmbedFieldBuilder
+                        {
+                            Name = Localization.StatNames[entry.stat],
+                            Value = usrs,
+                            IsInline = false
+                        });
+                    }
+                }
+                else
+                {
+                    builder.Color = Color.Red;
+
+                    builder.Description = "Сталася помилка при обробці вашого запиту. Спробуйте пізніше.";
+                }
+            }
+            else
+            {
+                builder.Color = Color.Red;
+
+                builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
+            }
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
+        }
+
         private async Task ClanStatsAsync(SocketMessage message, string mode)
         {
             var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode == x.Value.ToLower());

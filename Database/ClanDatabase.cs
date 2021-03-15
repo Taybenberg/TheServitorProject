@@ -40,6 +40,8 @@ namespace Database
 
         public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate) => await Activities.Where(x => x.Period >= afterDate && x.ActivityType == ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
 
+        public async Task<IEnumerable<User>> GetUsersAsync() => await Users.ToListAsync();
+
         public async Task RegisterUserAsync(long userID, ulong discordID)
         {
             var user = Users.Find(userID);
