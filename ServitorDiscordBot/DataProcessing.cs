@@ -45,6 +45,17 @@ namespace ServitorDiscordBot
 
         private async Task LeaderboardAsync(SocketMessage message, string mode)
         {
+            using var scope = _scopeFactory.CreateScope();
+
+            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+
+            if (!database.IsDiscordUserRegistered(message.Author.Id))
+            {
+                await UserIsNotRegisteredAsync(message);
+
+                return;
+            }
+
             var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode == x.Value.ToLower());
 
             var builder = new EmbedBuilder();
@@ -55,18 +66,14 @@ namespace ServitorDiscordBot
 
             if (!pair.Equals(default(KeyValuePair<BungieNetApi.ActivityType, string>)))
             {
-                using var scope = _scopeFactory.CreateScope();
-
                 var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+                builder.Title += $" | { pair.Value}";
 
                 var leaderboard = await apiClient.GetClanLeaderboardAsync(pair.Key);
 
                 if (leaderboard is not null)
                 {
-                    var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
-
-                    builder.Title += $" | { pair.Value}";
-
                     builder.Fields = new List<EmbedFieldBuilder>();
 
                     builder.Color = Color.Blue;
@@ -102,7 +109,7 @@ namespace ServitorDiscordBot
                 {
                     builder.Color = Color.Red;
 
-                    builder.Description = "Сталася помилка при обробці вашого запиту. Спробуйте пізніше.";
+                    builder.Description = "Сталася помилка при обробці вашого запиту сервером Bungie.net. Спробуйте пізніше.";
                 }
             }
             else
@@ -133,13 +140,13 @@ namespace ServitorDiscordBot
 
                 builder.Title += $" | { pair.Value}";
 
-                builder.Fields = new List<EmbedFieldBuilder>();
-
                 var clanStats = await apiClient.GetClanStatsAsync(pair.Key);
 
                 if (clanStats.Count() > 0)
                 {
                     builder.Color = Color.Blue;
+
+                    builder.Fields = new List<EmbedFieldBuilder>();
 
                     foreach (var clanStat in clanStats)
                     {
@@ -311,35 +318,37 @@ namespace ServitorDiscordBot
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
             if (!database.IsDiscordUserRegistered(message.Author.Id))
+            {
                 await UserIsNotRegisteredAsync(message);
+
+                return;
+            }
+
+            var partners = await database.GetUserPartnersAsync(message.Author.Id);
+
+            var builder = new EmbedBuilder();
+
+            builder.Title = $"Партнери {message.Author.Username}";
+
+            builder.Footer = GetFooter();
+
+            if (!partners.Any())
+            {
+                builder.Color = Color.Red;
+
+                builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
+            }
             else
             {
-                var partners = await database.GetUserPartnersAsync(message.Author.Id);
+                builder.Color = Color.Green;
 
-                var builder = new EmbedBuilder();
+                builder.Description = string.Empty;
 
-                builder.Title = $"Партнери {message.Author.Username}";
-
-                builder.Footer = GetFooter();
-
-                if (!partners.Any())
-                {
-                    builder.Color = Color.Red;
-
-                    builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
-                }
-                else
-                {
-                    builder.Color = Color.Green;
-
-                    builder.Description = string.Empty;
-
-                    foreach (var p in partners)
-                        builder.Description += $"{p.UserName} - {p.Count}\n";
-                }
-
-                await message.Channel.SendMessageAsync(embed: builder.Build());
+                foreach (var p in partners)
+                    builder.Description += $"{p.UserName} - {p.Count}\n";
             }
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
         private async Task GetUserActivitiesAsync(SocketMessage message)
@@ -351,36 +360,38 @@ namespace ServitorDiscordBot
             var user = await database.GetUserActivitiesAsync(message.Author.Id);
 
             if (user is null)
-                await UserIsNotRegisteredAsync(message);
-            else
             {
-                var builder = new EmbedBuilder();
+                await UserIsNotRegisteredAsync(message);
 
-                builder.Color = Color.Gold;
-
-                builder.Title = $"Активності {message.Author.Username}";
-
-                var acts = user.Characters.SelectMany(c => c.ActivityUserStats);
-
-                builder.Description = $"Неймовірно! **{acts.Count()}** активностей на рахунку {message.Author.Mention}! Так тримати!\n\n***По класах:***";
-
-                foreach (var c in user.Characters.OrderByDescending(x => x.ActivityUserStats.Count))
-                    builder.Description += $"\n{Localization.ClassNames[c.Class]} - {c.ActivityUserStats.Count}";
-
-                builder.Description += "\n\n***По типу активності:***";
-
-                List<(BungieNetApi.ActivityType ActivityType, int Count)> counter = new();
-
-                foreach (var type in acts.Select(x => x.Activity.ActivityType).Distinct())
-                    counter.Add((type, acts.Count(x => x.Activity.ActivityType == type)));
-
-                foreach (var count in counter.OrderByDescending(x => x.Count))
-                    builder.Description += $"\n{Localization.ActivityNames[count.ActivityType]} - {count.Count}";
-
-                builder.Footer = GetFooter();
-
-                await message.Channel.SendMessageAsync(embed: builder.Build());
+                return;
             }
+
+            var builder = new EmbedBuilder();
+
+            builder.Color = Color.Gold;
+
+            builder.Title = $"Активності {message.Author.Username}";
+
+            var acts = user.Characters.SelectMany(c => c.ActivityUserStats);
+
+            builder.Description = $"Неймовірно! **{acts.Count()}** активностей на рахунку {message.Author.Mention}! Так тримати!\n\n***По класах:***";
+
+            foreach (var c in user.Characters.OrderByDescending(x => x.ActivityUserStats.Count))
+                builder.Description += $"\n{Localization.ClassNames[c.Class]} - {c.ActivityUserStats.Count}";
+
+            builder.Description += "\n\n***По типу активності:***";
+
+            List<(BungieNetApi.ActivityType ActivityType, int Count)> counter = new();
+
+            foreach (var type in acts.Select(x => x.Activity.ActivityType).Distinct())
+                counter.Add((type, acts.Count(x => x.Activity.ActivityType == type)));
+
+            foreach (var count in counter.OrderByDescending(x => x.Count))
+                builder.Description += $"\n{Localization.ActivityNames[count.ActivityType]} - {count.Count}";
+
+            builder.Footer = GetFooter();
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
         private async Task GetClanActivitiesAsync(SocketMessage message)
