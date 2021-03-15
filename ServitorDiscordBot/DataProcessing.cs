@@ -36,7 +36,10 @@ namespace ServitorDiscordBot
 
             builder.Fields = new List<EmbedFieldBuilder>();
 
-            builder.Description = string.Join("\n", Localization.StatsActivityNames.Select(x => x.Value).OrderBy(y => y));
+            builder.Description = string.Empty;
+
+            foreach (var mode in Localization.StatsActivityNames.Values.OrderBy(x => x[0]))
+                builder.Description += $"**{mode[0]}** / {mode[1]}\n";
 
             builder.Footer = GetFooter();
 
@@ -56,7 +59,7 @@ namespace ServitorDiscordBot
                 return;
             }
 
-            var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode == x.Value.ToLower());
+            var pair = Localization.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
             var builder = new EmbedBuilder();
 
@@ -68,7 +71,7 @@ namespace ServitorDiscordBot
             {
                 var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-                builder.Title += $" | { pair.Value}";
+                builder.Title += $" | { pair.Value[0]}";
 
                 var leaderboard = await apiClient.GetClanLeaderboardAsync(pair.Key);
 
@@ -124,7 +127,7 @@ namespace ServitorDiscordBot
 
         private async Task ClanStatsAsync(SocketMessage message, string mode)
         {
-            var pair = Localization.StatsActivityNames.FirstOrDefault(x => mode == x.Value.ToLower());
+            var pair = Localization.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
             var builder = new EmbedBuilder();
 
@@ -138,7 +141,7 @@ namespace ServitorDiscordBot
 
                 var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-                builder.Title += $" | { pair.Value}";
+                builder.Title += $" | { pair.Value[0]}";
 
                 var clanStats = await apiClient.GetClanStatsAsync(pair.Key);
 
@@ -345,7 +348,7 @@ namespace ServitorDiscordBot
                 builder.Description = string.Empty;
 
                 foreach (var p in partners)
-                    builder.Description += $"{p.UserName} - {p.Count}\n";
+                    builder.Description += $"**{p.UserName}** – ***{p.Count}***\n";
             }
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
@@ -387,7 +390,11 @@ namespace ServitorDiscordBot
                 counter.Add((type, acts.Count(x => x.Activity.ActivityType == type)));
 
             foreach (var count in counter.OrderByDescending(x => x.Count))
-                builder.Description += $"\n{Localization.ActivityNames[count.ActivityType]} - {count.Count}";
+            {
+                var mode = Localization.ActivityNames[count.ActivityType];
+
+                builder.Description += $"\n**{mode[0]}** / {mode[1]} – ***{count.Count}***";
+            }
 
             builder.Footer = GetFooter();
 
@@ -416,7 +423,11 @@ namespace ServitorDiscordBot
                 counter.Add((type, acts.Count(x => x.ActivityType == type)));
 
             foreach (var count in counter.OrderByDescending(x => x.Count))
-                builder.Description += $"\n{Localization.ActivityNames[count.ActivityType]} - {count.Count}";
+            {
+                var mode = Localization.ActivityNames[count.ActivityType];
+
+                builder.Description += $"\n**{mode[0]}** / {mode[1]} – ***{count.Count}***";
+            }
 
             builder.Footer = GetFooter();
 
