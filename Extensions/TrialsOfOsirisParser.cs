@@ -42,7 +42,7 @@ namespace Extensions
                             using var stream = await node.Attributes["src"].Value.GetStreamAsync();
                             using Image icon = new Bitmap(stream);
 
-                            g.DrawImageUnscaled(icon, x, y);
+                            g.DrawImage(icon, x, y);
 
                             x += intervalX;
                         }

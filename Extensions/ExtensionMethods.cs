@@ -41,7 +41,7 @@ namespace Extensions
                     using var stream = await item.ItemIconUrl.GetStreamAsync();
                     using Image icon = new Bitmap(stream);
 
-                    g.DrawImageUnscaled(icon, Xi, Yi);
+                    g.DrawImage(icon, Xi, Yi);
 
                     g.DrawString(item.ItemName, itemName, brush, Xt1, Yt1);
                     g.DrawString(item.ItemTypeAndTier, itemType, brush, Xt2, Yt2);
