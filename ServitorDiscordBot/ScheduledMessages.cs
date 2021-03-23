@@ -15,6 +15,8 @@ namespace ServitorDiscordBot
     {
         private async Task Bumper_Notify(IEnumerable<KeyValuePair<string, DateTime>> users)
         {
+            _logger.LogInformation($"{DateTime.Now} Bump notification");
+
             IMessageChannel channel = _client.GetChannel(channelId) as IMessageChannel;
 
             var builder = new EmbedBuilder();

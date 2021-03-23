@@ -1,5 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +13,8 @@ namespace ServitorDiscordBot
         {
             if (message.Channel.Id == bumpChannelId && message.Embeds.Count > 0)
             {
+                _logger.LogInformation($"{DateTime.Now} Message in Bump channel");
+
                 var mention = message.MentionedUsers.FirstOrDefault();
                 var embed = message.Embeds.FirstOrDefault();
 
