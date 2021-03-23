@@ -34,8 +34,6 @@ namespace ServitorDiscordBot
 
             builder.Title = $"Режими";
 
-            builder.Fields = new List<EmbedFieldBuilder>();
-
             builder.Description = string.Empty;
 
             foreach (var mode in Localization.StatsActivityNames.Values.OrderBy(x => x[0]))
@@ -79,7 +77,7 @@ namespace ServitorDiscordBot
 
                 if (leaderboard.Any())
                 {
-                    builder.Fields = new List<EmbedFieldBuilder>();
+                    builder.Fields = new();
 
                     builder.Color = Color.Blue;
 
@@ -168,7 +166,7 @@ namespace ServitorDiscordBot
                 {
                     builder.Color = Color.Blue;
 
-                    builder.Fields = new List<EmbedFieldBuilder>();
+                    builder.Fields = new();
 
                     foreach (var clanStat in clanStats)
                     {

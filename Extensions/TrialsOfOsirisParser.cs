@@ -48,7 +48,7 @@ namespace Extensions
                         Yi += intervalY;
                     }
 
-                    int Xt = 252, Yt = 574;
+                    int Xt = 254, Yt = 574;
 
                     Brush brush = new SolidBrush(Color.White);
                     Font locationFont = new Font("Arial", 20, FontStyle.Bold);

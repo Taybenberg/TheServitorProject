@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -8,6 +9,28 @@ namespace ServitorDiscordBot
     {
         private async Task MessageReceivedAsync(SocketMessage message)
         {
+            if (message.Channel.Id == bumpChannelId && message.Embeds.Count > 0)
+            {
+                var mention = message.MentionedUsers.FirstOrDefault();
+                var embed = message.Embeds.FirstOrDefault();
+
+                if (mention is not null && embed is not null)
+                {
+                    if (embed.Description.Contains("Server bumped by"))
+                    {
+                        _bumper.AddUser(mention.Username);
+
+                        var builder = new EmbedBuilder();
+
+                        builder.Color = Color.DarkPurple;
+
+                        builder.Description = ":alarm_clock: :ok_hand:";
+
+                        await message.Channel.SendMessageAsync(embed: builder.Build());
+                    }
+                }
+            }
+
 #if DEBUG
             if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "servitor_beta")
                 return;

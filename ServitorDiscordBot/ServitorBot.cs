@@ -18,9 +18,11 @@ namespace ServitorDiscordBot
 
         private readonly DiscordSocketClient _client;
 
+        private readonly Bumper _bumper;
+
         private readonly string clanIconUrl, clanUrl, clanName;
 
-        private readonly ulong channelId;
+        private readonly ulong channelId, bumpChannelId;
 
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
@@ -28,7 +30,7 @@ namespace ServitorDiscordBot
 
             _scopeFactory = scopeFactory;
 
-            _client = new DiscordSocketClient();
+            _client = new();
 
             _client.Log += LogAsync;
 
@@ -41,8 +43,12 @@ namespace ServitorDiscordBot
             clanName = configuration["Destiny2:ClanName"];
 
             channelId = configuration.GetSection("DiscordChannelID").Get<ulong>();
+            bumpChannelId = configuration.GetSection("BumpChannelID").Get<ulong>();
 
             _client.SetGameAsync("Destiny 2").Wait();
+
+            _bumper = new();
+            _bumper.Notify += Bumper_Notify;
         }
 
         public void Dispose()

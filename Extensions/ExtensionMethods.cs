@@ -52,7 +52,7 @@ namespace Extensions
                     Yt2 += interval;
                 }
 
-                int Xt = 252, Yt = 574;
+                int Xt = 254, Yt = 574;
 
                 Font locationFont = new Font("Arial", 20, FontStyle.Bold);
 
