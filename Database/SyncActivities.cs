@@ -102,7 +102,9 @@ namespace Database
                 }
             });
 
-            Activities.AddRange(newActivitiesDictionary.Select(x => x.Value));
+            var lastActivitiesIds = Activities.Where(x => x.Period > date).Select(y => y.ActivityID).ToHashSet();
+
+            Activities.AddRange(newActivitiesDictionary.Where(x => !lastActivitiesIds.Contains(x.Key)).Select(x => x.Value));
 
             await SaveChangesAsync();
 
