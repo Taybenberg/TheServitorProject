@@ -34,14 +34,11 @@ namespace ServitorDiscordBot
             }
         }
 
-        static Bump bump;
-
-        Timer timer;
+        static Bump bump = new();
+        Timer timer = new();
 
         public Bumper()
         {
-            timer = new();
-
             timer.AutoReset = false;
             timer.Interval = (bump.nextBump - DateTime.Now).TotalMilliseconds;
 
