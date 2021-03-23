@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
 
             var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            using var inventory = await apiCient.GetXurInventoryAsync();
+            using var inventory = await apiCient.GetXurInventoryAsync(message is not null);
 
             IMessageChannel channel;
 

@@ -17,24 +17,22 @@ namespace Extensions
 
             using (var g = Graphics.FromImage(image))
             {
-                HtmlWeb web = new HtmlWeb();
+                var htmlDoc = new HtmlWeb().Load("https://www.light.gg/");
 
-                var htmlDoc = web.Load("https://www.light.gg/");
-
-                var trialsBillboard = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"trials-billboard\"]/div[2]/div[2]");
-
-                int Xi = 252, Yi = 30;
-                int intervalX = 121, intervalY = 136;
+                var trialsBillboard = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"trials-billboard\"]/div[2]");
 
                 if (trialsBillboard is not null)
                 {
+                    int Xi = 252, Yi = 30;
+                    int intervalX = 121, intervalY = 136;
+
                     for (int i = 1; i <= 4; i++)
                     {
                         int x = Xi, y = Yi;
 
                         for (int j = 1; j <= 3; j++)
                         {
-                            var node = trialsBillboard.SelectSingleNode($"span[{i}]/a[{j}]/img[@src]");
+                            var node = trialsBillboard.SelectSingleNode($"div[2]/span[{i}]/a[{j}]/img[@src]");
 
                             if (node is null)
                                 break;
@@ -49,6 +47,16 @@ namespace Extensions
 
                         Yi += intervalY;
                     }
+
+                    int Xt = 252, Yt = 574;
+
+                    Brush brush = new SolidBrush(Color.White);
+                    Font locationFont = new Font("Arial", 20, FontStyle.Bold);
+
+                    var location = trialsBillboard.SelectSingleNode("div[1]/span/text()");
+                    var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
+
+                    g.DrawString(locationName, locationFont, brush, Xt, Yt);
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using BungieNetApi;
 using Flurl.Http;
+using HtmlAgilityPack;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -15,7 +16,7 @@ namespace Extensions
             return await apiClient.GetActivityDetailsAsync(activity.ActivityID.ToString());
         }
 
-        public static async Task<Stream> GetXurInventoryAsync(this BungieNetApiClient apiClient)
+        public static async Task<Stream> GetXurInventoryAsync(this BungieNetApiClient apiClient, bool getLocation = false)
         {
             var items = await apiClient.GetXurItemsAsync();
 
@@ -50,6 +51,23 @@ namespace Extensions
                     Yt1 += interval;
                     Yt2 += interval;
                 }
+
+                int Xt = 252, Yt = 574;
+
+                Font locationFont = new Font("Arial", 20, FontStyle.Bold);
+
+                HtmlNode location = null;
+
+                if (getLocation)
+                {
+                    var htmlDoc = new HtmlWeb().Load("https://xur.wiki/");
+
+                    location = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"home-body\"]/div[1]/div/div/div[1]/div/div/h1");
+                }
+
+                var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
+
+                g.DrawString(locationName, locationFont, brush, Xt, Yt);
             }
 
             var ms = new MemoryStream();
