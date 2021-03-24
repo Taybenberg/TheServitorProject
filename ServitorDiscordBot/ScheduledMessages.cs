@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
         {
             _logger.LogInformation($"{DateTime.Now} Bump notification");
 
-            IMessageChannel channel = _client.GetChannel(channelId) as IMessageChannel;
+            IMessageChannel channel = _client.GetChannel(bumpChannelId) as IMessageChannel;
 
             var builder = new EmbedBuilder();
 
@@ -29,7 +29,7 @@ namespace ServitorDiscordBot
 
             if (users.Count() > 0)
             {
-                builder.Description += "\nКулдаун:";
+                builder.Description += "\nКулдаун до:";
 
                 builder.Fields = new();
 

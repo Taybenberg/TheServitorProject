@@ -28,7 +28,7 @@ namespace ServitorDiscordBot
 
                         builder.Color = Color.DarkPurple;
 
-                        builder.Description = ":alarm_clock: :ok_hand:";
+                        builder.Description = $":alarm_clock: :ok_hand:\n:fast_forward: {_bumper.NextBump.ToString("HH:mm:ss")}";
 
                         await message.Channel.SendMessageAsync(embed: builder.Build());
                     }

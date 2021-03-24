@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -16,8 +18,31 @@ namespace ServitorDiscordBot
             const int userBumpCooldown = 12;
             const int bumpCooldown = 4;
 
-            public DateTime nextBump = DateTime.Now.AddHours(bumpCooldown);
-            public ConcurrentDictionary<string, DateTime> bumpList = new();
+            private ConcurrentDictionary<string, DateTime> bumpList = new();
+            public IEnumerable<KeyValuePair<string, DateTime>> BumpList
+            {
+                get
+                {
+                    foreach (var bl in bumpList.Where(x => x.Value < DateTime.Now))
+                        bumpList.TryRemove(bl);
+
+                    return bumpList;
+                }
+            }
+
+            private DateTime nextBump = DateTime.Now.AddHours(bumpCooldown);
+            public DateTime NextBump
+            {
+                get
+                {
+                    var curr = DateTime.Now;
+
+                    if (nextBump < curr)
+                        nextBump = curr.AddHours(bumpCooldown);
+
+                    return nextBump;
+                }
+            }
 
             public DateTime AddUser(string userName)
             {
@@ -34,22 +59,29 @@ namespace ServitorDiscordBot
             }
         }
 
-        static Bump bump = new();
+        Bump bump;
         Timer timer = new();
+
+        const string path = "Bump.json";
+
+        public DateTime NextBump { get { return bump.NextBump; } }
 
         public Bumper()
         {
+            if (File.Exists(path))
+                bump = JsonSerializer.Deserialize<Bump>(File.ReadAllText(path));
+            else
+                bump = new();
+
             timer.AutoReset = false;
-            timer.Interval = (bump.nextBump - DateTime.Now).TotalMilliseconds;
+
+            timer.Interval = (bump.NextBump - DateTime.Now).TotalMilliseconds;
 
             timer.Elapsed += (_, _) =>
             {
                 timer.Stop();
 
-                foreach (var bl in bump.bumpList.Where(x => x.Value < DateTime.Now))
-                    bump.bumpList.TryRemove(bl);
-
-                Notify?.Invoke(bump.bumpList);
+                Notify?.Invoke(bump.BumpList);
             };
 
             timer.Start();
@@ -62,6 +94,8 @@ namespace ServitorDiscordBot
             timer.Interval = (bump.AddUser(userName) - DateTime.Now).TotalMilliseconds;
 
             timer.Start();
+
+            File.WriteAllText(path, JsonSerializer.Serialize(bump));
         }
     }
 }
