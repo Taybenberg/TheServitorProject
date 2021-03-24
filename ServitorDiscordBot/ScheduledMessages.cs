@@ -25,8 +25,6 @@ namespace ServitorDiscordBot
 
             builder.Description = "Саме час **!bump**-нути :alarm_clock:";
 
-            builder.Footer = GetFooter();
-
             if (users.Count() > 0)
             {
                 builder.Description += "\nКулдаун до:";
