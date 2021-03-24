@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -18,7 +19,9 @@ namespace ServitorDiscordBot
             const int userBumpCooldown = 12;
             const int bumpCooldown = 4;
 
-            private ConcurrentDictionary<string, DateTime> bumpList = new();
+            public ConcurrentDictionary<string, DateTime> bumpList { get; set; } = new();
+
+            [JsonIgnore]
             public IEnumerable<KeyValuePair<string, DateTime>> BumpList
             {
                 get
@@ -30,7 +33,9 @@ namespace ServitorDiscordBot
                 }
             }
 
-            private DateTime nextBump = DateTime.Now.AddHours(bumpCooldown);
+            public DateTime nextBump { get; set; } = DateTime.Now.AddHours(bumpCooldown);
+
+            [JsonIgnore]
             public DateTime NextBump
             {
                 get
