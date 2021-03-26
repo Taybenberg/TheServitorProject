@@ -49,6 +49,8 @@ namespace ServitorDiscordBot
 
             _bumper = new();
             _bumper.Notify += Bumper_Notify;
+
+            _logger.LogInformation($"{DateTime.Now} Bump scheduled on {_bumper.NextBump}");
         }
 
         public void Dispose()

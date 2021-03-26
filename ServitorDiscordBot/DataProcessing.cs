@@ -229,12 +229,16 @@ namespace ServitorDiscordBot
                         details += $" {u.TeamScore}";
                 }
 
+                List<string> members = new();
+
                 foreach (var u in act.ActivityUserStats)
                 {
-                    var clans = apiClient.GetUserClansAsync(u.MembershipType, u.MembershipId).Result;
+                    var memberClans = apiClient.GetUserClansAsync(u.MembershipType, u.MembershipId).Result;
 
-                    details += $"\n{u.DisplayName} {HttpUtility.HtmlDecode(string.Join(",", clans))}";
+                    members.Add($"\n{u.DisplayName} {HttpUtility.HtmlDecode(string.Join(",", memberClans))}");
                 }
+
+                details += string.Join(string.Empty, members.Distinct());
 
                 activityDetails.TryAdd(activity.Period, details);
             });
