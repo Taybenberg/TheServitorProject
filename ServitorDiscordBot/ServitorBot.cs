@@ -25,7 +25,7 @@ namespace ServitorDiscordBot
         private readonly ulong channelId, bumpChannelId;
 
         private readonly ulong[] bumpPingUsers;
-        
+
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;

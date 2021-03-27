@@ -63,10 +63,10 @@ namespace ServitorDiscordBot
 
                 var cooldown = curr.AddHours(userBumpCooldown);
 
-                if (!bumpList.TryAdd(userID, new BumpValue 
-                { 
-                    Username = userName, 
-                    Cooldown = cooldown 
+                if (!bumpList.TryAdd(userID, new BumpValue
+                {
+                    Username = userName,
+                    Cooldown = cooldown
                 }))
                     bumpList[userID].Cooldown = cooldown;
 

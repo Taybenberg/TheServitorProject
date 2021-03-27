@@ -32,7 +32,7 @@ namespace BotConsole
                     var bot = host.Services.GetService<ServitorBot>();
 
                     await bot.XurNotificationAsync();
-                }).DailyAtHour(19).Zoned(TimeZoneInfo.Local).Friday();
+                }).DailyAtHour(17).Friday();
             });
 
             host.Run();
