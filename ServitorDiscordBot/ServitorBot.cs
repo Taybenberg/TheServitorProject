@@ -20,10 +20,12 @@ namespace ServitorDiscordBot
 
         private readonly Bumper _bumper;
 
-        private readonly string clanIconUrl, clanUrl, clanName;
+        private readonly string serverIconUrl, clanUrl, serverName;
 
         private readonly ulong channelId, bumpChannelId;
 
+        private readonly ulong[] bumpPingUsers;
+        
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
@@ -40,10 +42,11 @@ namespace ServitorDiscordBot
 
             clanUrl = configuration["Destiny2:ClanURL"];
 
-            clanIconUrl = configuration["Discord:ClanIconURL"];
-            clanName = configuration["Discord:ClanName"];
+            serverIconUrl = configuration["Discord:ServerIconURL"];
+            serverName = configuration["Discord:ServerName"];
             channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong>();
             bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
+            bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<ulong[]>();
 
             _client.SetGameAsync("Destiny 2").Wait();
 

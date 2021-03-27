@@ -22,7 +22,7 @@ namespace ServitorDiscordBot
                 {
                     if (embed.Description.Contains("Server bumped by"))
                     {
-                        _bumper.AddUser(mention.Id);
+                        _bumper.AddUser(mention.Id, mention.Username);
 
                         var builder = new EmbedBuilder();
 
@@ -63,8 +63,8 @@ namespace ServitorDiscordBot
 
                 builder.Author = new();
                 builder.Author.Url = clanUrl;
-                builder.Author.IconUrl = clanIconUrl;
-                builder.Author.Name = $"На варті клану {clanName}";
+                builder.Author.IconUrl = serverIconUrl;
+                builder.Author.Name = $"На варті серверу {serverName}";
 
                 builder.Title = "Допомога";
                 builder.Description = $"Я **{_client.CurrentUser.Username}**, " +

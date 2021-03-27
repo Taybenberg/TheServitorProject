@@ -13,7 +13,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task Bumper_Notify(IEnumerable<KeyValuePair<ulong, DateTime>> users)
+        private async Task Bumper_Notify(Dictionary<ulong, (string, DateTime)> users)
         {
             _logger.LogInformation($"{DateTime.Now} Bump notification");
 
@@ -25,7 +25,7 @@ namespace ServitorDiscordBot
 
             builder.Description = "Саме час **!bump**-нути :alarm_clock:";
 
-            if (users.Count() > 0)
+            if (users.Count > 0)
             {
                 builder.Description += "\nКулдаун до:";
 
@@ -34,13 +34,18 @@ namespace ServitorDiscordBot
                 foreach (var user in users)
                     builder.Fields.Add(new EmbedFieldBuilder
                     {
-                        Name = _client.GetUser(user.Key).Username,
-                        Value = user.Value.ToString("HH:mm:ss"),
+                        Name = user.Value.Item1,
+                        Value = user.Value.Item2.ToString("HH:mm:ss"),
                         IsInline = true
                     });
             }
 
-            await channel.SendMessageAsync(embed: builder.Build());
+            string mentions = string.Empty;
+
+            foreach (var id in bumpPingUsers.Where(x => !users.ContainsKey(x)))
+                mentions += $"<@{id}> ";
+
+            await channel.SendMessageAsync(mentions, embed: builder.Build());
         }
 
         public async Task XurNotificationAsync(SocketMessage message = null)
