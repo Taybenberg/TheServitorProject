@@ -36,14 +36,14 @@ namespace ServitorDiscordBot
 
             _client.MessageReceived += MessageReceivedAsync;
 
-            _client.LoginAsync(TokenType.Bot, configuration["DiscordBotToken"]).Wait();
+            _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 
-            clanIconUrl = configuration["Destiny2:ClanIconURL"];
             clanUrl = configuration["Destiny2:ClanURL"];
-            clanName = configuration["Destiny2:ClanName"];
 
-            channelId = configuration.GetSection("DiscordChannelID").Get<ulong>();
-            bumpChannelId = configuration.GetSection("BumpChannelID").Get<ulong>();
+            clanIconUrl = configuration["Discord:ClanIconURL"];
+            clanName = configuration["Discord:ClanName"];
+            channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong>();
+            bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
 
             _client.SetGameAsync("Destiny 2").Wait();
 

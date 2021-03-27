@@ -11,7 +11,7 @@ namespace ServitorDiscordBot
     {
         private async Task MessageReceivedAsync(SocketMessage message)
         {
-            if (message.Channel.Id == bumpChannelId && message.Embeds.Count > 0)
+            if (message.Channel.Id == bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
             {
                 _logger.LogInformation($"{DateTime.Now} Message in Bump channel");
 
@@ -22,7 +22,7 @@ namespace ServitorDiscordBot
                 {
                     if (embed.Description.Contains("Server bumped by"))
                     {
-                        _bumper.AddUser(mention.Username);
+                        _bumper.AddUser(mention.Id);
 
                         var builder = new EmbedBuilder();
 

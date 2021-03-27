@@ -13,7 +13,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task Bumper_Notify(IEnumerable<KeyValuePair<string, DateTime>> users)
+        private async Task Bumper_Notify(IEnumerable<KeyValuePair<ulong, DateTime>> users)
         {
             _logger.LogInformation($"{DateTime.Now} Bump notification");
 
@@ -34,7 +34,7 @@ namespace ServitorDiscordBot
                 foreach (var user in users)
                     builder.Fields.Add(new EmbedFieldBuilder
                     {
-                        Name = user.Key,
+                        Name = _client.GetUser(user.Key).Username,
                         Value = user.Value.ToString("HH:mm:ss"),
                         IsInline = true
                     });

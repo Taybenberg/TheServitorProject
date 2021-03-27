@@ -12,17 +12,17 @@ namespace ServitorDiscordBot
 {
     class Bumper
     {
-        public event Func<IEnumerable<KeyValuePair<string, DateTime>>, Task> Notify;
+        public event Func<IEnumerable<KeyValuePair<ulong, DateTime>>, Task> Notify;
 
         class Bump
         {
             const int userBumpCooldown = 12;
             const int bumpCooldown = 4;
 
-            public ConcurrentDictionary<string, DateTime> bumpList { get; set; } = new();
+            public ConcurrentDictionary<ulong, DateTime> bumpList { get; set; } = new();
 
             [JsonIgnore]
-            public IEnumerable<KeyValuePair<string, DateTime>> BumpList
+            public IEnumerable<KeyValuePair<ulong, DateTime>> BumpList
             {
                 get
                 {
@@ -49,7 +49,7 @@ namespace ServitorDiscordBot
                 }
             }
 
-            public DateTime AddUser(string userName)
+            public DateTime AddUser(ulong userID)
             {
                 var curr = DateTime.Now;
 
@@ -57,8 +57,8 @@ namespace ServitorDiscordBot
 
                 var cooldown = curr.AddHours(userBumpCooldown);
 
-                if (!bumpList.TryAdd(userName, cooldown))
-                    bumpList[userName] = cooldown;
+                if (!bumpList.TryAdd(userID, cooldown))
+                    bumpList[userID] = cooldown;
 
                 return nextBump;
             }
@@ -92,11 +92,11 @@ namespace ServitorDiscordBot
             timer.Start();
         }
 
-        public void AddUser(string userName)
+        public void AddUser(ulong userID)
         {
             timer.Stop();
 
-            timer.Interval = (bump.AddUser(userName) - DateTime.Now).TotalMilliseconds;
+            timer.Interval = (bump.AddUser(userID) - DateTime.Now).TotalMilliseconds;
 
             timer.Start();
 
