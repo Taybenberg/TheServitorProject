@@ -30,7 +30,7 @@ namespace ServitorDiscordBot
         {
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.DarkBlue;
+            builder.Color = GetColor(MessageColors.Modes);
 
             builder.Title = $"Режими";
 
@@ -79,7 +79,7 @@ namespace ServitorDiscordBot
                 {
                     builder.Fields = new();
 
-                    builder.Color = Color.Blue;
+                    builder.Color = GetColor(MessageColors.Leaderboard);
 
                     var users = await database.GetUsersAsync();
 
@@ -127,14 +127,14 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
-                    builder.Color = Color.Red;
+                    builder.Color = GetColor(MessageColors.Error);
 
                     builder.Description = "Сталася помилка при обробці вашого запиту сервером Bungie.net. Спробуйте пізніше.";
                 }
             }
             else
             {
-                builder.Color = Color.Red;
+                builder.Color = GetColor(MessageColors.Error);
 
                 builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
             }
@@ -164,7 +164,7 @@ namespace ServitorDiscordBot
 
                 if (clanStats.Count() > 0)
                 {
-                    builder.Color = Color.Blue;
+                    builder.Color = GetColor(MessageColors.ClanStats);
 
                     builder.Fields = new();
 
@@ -180,14 +180,14 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
-                    builder.Color = Color.Red;
+                    builder.Color = GetColor(MessageColors.Error);
 
                     builder.Description = "Сталася помилка при обробці вашого запиту сервером Bungie.net. Спробуйте пізніше.";
                 }
             }
             else
             {
-                builder.Color = Color.Red;
+                builder.Color = GetColor(MessageColors.Error);
 
                 builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
             }
@@ -205,7 +205,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.DarkerGrey;
+            builder.Color = GetColor(MessageColors.Suspicious);
 
             builder.Description = "Шукаю інформацію, на це мені знадобиться трохи часу…";
 
@@ -276,7 +276,7 @@ namespace ServitorDiscordBot
             {
                 var builder = new EmbedBuilder();
 
-                builder.Color = Color.Teal;
+                builder.Color = GetColor(MessageColors.Register);
 
                 builder.Title = "Реєстрація";
                 builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**. " +
@@ -308,13 +308,13 @@ namespace ServitorDiscordBot
 
                 if (users.Count() < 1)
                 {
-                    builder.Color = Color.DarkMagenta;
+                    builder.Color = GetColor(MessageColors.RegisterNeedMoreInfo);
 
                     builder.Description = "Не можу знайти гравця. Перевірте запит.";
                 }
                 else if (users.Count() > 1)
                 {
-                    builder.Color = Color.DarkMagenta;
+                    builder.Color = GetColor(MessageColors.RegisterNeedMoreInfo);
 
                     builder.Description = $"Уточніть нікнейм, бо за цим шаблоном знайдено кілька гравців: {string.Join(", ", users.Select(x => x.UserName))}";
                 }
@@ -324,7 +324,7 @@ namespace ServitorDiscordBot
 
                     await database.RegisterUserAsync(user.UserID, message.Author.Id);
 
-                    builder.Color = Color.DarkGreen;
+                    builder.Color = GetColor(MessageColors.RegisterSuccessful);
 
                     builder.Description = $"Зареєстровано {message.Author.Mention} як гравця {user.UserName}";
                 }
@@ -358,13 +358,13 @@ namespace ServitorDiscordBot
 
             if (!partners.Any())
             {
-                builder.Color = Color.Red;
+                builder.Color = GetColor(MessageColors.Error);
 
                 builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
             }
             else
             {
-                builder.Color = Color.Green;
+                builder.Color = GetColor(MessageColors.MyPartners);
 
                 builder.Description = string.Empty;
 
@@ -392,7 +392,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.Gold;
+            builder.Color = GetColor(MessageColors.MyActivities);
 
             builder.Title = $"Активності {message.Author.Username}";
 
@@ -430,7 +430,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.Magenta;
+            builder.Color = GetColor(MessageColors.ClanActivities);
 
             builder.Title = $"Активності клану {serverName}";
 
@@ -460,7 +460,7 @@ namespace ServitorDiscordBot
         {
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.Orange;
+            builder.Color = GetColor(MessageColors.NotRegistered);
 
             builder.Title = "Реєстрація";
             builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
@@ -474,7 +474,7 @@ namespace ServitorDiscordBot
         {
             var builder = new EmbedBuilder();
 
-            builder.Color = Color.Orange;
+            builder.Color = GetColor(MessageColors.AlreadyRegistered);
 
             builder.Title = "Реєстрація";
             builder.Description = "Ґардіане, ви вже зареєстровані…";

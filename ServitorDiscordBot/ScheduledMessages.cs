@@ -21,7 +21,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = (Color?)System.Drawing.ColorTranslator.FromHtml("#ADC8D1");
+            builder.Color = GetColor(MessageColors.BumpNotification);
 
             builder.Description = "Саме час **!bump**-нути :alarm_clock:";
 
@@ -50,10 +50,6 @@ namespace ServitorDiscordBot
 
         public async Task EververseNotificationAsync(SocketMessage message = null)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
-
             using var inventory = await EververseParser.GetEververseInventoryAsync();
 
             IMessageChannel channel;
@@ -66,7 +62,7 @@ namespace ServitorDiscordBot
 
                 var builder = new EmbedBuilder();
 
-                builder.Color = (Color?)System.Drawing.ColorTranslator.FromHtml("#ADC8D1");
+                builder.Color = GetColor(MessageColors.Eververse);
 
                 builder.Title = $"Еверверс оновила асортимент";
 
@@ -98,7 +94,7 @@ namespace ServitorDiscordBot
 
                 var builder = new EmbedBuilder();
 
-                builder.Color = (Color?)System.Drawing.ColorTranslator.FromHtml("#ADC8D1");
+                builder.Color = GetColor(MessageColors.Xur);
 
                 builder.Title = $"Зур привіз свіжий крам";
 

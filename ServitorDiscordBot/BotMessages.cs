@@ -26,7 +26,7 @@ namespace ServitorDiscordBot
 
                         var builder = new EmbedBuilder();
 
-                        builder.Color = Color.DarkPurple;
+                        builder.Color = GetColor(MessageColors.Bumped);
 
                         builder.Description = $":alarm_clock: :ok_hand:\n:fast_forward: {_bumper.NextBump.ToString("HH:mm:ss")}";
 
@@ -45,21 +45,21 @@ namespace ServitorDiscordBot
 
             var command = message.Content.ToLower();
 
-            if (command is "біп")
+            if (command is "біп" or "bip")
             {
                 var builder = new EmbedBuilder();
 
-                builder.Color = Color.DarkPurple;
+                builder.Color = GetColor(MessageColors.Bip);
 
                 builder.Description = "біп…";
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
-            else if (command is "допомога")
+            else if (command is "допомога" or "help")
             {
                 var builder = new EmbedBuilder();
 
-                builder.Color = Color.Purple;
+                builder.Color = GetColor(MessageColors.Help);
 
                 builder.Author = new();
                 builder.Author.Url = clanUrl;
@@ -90,23 +90,23 @@ namespace ServitorDiscordBot
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
-            else if (command is "режими")
+            else if (command is "режими" or "modes")
             {
                 await GetModesAsync(message);
             }
-            else if (command is "кланові активності")
+            else if (command is "кланові активності" or "clan activities")
             {
                 await GetClanActivitiesAsync(message);
             }
-            else if (command is "мої активності")
+            else if (command is "мої активності" or "my activities")
             {
                 await GetUserActivitiesAsync(message);
             }
-            else if (command is "мої партнери")
+            else if (command is "мої партнери" or "my partners")
             {
                 await GetUserPartnersAsync(message);
             }
-            else if (command is "реєстрація")
+            else if (command is "реєстрація" or "register")
             {
                 await RegisterMessageAsync(message);
             }
@@ -114,7 +114,7 @@ namespace ServitorDiscordBot
             {
                 await FindSuspiciousAsync(message, true);
             }
-            else if (command is "відступники")
+            else if (command is "відступники" or "apostates")
             {
                 await FindSuspiciousAsync(message, false);
             }
