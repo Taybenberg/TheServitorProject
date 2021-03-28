@@ -48,6 +48,38 @@ namespace ServitorDiscordBot
             await channel.SendMessageAsync(mentions, embed: builder.Build());
         }
 
+        public async Task EververseNotificationAsync(SocketMessage message = null)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+            using var inventory = await EververseParser.GetEververseInventoryAsync();
+
+            IMessageChannel channel;
+
+            if (message is null)
+            {
+                _logger.LogInformation($"{DateTime.Now} Eververse update");
+
+                channel = _client.GetChannel(channelId) as IMessageChannel;
+
+                var builder = new EmbedBuilder();
+
+                builder.Color = (Color?)System.Drawing.ColorTranslator.FromHtml("#ADC8D1");
+
+                builder.Title = $"Еверверс оновила асортимент";
+
+                builder.Footer = GetFooter();
+
+                await channel.SendMessageAsync(embed: builder.Build());
+            }
+            else
+                channel = message.Channel;
+
+            await channel.SendFileAsync(inventory, "EververseInventory.png");
+        }
+
         public async Task XurNotificationAsync(SocketMessage message = null)
         {
             using var scope = _scopeFactory.CreateScope();

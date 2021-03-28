@@ -61,6 +61,16 @@ namespace Extensions {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] EververseItemsBackground {
+            get {
+                object obj = ResourceManager.GetObject("EververseItemsBackground", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] TrialsItemsBackground {

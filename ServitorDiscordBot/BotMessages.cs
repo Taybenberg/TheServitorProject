@@ -75,6 +75,7 @@ namespace ServitorDiscordBot
                     $"\n***біп*** - *запит на перевірку моєї працездатності*" +
                     $"\n***зур*** - *переглянути інвентар Зура*" +
                     $"\n***осіріс*** - *переглянути нагороди за випробування Осіріса*" +
+                    $"\n***еверверс*** - *переглянути асортимент Тесс Еверіс*" +
                     $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*" +
                     $"\n***мої партнери*** - *список партнерів ґардіана*" +
                     $"\n***кланові активності*** - *кількість активностей клану в цьому році*" +
@@ -124,6 +125,10 @@ namespace ServitorDiscordBot
             else if (command is "осіріс" or "osiris")
             {
                 await GetOsirisInventoryAsync(message);
+            }
+            else if (command is "еверверс" or "eververse")
+            {
+                await EververseNotificationAsync(message);
             }
             else if (command is "my_id")
             {
