@@ -60,7 +60,7 @@ namespace Extensions
 
                 if (getLocation)
                 {
-                    var htmlDoc = new HtmlWeb().Load("https://xur.wiki/");
+                    var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
 
                     location = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"home-body\"]/div[1]/div/div/div[1]/div/div/h1");
                 }

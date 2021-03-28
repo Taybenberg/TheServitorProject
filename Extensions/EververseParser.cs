@@ -17,7 +17,7 @@ namespace Extensions
 
             using (var g = Graphics.FromImage(image))
             {
-                var htmlDoc = new HtmlWeb().Load("https://www.todayindestiny.com/eververseWeekly");
+                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
             }
 
             var ms = new MemoryStream();

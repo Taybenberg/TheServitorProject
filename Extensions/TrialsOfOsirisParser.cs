@@ -17,7 +17,7 @@ namespace Extensions
 
             using (var g = Graphics.FromImage(image))
             {
-                var htmlDoc = new HtmlWeb().Load("https://www.light.gg/");
+                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.light.gg/");
 
                 var trialsBillboard = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"trials-billboard\"]/div[2]");
 
