@@ -16,15 +16,22 @@ namespace Extensions
         {
             if (!cachedImages.ContainsKey(url))
             {
-                using var stream = await url.GetStreamAsync();
+                try
+                {
+                    using var stream = await url.GetStreamAsync();
 
-                cachedImages.TryAdd(url, new Bitmap(stream));
+                    cachedImages.TryAdd(url, new Bitmap(stream));
+                }
+                catch
+                {
+                    return new Bitmap(1, 1);
+                }
             }
 
             return cachedImages[url];
         }
 
-        public async Task<Stream> GetEververseInventoryAsync(string seasonName, DateTime seasonStart)
+        public async Task<Stream> GetEververseInventoryAsync(string seasonName, DateTime seasonStart, int weekNumber)
         {
             using var background = new MemoryStream(ExtensionsRes.EververseItemsBackground);
 
@@ -32,18 +39,16 @@ namespace Extensions
 
             using (var g = Graphics.FromImage(image))
             {
-                int currWeek = (int)(DateTime.Now - seasonStart).TotalDays / 7 + 1;
-
                 Brush brush = new SolidBrush(Color.White);
                 Font font = new Font("Arial", 25, FontStyle.Bold);
 
                 int Xt = 210, Yt1 = 10, Yt2 = 70;
 
-                g.DrawString($"{seasonStart.AddDays((currWeek - 1) * 7).ToString("dd.MM.yyyy")} – Тиждень {currWeek}", font, brush, Xt, Yt1);
+                g.DrawString($"{seasonStart.AddDays((weekNumber - 1) * 7).ToString("dd.MM.yyyy")} – Тиждень {weekNumber}", font, brush, Xt, Yt1);
                 g.DrawString($"Сезон \"{seasonName}\"", font, brush, Xt, Yt2);
 
                 var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
-                var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{currWeek}]");
+                var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{weekNumber}]");
 
                 if (eververseWeekly is not null)
                 {
@@ -51,23 +56,40 @@ namespace Extensions
                     Image icon = await GetImage(iconUrl);
                     g.DrawImage(icon, 0, 0, 192, 192);
 
-                    var silverContainer = eververseWeekly.SelectSingleNode($"./div[2]/div[1]/div");
+                    int X = 35, intervalX = 106;
+                    int[] Y = { 178, 361, 467, 650 };
 
-                    if (silverContainer is not null)
+                    for (int i = 1; i <= 4; i++)
                     {
-                        int Xs = 35, Ys = 178, intervalX = 106;
+                        var container = eververseWeekly.SelectSingleNode($"./div[2]/div[{i}]/div");
 
-                        for (int i = 1; i <= 5; i++)
+                        if (container is not null)
                         {
-                            iconUrl = silverContainer.SelectSingleNode($"./div[{i}]/div[1]/div/img[3]").Attributes["src"].Value;
-                            icon = await GetImage(iconUrl);
-                            g.DrawImage(icon, Xs, Ys);
+                            int x = X, y = Y[i - 1];
 
-                            iconUrl = silverContainer.SelectSingleNode($"./div[{i}]/div[1]/div/img[1]").Attributes["src"].Value;
-                            icon = await GetImage(iconUrl);
-                            g.DrawImage(icon, Xs, Ys);
+                            for (int j = 1; j <= 7; j++)
+                            {
+                                var node = container.SelectSingleNode($"./div[{j}]/div[1]/div/img[3]")
+                                ?? container.SelectSingleNode($"./div[{j}]/div[1]/div/img[2]");
 
-                            Xs += intervalX;
+                                if (node is not null)
+                                {
+                                    iconUrl = node.Attributes["src"].Value;
+                                    icon = await GetImage(iconUrl);
+                                    g.DrawImage(icon, x, y);
+                                }
+
+                                node = container.SelectSingleNode($"./div[{j}]/div[1]/div/img[1]");
+
+                                if (node is null)
+                                    break;
+
+                                iconUrl = node.Attributes["src"].Value;
+                                icon = await GetImage(iconUrl);
+                                g.DrawImage(icon, x, y);
+
+                                x += intervalX;
+                            }
                         }
                     }
                 }

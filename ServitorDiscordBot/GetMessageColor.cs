@@ -25,7 +25,7 @@ namespace ServitorDiscordBot
                 RegisterNeedMoreInfo => ColorTranslator.FromHtml("#ff7043"),
                 Suspicious => ColorTranslator.FromHtml("#546e7a"),
                 Xur => ColorTranslator.FromHtml("#e0f7fa"),
-                Eververse => ColorTranslator.FromHtml("#cfff95"),
+                Eververse => ColorTranslator.FromHtml("#ffffcf"),
                 ClanStats => ColorTranslator.FromHtml("#76d275"),
                 Leaderboard => ColorTranslator.FromHtml("#2962ff"),
                 _ => ColorTranslator.FromHtml("#fafafa")

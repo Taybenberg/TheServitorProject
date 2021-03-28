@@ -75,7 +75,8 @@ namespace ServitorDiscordBot
                     $"\n***біп*** - *запит на перевірку моєї працездатності*" +
                     $"\n***зур*** - *переглянути інвентар Зура*" +
                     $"\n***осіріс*** - *переглянути нагороди за випробування Осіріса*" +
-                    $"\n***еверверс*** - *переглянути асортимент Тесс Еверіс*" +
+                    $"\n***еверверс*** - *переглянути поточний асортимент Тесс Еверіс*" +
+                     $"\n***еверверс %тиждень%*** - *переглянути асортимент Тесс Еверіс за визначений тиждень*" +
                     $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*" +
                     $"\n***мої партнери*** - *список партнерів ґардіана*" +
                     $"\n***кланові активності*** - *кількість активностей клану в цьому році*" +
@@ -126,9 +127,11 @@ namespace ServitorDiscordBot
             {
                 await GetOsirisInventoryAsync(message);
             }
-            else if (command is "еверверс" or "eververse")
+            else if (command.Contains("еверверс"))
             {
-                await EververseNotificationAsync(message);
+                var week = command.Replace("еверверс", "").TrimStart();
+
+                await EververseNotificationAsync(message, week);
             }
             else if (command is "my_id")
             {

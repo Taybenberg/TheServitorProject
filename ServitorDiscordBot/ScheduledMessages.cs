@@ -48,10 +48,16 @@ namespace ServitorDiscordBot
             await channel.SendMessageAsync(mentions, embed: builder.Build());
         }
 
-        public async Task EververseNotificationAsync(SocketMessage message = null)
+        public async Task EververseNotificationAsync(SocketMessage message = null, string week = null)
         {
-            using var parser = new EververseParser();
-            using var inventory = await parser.GetEververseInventoryAsync(seasonName, seasonStart);
+            int currWeek = 0;
+            int.TryParse(week, out currWeek);
+
+            if (currWeek < 1 || currWeek > 13)
+                currWeek = (int)(DateTime.Now - seasonStart).TotalDays / 7 + 1;
+
+            using var parser = new EververseParser();          
+            using var inventory = await parser.GetEververseInventoryAsync(seasonName, seasonStart, currWeek);
 
             IMessageChannel channel;
 
