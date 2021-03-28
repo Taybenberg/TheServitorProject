@@ -50,7 +50,8 @@ namespace ServitorDiscordBot
 
         public async Task EververseNotificationAsync(SocketMessage message = null)
         {
-            using var inventory = await EververseParser.GetEververseInventoryAsync();
+            using var parser = new EververseParser();
+            using var inventory = await parser.GetEververseInventoryAsync(seasonName, seasonStart);
 
             IMessageChannel channel;
 

@@ -20,7 +20,9 @@ namespace ServitorDiscordBot
 
         private readonly Bumper _bumper;
 
-        private readonly string serverIconUrl, clanUrl, serverName;
+        private readonly string serverIconUrl, clanUrl, serverName, seasonName;
+
+        private readonly DateTime seasonStart;
 
         private readonly ulong channelId, bumpChannelId;
 
@@ -41,6 +43,8 @@ namespace ServitorDiscordBot
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 
             clanUrl = configuration["Destiny2:ClanURL"];
+            seasonName = configuration["Destiny2:SeasonName"];
+            seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
 
             serverIconUrl = configuration["Discord:ServerIconURL"];
             serverName = configuration["Discord:ServerName"];

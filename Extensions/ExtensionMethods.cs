@@ -61,8 +61,7 @@ namespace Extensions
                 if (getLocation)
                 {
                     var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
-
-                    location = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"home-body\"]/div[1]/div/div/div[1]/div/div/h1");
+                    location = htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1");
                 }
 
                 var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
