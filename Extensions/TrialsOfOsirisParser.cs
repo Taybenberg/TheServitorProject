@@ -1,7 +1,9 @@
 ﻿using Flurl.Http;
 using HtmlAgilityPack;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Processing;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -11,58 +13,52 @@ namespace Extensions
     {
         public static async Task<Stream> GetOsirisInventoryAsync()
         {
-            using var background = new MemoryStream(ExtensionsRes.TrialsItemsBackground);
+            using Image image = Image.Load(ExtensionsRes.TrialsItemsBackground);
 
-            using Image image = Image.FromStream(background);
+            var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.light.gg/");
 
-            using (var g = Graphics.FromImage(image))
+            var trialsBillboard = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"trials-billboard\"]/div[2]");
+
+            if (trialsBillboard is not null)
             {
-                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.light.gg/");
+                int Xi = 252, Yi = 30;
+                int intervalX = 121, intervalY = 136;
 
-                var trialsBillboard = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"trials-billboard\"]/div[2]");
-
-                if (trialsBillboard is not null)
+                for (int i = 1; i <= 4; i++)
                 {
-                    int Xi = 252, Yi = 30;
-                    int intervalX = 121, intervalY = 136;
+                    int x = Xi, y = Yi;
 
-                    for (int i = 1; i <= 4; i++)
+                    for (int j = 1; j <= 3; j++)
                     {
-                        int x = Xi, y = Yi;
+                        var node = trialsBillboard.SelectSingleNode($"./div[2]/span[{i}]/a[{j}]/img[@src]");
 
-                        for (int j = 1; j <= 3; j++)
-                        {
-                            var node = trialsBillboard.SelectSingleNode($"./div[2]/span[{i}]/a[{j}]/img[@src]");
+                        if (node is null)
+                            break;
 
-                            if (node is null)
-                                break;
+                        using var stream = await node.Attributes["src"].Value.GetStreamAsync();
+                        using Image icon = await Image.LoadAsync(stream);
 
-                            using var stream = await node.Attributes["src"].Value.GetStreamAsync();
-                            using Image icon = Image.FromStream(stream);
+                        image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
 
-                            g.DrawImage(icon, x, y);
-
-                            x += intervalX;
-                        }
-
-                        Yi += intervalY;
+                        x += intervalX;
                     }
 
-                    int Xt = 254, Yt = 574;
-
-                    Brush brush = new SolidBrush(Color.White);
-                    Font locationFont = new Font("Arial", 20, FontStyle.Bold);
-
-                    var location = trialsBillboard.SelectSingleNode("./div[1]/span/text()");
-                    var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
-
-                    g.DrawString(locationName, locationFont, brush, Xt, Yt);
+                    Yi += intervalY;
                 }
+
+                int Xt = 257, Yt = 574;
+
+                Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
+
+                var location = trialsBillboard.SelectSingleNode("./div[1]/span/text()");
+                var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
+
+                image.Mutate(m => m.DrawText(locationName, locationFont, Color.White, new Point(Xt, Yt)));
             }
 
             var ms = new MemoryStream();
 
-            image.Save(ms, ImageFormat.Png);
+            await image.SaveAsPngAsync(ms);
 
             ms.Position = 0;
 

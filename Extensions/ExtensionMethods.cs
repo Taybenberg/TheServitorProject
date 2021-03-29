@@ -1,8 +1,10 @@
 ﻿using BungieNetApi;
 using Flurl.Http;
 using HtmlAgilityPack;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Processing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,58 +22,51 @@ namespace Extensions
         {
             var items = await apiClient.GetXurItemsAsync();
 
-            using var background = new MemoryStream(ExtensionsRes.XurItemsBackground);
+            using Image image = Image.Load(ExtensionsRes.XurItemsBackground);
 
-            using Image image = Image.FromStream(background);
+            int Xi = 30, Yi = 30;
+            int Xt1 = 146, Yt1 = 43;
+            int Xt2 = 153, Yt2 = 89;
 
-            using (var g = Graphics.FromImage(image))
+            int interval = 136;
+
+            Font itemName = new Font(SystemFonts.Find("Arial"), 34);
+            Font itemType = new Font(SystemFonts.Find("Arial"), 21);
+
+            foreach (var item in items.Reverse())
             {
-                int Xi = 30, Yi = 30;
-                int Xt1 = 145, Yt1 = 43;
-                int Xt2 = 152, Yt2 = 87;
+                using var stream = await item.ItemIconUrl.GetStreamAsync();
+                using Image icon = await Image.LoadAsync(stream);
 
-                int interval = 136;
+                image.Mutate(m => m.DrawImage(icon, new Point(Xi, Yi), 1));
 
-                Brush brush = new SolidBrush(Color.Black);
+                image.Mutate(m => m.DrawText(item.ItemName, itemName, Color.Black, new Point(Xt1, Yt1)));
+                image.Mutate(m => m.DrawText(item.ItemTypeAndTier, itemType, Color.Black, new Point(Xt2, Yt2)));
 
-                Font itemName = new Font("Arial", 25);
-                Font itemType = new Font("Arial", 16);
-
-                foreach (var item in items.Reverse())
-                {
-                    using var stream = await item.ItemIconUrl.GetStreamAsync();
-                    using Image icon = Image.FromStream(stream);
-
-                    g.DrawImage(icon, Xi, Yi);
-
-                    g.DrawString(item.ItemName, itemName, brush, Xt1, Yt1);
-                    g.DrawString(item.ItemTypeAndTier, itemType, brush, Xt2, Yt2);
-
-                    Yi += interval;
-                    Yt1 += interval;
-                    Yt2 += interval;
-                }
-
-                int Xt = 254, Yt = 574;
-
-                Font locationFont = new Font("Arial", 20, FontStyle.Bold);
-
-                HtmlNode location = null;
-
-                if (getLocation)
-                {
-                    var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
-                    location = htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1");
-                }
-
-                var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
-
-                g.DrawString(locationName, locationFont, brush, Xt, Yt);
+                Yi += interval;
+                Yt1 += interval;
+                Yt2 += interval;
             }
+
+            int Xt = 257, Yt = 574;
+
+            Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
+
+            HtmlNode location = null;
+
+            if (getLocation)
+            {
+                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
+                location = htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1");
+            }
+
+            var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
+
+            image.Mutate(m => m.DrawText(locationName, locationFont, Color.Black, new Point(Xt, Yt)));
 
             var ms = new MemoryStream();
 
-            image.Save(ms, ImageFormat.Png);
+            await image.SaveAsPngAsync(ms);
 
             ms.Position = 0;
 
