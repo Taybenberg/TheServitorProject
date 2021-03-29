@@ -13,7 +13,7 @@ namespace Extensions
         {
             using var background = new MemoryStream(ExtensionsRes.TrialsItemsBackground);
 
-            using Image image = new Bitmap(background);
+            using Image image = Image.FromStream(background);
 
             using (var g = Graphics.FromImage(image))
             {
@@ -38,7 +38,7 @@ namespace Extensions
                                 break;
 
                             using var stream = await node.Attributes["src"].Value.GetStreamAsync();
-                            using Image icon = new Bitmap(stream);
+                            using Image icon = Image.FromStream(stream);
 
                             g.DrawImage(icon, x, y);
 

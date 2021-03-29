@@ -10,7 +10,7 @@ using System.Timers;
 
 namespace ServitorDiscordBot
 {
-    class Bumper
+    class Bumper : IDisposable
     {
         public event Func<Dictionary<ulong, (string, DateTime)>, Task> Notify;
 
@@ -74,43 +74,49 @@ namespace ServitorDiscordBot
             }
         }
 
-        Bump bump;
-        Timer timer = new();
+        private Bump _bump;
+        Timer _timer = new();
 
         const string path = "Bump.json";
 
-        public DateTime NextBump { get { return bump.NextBump; } }
+        public DateTime NextBump { get { return _bump.NextBump; } }
 
         public Bumper()
         {
             if (File.Exists(path))
-                bump = JsonSerializer.Deserialize<Bump>(File.ReadAllText(path));
+                _bump = JsonSerializer.Deserialize<Bump>(File.ReadAllText(path));
             else
-                bump = new();
+                _bump = new();
 
-            timer.AutoReset = false;
+            _timer.AutoReset = false;
 
-            timer.Interval = (bump.NextBump - DateTime.Now).TotalMilliseconds;
+            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds;
 
-            timer.Elapsed += (_, _) =>
+            _timer.Elapsed += (_, _) =>
             {
-                timer.Stop();
+                _timer.Stop();
 
-                Notify?.Invoke(bump.BumpList);
+                Notify?.Invoke(_bump.BumpList);
             };
 
-            timer.Start();
+            _timer.Start();
         }
 
         public void AddUser(ulong userID, string userName)
         {
-            timer.Stop();
+            _timer.Stop();
 
-            timer.Interval = (bump.AddUser(userID, userName) - DateTime.Now).TotalMilliseconds;
+            _timer.Interval = (_bump.AddUser(userID, userName) - DateTime.Now).TotalMilliseconds;
 
-            timer.Start();
+            _timer.Start();
 
-            File.WriteAllText(path, JsonSerializer.Serialize(bump));
+            File.WriteAllText(path, JsonSerializer.Serialize(_bump));
+        }
+
+        public void Dispose()
+        {
+            _timer.Stop();
+            _timer.Dispose();
         }
     }
 }

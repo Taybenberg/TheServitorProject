@@ -19,8 +19,7 @@ namespace Extensions
                 try
                 {
                     using var stream = await url.GetStreamAsync();
-
-                    cachedImages.TryAdd(url, new Bitmap(stream));
+                    cachedImages.TryAdd(url, Image.FromStream(stream));
                 }
                 catch
                 {
@@ -35,7 +34,7 @@ namespace Extensions
         {
             using var background = new MemoryStream(ExtensionsRes.EververseItemsBackground);
 
-            using Image image = new Bitmap(background);
+            using Image image = Image.FromStream(background);
 
             using (var g = Graphics.FromImage(image))
             {

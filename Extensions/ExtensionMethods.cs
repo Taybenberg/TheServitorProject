@@ -22,7 +22,7 @@ namespace Extensions
 
             using var background = new MemoryStream(ExtensionsRes.XurItemsBackground);
 
-            using Image image = new Bitmap(background);
+            using Image image = Image.FromStream(background);
 
             using (var g = Graphics.FromImage(image))
             {
@@ -40,7 +40,7 @@ namespace Extensions
                 foreach (var item in items.Reverse())
                 {
                     using var stream = await item.ItemIconUrl.GetStreamAsync();
-                    using Image icon = new Bitmap(stream);
+                    using Image icon = Image.FromStream(stream);
 
                     g.DrawImage(icon, Xi, Yi);
 
