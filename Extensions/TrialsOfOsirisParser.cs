@@ -35,10 +35,17 @@ namespace Extensions
                         if (node is null)
                             break;
 
-                        using var stream = await node.Attributes["src"].Value.GetStreamAsync();
-                        using Image icon = await Image.LoadAsync(stream);
+                        try
+                        {
+                            using var stream = await node.Attributes["src"].Value.GetStreamAsync();
+                            using Image icon = await Image.LoadAsync(stream);
 
-                        image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
+                            image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
+                        }
+                        catch
+                        {
+                            continue;
+                        }
 
                         x += intervalX;
                     }
