@@ -25,6 +25,22 @@ namespace BungieNetApi
             _xApiKey = configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>();
         }
 
+        public async Task<Milestone> GetMilestonesAsync()
+        {
+            var milestone = new Milestone();
+
+            var rawMilestones = await getRawMilestonesAsync();
+
+            var nightfallHash = rawMilestones._1942283261.activities.FirstOrDefault();
+
+            var nightfall = await getRawActivityDefinitionAsync(nightfallHash.activityHash);
+
+            milestone.NightfallTheOrdealName = nightfall.originalDisplayProperties.description;
+            milestone.NightfallTheOrdealImage = _bungieNetUrl.AppendPathSegment(nightfall.pgcrImage);
+
+            return milestone;
+        }
+
         public async Task<IEnumerable<(string stat, IEnumerable<(int rank, long userId, string className, string value)> users)>> GetClanLeaderboardAsync(ActivityType activityType, string[] modes)
         {
             ConcurrentDictionary<string, IEnumerable<(int, long, string, string)>> leaderboard = new();
@@ -61,7 +77,7 @@ namespace BungieNetApi
 
             foreach (var rawItem in rawXurItems.saleItems.Values.Skip(1).SkipLast(1))
             {
-                var rawItemDetails = getRawItemDetailsAsync(rawItem.itemHash).Result;
+                var rawItemDetails = getRawItemDefinitionAsync(rawItem.itemHash).Result;
 
                 if (rawItemDetails is not null)
                 {

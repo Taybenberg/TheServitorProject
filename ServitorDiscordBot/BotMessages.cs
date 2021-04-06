@@ -73,6 +73,7 @@ namespace ServitorDiscordBot
                     $"Наразі Авангард надав мені роль обчислювальної машини для збору статистичних даних про діяльність вашого [клану]({_clanUrl})." +
                     $"\n\n**Зараз я вмію виконувати наступні функції:**" +
                     $"\n***біп*** - *запит на перевірку моєї працездатності*" +
+                    $"\n***тиждень*** - *переглянути інформацію про поточний тиждень*" +
                     $"\n***зур*** - *переглянути інвентар Зура*" +
                     $"\n***осіріс*** - *переглянути нагороди за випробування Осіріса*" +
                     $"\n***еверверс*** - *переглянути поточний асортимент Тесс Еверіс*" +
@@ -90,6 +91,10 @@ namespace ServitorDiscordBot
                 builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
+            }
+            else if (command is "тиждень" or "weekly")
+            {
+                await GetWeeklyMilestoneAsync(message);
             }
             else if (command is "режими" or "modes")
             {

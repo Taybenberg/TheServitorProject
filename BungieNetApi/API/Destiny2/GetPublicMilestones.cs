@@ -7,10 +7,16 @@ namespace API.Destiny2.GetPublicMilestones
     public class Rootobject
     {
         public Response Response { get; set; }
+
+        [IgnoreDataMember]
         public int ErrorCode { get; set; }
+        [IgnoreDataMember]
         public int ThrottleSeconds { get; set; }
+        [IgnoreDataMember]
         public string ErrorStatus { get; set; }
+        [IgnoreDataMember]
         public string Message { get; set; }
+        [IgnoreDataMember]
         public Messagedata MessageData { get; set; }
     }
 
@@ -272,18 +278,28 @@ namespace API.Destiny2.GetPublicMilestones
 
     public class _1942283261
     {
+        [IgnoreDataMember]
         public int milestoneHash { get; set; }
+
         public Activity2[] activities { get; set; }
+
+        [IgnoreDataMember]
         public DateTime startDate { get; set; }
+        [IgnoreDataMember]
         public DateTime endDate { get; set; }
+        [IgnoreDataMember]
         public int order { get; set; }
     }
 
     public class Activity2
     {
         public long activityHash { get; set; }
+
+        [IgnoreDataMember]
         public object[] challengeObjectiveHashes { get; set; }
+        [IgnoreDataMember]
         public long[] modifierHashes { get; set; }
+        [IgnoreDataMember]
         public Booleanactivityoptions2 booleanActivityOptions { get; set; }
     }
 
@@ -576,5 +592,4 @@ namespace API.Destiny2.GetPublicMilestones
     public class Messagedata
     {
     }
-
 }

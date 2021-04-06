@@ -15,12 +15,33 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetOsirisInventoryAsync(SocketMessage message)
+        private async Task GetWeeklyMilestoneAsync(SocketMessage message)
         {
             using var scope = _scopeFactory.CreateScope();
 
             var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
+            var milestone = await apiCient.GetMilestonesAsync();
+
+            int currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessageColors.Eververse);
+
+            builder.Title = $"Тиждень {currWeek}";
+
+            builder.Description = $"**Найтфол: {milestone.NightfallTheOrdealName}**";
+
+            builder.ImageUrl = milestone.NightfallTheOrdealImage;
+
+            builder.Footer = GetFooter();
+
+            await message.Channel.SendMessageAsync(embed: builder.Build());
+        }
+
+        private async Task GetOsirisInventoryAsync(SocketMessage message)
+        {
             using var inventory = await TrialsOfOsirisParser.GetOsirisInventoryAsync();
 
             await message.Channel.SendFileAsync(inventory, "OsirisInventory.png");

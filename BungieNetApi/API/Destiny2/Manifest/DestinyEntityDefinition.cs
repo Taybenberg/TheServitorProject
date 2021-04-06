@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace API.Destiny2.GetDestinyEntityDefinition
+namespace API.Destiny2.Manifest.DestinyEntityDefinition
 {
     public class Rootobject
     {
