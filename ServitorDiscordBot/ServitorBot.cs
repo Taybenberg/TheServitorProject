@@ -20,13 +20,13 @@ namespace ServitorDiscordBot
 
         private readonly Bumper _bumper;
 
-        private readonly string serverIconUrl, clanUrl, serverName, seasonName;
+        private readonly string _serverIconUrl, _clanUrl, _serverName, _seasonName;
 
-        private readonly DateTime seasonStart;
+        private readonly DateTime _seasonStart;
 
-        private readonly ulong channelId, bumpChannelId;
+        private readonly ulong _channelId, _bumpChannelId;
 
-        private readonly ulong[] bumpPingUsers;
+        private readonly ulong[] _bumpPingUsers;
 
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
@@ -42,15 +42,15 @@ namespace ServitorDiscordBot
 
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 
-            clanUrl = configuration["Destiny2:ClanURL"];
-            seasonName = configuration["Destiny2:SeasonName"];
-            seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
+            _clanUrl = configuration["Destiny2:ClanURL"];
+            _seasonName = configuration["Destiny2:SeasonName"];
+            _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
 
-            serverIconUrl = configuration["Discord:ServerIconURL"];
-            serverName = configuration["Discord:ServerName"];
-            channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong>();
-            bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
-            bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<ulong[]>();
+            _serverIconUrl = configuration["Discord:ServerIconURL"];
+            _serverName = configuration["Discord:ServerName"];
+            _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong>();
+            _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
+            _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<ulong[]>();
 
             _client.SetGameAsync("Destiny 2").Wait();
 

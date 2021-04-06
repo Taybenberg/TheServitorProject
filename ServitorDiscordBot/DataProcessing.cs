@@ -148,7 +148,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Title = $"БЕТА | Статистика клану {serverName}";
+            builder.Title = $"БЕТА | Статистика клану {_serverName}";
 
             builder.Footer = GetFooter();
 
@@ -432,7 +432,7 @@ namespace ServitorDiscordBot
 
             builder.Color = GetColor(MessageColors.ClanActivities);
 
-            builder.Title = $"Активності клану {serverName}";
+            builder.Title = $"Активності клану {_serverName}";
 
             var acts = await database.Activities.ToListAsync();
 

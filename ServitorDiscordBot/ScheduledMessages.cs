@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
         {
             _logger.LogInformation($"{DateTime.Now} Bump notification");
 
-            IMessageChannel channel = _client.GetChannel(bumpChannelId) as IMessageChannel;
+            IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
 
             var builder = new EmbedBuilder();
 
@@ -42,7 +42,7 @@ namespace ServitorDiscordBot
 
             string mentions = string.Empty;
 
-            foreach (var id in bumpPingUsers.Where(x => !users.ContainsKey(x)))
+            foreach (var id in _bumpPingUsers.Where(x => !users.ContainsKey(x)))
                 mentions += $"<@{id}> ";
 
             await channel.SendMessageAsync(mentions, embed: builder.Build());
@@ -54,10 +54,10 @@ namespace ServitorDiscordBot
             int.TryParse(week, out currWeek);
 
             if (currWeek < 1 || currWeek > 13)
-                currWeek = (int)(DateTime.Now - seasonStart).TotalDays / 7 + 1;
+                currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
             using var parser = new EververseParser();
-            using var inventory = await parser.GetEververseInventoryAsync(seasonName, seasonStart, currWeek);
+            using var inventory = await parser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
 
             IMessageChannel channel;
 
@@ -65,7 +65,7 @@ namespace ServitorDiscordBot
             {
                 _logger.LogInformation($"{DateTime.Now} Eververse update");
 
-                channel = _client.GetChannel(channelId) as IMessageChannel;
+                channel = _client.GetChannel(_channelId) as IMessageChannel;
 
                 var builder = new EmbedBuilder();
 
@@ -97,7 +97,7 @@ namespace ServitorDiscordBot
             {
                 _logger.LogInformation($"{DateTime.Now} Xur arrived");
 
-                channel = _client.GetChannel(channelId) as IMessageChannel;
+                channel = _client.GetChannel(_channelId) as IMessageChannel;
 
                 var builder = new EmbedBuilder();
 

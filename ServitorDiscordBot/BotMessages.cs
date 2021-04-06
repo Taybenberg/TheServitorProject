@@ -11,7 +11,7 @@ namespace ServitorDiscordBot
     {
         private async Task MessageReceivedAsync(SocketMessage message)
         {
-            if (message.Channel.Id == bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
+            if (message.Channel.Id == _bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
             {
                 _logger.LogInformation($"{DateTime.Now} Message in Bump channel");
 
@@ -62,15 +62,15 @@ namespace ServitorDiscordBot
                 builder.Color = GetColor(MessageColors.Help);
 
                 builder.Author = new();
-                builder.Author.Url = clanUrl;
-                builder.Author.IconUrl = serverIconUrl;
-                builder.Author.Name = $"На варті серверу {serverName}";
+                builder.Author.Url = _clanUrl;
+                builder.Author.IconUrl = _serverIconUrl;
+                builder.Author.Name = $"На варті серверу {_serverName}";
 
                 builder.Title = "Допомога";
                 builder.Description = $"Я **{_client.CurrentUser.Username}**, " +
                     $"дружній прислужник, якого на околицях сонячної системи підібрав відважний ґардіан. " +
                     $"Я не становлю загрози і присягаюсь служити на благо Останнього міста. " +
-                    $"Наразі Авангард надав мені роль обчислювальної машини для збору статистичних даних про діяльність вашого [клану]({clanUrl})." +
+                    $"Наразі Авангард надав мені роль обчислювальної машини для збору статистичних даних про діяльність вашого [клану]({_clanUrl})." +
                     $"\n\n**Зараз я вмію виконувати наступні функції:**" +
                     $"\n***біп*** - *запит на перевірку моєї працездатності*" +
                     $"\n***зур*** - *переглянути інвентар Зура*" +
