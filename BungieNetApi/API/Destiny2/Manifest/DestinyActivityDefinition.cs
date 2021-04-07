@@ -22,7 +22,7 @@ namespace API.Destiny2.Manifest.DestinyActivityDefinition
     {
         [IgnoreDataMember]
         public Displayproperties displayProperties { get; set; }
-        
+
         public Originaldisplayproperties originalDisplayProperties { get; set; }
 
         [IgnoreDataMember]

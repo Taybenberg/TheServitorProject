@@ -31,7 +31,7 @@ namespace BungieNetApi
 
             var rawMilestones = await getRawMilestonesAsync();
 
-            var nightfallHash = rawMilestones._1942283261.activities.FirstOrDefault();
+            var nightfallHash = rawMilestones.Response["1942283261"].activities.FirstOrDefault();
 
             var nightfall = await getRawActivityDefinitionAsync(nightfallHash.activityHash);
 

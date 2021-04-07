@@ -88,7 +88,7 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            if (!pair.Equals(default(KeyValuePair<BungieNetApi.ActivityType, string>)))
+            if (pair.Value is not null)
             {
                 var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
@@ -173,7 +173,7 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            if (!pair.Equals(default(KeyValuePair<BungieNetApi.ActivityType, string>)))
+            if (pair.Value is not null)
             {
                 using var scope = _scopeFactory.CreateScope();
 
