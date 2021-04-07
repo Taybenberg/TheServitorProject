@@ -101,9 +101,8 @@ namespace API.Destiny2.Manifest.DestinyActivityDefinition
     public class Originaldisplayproperties
     {
         public string description { get; set; }
-
-        [IgnoreDataMember]
         public string name { get; set; }
+
         [IgnoreDataMember]
         public string icon { get; set; }
         [IgnoreDataMember]

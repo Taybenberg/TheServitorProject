@@ -48,39 +48,56 @@ namespace ServitorDiscordBot
             await channel.SendMessageAsync(mentions, embed: builder.Build());
         }
 
-        public async Task EververseNotificationAsync(SocketMessage message = null, string week = null)
+        public async Task GetWeeklyMilestoneAsync(SocketMessage message = null)
         {
-            int currWeek = 0;
-            int.TryParse(week, out currWeek);
+            using var scope = _scopeFactory.CreateScope();
 
-            if (currWeek < 1 || currWeek > 13)
-                currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            using var parser = new EververseParser();
-            using var inventory = await parser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
+            var milestone = await apiCient.GetMilestonesAsync();
 
-            IMessageChannel channel;
+            int currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessageColors.Eververse);
+
+            builder.Title = $"Тиждень {currWeek}";
+
+            builder.Fields = new()
+            {
+                new EmbedFieldBuilder
+                {
+                    Name = "Найтфол",
+                    Value = milestone.NightfallTheOrdealName,
+                    IsInline = true
+                },
+                new EmbedFieldBuilder
+                {
+                    Name = "Ротація горнила",
+                    Value = milestone.CrucibleRotationModeName,
+                    IsInline = true
+                }
+            };
+
+            builder.ImageUrl = milestone.NightfallTheOrdealImage;
+
+            builder.Footer = GetFooter();
 
             if (message is null)
             {
-                _logger.LogInformation($"{DateTime.Now} Eververse update");
+                _logger.LogInformation($"{DateTime.Now} Weekly reset");
 
-                channel = _client.GetChannel(_channelId) as IMessageChannel;
+                builder.Description = "Відбувся тижневий ресет";
 
-                var builder = new EmbedBuilder();
-
-                builder.Color = GetColor(MessageColors.Eververse);
-
-                builder.Title = $"Еверверс оновила асортимент";
-
-                builder.Footer = GetFooter();
+                var channel = _client.GetChannel(_channelId) as IMessageChannel;
 
                 await channel.SendMessageAsync(embed: builder.Build());
+
+                await GetEververseInventoryAsync(week: currWeek.ToString());
             }
             else
-                channel = message.Channel;
-
-            await channel.SendFileAsync(inventory, "EververseInventory.png");
+                await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
         public async Task XurNotificationAsync(SocketMessage message = null)

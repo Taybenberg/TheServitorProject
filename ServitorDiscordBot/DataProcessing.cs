@@ -15,29 +15,20 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetWeeklyMilestoneAsync(SocketMessage message)
+        public async Task GetEververseInventoryAsync(SocketMessage message = null, string week = null)
         {
-            using var scope = _scopeFactory.CreateScope();
+            int currWeek = 0;
+            int.TryParse(week, out currWeek);
 
-            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+            if (currWeek < 1 || currWeek > 13)
+                currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
-            var milestone = await apiCient.GetMilestonesAsync();
+            using var parser = new EververseParser();
+            using var inventory = await parser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
 
-            int currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessageColors.Eververse);
-
-            builder.Title = $"Тиждень {currWeek}";
-
-            builder.Description = $"**Найтфол: {milestone.NightfallTheOrdealName}**";
-
-            builder.ImageUrl = milestone.NightfallTheOrdealImage;
-
-            builder.Footer = GetFooter();
-
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
 
         private async Task GetOsirisInventoryAsync(SocketMessage message)

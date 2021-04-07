@@ -136,7 +136,7 @@ namespace ServitorDiscordBot
             {
                 var week = command.Replace("еверверс", "").TrimStart();
 
-                await EververseNotificationAsync(message, week);
+                await GetEververseInventoryAsync(message, week);
             }
             else if (command is "my_id")
             {

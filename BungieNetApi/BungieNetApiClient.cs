@@ -29,14 +29,26 @@ namespace BungieNetApi
         {
             var milestone = new Milestone();
 
-            var rawMilestones = await getRawMilestonesAsync();
+            var rawMilestones = (await getRawMilestonesAsync()).Response;
 
-            var nightfallHash = rawMilestones.Response["1942283261"].activities.FirstOrDefault();
+            if (rawMilestones.ContainsKey("3312774044"))
+            {
+                var rawCrucible = rawMilestones["3312774044"].activities.FirstOrDefault();
 
-            var nightfall = await getRawActivityDefinitionAsync(nightfallHash.activityHash);
+                var crucible = await getRawActivityDefinitionAsync(rawCrucible.activityHash);
 
-            milestone.NightfallTheOrdealName = nightfall.originalDisplayProperties.description;
-            milestone.NightfallTheOrdealImage = _bungieNetUrl.AppendPathSegment(nightfall.pgcrImage);
+                milestone.CrucibleRotationModeName = crucible.originalDisplayProperties.name;
+            }
+
+            if (rawMilestones.ContainsKey("1942283261"))
+            {
+                var rawNightfall = rawMilestones["1942283261"].activities.FirstOrDefault();
+
+                var nightfall = await getRawActivityDefinitionAsync(rawNightfall.activityHash);
+
+                milestone.NightfallTheOrdealName = nightfall.originalDisplayProperties.description;
+                milestone.NightfallTheOrdealImage = _bungieNetUrl.AppendPathSegment(nightfall.pgcrImage);
+            }
 
             return milestone;
         }

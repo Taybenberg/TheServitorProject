@@ -33,7 +33,7 @@ namespace BotConsole
 
                     await (DateTime.Now.DayOfWeek switch
                     {
-                        DayOfWeek.Tuesday => bot.EververseNotificationAsync(),
+                        DayOfWeek.Tuesday => bot.GetWeeklyMilestoneAsync(),
                         DayOfWeek.Friday => bot.XurNotificationAsync()
                     });
                 }).DailyAtHour(17);
