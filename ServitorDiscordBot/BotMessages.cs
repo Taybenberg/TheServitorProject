@@ -74,6 +74,8 @@ namespace ServitorDiscordBot
                     $"\n\n**Зараз я вмію виконувати наступні функції:**" +
                     $"\n***біп*** - *запит на перевірку моєї працездатності*" +
                     $"\n***тиждень*** - *переглянути інформацію про поточний тиждень*" +
+                    $"\n***сектори*** - *переглянути лутпул сьогоднішніх загублених секторів*" +
+                    $"\n***ресурси*** - *переглянути поточний асортимент вендорів*" +
                     $"\n***зур*** - *переглянути інвентар Зура*" +
                     $"\n***осіріс*** - *переглянути нагороди за випробування Осіріса*" +
                     $"\n***еверверс*** - *переглянути поточний асортимент Тесс Еверіс*" +
@@ -95,6 +97,14 @@ namespace ServitorDiscordBot
             else if (command is "тиждень" or "weekly")
             {
                 await GetWeeklyMilestoneAsync(message);
+            }
+            else if (command is "сектори" or "sectors")
+            {
+                await GetLostSectorsLootAsync(message);
+            }
+            else if (command is "ресурси" or "resources")
+            {
+                await GetResourcesPoolAsync(message);
             }
             else if (command is "режими" or "modes")
             {

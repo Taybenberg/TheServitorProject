@@ -73,6 +73,26 @@ namespace Extensions {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] LostSectorsBackground {
+            get {
+                object obj = ResourceManager.GetObject("LostSectorsBackground", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ResourcesBackground {
+            get {
+                object obj = ResourceManager.GetObject("ResourcesBackground", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] TrialsItemsBackground {
             get {
                 object obj = ResourceManager.GetObject("TrialsItemsBackground", resourceCulture);

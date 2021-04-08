@@ -23,12 +23,25 @@ namespace ServitorDiscordBot
             if (currWeek < 1 || currWeek > 13)
                 currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
-            using var parser = new EververseParser();
-            using var inventory = await parser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
+            using var inventory = await EververseParser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
 
             IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
 
             await channel.SendFileAsync(inventory, "EververseInventory.png");
+        }
+
+        private async Task GetResourcesPoolAsync(SocketMessage message)
+        {
+            using var resources = await ResourcesParser.GetResourcesAsync();
+
+            await message.Channel.SendFileAsync(resources, "ResourcesPool.png");
+        }
+
+        private async Task GetLostSectorsLootAsync(SocketMessage message)
+        {
+            using var sectors = await LostSectorsParser.GetLostSectorsAsync();
+
+            await message.Channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
 
         private async Task GetOsirisInventoryAsync(SocketMessage message)

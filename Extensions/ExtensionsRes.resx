@@ -121,6 +121,12 @@
   <data name="EververseItemsBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\eververseitemsbackground.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="LostSectorsBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\LostSectorsBackground.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ResourcesBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ResourcesBackground.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="TrialsItemsBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\trialsitemsbackground.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
