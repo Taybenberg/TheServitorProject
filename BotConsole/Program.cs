@@ -31,11 +31,16 @@ namespace BotConsole
                 {
                     var bot = host.Services.GetService<ServitorBot>();
 
-                    await (DateTime.Now.DayOfWeek switch
+                    switch (DateTime.Now.DayOfWeek)
                     {
-                        DayOfWeek.Tuesday => bot.GetWeeklyMilestoneAsync(),
-                        DayOfWeek.Friday => bot.XurNotificationAsync()
-                    });
+                        case DayOfWeek.Tuesday:
+                            await bot.GetWeeklyMilestoneAsync();
+                            break;
+
+                        case DayOfWeek.Friday:
+                            await bot.XurNotificationAsync();
+                            break;
+                    }
 
                     await bot.DailyResetNotificationAsync();
                 }).DailyAtHour(17);
