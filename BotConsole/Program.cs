@@ -36,6 +36,8 @@ namespace BotConsole
                         DayOfWeek.Tuesday => bot.GetWeeklyMilestoneAsync(),
                         DayOfWeek.Friday => bot.XurNotificationAsync()
                     });
+
+                    await bot.DailyResetNotificationAsync();
                 }).DailyAtHour(17);
             });
 

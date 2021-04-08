@@ -30,18 +30,22 @@ namespace ServitorDiscordBot
             await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
 
-        private async Task GetResourcesPoolAsync(SocketMessage message)
+        private async Task GetResourcesPoolAsync(SocketMessage message = null)
         {
             using var resources = await ResourcesParser.GetResourcesAsync();
 
-            await message.Channel.SendFileAsync(resources, "ResourcesPool.png");
+            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
+
+            await channel.SendFileAsync(resources, "ResourcesPool.png");
         }
 
-        private async Task GetLostSectorsLootAsync(SocketMessage message)
+        private async Task GetLostSectorsLootAsync(SocketMessage message = null)
         {
             using var sectors = await LostSectorsParser.GetLostSectorsAsync();
 
-            await message.Channel.SendFileAsync(sectors, "LostSectorsLoot.png");
+            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
+
+            await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
 
         private async Task GetOsirisInventoryAsync(SocketMessage message)

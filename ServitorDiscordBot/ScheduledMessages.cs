@@ -48,6 +48,31 @@ namespace ServitorDiscordBot
             await channel.SendMessageAsync(mentions, embed: builder.Build());
         }
 
+        public async Task DailyResetNotificationAsync()
+        {
+            _logger.LogInformation($"{DateTime.Now} Daily reset");
+
+            int currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessageColors.Reset);
+
+            builder.Title = $"Тиждень {currWeek}";
+
+            builder.Description = "Відбувся денний ресет";
+
+            builder.Footer = GetFooter();
+
+            var channel = _client.GetChannel(_channelId) as IMessageChannel;
+
+            await channel.SendMessageAsync(embed: builder.Build());
+
+            await GetResourcesPoolAsync();
+
+            await GetLostSectorsLootAsync();
+        }
+
         public async Task GetWeeklyMilestoneAsync(SocketMessage message = null)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -60,7 +85,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.Eververse);
+            builder.Color = GetColor(MessageColors.Reset);
 
             builder.Title = $"Тиждень {currWeek}";
 

@@ -23,7 +23,7 @@ namespace ServitorDiscordBot
             RegisterNeedMoreInfo => new Color(0xff7043),
             Suspicious => new Color(0x546e7a),
             Xur => new Color(0xe0f7fa),
-            Eververse => new Color(0xffffcf),
+            Reset => new Color(0xffffcf),
             ClanStats => new Color(0x76d275),
             Leaderboard => new Color(0x2962ff),
             _ => new Color(0xfafafa)

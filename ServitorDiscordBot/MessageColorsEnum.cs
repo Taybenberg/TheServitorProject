@@ -19,7 +19,7 @@
         Suspicious,
         Xur,
         Osiris,
-        Eververse,
+        Reset,
         ClanStats,
         Leaderboard
     }
