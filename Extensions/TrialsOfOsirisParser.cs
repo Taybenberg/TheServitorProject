@@ -58,7 +58,7 @@ namespace Extensions
                 Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
 
                 var location = trialsBillboard.SelectSingleNode("./div[1]/span/text()");
-                var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
+                var locationName = location?.InnerText.Trim() ?? "Невизначено";
 
                 image.Mutate(m => m.DrawText(locationName, locationFont, Color.White, new Point(Xt, Yt)));
             }

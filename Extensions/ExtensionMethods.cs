@@ -60,7 +60,7 @@ namespace Extensions
                 location = htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1");
             }
 
-            var locationName = location is null ? "Невизначено" : location.InnerText.Trim();
+            var locationName = location?.InnerText.Trim() ?? "Невизначено";
 
             image.Mutate(m => m.DrawText(locationName, locationFont, Color.Black, new Point(Xt, Yt)));
 

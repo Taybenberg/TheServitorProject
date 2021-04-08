@@ -1,40 +1,20 @@
-﻿using Flurl.Http;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
-using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Extensions
 {
-    public class EververseParser : IDisposable
+    public static class EververseParser
     {
-        private ConcurrentDictionary<string, Image> cachedImages = new();
-        private async Task<Image> GetImage(string url)
+        public static async Task<Stream> GetEververseInventoryAsync(string seasonName, DateTime seasonStart, int weekNumber)
         {
-            if (!cachedImages.ContainsKey(url))
-            {
-                try
-                {
-                    using var stream = await url.GetStreamAsync();
-                    cachedImages.TryAdd(url, await Image.LoadAsync(stream));
-                }
-                catch
-                {
-                    return new Image<Rgba32>(1, 1);
-                }
-            }
+            using var loader = new ImageLoader();
 
-            return cachedImages[url];
-        }
-
-        public async Task<Stream> GetEververseInventoryAsync(string seasonName, DateTime seasonStart, int weekNumber)
-        {
             using Image image = Image.Load(ExtensionsRes.EververseItemsBackground);
 
             Font font = new Font(SystemFonts.Find("Arial"), 30, FontStyle.Bold);
@@ -59,7 +39,7 @@ namespace Extensions
             if (eververseWeekly is not null)
             {
                 string iconUrl = eververseWeekly.SelectSingleNode($"./div[1]/img").Attributes["src"].Value;
-                Image icon = (await GetImage(iconUrl)).Clone(m => m.Resize(192, 192));
+                Image icon = (await loader.GetImage(iconUrl)).Clone(m => m.Resize(192, 192));
                 image.Mutate(m => m.DrawImage(icon, new Point(0, 0), 1));
 
                 int X = 35, intervalX = 106;
@@ -81,7 +61,7 @@ namespace Extensions
                             if (node is not null)
                             {
                                 iconUrl = node.Attributes["src"].Value;
-                                icon = await GetImage(iconUrl);
+                                icon = await loader.GetImage(iconUrl);
                                 image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
                             }
 
@@ -91,7 +71,7 @@ namespace Extensions
                                 break;
 
                             iconUrl = node.Attributes["src"].Value;
-                            icon = await GetImage(iconUrl);
+                            icon = await loader.GetImage(iconUrl);
                             image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
 
                             x += intervalX;
@@ -107,14 +87,6 @@ namespace Extensions
             ms.Position = 0;
 
             return ms;
-        }
-
-        public void Dispose()
-        {
-            foreach (var image in cachedImages)
-                image.Value.Dispose();
-
-            cachedImages.Clear();
         }
     }
 }
