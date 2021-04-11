@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -13,16 +14,17 @@ namespace ServitorDiscordBot
         {
             if (message.Channel.Id == _bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
             {
-                _logger.LogInformation($"{DateTime.Now} Message in Bump channel");
-
-                var mention = message.MentionedUsers.FirstOrDefault();
                 var embed = message.Embeds.FirstOrDefault();
 
-                if (mention is not null && embed is not null)
+                if (embed is not null)
                 {
                     if (embed.Description.Contains("Server bumped by"))
                     {
-                        _bumper.AddUser(mention.Id, mention.Username);
+                        _logger.LogInformation($"{DateTime.Now} Server bumped");
+
+                        var mention = Regex.Match(embed.Description, "(?<=\\<@)\\D?(\\d+)(?=\\>)").Groups[1].Value;
+
+                        _bumper.AddUser(mention);
 
                         var builder = new EmbedBuilder();
 

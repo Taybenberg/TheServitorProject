@@ -12,30 +12,24 @@ namespace ServitorDiscordBot
 {
     class Bumper : IDisposable
     {
-        public event Func<Dictionary<ulong, (string, DateTime)>, Task> Notify;
+        public event Func<Dictionary<string, DateTime>, Task> Notify;
 
         class Bump
         {
-            public record BumpValue
-            {
-                public string Username { get; set; }
-                public DateTime Cooldown { get; set; }
-            }
-
             const int userBumpCooldown = 12;
             const int bumpCooldown = 4;
 
-            public ConcurrentDictionary<ulong, BumpValue> bumpList { get; set; } = new();
+            public ConcurrentDictionary<string, DateTime> bumpList { get; set; } = new();
 
             [JsonIgnore]
-            public Dictionary<ulong, (string, DateTime)> BumpList
+            public Dictionary<string, DateTime> BumpList
             {
                 get
                 {
-                    foreach (var bl in bumpList.Where(x => x.Value.Cooldown < DateTime.Now))
+                    foreach (var bl in bumpList.Where(x => x.Value < DateTime.Now))
                         bumpList.TryRemove(bl);
 
-                    return bumpList.ToDictionary(x => x.Key, x => (x.Value.Username, x.Value.Cooldown));
+                    return bumpList.ToDictionary(x => x.Key, x => x.Value);
                 }
             }
 
@@ -55,7 +49,7 @@ namespace ServitorDiscordBot
                 }
             }
 
-            public DateTime AddUser(ulong userID, string userName)
+            public DateTime AddUser(string userID)
             {
                 var curr = DateTime.Now;
 
@@ -63,12 +57,8 @@ namespace ServitorDiscordBot
 
                 var cooldown = curr.AddHours(userBumpCooldown);
 
-                if (!bumpList.TryAdd(userID, new BumpValue
-                {
-                    Username = userName,
-                    Cooldown = cooldown
-                }))
-                    bumpList[userID].Cooldown = cooldown;
+                if (!bumpList.TryAdd(userID, cooldown))
+                    bumpList[userID] = cooldown;
 
                 return nextBump;
             }
@@ -102,11 +92,11 @@ namespace ServitorDiscordBot
             _timer.Start();
         }
 
-        public void AddUser(ulong userID, string userName)
+        public void AddUser(string userID)
         {
             _timer.Stop();
 
-            _timer.Interval = (_bump.AddUser(userID, userName) - DateTime.Now).TotalMilliseconds;
+            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds;
 
             _timer.Start();
 
