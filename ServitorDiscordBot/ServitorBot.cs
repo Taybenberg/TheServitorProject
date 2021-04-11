@@ -26,7 +26,7 @@ namespace ServitorDiscordBot
 
         private readonly ulong _channelId, _bumpChannelId;
 
-        private readonly ulong[] _bumpPingUsers;
+        private readonly string[] _bumpPingUsers;
 
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
@@ -50,7 +50,7 @@ namespace ServitorDiscordBot
             _serverName = configuration["Discord:ServerName"];
             _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
-            _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<ulong[]>();
+            _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
 
             _client.SetGameAsync("Destiny 2").Wait();
 

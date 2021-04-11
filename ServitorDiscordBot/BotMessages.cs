@@ -18,7 +18,7 @@ namespace ServitorDiscordBot
 
                 if (embed is not null)
                 {
-                    if (embed.Description.Contains("Server bumped by"))
+                    if (embed.Description?.Contains("Server bumped by") ?? false)
                     {
                         _logger.LogInformation($"{DateTime.Now} Server bumped");
 

@@ -35,7 +35,7 @@ namespace ServitorDiscordBot
 
             string mentions = string.Empty;
 
-            foreach (var id in _bumpPingUsers.Where(x => !users.ContainsKey(x.ToString())))
+            foreach (var id in _bumpPingUsers.Where(x => !users.ContainsKey(x)))
                 mentions += $"<@{id}> ";
 
             await channel.SendMessageAsync(mentions, embed: builder.Build());
