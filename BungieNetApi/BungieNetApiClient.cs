@@ -33,7 +33,11 @@ namespace BungieNetApi
 
             if (rawMilestones.ContainsKey("3312774044"))
             {
-                var rawCrucible = rawMilestones["3312774044"].activities.FirstOrDefault();
+                var rawCrucible = rawMilestones["3312774044"].activities.Where(x => x.activityHash is
+                    not 1717505396 //Control
+                    and not 1957660400 //Elimination
+                    and not 2259621230 //Rumble
+                ).FirstOrDefault();
 
                 var crucible = await getRawActivityDefinitionAsync(rawCrucible.activityHash);
 

@@ -96,7 +96,7 @@ namespace ServitorDiscordBot
         {
             _timer.Stop();
 
-            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds;
+            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds - 5000;
 
             _timer.Start();
 
