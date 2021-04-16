@@ -232,14 +232,6 @@ namespace ServitorDiscordBot
 
             var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessageColors.Suspicious);
-
-            builder.Description = "Шукаю інформацію, на це мені знадобиться трохи часу…";
-
-            var notification = await message.Channel.SendMessageAsync(embed: builder.Build());
-
             ConcurrentDictionary<DateTime, string> activityDetails = new();
 
             var activities = nigthfalls ? await database.GetSuspiciousNightfallsOnlyAsync(DateTime.Now.AddDays(-7)) : await database.GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime.Now.AddDays(-7));
@@ -272,6 +264,10 @@ namespace ServitorDiscordBot
                 activityDetails.TryAdd(activity.Period, details);
             });
 
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessageColors.Suspicious);
+
             builder.Title = $"Виявлено активностей: {activityDetails.Count}";
 
             string list = "Увага, чутливим не читати! Останні активності:\n||";
@@ -289,8 +285,6 @@ namespace ServitorDiscordBot
             builder.Footer = GetFooter();
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
-
-            await notification.DeleteAsync();
         }
 
         private async Task RegisterMessageAsync(SocketMessage message)

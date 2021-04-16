@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,7 +76,7 @@ namespace ServitorDiscordBot
             await _client.StopAsync();
         }
 
-        private Task LogAsync(LogMessage log)
+        private async Task LogAsync(LogMessage log)
         {
             var logLevel = log.Severity switch
             {
@@ -87,8 +88,35 @@ namespace ServitorDiscordBot
             };
 
             _logger.Log(logLevel, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
+        }
 
-            return Task.CompletedTask;
+        private async Task ExecuteWaitMessage<T>(SocketMessage message, Func<SocketMessage, T, Task> method, T arg)
+        {
+            var wait = await GetWaitMessageAsync(message.Channel);
+
+            await method(message, arg);
+
+            await wait.DeleteAsync();
+        }
+
+        private async Task ExecuteWaitMessage(SocketMessage message, Func<SocketMessage, Task> method)
+        {
+            var wait = await GetWaitMessageAsync(message.Channel);
+
+            await method(message);
+
+            await wait.DeleteAsync();
+        }
+
+        private async Task<RestUserMessage> GetWaitMessageAsync(ISocketMessageChannel channel)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessageColors.Wait);
+
+            builder.Description = "Виконую ваш запит, на це знадобиться трохи часу…";
+
+            return await channel.SendMessageAsync(embed: builder.Build());
         }
 
         private EmbedFooterBuilder GetFooter()

@@ -2,6 +2,7 @@
 {
     public enum MessageColors
     {
+        Wait,
         Error,
         BumpNotification,
         Bumped,

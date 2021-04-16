@@ -7,6 +7,7 @@ namespace ServitorDiscordBot
     {
         Color GetColor(MessageColors colors) => colors switch
         {
+            Wait => new Color(0x616161),
             Error => new Color(0xd50000),
             BumpNotification => new Color(0x3949ab),
             Bumped => new Color(0x6f74dd),
