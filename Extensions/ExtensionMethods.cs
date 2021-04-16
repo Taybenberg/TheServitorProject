@@ -37,7 +37,6 @@ namespace Extensions
             {
                 using var stream = await item.ItemIconUrl.GetStreamAsync();
                 using Image icon = await Image.LoadAsync(stream);
-
                 image.Mutate(m => m.DrawImage(icon, new Point(Xi, Yi), 1));
 
                 image.Mutate(m => m.DrawText(item.ItemName, itemName, Color.Black, new Point(Xt1, Yt1)));
@@ -61,7 +60,6 @@ namespace Extensions
             }
 
             var locationName = location?.InnerText.Trim() ?? "Невизначено";
-
             image.Mutate(m => m.DrawText(locationName, locationFont, Color.Black, new Point(Xt, Yt)));
 
             var ms = new MemoryStream();

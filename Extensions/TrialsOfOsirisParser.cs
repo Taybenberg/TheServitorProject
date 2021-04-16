@@ -39,7 +39,6 @@ namespace Extensions
                         {
                             using var stream = await node.Attributes["src"].Value.GetStreamAsync();
                             using Image icon = await Image.LoadAsync(stream);
-
                             image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
                         }
                         catch
@@ -56,10 +55,7 @@ namespace Extensions
                 int Xt = 257, Yt = 574;
 
                 Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
-
-                var location = trialsBillboard.SelectSingleNode("./div[1]/span/text()");
-                var locationName = location?.InnerText.Trim() ?? "Невизначено";
-
+                var locationName = trialsBillboard.SelectSingleNode("./div[1]/span/text()")?.InnerText.Trim() ?? "Невизначено";
                 image.Mutate(m => m.DrawText(locationName, locationFont, Color.White, new Point(Xt, Yt)));
             }
 
