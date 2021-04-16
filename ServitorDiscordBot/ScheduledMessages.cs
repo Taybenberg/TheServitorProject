@@ -82,6 +82,17 @@ namespace ServitorDiscordBot
 
             builder.Title = $"Тиждень {currWeek}";
 
+            string additionalDescription = string.Empty;
+
+            if (await ExtensionMethods.IsIronBannerAvailableAsync())
+            {
+                builder.ThumbnailUrl = "https://bungie.net/common/destiny2_content/icons/0ee91b79ba1366243832cf810afc3b75.jpg";
+
+                additionalDescription = $"Доступний **{Localization.StatsActivityNames[BungieNetApi.ActivityType.IronBannerControl][0]}**!";
+            }
+                
+            var mode = Localization.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
+
             builder.Fields = new()
             {
                 new EmbedFieldBuilder
@@ -93,7 +104,7 @@ namespace ServitorDiscordBot
                 new EmbedFieldBuilder
                 {
                     Name = "Ротація горнила",
-                    Value = milestone.CrucibleRotationModeName,
+                    Value = $"{mode[0]} | {mode[1]}",
                     IsInline = true
                 }
             };
@@ -106,7 +117,7 @@ namespace ServitorDiscordBot
             {
                 _logger.LogInformation($"{DateTime.Now} Weekly reset");
 
-                builder.Description = "Відбувся тижневий ресет";
+                builder.Description = $"Відбувся тижневий ресет\n{additionalDescription}";
 
                 var channel = _client.GetChannel(_channelId) as IMessageChannel;
 
@@ -115,7 +126,11 @@ namespace ServitorDiscordBot
                 await GetEververseInventoryAsync(week: currWeek.ToString());
             }
             else
+            {
+                builder.Description = additionalDescription;
+
                 await message.Channel.SendMessageAsync(embed: builder.Build());
+            }
         }
 
         public async Task XurNotificationAsync(SocketMessage message = null)

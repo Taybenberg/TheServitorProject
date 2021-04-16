@@ -98,15 +98,15 @@ namespace ServitorDiscordBot
             }
             else if (command is "тиждень" or "weekly")
             {
-                await ExecuteWaitMessage(message, GetWeeklyMilestoneAsync);
+                await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync);
             }
             else if (command is "сектори" or "sectors")
             {
-                await ExecuteWaitMessage(message, GetLostSectorsLootAsync);
+                await ExecuteWaitMessageAsync(message, GetLostSectorsLootAsync);
             }
             else if (command is "ресурси" or "resources")
             {
-                await ExecuteWaitMessage(message, GetResourcesPoolAsync);
+                await ExecuteWaitMessageAsync(message, GetResourcesPoolAsync);
             }
             else if (command is "режими" or "modes")
             {
@@ -130,25 +130,25 @@ namespace ServitorDiscordBot
             }
             else if (command is "100k" or "100к")
             {
-                await ExecuteWaitMessage(message, FindSuspiciousAsync, true);
+                await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, true);
             }
             else if (command is "відступники" or "apostates")
             {
-                await ExecuteWaitMessage(message, FindSuspiciousAsync, false);
+                await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, false);
             }
             else if (command is "зур" or "xur")
             {
-                await ExecuteWaitMessage(message, XurNotificationAsync);
+                await ExecuteWaitMessageAsync(message, XurNotificationAsync);
             }
             else if (command is "осіріс" or "osiris")
             {
-                await ExecuteWaitMessage(message, GetOsirisInventoryAsync);
+                await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync);
             }
             else if (command.Contains("еверверс"))
             {
                 var week = command.Replace("еверверс", "").TrimStart();
 
-                await ExecuteWaitMessage(message, GetEververseInventoryAsync, week);
+                await ExecuteWaitMessageAsync(message, GetEververseInventoryAsync, week);
             }
             else if (command is "my_id")
             {
@@ -176,13 +176,13 @@ namespace ServitorDiscordBot
             {
                 var mode = command.Replace("статистика клану ", "");
 
-                await ExecuteWaitMessage(message, ClanStatsAsync, mode);
+                await ExecuteWaitMessageAsync(message, ClanStatsAsync, mode);
             }
             else if (command.Contains("дошка лідерів"))
             {
                 var mode = command.Replace("дошка лідерів ", "");
 
-                await ExecuteWaitMessage(message, LeaderboardAsync, mode);
+                await ExecuteWaitMessageAsync(message, LeaderboardAsync, mode);
             }
         }
     }

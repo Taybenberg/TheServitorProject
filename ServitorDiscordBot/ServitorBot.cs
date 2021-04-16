@@ -90,7 +90,7 @@ namespace ServitorDiscordBot
             _logger.Log(logLevel, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
         }
 
-        private async Task ExecuteWaitMessage<T>(SocketMessage message, Func<SocketMessage, T, Task> method, T arg)
+        private async Task ExecuteWaitMessageAsync<T>(SocketMessage message, Func<SocketMessage, T, Task> method, T arg)
         {
             var wait = await GetWaitMessageAsync(message.Channel);
 
@@ -99,7 +99,7 @@ namespace ServitorDiscordBot
             await wait.DeleteAsync();
         }
 
-        private async Task ExecuteWaitMessage(SocketMessage message, Func<SocketMessage, Task> method)
+        private async Task ExecuteWaitMessageAsync(SocketMessage message, Func<SocketMessage, Task> method)
         {
             var wait = await GetWaitMessageAsync(message.Channel);
 
