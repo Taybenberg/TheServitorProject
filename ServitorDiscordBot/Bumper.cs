@@ -80,7 +80,7 @@ namespace ServitorDiscordBot
 
             _timer.AutoReset = false;
 
-            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds;
+            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds - 5000;
 
             _timer.Elapsed += (_, _) =>
             {
