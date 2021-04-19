@@ -40,7 +40,7 @@ namespace Extensions
             int interval = 136;
 
             Font itemName = new Font(SystemFonts.Find("Arial"), 34);
-            Font itemType = new Font(SystemFonts.Find("Arial"), 21);
+            Font itemType = new Font(SystemFonts.Find("Arial"), 23);
 
             foreach (var item in items.Reverse())
             {
@@ -49,7 +49,7 @@ namespace Extensions
                 image.Mutate(m => m.DrawImage(icon, new Point(Xi, Yi), 1));
 
                 image.Mutate(m => m.DrawText(item.ItemName, itemName, Color.Black, new Point(Xt1, Yt1)));
-                image.Mutate(m => m.DrawText(item.ItemTypeAndTier, itemType, Color.Black, new Point(Xt2, Yt2)));
+                image.Mutate(m => m.DrawText(Localization.ItemNames[item.ItemTypeAndTier], itemType, Color.Black, new Point(Xt2, Yt2)));
 
                 Yi += interval;
                 Yt1 += interval;
