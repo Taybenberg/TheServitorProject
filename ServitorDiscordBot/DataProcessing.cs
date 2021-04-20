@@ -375,7 +375,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Title = $"Партнери {message.Author.Username}";
+            builder.Title = $"Побратими {message.Author.Username}";
 
             builder.Footer = GetFooter();
 
