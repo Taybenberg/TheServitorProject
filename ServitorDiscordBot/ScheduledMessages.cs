@@ -55,8 +55,6 @@ namespace ServitorDiscordBot
 
             builder.Description = "Відбувся денний ресет";
 
-            builder.Footer = GetFooter();
-
             var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendMessageAsync(embed: builder.Build());
@@ -154,8 +152,6 @@ namespace ServitorDiscordBot
                 builder.Color = GetColor(MessageColors.Xur);
 
                 builder.Title = $"Зур привіз свіжий крам";
-
-                builder.Footer = GetFooter();
 
                 await channel.SendMessageAsync(embed: builder.Build());
             }
