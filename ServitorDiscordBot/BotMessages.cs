@@ -37,13 +37,8 @@ namespace ServitorDiscordBot
                 }
             }
 
-#if DEBUG
-            if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "servitor_beta")
+            if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || !_channelId.Any(x => x == message.Channel.Id))
                 return;
-#else
-            if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || message.Channel.Name.ToLower() != "destiny_bot")
-                return;
-#endif
 
             var command = message.Content.ToLower();
 

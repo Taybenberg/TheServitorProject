@@ -25,7 +25,7 @@ namespace ServitorDiscordBot
 
             using var inventory = await EververseParser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
 
-            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
+            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
@@ -34,7 +34,7 @@ namespace ServitorDiscordBot
         {
             using var resources = await ResourcesParser.GetResourcesAsync();
 
-            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
+            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(resources, "ResourcesPool.png");
         }
@@ -43,7 +43,7 @@ namespace ServitorDiscordBot
         {
             using var sectors = await LostSectorsParser.GetLostSectorsAsync();
 
-            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId) as IMessageChannel;
+            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }

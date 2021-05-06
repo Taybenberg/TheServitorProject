@@ -25,7 +25,8 @@ namespace ServitorDiscordBot
 
         private readonly DateTime _seasonStart;
 
-        private readonly ulong _channelId, _bumpChannelId;
+        private readonly ulong[] _channelId;
+        private readonly ulong _bumpChannelId;
 
         private readonly string[] _bumpPingUsers;
 
@@ -49,7 +50,7 @@ namespace ServitorDiscordBot
 
             _serverIconUrl = configuration["Discord:ServerIconURL"];
             _serverName = configuration["Discord:ServerName"];
-            _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong>();
+            _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
             _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
 

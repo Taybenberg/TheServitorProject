@@ -57,7 +57,7 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            var channel = _client.GetChannel(_channelId) as IMessageChannel;
+            var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendMessageAsync(embed: builder.Build());
 
@@ -119,7 +119,7 @@ namespace ServitorDiscordBot
 
                 builder.Description = $"Відбувся тижневий ресет\n{additionalDescription}";
 
-                var channel = _client.GetChannel(_channelId) as IMessageChannel;
+                var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
                 await channel.SendMessageAsync(embed: builder.Build());
 
@@ -147,7 +147,7 @@ namespace ServitorDiscordBot
             {
                 _logger.LogInformation($"{DateTime.Now} Xur arrived");
 
-                channel = _client.GetChannel(_channelId) as IMessageChannel;
+                channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
                 var builder = new EmbedBuilder();
 
