@@ -6,6 +6,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Extensions
 {
@@ -56,7 +57,7 @@ namespace Extensions
 
                 Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
                 var locationName = trialsBillboard.SelectSingleNode("./div[1]/span/text()")?.InnerText.Trim() ?? "Невизначено";
-                image.Mutate(m => m.DrawText(locationName, locationFont, Color.White, new Point(Xt, Yt)));
+                image.Mutate(m => m.DrawText(HttpUtility.HtmlEncode(locationName), locationFont, Color.White, new Point(Xt, Yt)));
             }
 
             var ms = new MemoryStream();

@@ -8,6 +8,7 @@ using SixLabors.ImageSharp.Processing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Extensions
 {
@@ -69,7 +70,7 @@ namespace Extensions
             }
 
             var locationName = location?.InnerText.Trim() ?? "Невизначено";
-            image.Mutate(m => m.DrawText(locationName, locationFont, Color.Black, new Point(Xt, Yt)));
+            image.Mutate(m => m.DrawText(HttpUtility.HtmlEncode(locationName), locationFont, Color.Black, new Point(Xt, Yt)));
 
             var ms = new MemoryStream();
 
