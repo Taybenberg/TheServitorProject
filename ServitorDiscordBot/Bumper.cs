@@ -12,12 +12,14 @@ namespace ServitorDiscordBot
 {
     class Bumper : IDisposable
     {
+        const int bumpPreIntervalMs = 10000;
+
         public event Func<Dictionary<string, DateTime>, Task> Notify;
 
         class Bump
         {
-            const int userBumpCooldown = 12;
-            const int bumpCooldown = 4;
+            const int userBumpCooldownHours = 12;
+            const int bumpCooldownHours = 4;
 
             public ConcurrentDictionary<string, DateTime> bumpList { get; set; } = new();
 
@@ -33,7 +35,7 @@ namespace ServitorDiscordBot
                 }
             }
 
-            public DateTime nextBump { get; set; } = DateTime.Now.AddHours(bumpCooldown);
+            public DateTime nextBump { get; set; } = DateTime.Now.AddHours(bumpCooldownHours);
 
             [JsonIgnore]
             public DateTime NextBump
@@ -43,7 +45,7 @@ namespace ServitorDiscordBot
                     var curr = DateTime.Now;
 
                     if (nextBump < curr)
-                        nextBump = curr.AddHours(bumpCooldown);
+                        nextBump = curr.AddHours(bumpCooldownHours);
 
                     return nextBump;
                 }
@@ -53,9 +55,9 @@ namespace ServitorDiscordBot
             {
                 var curr = DateTime.Now;
 
-                nextBump = curr.AddHours(bumpCooldown);
+                nextBump = curr.AddHours(bumpCooldownHours);
 
-                var cooldown = curr.AddHours(userBumpCooldown);
+                var cooldown = curr.AddHours(userBumpCooldownHours);
 
                 if (!bumpList.TryAdd(userID, cooldown))
                     bumpList[userID] = cooldown;
@@ -80,7 +82,7 @@ namespace ServitorDiscordBot
 
             _timer.AutoReset = false;
 
-            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds - 5000;
+            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds - bumpPreIntervalMs;
 
             _timer.Elapsed += (_, _) =>
             {
@@ -96,7 +98,7 @@ namespace ServitorDiscordBot
         {
             _timer.Stop();
 
-            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds - 5000;
+            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds - bumpPreIntervalMs;
 
             _timer.Start();
 
