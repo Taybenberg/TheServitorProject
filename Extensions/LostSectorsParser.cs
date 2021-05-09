@@ -17,13 +17,13 @@ namespace Extensions
             using Image image = Image.Load(ExtensionsRes.LostSectorsBackground);
 
             Font dateFont = new Font(SystemFonts.Find("Arial"), 32, FontStyle.Bold);
-            
+
             var currDate = DateTime.UtcNow;
             var resetTime = currDate.Date.AddHours(17).ToLocalTime();
-            
-            image.Mutate(m => m.DrawText((currDate.Hour < 17 ? 
-                $"{resetTime.AddDays(-1).ToString("dd.MM HH:mm")} – {resetTime.ToString("dd.MM HH:mm")}" : 
-                $"{resetTime.ToString("dd.MM HH:mm")} – {resetTime.AddDays(1).ToString("dd.MM HH:mm")}"), 
+
+            image.Mutate(m => m.DrawText((currDate.Hour < 17 ?
+                $"{resetTime.AddDays(-1).ToString("dd.MM HH:mm")} – {resetTime.ToString("dd.MM HH:mm")}" :
+                $"{resetTime.ToString("dd.MM HH:mm")} – {resetTime.AddDays(1).ToString("dd.MM HH:mm")}"),
                 dateFont, Color.White, new Point(142, 61)));
 
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
@@ -80,7 +80,7 @@ namespace Extensions
 
                 image.Mutate(m => m.DrawText(Localization.ItemNames[reward], sectorFont, Color.Black, new Point(419, 491)));
             }
-            
+
             var ms = new MemoryStream();
 
             await image.SaveAsPngAsync(ms);

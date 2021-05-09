@@ -134,7 +134,7 @@ namespace ServitorDiscordBot
             {
                 await ExecuteWaitMessageAsync(message, XurNotificationAsync);
             }
-            else if (command is "осіріс" or "osiris")
+            else if (command is "осіріс" or "osiris" or "сосіріс")
             {
                 await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync);
             }

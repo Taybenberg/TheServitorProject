@@ -88,7 +88,7 @@ namespace ServitorDiscordBot
 
                 additionalDescription = $"Доступний **{Localization.StatsActivityNames[BungieNetApi.ActivityType.IronBannerControl][0]}**!";
             }
-                
+
             var mode = Localization.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
 
             builder.Fields = new()
