@@ -28,7 +28,7 @@ namespace ServitorDiscordBot
 
                         var builder = new EmbedBuilder();
 
-                        builder.Color = GetColor(MessageColors.Bumped);
+                        builder.Color = GetColor(MessagesEnum.Bumped);
 
                         builder.Description = $":alarm_clock: :ok_hand:\n:fast_forward: {_bumper.NextBump.ToString("HH:mm:ss")}";
 
@@ -42,141 +42,89 @@ namespace ServitorDiscordBot
 
             var command = message.Content.ToLower();
 
-            if (command is "біп" or "bip")
+            switch (command)
             {
-                var builder = new EmbedBuilder();
+                case string c when GetCommand(MessagesEnum.Bip).Contains(c):
+                    await GetBipMessageAsync(message.Channel); break;
 
-                builder.Color = GetColor(MessageColors.Bip);
+                case string c when GetCommand(MessagesEnum.Help).Contains(c):
+                    await GetHelpMessageAsync(message.Channel); break;
 
-                builder.Description = "біп…";
+                case string c when GetCommand(MessagesEnum.Weekly).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, GetWeeklyMilestoneAsync); break;
 
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-            }
-            else if (command is "допомога" or "help")
-            {
-                var builder = new EmbedBuilder();
+                case string c when GetCommand(MessagesEnum.Sectors).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, GetLostSectorsLootAsync); break;
 
-                builder.Color = GetColor(MessageColors.Help);
+                case string c when GetCommand(MessagesEnum.Resources).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, GetResourcesPoolAsync); break;
 
-                builder.Author = new();
-                builder.Author.IconUrl = _serverIconUrl;
-                builder.Author.Name = $"На варті серверу {_serverName}";
+                case string c when GetCommand(MessagesEnum.Modes).Contains(c):
+                    await GetModesAsync(message.Channel); break;
 
-                builder.Title = "Допомога";
-                builder.Description = $"Я **{_client.CurrentUser.Username}**, " +
-                    $"дружній прислужник, якого на околицях сонячної системи підібрав відважний ґардіан. " +
-                    $"Я не становлю загрози і присягаюсь служити на благо Останнього міста. " +
-                    $"Наразі Авангард надав мені роль обчислювальної машини для збору статистичних даних про діяльність вашого [клану]({_clanUrl})." +
-                    $"\n**Зараз я вмію виконувати наступні функції:**\n" +
-                    $"\n***біп*** - *запит на перевірку моєї працездатності*\n" +
-                    $"\n***тиждень*** - *переглянути інформацію про поточний тиждень*\n" +
-                    $"\n***сектори*** - *переглянути лутпул сьогоднішніх загублених секторів*\n" +
-                    $"\n***ресурси*** - *переглянути поточний асортимент вендорів*\n" +
-                    $"\n***зур*** - *переглянути інвентар Зура*\n" +
-                    $"\n***осіріс*** - *переглянути нагороди за випробування Осіріса*\n" +
-                    $"\n***еверверс*** - *переглянути поточний асортимент Тесс Еверіс*\n" +
-                    $"\n***еверверс %тиждень%*** - *переглянути асортимент Тесс Еверіс за визначений тиждень (1-13)*\n" +
-                    $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*\n" +
-                    $"\n***мої побратими*** - *список побратимів ґардіана*\n" +
-                    $"\n***кланові активності*** - *кількість активностей клану в цьому році*\n" +
-                    $"\n***режими*** - *список типів активностей*\n" +
-                    $"\n***статистика клану %режим%*** - *агрегована статистика клану в типі активності*\n" +
-                    $"\n***дошка лідерів %режим%*** - *список лідерів у типі активності*\n" +
-                    $"\n***відступники*** - *виявити потенційно небезпечні активності окрім нальотів*\n" +
-                    $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*\n" +
-                    $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*";
+                case string c when GetCommand(MessagesEnum.ClanActivities).Contains(c):
+                    await GetClanActivitiesAsync(message.Channel); break;
 
-                builder.Footer = GetFooter();
+                case string c when GetCommand(MessagesEnum.MyActivities).Contains(c):
+                    await GetUserActivitiesAsync(message); break;
 
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-            }
-            else if (command is "тиждень" or "weekly")
-            {
-                await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync);
-            }
-            else if (command is "сектори" or "sectors")
-            {
-                await ExecuteWaitMessageAsync(message, GetLostSectorsLootAsync);
-            }
-            else if (command is "ресурси" or "resources")
-            {
-                await ExecuteWaitMessageAsync(message, GetResourcesPoolAsync);
-            }
-            else if (command is "режими" or "modes")
-            {
-                await GetModesAsync(message);
-            }
-            else if (command is "кланові активності" or "clan activities")
-            {
-                await GetClanActivitiesAsync(message);
-            }
-            else if (command is "мої активності" or "my activities")
-            {
-                await GetUserActivitiesAsync(message);
-            }
-            else if (command is "мої побратими" or "my partners")
-            {
-                await GetUserPartnersAsync(message);
-            }
-            else if (command is "реєстрація" or "register")
-            {
-                await RegisterMessageAsync(message);
-            }
-            else if (command is "100k" or "100к")
-            {
-                await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, true);
-            }
-            else if (command is "відступники" or "apostates")
-            {
-                await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, false);
-            }
-            else if (command is "зур" or "xur")
-            {
-                await ExecuteWaitMessageAsync(message, XurNotificationAsync);
-            }
-            else if (command is "осіріс" or "osiris" or "сосіріс")
-            {
-                await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync);
-            }
-            else if (command.Contains("еверверс"))
-            {
-                var week = command.Replace("еверверс", "").TrimStart();
+                case string c when GetCommand(MessagesEnum.MyPartners).Contains(c):
+                    await GetUserPartnersAsync(message); break;
 
-                await ExecuteWaitMessageAsync(message, GetEververseInventoryAsync, week);
-            }
-            else if (command is "my_id")
-            {
-                var m = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
+                case string c when GetCommand(MessagesEnum.Register).Contains(c):
+                    await RegisterMessageAsync(message); break;
 
-                await Task.Delay(5000);
+                case string c when GetCommand(MessagesEnum._100K).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, FindSuspiciousAsync, true); break;
 
-                await m.DeleteAsync();
-            }
-            else if (command is "channel_id")
-            {
-                var m = await message.Channel.SendMessageAsync(message.Channel.Id.ToString());
+                case string c when GetCommand(MessagesEnum.Apostates).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, FindSuspiciousAsync, false); break;
 
-                await Task.Delay(5000);
+                case string c when GetCommand(MessagesEnum.Xur).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, XurNotificationAsync); break;
 
-                await m.DeleteAsync();
-            }
-            else if (command.Contains("зареєструвати"))
-            {
-                var nickname = command.Replace("зареєструватися ", "").Replace("зареєструватись ", "").Replace("зареєструвати ", "");
+                case string c when GetCommand(MessagesEnum.Osiris).Contains(c):
+                    await ExecuteWaitMessageAsync(message.Channel, GetOsirisInventoryAsync); break;
 
-                await TryRegisterUserAsync(message, nickname);
-            }
-            else if (command.Contains("статистика клану"))
-            {
-                var mode = command.Replace("статистика клану ", "");
+                case "my_id":
+                    var mid = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
+                    await Task.Delay(5000);
+                    await mid.DeleteAsync();
+                    break;
 
-                await ExecuteWaitMessageAsync(message, ClanStatsAsync, mode);
-            }
-            else if (command.Contains("дошка лідерів"))
-            {
-                var mode = command.Replace("дошка лідерів ", "");
+                case "channel_id":
+                    var cid = await message.Channel.SendMessageAsync(message.Channel.Id.ToString());
+                    await Task.Delay(5000);
+                    await cid.DeleteAsync();
+                    break;
 
-                await ExecuteWaitMessageAsync(message, LeaderboardAsync, mode);
+                case string c when GetCommand(MessagesEnum.Eververse).Any(x => c.IndexOf(x) == 0):
+                    var week = c.Replace(GetCommand(MessagesEnum.Eververse)
+                        .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
+                        .TrimStart();
+                    await ExecuteWaitMessageAsync(message.Channel, GetEververseInventoryAsync, week);
+                    break;
+
+                case string c when GetCommand(MessagesEnum.NotRegistered).Any(x => c.IndexOf(x) == 0):
+                    var nickname = c.Replace(GetCommand(MessagesEnum.NotRegistered)
+                        .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
+                        .TrimStart();
+                    await TryRegisterUserAsync(message, nickname);
+                    break;
+
+                case string c when GetCommand(MessagesEnum.ClanStats).Any(x => c.IndexOf(x) == 0):
+                    var csMode = c.Replace(GetCommand(MessagesEnum.ClanStats)
+                        .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
+                        .TrimStart();
+                    await ExecuteWaitMessageAsync(message.Channel, ClanStatsAsync, csMode);
+                    break;
+
+                case string c when GetCommand(MessagesEnum.Leaderboard).Any(x => c.IndexOf(x) == 0):
+                    var lbMode = c.Replace(GetCommand(MessagesEnum.Leaderboard)
+                        .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
+                        .TrimStart();
+                    await ExecuteWaitMessageAsync(message, LeaderboardAsync, lbMode);
+                    break;
             }
         }
     }

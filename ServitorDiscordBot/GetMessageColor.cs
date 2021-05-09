@@ -1,11 +1,11 @@
 ﻿using Discord;
-using static ServitorDiscordBot.MessageColors;
+using static ServitorDiscordBot.MessagesEnum;
 
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        Color GetColor(MessageColors colors) => colors switch
+        Color GetColor(MessagesEnum messagesEnum) => messagesEnum switch
         {
             Wait => new Color(0x616161),
             Error => new Color(0xd50000),

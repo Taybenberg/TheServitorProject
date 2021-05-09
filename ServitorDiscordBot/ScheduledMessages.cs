@@ -21,7 +21,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.BumpNotification);
+            builder.Color = GetColor(MessagesEnum.BumpNotification);
 
             builder.Description = "Саме час **!bump**-нути :alarm_clock:";
 
@@ -49,7 +49,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.Reset);
+            builder.Color = GetColor(MessagesEnum.Reset);
 
             builder.Title = $"Тиждень {currWeek}";
 
@@ -64,7 +64,7 @@ namespace ServitorDiscordBot
             await GetLostSectorsLootAsync();
         }
 
-        public async Task GetWeeklyMilestoneAsync(SocketMessage message = null)
+        public async Task GetWeeklyMilestoneAsync(IMessageChannel channel = null)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -76,7 +76,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.Reset);
+            builder.Color = GetColor(MessagesEnum.Reset);
 
             builder.Title = $"Тиждень {currWeek}";
 
@@ -111,13 +111,13 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            if (message is null)
+            if (channel is null)
             {
                 _logger.LogInformation($"{DateTime.Now} Weekly reset");
 
                 builder.Description = $"Відбувся тижневий ресет\n{additionalDescription}";
 
-                var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
+                channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
                 await channel.SendMessageAsync(embed: builder.Build());
 
@@ -127,21 +127,19 @@ namespace ServitorDiscordBot
             {
                 builder.Description = additionalDescription;
 
-                await message.Channel.SendMessageAsync(embed: builder.Build());
+                await channel.SendMessageAsync(embed: builder.Build());
             }
         }
 
-        public async Task XurNotificationAsync(SocketMessage message = null)
+        public async Task XurNotificationAsync(IMessageChannel channel = null)
         {
             using var scope = _scopeFactory.CreateScope();
 
             var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            using var inventory = await apiCient.GetXurInventoryAsync(message is not null);
+            using var inventory = await apiCient.GetXurInventoryAsync(channel is not null);
 
-            IMessageChannel channel;
-
-            if (message is null)
+            if (channel is null)
             {
                 _logger.LogInformation($"{DateTime.Now} Xur arrived");
 
@@ -149,14 +147,12 @@ namespace ServitorDiscordBot
 
                 var builder = new EmbedBuilder();
 
-                builder.Color = GetColor(MessageColors.Xur);
+                builder.Color = GetColor(MessagesEnum.Xur);
 
                 builder.Title = $"Зур привіз свіжий крам";
 
                 await channel.SendMessageAsync(embed: builder.Build());
             }
-            else
-                channel = message.Channel;
 
             await channel.SendFileAsync(inventory, "XurInventory.png");
         }

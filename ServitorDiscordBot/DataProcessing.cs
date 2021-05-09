@@ -15,7 +15,57 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        public async Task GetEververseInventoryAsync(SocketMessage message = null, string week = null)
+        private async Task GetHelpMessageAsync(IMessageChannel channel)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessagesEnum.Help);
+
+            builder.Author = new();
+            builder.Author.IconUrl = _serverIconUrl;
+            builder.Author.Name = $"На варті серверу {_serverName}";
+
+            builder.Title = "Допомога";
+            builder.Description = $"Я **{_client.CurrentUser.Username}**, " +
+                $"дружній прислужник, якого на околицях сонячної системи підібрав відважний ґардіан. " +
+                $"Я не становлю загрози і присягаюсь служити на благо Останнього міста. " +
+                $"Наразі Авангард надав мені роль обчислювальної машини для збору статистичних даних про діяльність вашого [клану]({_clanUrl})." +
+                $"\n**Зараз я вмію виконувати наступні функції:**\n" +
+                $"\n***біп*** - *запит на перевірку моєї працездатності*\n" +
+                $"\n***тиждень*** - *переглянути інформацію про поточний тиждень*\n" +
+                $"\n***сектори*** - *переглянути лутпул сьогоднішніх загублених секторів*\n" +
+                $"\n***ресурси*** - *переглянути поточний асортимент вендорів*\n" +
+                $"\n***зур*** - *переглянути інвентар Зура*\n" +
+                $"\n***осіріс*** - *переглянути нагороди за випробування Осіріса*\n" +
+                $"\n***еверверс*** - *переглянути поточний асортимент Тесс Еверіс*\n" +
+                $"\n***еверверс %тиждень%*** - *переглянути асортимент Тесс Еверіс за визначений тиждень (1-13)*\n" +
+                $"\n***мої активності*** - *кількість активностей ґардіана у цьому році*\n" +
+                $"\n***мої побратими*** - *список побратимів ґардіана*\n" +
+                $"\n***кланові активності*** - *кількість активностей клану в цьому році*\n" +
+                $"\n***режими*** - *список типів активностей*\n" +
+                $"\n***статистика клану %режим%*** - *агрегована статистика клану в типі активності*\n" +
+                $"\n***дошка лідерів %режим%*** - *список лідерів у типі активності*\n" +
+                $"\n***відступники*** - *виявити потенційно небезпечні активності окрім нальотів*\n" +
+                $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*\n" +
+                $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*";
+
+            builder.Footer = GetFooter();
+
+            await channel.SendMessageAsync(embed: builder.Build());
+        }
+
+        private async Task GetBipMessageAsync(IMessageChannel channel)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = GetColor(MessagesEnum.Bip);
+
+            builder.Description = "біп…";
+
+            await channel.SendMessageAsync(embed: builder.Build());
+        }
+
+        public async Task GetEververseInventoryAsync(IMessageChannel channel = null, string week = null)
         {
             int currWeek = 0;
             int.TryParse(week, out currWeek);
@@ -25,41 +75,41 @@ namespace ServitorDiscordBot
 
             using var inventory = await EververseParser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
 
-            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId[0]) as IMessageChannel;
+            channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
 
-        private async Task GetResourcesPoolAsync(SocketMessage message = null)
+        private async Task GetResourcesPoolAsync(IMessageChannel channel = null)
         {
             using var resources = await ResourcesParser.GetResourcesAsync();
 
-            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId[0]) as IMessageChannel;
+            channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(resources, "ResourcesPool.png");
         }
 
-        private async Task GetLostSectorsLootAsync(SocketMessage message = null)
+        private async Task GetLostSectorsLootAsync(IMessageChannel channel = null)
         {
             using var sectors = await LostSectorsParser.GetLostSectorsAsync();
 
-            IMessageChannel channel = message?.Channel ?? _client.GetChannel(_channelId[0]) as IMessageChannel;
+            channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
 
-        private async Task GetOsirisInventoryAsync(SocketMessage message)
+        private async Task GetOsirisInventoryAsync(IMessageChannel channel)
         {
             using var inventory = await TrialsOfOsirisParser.GetOsirisInventoryAsync();
 
-            await message.Channel.SendFileAsync(inventory, "OsirisInventory.png");
+            await channel.SendFileAsync(inventory, "OsirisInventory.png");
         }
 
-        private async Task GetModesAsync(SocketMessage message)
+        private async Task GetModesAsync(IMessageChannel channel)
         {
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.Modes);
+            builder.Color = GetColor(MessagesEnum.Modes);
 
             builder.Title = $"Режими";
 
@@ -70,7 +120,7 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendMessageAsync(embed: builder.Build());
         }
 
         private async Task LeaderboardAsync(SocketMessage message, string mode)
@@ -83,7 +133,7 @@ namespace ServitorDiscordBot
 
             if (currUser is null)
             {
-                await UserIsNotRegisteredAsync(message);
+                await UserIsNotRegisteredAsync(message.Channel);
 
                 return;
             }
@@ -108,7 +158,7 @@ namespace ServitorDiscordBot
                 {
                     builder.Fields = new();
 
-                    builder.Color = GetColor(MessageColors.Leaderboard);
+                    builder.Color = GetColor(MessagesEnum.Leaderboard);
 
                     var users = await database.GetUsersAsync();
 
@@ -156,14 +206,14 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
-                    builder.Color = GetColor(MessageColors.Error);
+                    builder.Color = GetColor(MessagesEnum.Error);
 
                     builder.Description = "Сталася помилка при обробці вашого запиту сервером Bungie.net. Спробуйте пізніше.";
                 }
             }
             else
             {
-                builder.Color = GetColor(MessageColors.Error);
+                builder.Color = GetColor(MessagesEnum.Error);
 
                 builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
             }
@@ -171,7 +221,7 @@ namespace ServitorDiscordBot
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task ClanStatsAsync(SocketMessage message, string mode)
+        private async Task ClanStatsAsync(IMessageChannel channel, string mode)
         {
             var pair = Localization.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
@@ -193,7 +243,7 @@ namespace ServitorDiscordBot
 
                 if (clanStats.Count() > 0)
                 {
-                    builder.Color = GetColor(MessageColors.ClanStats);
+                    builder.Color = GetColor(MessagesEnum.ClanStats);
 
                     builder.Fields = new();
 
@@ -209,22 +259,22 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
-                    builder.Color = GetColor(MessageColors.Error);
+                    builder.Color = GetColor(MessagesEnum.Error);
 
                     builder.Description = "Сталася помилка при обробці вашого запиту сервером Bungie.net. Спробуйте пізніше.";
                 }
             }
             else
             {
-                builder.Color = GetColor(MessageColors.Error);
+                builder.Color = GetColor(MessagesEnum.Error);
 
                 builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
             }
 
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task FindSuspiciousAsync(SocketMessage message, bool nigthfalls)
+        private async Task FindSuspiciousAsync(IMessageChannel channel, bool nigthfalls)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -266,7 +316,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.Suspicious);
+            builder.Color = GetColor(MessagesEnum.Suspicious);
 
             builder.Title = $"Виявлено активностей: {activityDetails.Count}";
 
@@ -284,7 +334,7 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendMessageAsync(embed: builder.Build());
         }
 
         private async Task RegisterMessageAsync(SocketMessage message)
@@ -294,12 +344,12 @@ namespace ServitorDiscordBot
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
             if (database.IsDiscordUserRegistered(message.Author.Id))
-                await UserAlreadyRegisteredAsync(message);
+                await UserAlreadyRegisteredAsync(message.Channel);
             else
             {
                 var builder = new EmbedBuilder();
 
-                builder.Color = GetColor(MessageColors.Register);
+                builder.Color = GetColor(MessagesEnum.Register);
 
                 builder.Title = "Реєстрація";
                 builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**. " +
@@ -319,43 +369,52 @@ namespace ServitorDiscordBot
 
             var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
 
-            if (!database.IsDiscordUserRegistered(message.Author.Id) && nickname.Length > 0)
+            if (!database.IsDiscordUserRegistered(message.Author.Id))
             {
-                var users = (await database.GetUsersByUserNameAsync(nickname)).Where(x => x.DiscordUserID is null);
-
                 var builder = new EmbedBuilder();
 
                 builder.Title = "Реєстрація";
 
                 builder.Footer = GetFooter();
 
-                if (users.Count() < 1)
+                if (nickname.Length > 0)
                 {
-                    builder.Color = GetColor(MessageColors.RegisterNeedMoreInfo);
+                    var users = (await database.GetUsersByUserNameAsync(nickname)).Where(x => x.DiscordUserID is null);
 
-                    builder.Description = "Не можу знайти гравця. Перевірте запит.";
-                }
-                else if (users.Count() > 1)
-                {
-                    builder.Color = GetColor(MessageColors.RegisterNeedMoreInfo);
+                    if (users.Count() < 1)
+                    {
+                        builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
 
-                    builder.Description = $"Уточніть нікнейм, бо за цим шаблоном знайдено кілька гравців: {string.Join(", ", users.Select(x => x.UserName))}";
+                        builder.Description = "Не можу знайти гравця. Перевірте запит.";
+                    }
+                    else if (users.Count() > 1)
+                    {
+                        builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
+
+                        builder.Description = $"Уточніть нікнейм, бо за цим шаблоном знайдено кілька гравців: {string.Join(", ", users.Select(x => x.UserName))}";
+                    }
+                    else
+                    {
+                        var user = users.First();
+
+                        await database.RegisterUserAsync(user.UserID, message.Author.Id);
+
+                        builder.Color = GetColor(MessagesEnum.RegisterSuccessful);
+
+                        builder.Description = $"Зареєстровано {message.Author.Mention} як гравця {user.UserName}";
+                    }
                 }
                 else
                 {
-                    var user = users.First();
+                    builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
 
-                    await database.RegisterUserAsync(user.UserID, message.Author.Id);
-
-                    builder.Color = GetColor(MessageColors.RegisterSuccessful);
-
-                    builder.Description = $"Зареєстровано {message.Author.Mention} як гравця {user.UserName}";
+                    builder.Description = "Ви не написати свій нікнейм, повторіть команду, тільки цього разу допишіть свій нікнейм.";
                 }
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
             else
-                await UserAlreadyRegisteredAsync(message);
+                await UserAlreadyRegisteredAsync(message.Channel);
         }
 
         private async Task GetUserPartnersAsync(SocketMessage message)
@@ -366,7 +425,7 @@ namespace ServitorDiscordBot
 
             if (!database.IsDiscordUserRegistered(message.Author.Id))
             {
-                await UserIsNotRegisteredAsync(message);
+                await UserIsNotRegisteredAsync(message.Channel);
 
                 return;
             }
@@ -381,13 +440,13 @@ namespace ServitorDiscordBot
 
             if (!partners.Any())
             {
-                builder.Color = GetColor(MessageColors.Error);
+                builder.Color = GetColor(MessagesEnum.Error);
 
                 builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
             }
             else
             {
-                builder.Color = GetColor(MessageColors.MyPartners);
+                builder.Color = GetColor(MessagesEnum.MyPartners);
 
                 builder.Description = string.Empty;
 
@@ -408,14 +467,14 @@ namespace ServitorDiscordBot
 
             if (user is null)
             {
-                await UserIsNotRegisteredAsync(message);
+                await UserIsNotRegisteredAsync(message.Channel);
 
                 return;
             }
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.MyActivities);
+            builder.Color = GetColor(MessagesEnum.MyActivities);
 
             builder.Title = $"Активності {message.Author.Username}";
 
@@ -445,7 +504,7 @@ namespace ServitorDiscordBot
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task GetClanActivitiesAsync(SocketMessage message)
+        private async Task GetClanActivitiesAsync(IMessageChannel channel)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -453,7 +512,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.ClanActivities);
+            builder.Color = GetColor(MessagesEnum.ClanActivities);
 
             builder.Title = $"Активності клану {_serverName}";
 
@@ -475,36 +534,36 @@ namespace ServitorDiscordBot
 
             builder.Footer = GetFooter();
 
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendMessageAsync(embed: builder.Build());
         }
 
 
-        private async Task UserIsNotRegisteredAsync(SocketMessage message)
+        private async Task UserIsNotRegisteredAsync(IMessageChannel channel)
         {
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.NotRegistered);
+            builder.Color = GetColor(MessagesEnum.NotRegistered);
 
             builder.Title = "Реєстрація";
             builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
 
             builder.Footer = GetFooter();
 
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task UserAlreadyRegisteredAsync(SocketMessage message)
+        private async Task UserAlreadyRegisteredAsync(IMessageChannel channel)
         {
             var builder = new EmbedBuilder();
 
-            builder.Color = GetColor(MessageColors.AlreadyRegistered);
+            builder.Color = GetColor(MessagesEnum.AlreadyRegistered);
 
             builder.Title = "Реєстрація";
             builder.Description = "Ґардіане, ви вже зареєстровані…";
 
             builder.Footer = GetFooter();
 
-            await message.Channel.SendMessageAsync(embed: builder.Build());
+            await channel.SendMessageAsync(embed: builder.Build());
         }
     }
 }

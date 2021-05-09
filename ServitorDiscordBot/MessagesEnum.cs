@@ -1,7 +1,14 @@
 ﻿namespace ServitorDiscordBot
 {
-    public enum MessageColors
+    public enum MessagesEnum
     {
+        Weekly,
+        Sectors,
+        Resources,
+        Suspicious,
+        _100K,
+        Apostates,
+        Eververse,
         Wait,
         Error,
         BumpNotification,
@@ -17,7 +24,6 @@
         Register,
         RegisterSuccessful,
         RegisterNeedMoreInfo,
-        Suspicious,
         Xur,
         Osiris,
         Reset,
