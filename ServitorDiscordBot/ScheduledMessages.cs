@@ -1,6 +1,5 @@
 ﻿using BungieNetApi;
 using Discord;
-using Discord.WebSocket;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

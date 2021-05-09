@@ -1,9 +1,6 @@
-﻿using Discord;
-using Discord.WebSocket;
-using Microsoft.Extensions.Logging;
+﻿using Discord.WebSocket;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -13,29 +10,7 @@ namespace ServitorDiscordBot
         private async Task MessageReceivedAsync(SocketMessage message)
         {
             if (message.Channel.Id == _bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
-            {
-                var embed = message.Embeds.FirstOrDefault();
-
-                if (embed is not null)
-                {
-                    if (embed.Description?.Contains("Server bumped by") ?? false)
-                    {
-                        _logger.LogInformation($"{DateTime.Now} Server bumped");
-
-                        var mention = Regex.Match(embed.Description, "(?<=\\<@)\\D?(\\d+)(?=\\>)").Groups[1].Value;
-
-                        _bumper.AddUser(mention);
-
-                        var builder = new EmbedBuilder();
-
-                        builder.Color = GetColor(MessagesEnum.Bumped);
-
-                        builder.Description = $":alarm_clock: :ok_hand:\n:fast_forward: {_bumper.NextBump.ToString("HH:mm:ss")}";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                }
-            }
+                await InitBumpAsync(message);
 
             if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || !_channelId.Any(x => x == message.Channel.Id))
                 return;
@@ -63,13 +38,13 @@ namespace ServitorDiscordBot
                     await GetModesAsync(message.Channel); break;
 
                 case string c when GetCommand(MessagesEnum.ClanActivities).Contains(c):
-                    await GetClanActivitiesAsync(message.Channel); break;
+                    await ExecuteWaitMessageAsync(message.Channel, GetClanActivitiesAsync); break;
 
                 case string c when GetCommand(MessagesEnum.MyActivities).Contains(c):
-                    await GetUserActivitiesAsync(message); break;
+                    await ExecuteWaitMessageAsync(message, GetUserActivitiesAsync); break;
 
                 case string c when GetCommand(MessagesEnum.MyPartners).Contains(c):
-                    await GetUserPartnersAsync(message); break;
+                    await ExecuteWaitMessageAsync(message, GetUserPartnersAsync); break;
 
                 case string c when GetCommand(MessagesEnum.Register).Contains(c):
                     await RegisterMessageAsync(message); break;
