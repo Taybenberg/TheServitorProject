@@ -20,80 +20,53 @@ namespace Extensions
 
             Font font = new Font(SystemFonts.Find("Arial"), 20, FontStyle.Bold);
 
-            var spiderContainer = htmlDoc.DocumentNode.SelectSingleNode("//*[contains(@hash,'863940356')]/div[2]/div[5]/div");
+            string[][] vendors = { new string[] { "Павук", "Банші-44" }, new string[] { "//*[contains(@hash,'863940356')]/div[2]/div[5]/div", "//*[contains(@hash,'672118013')]/div[2]/div[4]/div" } };
 
-            if (spiderContainer is not null)
+            for (int i = 0; i < vendors[0].Length; i++)
             {
-                image.Mutate(m => m.DrawText($"Павук", font, Color.Black, new Point(30, 10)));
+                var container = htmlDoc.DocumentNode.SelectSingleNode(vendors[1][i]);
 
-                int y = 30;
-
-                for (int i = 1; i <= 7; i++)
+                if (container is not null)
                 {
-                    var resIconUrl = spiderContainer.SelectSingleNode($"./div[{i}]/div[1]/div/img").Attributes["src"].Value;
-                    Image res = await loader.GetImage(resIconUrl);
-                    image.Mutate(m => m.DrawImage(res, new Point(30, y), 1));
+                    image.Mutate(m => m.DrawText(vendors[0][i], font, Color.Black, new Point(30 + 400 * i, 10)));
 
-                    var resName = spiderContainer.SelectSingleNode($"./div[{i}]/div[3]/div[1]/p[1]").InnerText[9..];
-                    image.Mutate(m => m.DrawText(resName, font, Color.Black, new Point(130, y)));
+                    int y = 30;
 
-                    var currencyIconUrl = spiderContainer.SelectSingleNode($"./div[{i}]/div[3]/div[2]/div[2]/div/div/img").Attributes["src"].Value;
-                    Image currency = await loader.GetImage(currencyIconUrl);
-                    currency.Mutate(m => m.Resize(40, 40));
-                    image.Mutate(m => m.DrawImage(currency, new Point(130, y + 50), 1));
-
-                    var currencyName = spiderContainer.SelectSingleNode($"./div[{i}]/div[3]/div[2]/div[2]/div/p[1]").InnerText;
-                    image.Mutate(m => m.DrawText(currencyName, font, Color.Black, new Point(180, y + 50)));
-
-                    var currencyQuantity = spiderContainer.SelectSingleNode($"./div[{i}]/div[3]/div[2]/div[2]/div/p[2]").InnerText;
-                    image.Mutate(m => m.DrawText(currencyQuantity, font, Color.Black, new Point(380, y + 50)));
-
-                    y += 96 + 10;
-                }
-            }
-
-            var bansheeContainer = htmlDoc.DocumentNode.SelectSingleNode("//*[contains(@hash,'672118013')]/div[2]/div[4]/div");
-
-            if (bansheeContainer is not null)
-            {
-                image.Mutate(m => m.DrawText($"Банші-44", font, Color.Black, new Point(430, 10)));
-
-                int y = 30;
-
-                for (int i = 1; i <= 7; i++)
-                {
-                    var resIconUrl = (bansheeContainer.SelectSingleNode($"./div[{i}]/div[1]/div/img[2]") ??
-                        bansheeContainer.SelectSingleNode($"./div[{i}]/div[1]/div/img")).Attributes["src"].Value;
-                    Image res = await loader.GetImage(resIconUrl);
-                    image.Mutate(m => m.DrawImage(res, new Point(430, y), 1));
-
-                    var resName = bansheeContainer.SelectSingleNode($"./div[{i}]/div[3]/div[1]/p[1]").InnerText;
-                    image.Mutate(m => m.DrawText(resName, font, Color.Black, new Point(530, y)));
-
-                    var currencyContainer = bansheeContainer.SelectSingleNode($"./div[{i}]/div[3]/div[2]/div[2]");
-
-                    for (int j = 1; j <= 4; j++)
+                    for (int j = 1; j <= 7; j++)
                     {
-                        var currencyEntry = currencyContainer.SelectSingleNode($"./div[{j}]");
+                        var resIconUrl = (container.SelectSingleNode($"./div[{j}]/div[1]/div/img[2]") ??
+                            container.SelectSingleNode($"./div[{j}]/div[1]/div/img")).Attributes["src"].Value;
+                        Image res = await loader.GetImage(resIconUrl);
+                        image.Mutate(m => m.DrawImage(res, new Point(30 + 400 * i, y), 1));
 
-                        if (currencyEntry is null)
-                            break;
+                        var resName = container.SelectSingleNode($"./div[{j}]/div[3]/div[1]/p[1]").InnerText.Replace("Purchase ", "");
+                        image.Mutate(m => m.DrawText(resName, font, Color.Black, new Point(130 + 400 * i, y)));
 
-                        y += 50;
+                        var currencyContainer = container.SelectSingleNode($"./div[{j}]/div[3]/div[2]/div[2]");
 
-                        var currencyIconUrl = currencyEntry.SelectSingleNode($"./div/img").Attributes["src"].Value;
-                        Image currency = await loader.GetImage(currencyIconUrl);
-                        currency.Mutate(m => m.Resize(40, 40));
-                        image.Mutate(m => m.DrawImage(currency, new Point(530, y), 1));
+                        for (int z = 1; z <= 4; z++)
+                        {
+                            var currencyEntry = currencyContainer.SelectSingleNode($"./div[{z}]");
 
-                        var currencyName = currencyEntry.SelectSingleNode($"./p[1]").InnerText;
-                        image.Mutate(m => m.DrawText(currencyName, font, Color.Black, new Point(580, y)));
+                            if (currencyEntry is null)
+                                break;
 
-                        var currencyQuantity = currencyEntry.SelectSingleNode($"./p[2]").InnerText;
-                        image.Mutate(m => m.DrawText(currencyQuantity, font, Color.Black, new Point(780, y)));
+                            y += 50;
+
+                            var currencyIconUrl = currencyEntry.SelectSingleNode($"./div/img").Attributes["src"].Value;
+                            Image currency = await loader.GetImage(currencyIconUrl);
+                            currency.Mutate(m => m.Resize(40, 40));
+                            image.Mutate(m => m.DrawImage(currency, new Point(130 + 400 * i, y), 1));
+
+                            var currencyName = currencyEntry.SelectSingleNode($"./p[1]").InnerText;
+                            image.Mutate(m => m.DrawText(currencyName, font, Color.Black, new Point(180 + 400 * i, y)));
+
+                            var currencyQuantity = currencyEntry.SelectSingleNode($"./p[2]").InnerText;
+                            image.Mutate(m => m.DrawText(currencyQuantity, font, Color.Black, new Point(380 + 400 * i, y)));
+                        }
+
+                        y += 60;
                     }
-
-                    y += 60;
                 }
             }
 

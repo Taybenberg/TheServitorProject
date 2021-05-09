@@ -31,54 +31,34 @@ namespace Extensions
             Font lightFont = new Font(SystemFonts.Find("Arial"), 32);
             Font sectorFont = new Font(SystemFonts.Find("Arial"), 28);
 
-            var sectorLegend = htmlDoc.DocumentNode.SelectSingleNode("//*[contains(@id,'bl_lost_sector_legend')]");
+            string[] sectors = { "//*[contains(@id,'bl_lost_sector_legend')]", "//*[contains(@id,'bl_lost_sector_master')]" };
 
-            if (sectorLegend is not null)
+            for (int i = 0; i < sectors.Length; i++)
             {
-                var lightLevel = sectorLegend.SelectSingleNode("./div[14]/div[1]").InnerText;
+                var sector = htmlDoc.DocumentNode.SelectSingleNode(sectors[i]);
 
-                image.Mutate(m => m.DrawText(lightLevel, lightFont, Color.Black, new Point(306, 129)));
+                if (sector is not null)
+                {
+                    var lightLevel = sector.SelectSingleNode("./div[14]/div[1]").InnerText;
 
-                var sectorIcon = sectorLegend.SelectSingleNode("./div[12]/div[1]/div/div/img").Attributes["src"].Value;
+                    image.Mutate(m => m.DrawText(lightLevel, lightFont, Color.Black, new Point(306 + 386 * i, 129)));
 
-                using var stream = await sectorIcon.GetStreamAsync();
-                using Image icon = await Image.LoadAsync(stream);
-                icon.Mutate(m => m.Resize(346, 194));
+                    var sectorIcon = sector.SelectSingleNode("./div[12]/div[1]/div/div/img").Attributes["src"].Value;
 
-                image.Mutate(m => m.DrawImage(icon, new Point(35, 178), 1));
+                    using var stream = await sectorIcon.GetStreamAsync();
+                    using Image icon = await Image.LoadAsync(stream);
+                    icon.Mutate(m => m.Resize(346, 194));
 
-                var sectorName = sectorLegend.SelectSingleNode("./div[12]/div[3]/p[2]").InnerText;
+                    image.Mutate(m => m.DrawImage(icon, new Point(35 + 386 * i, 178), 1));
 
-                image.Mutate(m => m.DrawText(sectorName, sectorFont, Color.Black, new Point(33, 419)));
+                    var sectorName = sector.SelectSingleNode("./div[12]/div[3]/p[2]").InnerText;
 
-                var reward = sectorLegend.SelectSingleNode("./div[13]/div[4]/div[1]/p[1]").InnerText[10..^7];
+                    image.Mutate(m => m.DrawText(sectorName, sectorFont, Color.Black, new Point(33 + 386 * i, 419)));
 
-                image.Mutate(m => m.DrawText(Localization.ItemNames[reward], sectorFont, Color.Black, new Point(33, 491)));
-            }
+                    var reward = sector.SelectSingleNode("./div[13]/div[4]/div[1]/p[1]").InnerText[10..^7];
 
-            var sectorMaster = htmlDoc.DocumentNode.SelectSingleNode("//*[contains(@id,'bl_lost_sector_master')]");
-
-            if (sectorMaster is not null)
-            {
-                var lightLevel = sectorMaster.SelectSingleNode("./div[14]/div[1]").InnerText;
-
-                image.Mutate(m => m.DrawText(lightLevel, lightFont, Color.Black, new Point(694, 129)));
-
-                var sectorIcon = sectorMaster.SelectSingleNode("./div[12]/div[1]/div/div/img").Attributes["src"].Value;
-
-                using var stream = await sectorIcon.GetStreamAsync();
-                using Image icon = await Image.LoadAsync(stream);
-                icon.Mutate(m => m.Resize(346, 194));
-
-                image.Mutate(m => m.DrawImage(icon, new Point(421, 178), 1));
-
-                var sectorName = sectorMaster.SelectSingleNode("./div[12]/div[3]/p[2]").InnerText;
-
-                image.Mutate(m => m.DrawText(sectorName, sectorFont, Color.Black, new Point(419, 419)));
-
-                var reward = sectorMaster.SelectSingleNode("./div[13]/div[4]/div[1]/p[1]").InnerText[10..^7];
-
-                image.Mutate(m => m.DrawText(Localization.ItemNames[reward], sectorFont, Color.Black, new Point(419, 491)));
+                    image.Mutate(m => m.DrawText(Localization.ItemNames[reward], sectorFont, Color.Black, new Point(33 + 386 * i, 491)));
+                }
             }
 
             var ms = new MemoryStream();
