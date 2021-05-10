@@ -12,7 +12,7 @@ namespace ServitorDiscordBot
             int currWeek = 0;
             int.TryParse(week, out currWeek);
 
-            if (currWeek < 1 || currWeek > 13)
+            if (currWeek < 1 || currWeek > 15)
                 currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
             using var inventory = await EververseParser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
