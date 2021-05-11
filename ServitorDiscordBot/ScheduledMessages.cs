@@ -61,6 +61,11 @@ namespace ServitorDiscordBot
             await GetResourcesPoolAsync();
 
             await GetLostSectorsLootAsync();
+
+            var roadmap = RoadmapParser.GetRoadmap();
+
+            if (roadmap is not null)
+                await channel.SendFileAsync(roadmap, "Roadmap.png");
         }
 
         public async Task GetWeeklyMilestoneAsync(IMessageChannel channel = null)
