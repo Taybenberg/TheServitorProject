@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServitorDiscordBot;
 using System;
+using System.Threading.Tasks;
 
 namespace BotConsole
 {
@@ -20,11 +21,7 @@ namespace BotConsole
             {
                 scheduler.ScheduleAsync(async () =>
                 {
-                    var db = host.Services.GetService<ClanDatabase>();
-
-                    await db.SyncUsersAsync();
-
-                    await db.SyncActivitiesAsync();
+                    await syncDB(host);
                 }).DailyAtHour(5).Zoned(TimeZoneInfo.Local);
 
                 scheduler.ScheduleAsync(async () =>
@@ -62,5 +59,14 @@ namespace BotConsole
                     services.AddSingleton<ServitorBot>();
                     services.AddHostedService(p => p.GetRequiredService<ServitorBot>());
                 });
+
+        private static async Task syncDB(IHost host)
+        {
+            var db = host.Services.GetService<ClanDatabase>();
+
+            await db.SyncUsersAsync();
+
+            await db.SyncActivitiesAsync();
+        }
     }
 }
