@@ -14,7 +14,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task InitBumpAsync(SocketMessage message)
+        private async Task InitBumpAsync(IMessage message)
         {
             var embed = message.Embeds.FirstOrDefault();
 
@@ -39,7 +39,7 @@ namespace ServitorDiscordBot
             }
         }
 
-        private async Task LeaderboardAsync(SocketMessage message, string mode)
+        private async Task LeaderboardAsync(IMessage message, string mode)
         {
             using var scope = _scopeFactory.CreateScope();
 

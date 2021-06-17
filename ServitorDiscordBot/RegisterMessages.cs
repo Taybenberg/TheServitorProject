@@ -37,7 +37,7 @@ namespace ServitorDiscordBot
             await channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task RegisterMessageAsync(SocketMessage message)
+        private async Task RegisterMessageAsync(IMessage message)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -63,7 +63,7 @@ namespace ServitorDiscordBot
             }
         }
 
-        private async Task TryRegisterUserAsync(SocketMessage message, string nickname)
+        private async Task TryRegisterUserAsync(IMessage message, string nickname)
         {
             using var scope = _scopeFactory.CreateScope();
 

@@ -15,7 +15,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetUserActivitiesAsync(SocketMessage message)
+        private async Task GetUserActivitiesAsync(IMessage message)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -62,7 +62,7 @@ namespace ServitorDiscordBot
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task GetUserPartnersAsync(SocketMessage message)
+        private async Task GetUserPartnersAsync(IMessage message)
         {
             using var scope = _scopeFactory.CreateScope();
 

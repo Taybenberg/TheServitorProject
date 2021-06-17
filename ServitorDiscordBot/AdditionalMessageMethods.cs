@@ -7,51 +7,63 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task ExecuteWaitMessageAsync(SocketMessage message, Func<SocketMessage, Task> method)
+        private async Task ExecuteWaitMessageAsync(IMessage message, Func<IMessage, Task> method, bool deleteSenderMessage = false)
         {
-            var wait = await GetWaitMessageAsync(message.Channel);
+            var wait = await GetWaitMessageAsync(message);
+
+            if (deleteSenderMessage)
+                await message.DeleteAsync();
 
             await method(message);
 
             await wait.DeleteAsync();
         }
 
-        private async Task ExecuteWaitMessageAsync<T>(SocketMessage message, Func<SocketMessage, T, Task> method, T arg)
+        private async Task ExecuteWaitMessageAsync<T>(IMessage message, Func<IMessage, T, Task> method, T arg, bool deleteSenderMessage = false)
         {
-            var wait = await GetWaitMessageAsync(message.Channel);
+            var wait = await GetWaitMessageAsync(message);
+
+            if (deleteSenderMessage)
+                await message.DeleteAsync();
 
             await method(message, arg);
 
             await wait.DeleteAsync();
         }
 
-        private async Task ExecuteWaitMessageAsync(IMessageChannel channel, Func<IMessageChannel, Task> method)
+        private async Task ExecuteWaitMessageAsync(IMessage message, Func<IMessageChannel, Task> method, bool deleteSenderMessage = false)
         {
-            var wait = await GetWaitMessageAsync(channel);
+            var wait = await GetWaitMessageAsync(message);
 
-            await method(channel);
+            if (deleteSenderMessage)
+                await message.DeleteAsync();
+
+            await method(message.Channel);
 
             await wait.DeleteAsync();
         }
 
-        private async Task ExecuteWaitMessageAsync<T>(IMessageChannel channel, Func<IMessageChannel, T, Task> method, T arg)
+        private async Task ExecuteWaitMessageAsync<T>(IMessage message, Func<IMessageChannel, T, Task> method, T arg, bool deleteSenderMessage = false)
         {
-            var wait = await GetWaitMessageAsync(channel);
+            var wait = await GetWaitMessageAsync(message);
 
-            await method(channel, arg);
+            if (deleteSenderMessage)
+                await message.DeleteAsync();
+
+            await method(message.Channel, arg);
 
             await wait.DeleteAsync();
         }
 
-        private async Task<IUserMessage> GetWaitMessageAsync(IMessageChannel channel)
+        private async Task<IUserMessage> GetWaitMessageAsync(IMessage message)
         {
             var builder = new EmbedBuilder();
 
             builder.Color = GetColor(MessagesEnum.Wait);
 
-            builder.Description = "Виконую ваш запит, на це знадобиться трохи часу…";
+            builder.Description = $"Виконую ваш запит \"{message.Content}\", на це знадобиться трохи часу…";
 
-            return await channel.SendMessageAsync(embed: builder.Build());
+            return await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
         private EmbedFooterBuilder GetFooter()

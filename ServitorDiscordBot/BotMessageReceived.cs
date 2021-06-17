@@ -9,13 +9,36 @@ namespace ServitorDiscordBot
     {
         private async Task MessageReceivedAsync(SocketMessage message)
         {
+            var command = message?.Content?.ToLower();
+
+            switch (command)
+            {
+                case "!my_id":
+                    var mid = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
+                    
+                    await message.DeleteAsync();
+                    
+                    await Task.Delay(5000);
+                    
+                    await mid.DeleteAsync();
+                    return;
+
+                case "!channel_id":
+                    var cid = await message.Channel.SendMessageAsync(message.Channel.Id.ToString());
+                    
+                    await message.DeleteAsync();
+
+                    await Task.Delay(5000);
+
+                    await cid.DeleteAsync();
+                    return;
+            }
+
             if (message.Channel.Id == _bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
                 await InitBumpAsync(message);
 
             if (message.Author.Id == _client.CurrentUser.Id || message.Author.IsBot || !_channelId.Any(x => x == message.Channel.Id))
                 return;
-
-            var command = message.Content.ToLower();
 
             switch (command)
             {
@@ -26,19 +49,19 @@ namespace ServitorDiscordBot
                     await GetHelpMessageAsync(message.Channel); break;
 
                 case string c when GetCommand(MessagesEnum.Weekly).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, GetWeeklyMilestoneAsync); break;
+                    await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync); break;
 
                 case string c when GetCommand(MessagesEnum.Sectors).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, GetLostSectorsLootAsync); break;
+                    await ExecuteWaitMessageAsync(message, GetLostSectorsLootAsync); break;
 
                 case string c when GetCommand(MessagesEnum.Resources).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, GetResourcesPoolAsync); break;
+                    await ExecuteWaitMessageAsync(message, GetResourcesPoolAsync); break;
 
                 case string c when GetCommand(MessagesEnum.Modes).Contains(c):
                     await GetModesAsync(message.Channel); break;
 
                 case string c when GetCommand(MessagesEnum.ClanActivities).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, GetClanActivitiesAsync); break;
+                    await ExecuteWaitMessageAsync(message, GetClanActivitiesAsync); break;
 
                 case string c when GetCommand(MessagesEnum.MyActivities).Contains(c):
                     await ExecuteWaitMessageAsync(message, GetUserActivitiesAsync); break;
@@ -50,34 +73,22 @@ namespace ServitorDiscordBot
                     await RegisterMessageAsync(message); break;
 
                 case string c when GetCommand(MessagesEnum._100K).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, FindSuspiciousAsync, true); break;
+                    await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: true); break;
 
                 case string c when GetCommand(MessagesEnum.Apostates).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, FindSuspiciousAsync, false); break;
+                    await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: false); break;
 
                 case string c when GetCommand(MessagesEnum.Xur).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, XurNotificationAsync); break;
+                    await ExecuteWaitMessageAsync(message, XurNotificationAsync, deleteSenderMessage: true); break;
 
                 case string c when GetCommand(MessagesEnum.Osiris).Contains(c):
-                    await ExecuteWaitMessageAsync(message.Channel, GetOsirisInventoryAsync); break;
-
-                case "my_id":
-                    var mid = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
-                    await Task.Delay(5000);
-                    await mid.DeleteAsync();
-                    break;
-
-                case "channel_id":
-                    var cid = await message.Channel.SendMessageAsync(message.Channel.Id.ToString());
-                    await Task.Delay(5000);
-                    await cid.DeleteAsync();
-                    break;
+                    await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync, deleteSenderMessage: true); break;
 
                 case string c when GetCommand(MessagesEnum.Eververse).Any(x => c.IndexOf(x) == 0):
                     var week = c.Replace(GetCommand(MessagesEnum.Eververse)
                         .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
                         .TrimStart();
-                    await ExecuteWaitMessageAsync(message.Channel, GetEververseInventoryAsync, week);
+                    await ExecuteWaitMessageAsync(message, GetEververseInventoryAsync, week);
                     break;
 
                 case string c when GetCommand(MessagesEnum.NotRegistered).Any(x => c.IndexOf(x) == 0):
@@ -91,7 +102,7 @@ namespace ServitorDiscordBot
                     var csMode = c.Replace(GetCommand(MessagesEnum.ClanStats)
                         .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
                         .TrimStart();
-                    await ExecuteWaitMessageAsync(message.Channel, ClanStatsAsync, csMode);
+                    await ExecuteWaitMessageAsync(message, ClanStatsAsync, csMode);
                     break;
 
                 case string c when GetCommand(MessagesEnum.Leaderboard).Any(x => c.IndexOf(x) == 0):
