@@ -1,5 +1,6 @@
 ﻿using Flurl;
 using Flurl.Http;
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -18,7 +19,14 @@ namespace BungieNetApi
                 .AppendPathSegment("Milestones")
                 .WithHeader(_xApiKey.Name, _xApiKey.Value);
 
-            return await JsonSerializer.DeserializeAsync<API.Destiny2.GetPublicMilestones.Rootobject>(await milestoneRequest.GetStreamAsync());
+            try
+            {
+                return await JsonSerializer.DeserializeAsync<API.Destiny2.GetPublicMilestones.Rootobject>(await milestoneRequest.GetStreamAsync());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
     }

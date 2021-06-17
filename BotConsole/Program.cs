@@ -28,6 +28,8 @@ namespace BotConsole
                 {
                     var bot = host.Services.GetService<ServitorBot>();
 
+                    await bot.DailyResetNotificationAsync();
+
                     switch (DateTime.Now.DayOfWeek)
                     {
                         case DayOfWeek.Tuesday:
@@ -38,8 +40,6 @@ namespace BotConsole
                             await bot.XurNotificationAsync();
                             break;
                     }
-
-                    await bot.DailyResetNotificationAsync();
                 }).DailyAtHour(17);
             });
 

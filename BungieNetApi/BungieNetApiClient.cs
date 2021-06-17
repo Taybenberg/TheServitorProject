@@ -31,27 +31,30 @@ namespace BungieNetApi
 
             var rawMilestones = (await getRawMilestonesAsync()).Response;
 
-            if (rawMilestones.ContainsKey("3312774044"))
+            if (rawMilestones is not null)
             {
-                var rawCrucible = rawMilestones["3312774044"].activities.Where(x => x.activityHash is
-                    not 1717505396 //Control
-                    and not 1957660400 //Elimination
-                    and not 2259621230 //Rumble
-                ).FirstOrDefault();
+                if (rawMilestones.ContainsKey("3312774044"))
+                {
+                    var rawCrucible = rawMilestones["3312774044"].activities.Where(x => x.activityHash is
+                        not 1717505396 //Control
+                        and not 1957660400 //Elimination
+                        and not 2259621230 //Rumble
+                    ).FirstOrDefault();
 
-                var crucible = await getRawActivityDefinitionAsync(rawCrucible.activityHash);
+                    var crucible = await getRawActivityDefinitionAsync(rawCrucible.activityHash);
 
-                milestone.CrucibleRotationModeName = crucible.originalDisplayProperties.name;
-            }
+                    milestone.CrucibleRotationModeName = crucible.originalDisplayProperties.name;
+                }
 
-            if (rawMilestones.ContainsKey("1942283261"))
-            {
-                var rawNightfall = rawMilestones["1942283261"].activities.FirstOrDefault();
+                if (rawMilestones.ContainsKey("1942283261"))
+                {
+                    var rawNightfall = rawMilestones["1942283261"].activities.FirstOrDefault();
 
-                var nightfall = await getRawActivityDefinitionAsync(rawNightfall.activityHash);
+                    var nightfall = await getRawActivityDefinitionAsync(rawNightfall.activityHash);
 
-                milestone.NightfallTheOrdealName = nightfall.originalDisplayProperties.description;
-                milestone.NightfallTheOrdealImage = _bungieNetUrl.AppendPathSegment(nightfall.pgcrImage);
+                    milestone.NightfallTheOrdealName = nightfall.originalDisplayProperties.description;
+                    milestone.NightfallTheOrdealImage = _bungieNetUrl.AppendPathSegment(nightfall.pgcrImage);
+                }
             }
 
             return milestone;
