@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Extensions;
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -40,11 +41,22 @@ namespace ServitorDiscordBot
             await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
 
+        private ConcurrentDictionary<ulong, ulong> osirisInventory = new();
         private async Task GetOsirisInventoryAsync(IMessageChannel channel)
         {
             using var inventory = await TrialsOfOsirisParser.GetOsirisInventoryAsync();
 
-            await channel.SendFileAsync(inventory, "OsirisInventory.png");
+            var message = await channel.SendFileAsync(inventory, "OsirisInventory.png");
+
+            if (!osirisInventory.TryAdd(channel.Id, message.Id))
+            {
+                var ch = _client.GetChannel(channel.Id) as IMessageChannel;
+
+                var msg = await ch.GetMessageAsync(osirisInventory[channel.Id]);
+                await msg.DeleteAsync();
+
+                osirisInventory[channel.Id] = message.Id;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -135,6 +136,7 @@ namespace ServitorDiscordBot
             }
         }
 
+        private ConcurrentDictionary<ulong, ulong> xurInventory = new();
         public async Task XurNotificationAsync(IMessageChannel channel = null)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -158,7 +160,17 @@ namespace ServitorDiscordBot
                 await channel.SendMessageAsync(embed: builder.Build());
             }
 
-            await channel.SendFileAsync(inventory, "XurInventory.png");
+            var message = await channel.SendFileAsync(inventory, "XurInventory.png");
+
+            if (!xurInventory.TryAdd(channel.Id, message.Id))
+            {
+                var ch = _client.GetChannel(channel.Id) as IMessageChannel;
+
+                var msg = await ch.GetMessageAsync(xurInventory[channel.Id]);
+                await msg.DeleteAsync();
+
+                xurInventory[channel.Id] = message.Id;
+            }
         }
     }
 }
