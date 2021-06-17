@@ -12,7 +12,13 @@ namespace ServitorDiscordBot
             var wait = await GetWaitMessageAsync(message);
 
             if (deleteSenderMessage)
-                await message.DeleteAsync();
+            {
+                try
+                {
+                    await message.DeleteAsync();
+                }
+                catch (Exception) { }
+            }
 
             await method(message);
 
@@ -24,7 +30,13 @@ namespace ServitorDiscordBot
             var wait = await GetWaitMessageAsync(message);
 
             if (deleteSenderMessage)
-                await message.DeleteAsync();
+            {
+                try
+                {
+                    await message.DeleteAsync();
+                }
+                catch (Exception) { }
+            }
 
             await method(message, arg);
 
@@ -36,7 +48,13 @@ namespace ServitorDiscordBot
             var wait = await GetWaitMessageAsync(message);
 
             if (deleteSenderMessage)
-                await message.DeleteAsync();
+            {
+                try
+                {
+                    await message.DeleteAsync();
+                }
+                catch (Exception) { }
+            }
 
             await method(message.Channel);
 
@@ -48,7 +66,13 @@ namespace ServitorDiscordBot
             var wait = await GetWaitMessageAsync(message);
 
             if (deleteSenderMessage)
-                await message.DeleteAsync();
+            {
+                try
+                {
+                    await message.DeleteAsync();
+                }
+                catch (Exception) { }
+            }
 
             await method(message.Channel, arg);
 
@@ -61,7 +85,7 @@ namespace ServitorDiscordBot
 
             builder.Color = GetColor(MessagesEnum.Wait);
 
-            builder.Description = $"Виконую ваш запит \"{message.Content}\", на це знадобиться трохи часу…";
+            builder.Description = $"Виконую ваш запит \"{message.Content.ToLower()}\", на це знадобиться трохи часу…";
 
             return await message.Channel.SendMessageAsync(embed: builder.Build());
         }
