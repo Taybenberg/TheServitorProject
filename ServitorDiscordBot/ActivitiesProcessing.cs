@@ -1,7 +1,6 @@
 ﻿using BungieNetApi;
 using Database;
 using Discord;
-using Discord.WebSocket;
 using Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
