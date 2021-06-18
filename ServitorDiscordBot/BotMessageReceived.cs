@@ -74,7 +74,7 @@ namespace ServitorDiscordBot
                             return;
                         }
 
-                        (var ch, var ms) = await GetChannelMessageAsync(c);
+                        (_, var ms) = await GetChannelMessageAsync(c);
 
                         if (ms is not null)
                         {
@@ -91,7 +91,7 @@ namespace ServitorDiscordBot
                     }
             }
 
-            if (message.Author.Id == _client.CurrentUser.Id || !_channelId.Any(x => x == message.Channel.Id))
+            if (!_channelId.Any(x => x == message.Channel.Id))
                 return;
 
             switch (command)
