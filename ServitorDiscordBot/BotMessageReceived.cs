@@ -21,77 +21,7 @@ namespace ServitorDiscordBot
 
             var command = message?.Content?.ToLower();
 
-            switch (command)
-            {
-                case "!my_id":
-                    {
-                        await SendTemporaryMessageAsync(message, message.Author.Id.ToString());
-                        return;
-                    }
-
-                case "!channel_id":
-                    {
-                        await SendTemporaryMessageAsync(message, message.Channel.Id.ToString());
-                        return;
-                    }
-
-                case string c when c.StartsWith("!delete_messages"):
-                    {
-                        if (!CheckModerationRole(message.Author))
-                        {
-                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
-                            return;
-                        }
-
-                        (var ch, var ms) = await GetChannelMessageAsync(c);
-
-                        if (ms is not null && ch is not null)
-                        {
-                            try
-                            {
-                                var messages = await ch.GetMessagesAsync(ms, Direction.After).Flatten().ToListAsync();
-
-                                var notification = await message.Channel.SendMessageAsync($"Чистка {messages.Count} повідомлень...");
-
-                                foreach (var m in messages)
-                                {
-                                    await m.DeleteAsync();
-                                }
-
-                                await notification.DeleteAsync();
-                            }
-                            catch (Exception) { }
-                        }
-
-                        return;
-                    }
-
-                case string c when c.StartsWith("!delete_message"):
-                    {
-                        if (!CheckModerationRole(message.Author))
-                        {
-                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
-                            return;
-                        }
-
-                        (_, var ms) = await GetChannelMessageAsync(c);
-
-                        if (ms is not null)
-                        {
-                            try
-                            {
-                                await ms.DeleteAsync();
-
-                                await message.DeleteAsync();
-                            }
-                            catch (Exception) { }
-                        }
-
-                        return;
-                    }
-            }
-
-            if (!_channelId.Any(x => x == message.Channel.Id))
+            if (await ServiceMessagesAsync(message, command) || !_channelId.Any(x => x == message.Channel.Id))
                 return;
 
             switch (command)
