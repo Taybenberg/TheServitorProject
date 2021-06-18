@@ -1,23 +1,56 @@
 ﻿using Discord;
+using Discord.WebSocket;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private bool CheckModerationRole(IUser user) => 
+            ((SocketGuildUser)user).Roles.Any(x => 
+            x.Name.ToLower().StartsWith("admin") || 
+            x.Name.ToLower().StartsWith("moder") ||
+            x.Name.ToLower() is "raid lead" ||
+            x.Name.ToLower() is "old");
+
+        private async Task<(IMessageChannel, IMessage)> GetChannelMessageAsync(string link)
+        {
+            var strs = link.Split('/');
+
+            if (strs.Length < 4)
+                return (null, null);
+
+            var chid = ulong.Parse(strs[^2]);
+            var msid = ulong.Parse(strs[^1]);
+
+            var ch = _client.GetChannel(chid) as IMessageChannel;
+            var ms = await ch.GetMessageAsync(msid);
+
+            return (ch, ms);
+        }
+
+        private async Task SendTemporaryMessageAsync(IMessage message, string text)
+        {
+            var msg = await message.Channel.SendMessageAsync(text);
+
+            try
+            {
+                await message.DeleteAsync();
+            }
+            catch (Exception) { }
+
+            await Task.Delay(5000);
+
+            await msg.DeleteAsync();
+        }
+
         private async Task ExecuteWaitMessageAsync(IMessage message, Func<IMessage, Task> method, bool deleteSenderMessage = false)
         {
             var wait = await GetWaitMessageAsync(message);
 
-            if (deleteSenderMessage)
-            {
-                try
-                {
-                    await message.DeleteAsync();
-                }
-                catch (Exception) { }
-            }
+            await DeleteMessageAsync(message, deleteSenderMessage);
 
             await method(message);
 
@@ -28,14 +61,7 @@ namespace ServitorDiscordBot
         {
             var wait = await GetWaitMessageAsync(message);
 
-            if (deleteSenderMessage)
-            {
-                try
-                {
-                    await message.DeleteAsync();
-                }
-                catch (Exception) { }
-            }
+            await DeleteMessageAsync(message, deleteSenderMessage);
 
             await method(message, arg);
 
@@ -46,14 +72,7 @@ namespace ServitorDiscordBot
         {
             var wait = await GetWaitMessageAsync(message);
 
-            if (deleteSenderMessage)
-            {
-                try
-                {
-                    await message.DeleteAsync();
-                }
-                catch (Exception) { }
-            }
+            await DeleteMessageAsync(message, deleteSenderMessage);
 
             await method(message.Channel);
 
@@ -64,7 +83,16 @@ namespace ServitorDiscordBot
         {
             var wait = await GetWaitMessageAsync(message);
 
-            if (deleteSenderMessage)
+            await DeleteMessageAsync(message, deleteSenderMessage);
+
+            await method(message.Channel, arg);
+
+            await wait.DeleteAsync();
+        }
+
+        private async Task DeleteMessageAsync(IMessage message, bool del)
+        {
+            if (del)
             {
                 try
                 {
@@ -72,10 +100,6 @@ namespace ServitorDiscordBot
                 }
                 catch (Exception) { }
             }
-
-            await method(message.Channel, arg);
-
-            await wait.DeleteAsync();
         }
 
         private async Task<IUserMessage> GetWaitMessageAsync(IMessage message)

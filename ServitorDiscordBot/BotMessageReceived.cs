@@ -13,7 +13,6 @@ namespace ServitorDiscordBot
             if (message.Channel.Id == _bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
             {
                 await InitBumpAsync(message);
-
                 return;
             }
 
@@ -25,70 +24,72 @@ namespace ServitorDiscordBot
             switch (command)
             {
                 case "!my_id":
-                    var mid = await message.Channel.SendMessageAsync(message.Author.Id.ToString());
-
-                    try
                     {
-                        await message.DeleteAsync();
+                        await SendTemporaryMessageAsync(message, message.Author.Id.ToString());
+                        return;
                     }
-                    catch (Exception) { }
-
-                    await Task.Delay(5000);
-
-                    await mid.DeleteAsync();
-                    return;
 
                 case "!channel_id":
-                    var cid = await message.Channel.SendMessageAsync(message.Channel.Id.ToString());
-
-                    try
                     {
-                        await message.DeleteAsync();
-                    }
-                    catch (Exception) { }
-
-                    await Task.Delay(5000);
-
-                    await cid.DeleteAsync();
-                    return;
-
-                case string c when c.StartsWith("!delete"):
-                    if (!((SocketGuildUser)message.Author).Roles.Any(x => x.Name.ToLower().StartsWith("admin") || x.Name.ToLower().StartsWith("moder")))
-                    {
-                        await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                        await SendTemporaryMessageAsync(message, message.Channel.Id.ToString());
                         return;
                     }
 
-                    var strs = c.Split('/');
-
-                    if (strs.Length < 4)
-                        return;
-
-                    try
+                case string c when c.StartsWith("!delete_messages"):
                     {
-                        var chid = ulong.Parse(strs[^2]);
-                        var msid = ulong.Parse(strs[^1]);
+                        if (!CheckModerationRole(message.Author))
+                        {
+                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                            return;
+                        }
 
-                        var ch = _client.GetChannel(chid) as IMessageChannel;
-                        var ms = await ch.GetMessageAsync(msid);
+                        (var ch, var ms) = await GetChannelMessageAsync(c);
+
+                        if (ms is not null && ch is not null)
+                        {
+                            try
+                            {
+                                var messages = await ch.GetMessagesAsync(ms, Direction.After).Flatten().ToListAsync();
+
+                                var notification = await message.Channel.SendMessageAsync($"Чистка {messages.Count} повідомлень...");
+
+                                foreach (var m in messages)
+                                {
+                                    await m.DeleteAsync();
+                                }
+
+                                await notification.DeleteAsync();
+                            }
+                            catch (Exception) { }
+                        }
+
+                        return;
+                    }
+
+                case string c when c.StartsWith("!delete_message"):
+                    {
+                        /*
+                        if (!CheckModerationRole(message.Author))
+                        {
+                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                            return;
+                        }*/
+
+                        (var ch, var ms) = await GetChannelMessageAsync(c);
 
                         if (ms is not null)
                         {
-                            var messages = await ch.GetMessagesAsync(ms, Direction.After).Flatten().ToListAsync();
-
-                            var notification = await message.Channel.SendMessageAsync($"Чистка {messages.Count} повідомлень...");
-
-                            foreach (var m in messages)
+                            try
                             {
-                                await m.DeleteAsync();
+                                await ms.DeleteAsync();
+
+                                await message.DeleteAsync();
                             }
-
-                            await notification.DeleteAsync();
+                            catch (Exception) { }
                         }
-                    }
-                    catch (Exception) { }
 
-                    return;
+                        return;
+                    }
             }
 
             if (message.Author.Id == _client.CurrentUser.Id || !_channelId.Any(x => x == message.Channel.Id))
