@@ -10,8 +10,8 @@ namespace ServitorDiscordBot
     {
         private bool CheckModerationRole(IUser user) =>
             ((SocketGuildUser)user).Roles.Any(x =>
-            x.Name.ToLower().StartsWith("admin") ||
-            x.Name.ToLower().StartsWith("moder") ||
+            x.Name.ToLower() is "administrator" ||
+            x.Name.ToLower() is "moderator" ||
             x.Name.ToLower() is "raid lead" ||
             x.Name.ToLower() is "old");
 
