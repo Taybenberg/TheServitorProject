@@ -53,7 +53,12 @@ namespace ServitorDiscordBot
                 var ch = _client.GetChannel(channel.Id) as IMessageChannel;
 
                 var msg = await ch.GetMessageAsync(osirisInventory[channel.Id]);
-                await msg.DeleteAsync();
+
+                try
+                {
+                    await msg.DeleteAsync();
+                }
+                catch (Exception) { }
 
                 osirisInventory[channel.Id] = message.Id;
             }
