@@ -68,12 +68,11 @@ namespace ServitorDiscordBot
 
                 case string c when c.StartsWith("!delete_message"):
                     {
-                        /*
                         if (!CheckModerationRole(message.Author))
                         {
                             await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
                             return;
-                        }*/
+                        }
 
                         (var ch, var ms) = await GetChannelMessageAsync(c);
 
