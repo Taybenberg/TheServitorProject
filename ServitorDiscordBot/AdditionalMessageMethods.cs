@@ -15,20 +15,22 @@ namespace ServitorDiscordBot
             x.Name.ToLower() is "raid lead" ||
             x.Name.ToLower() is "old");
 
-        private async Task<(IMessageChannel, IMessage)> GetChannelMessageAsync(string link)
+        private async Task<(IGuild, IMessageChannel, IMessage)> GetChannelMessageAsync(string link)
         {
             var strs = link.Split('/');
 
             if (strs.Length < 4)
-                return (null, null);
+                return (null, null, null);
 
+            var glid = ulong.Parse(strs[^3]);
             var chid = ulong.Parse(strs[^2]);
             var msid = ulong.Parse(strs[^1]);
 
-            var ch = _client.GetChannel(chid) as IMessageChannel;
+            var gl = _client.GetGuild(glid) as IGuild;
+            var ch = await gl.GetChannelAsync(chid) as IMessageChannel;
             var ms = await ch.GetMessageAsync(msid);
 
-            return (ch, ms);
+            return (gl, ch, ms);
         }
 
         private async Task SendTemporaryMessageAsync(IMessage message, string text)
