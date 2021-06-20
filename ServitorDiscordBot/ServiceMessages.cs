@@ -38,6 +38,77 @@ namespace ServitorDiscordBot
                         return true;
                     }
 
+                case "!delete_this":
+                    {
+                        if (!CheckModerationRole(message.Author))
+                        {
+                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+
+                            return true;
+                        }
+
+                        try
+                        {
+                            var msg = await message.Channel.GetMessageAsync(message.Reference.MessageId.Value);
+
+                            await msg.DeleteAsync();
+
+                            await message.DeleteAsync();
+                        }
+                        catch (Exception) { }
+
+                        return true;
+                    }
+
+                case string c when c.StartsWith("!delete_after"):
+                    {
+                        if (!CheckModerationRole(message.Author))
+                        {
+                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+
+                            return true;
+                        }
+
+                        try
+                        {
+                            var strs = c.Split(' ');
+
+                            if (strs.Length < 2)
+                            {
+                                await message.Channel.SendMessageAsync($"Ви ввели команду в хибному форматі. Перевірте формат.");
+
+                                return true;
+                            }
+
+                            int limit = int.Parse(strs[1]);
+
+                            if (limit > 0)
+                            {
+                                var msg = await message.Channel.GetMessageAsync(message.Reference.MessageId.Value);
+
+                                var messages = await message.Channel.GetMessagesAsync(msg, Direction.After, limit).Flatten().ToListAsync();
+
+                                var notification = await message.Channel.SendMessageAsync($"Чистка {messages.Count} повідомлень...");
+
+                                foreach (var m in messages)
+                                {
+                                    await m.DeleteAsync();
+                                }
+
+                                await notification.DeleteAsync();
+
+                                await message.DeleteAsync();
+                            }
+                            else
+                            {
+                                await message.Channel.SendMessageAsync($"Ви ввели команду в хибному форматі. Перевірте формат.");
+                            }
+                        }
+                        catch (Exception) { }
+
+                        return true;
+                    }
+
                 case string c when c.StartsWith("!delete_messages"):
                     {
                         if (!CheckModerationRole(message.Author))
@@ -123,6 +194,5 @@ namespace ServitorDiscordBot
                 default: return false;
             }
         }
-
     }
 }
