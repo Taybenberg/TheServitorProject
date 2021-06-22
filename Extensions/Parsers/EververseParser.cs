@@ -15,7 +15,7 @@ namespace Extensions.Parsers
         private DateTime _seasonStart;
         private int _weekNumber;
 
-        public EververseParser(string seasonName, DateTime seasonStart, int weekNumber) => 
+        public EververseParser(string seasonName, DateTime seasonStart, int weekNumber) =>
             (_seasonName, _seasonStart, _weekNumber) = (seasonName, seasonStart, weekNumber);
 
         public async Task<Stream> GetImageAsync()

@@ -1,5 +1,5 @@
 ﻿using Discord;
-using Extensions;
+using Extensions.Parsers;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
@@ -16,7 +16,9 @@ namespace ServitorDiscordBot
             if (currWeek < 1 || currWeek > 15)
                 currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
-            using var inventory = await EververseParser.GetEververseInventoryAsync(_seasonName, _seasonStart, currWeek);
+            IInventoryParser parser = new EververseParser(_seasonName, _seasonStart, currWeek);
+
+            using var inventory = await parser.GetImageAsync();
 
             channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
@@ -25,7 +27,9 @@ namespace ServitorDiscordBot
 
         private async Task GetResourcesPoolAsync(IMessageChannel channel = null)
         {
-            using var resources = await ResourcesParser.GetResourcesAsync();
+            IInventoryParser parser = new ResourcesParser();
+
+            using var resources = await parser.GetImageAsync();
 
             channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
@@ -34,7 +38,9 @@ namespace ServitorDiscordBot
 
         private async Task GetLostSectorsLootAsync(IMessageChannel channel = null)
         {
-            using var sectors = await LostSectorsParser.GetLostSectorsAsync();
+            IInventoryParser parser = new LostSectorsParser();
+
+            using var sectors = await parser.GetImageAsync();
 
             channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
@@ -44,7 +50,9 @@ namespace ServitorDiscordBot
         private ConcurrentDictionary<ulong, ulong> osirisInventory = new();
         private async Task GetOsirisInventoryAsync(IMessageChannel channel)
         {
-            using var inventory = await TrialsOfOsirisParser.GetOsirisInventoryAsync();
+            IInventoryParser parser = new TrialsOfOsirisParser();
+
+            using var inventory = await parser.GetImageAsync();
 
             var message = await channel.SendFileAsync(inventory, "OsirisInventory.png");
 

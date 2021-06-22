@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Extensions.Parsers
 {
-    interface IInventoryParser
+    public interface IInventoryParser
     {
         Task<Stream> GetImageAsync();
     }
