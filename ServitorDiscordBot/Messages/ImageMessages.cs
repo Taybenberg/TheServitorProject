@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Extensions.Inventory;
 using Extensions.Parsers;
 using System;
 using System.Collections.Concurrent;
@@ -16,7 +17,7 @@ namespace ServitorDiscordBot
             if (currWeek < 1 || currWeek > 15)
                 currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
-            IInventoryParser parser = new EververseParser(_seasonName, _seasonStart, currWeek);
+            IInventoryParser<EververseInventory> parser = new EververseParser(_seasonName, _seasonStart, currWeek);
 
             using var inventory = await parser.GetImageAsync();
 
@@ -27,7 +28,7 @@ namespace ServitorDiscordBot
 
         private async Task GetResourcesPoolAsync(IMessageChannel channel = null)
         {
-            IInventoryParser parser = new ResourcesParser();
+            IInventoryParser<ResourcesInventory> parser = new ResourcesParser();
 
             using var resources = await parser.GetImageAsync();
 
@@ -38,7 +39,7 @@ namespace ServitorDiscordBot
 
         private async Task GetLostSectorsLootAsync(IMessageChannel channel = null)
         {
-            IInventoryParser parser = new LostSectorsParser();
+            IInventoryParser<LostSectorsInventory> parser = new LostSectorsParser();
 
             using var sectors = await parser.GetImageAsync();
 
@@ -50,7 +51,7 @@ namespace ServitorDiscordBot
         private ConcurrentDictionary<ulong, ulong> osirisInventory = new();
         private async Task GetOsirisInventoryAsync(IMessageChannel channel)
         {
-            IInventoryParser parser = new TrialsOfOsirisParser();
+            IInventoryParser<OsirisInventory> parser = new TrialsOfOsirisParser();
 
             using var inventory = await parser.GetImageAsync();
 

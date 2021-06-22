@@ -1,6 +1,7 @@
 ﻿using BungieNetApi;
 using Discord;
 using Extensions;
+using Extensions.Inventory;
 using Extensions.Parsers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -64,7 +65,7 @@ namespace ServitorDiscordBot
 
             await GetLostSectorsLootAsync();
 
-            IInventoryParser parser = new RoadmapParser();
+            IInventoryParser<RoadmapInventory> parser = new RoadmapParser();
 
             using var roadmap = await parser.GetImageAsync();
 
@@ -146,7 +147,7 @@ namespace ServitorDiscordBot
 
             var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
 
-            IInventoryParser parser = new XurParser(apiCient, channel is not null);
+            IInventoryParser<XurInventory> parser = new XurParser(apiCient, channel is not null);
 
             using var inventory = await parser.GetImageAsync();
 
