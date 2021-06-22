@@ -9,9 +9,16 @@ using System.Threading.Tasks;
 
 namespace Extensions
 {
-    public static class EververseParser
+    public class EververseParser : IInventoryParser
     {
-        public static async Task<Stream> GetEververseInventoryAsync(string seasonName, DateTime seasonStart, int weekNumber)
+        private string _seasonName;
+        private DateTime _seasonStart;
+        private int _weekNumber;
+
+        public EververseParser(string seasonName, DateTime seasonStart, int weekNumber) => 
+            (_seasonName, _seasonStart, _weekNumber) = (seasonName, seasonStart, weekNumber);
+
+        public async Task<Stream> GetImageAsync()
         {
             using var loader = new ImageLoader();
 
@@ -23,18 +30,18 @@ namespace Extensions
 
             image.Mutate(m => m.DrawText
             (
-                $"{seasonStart.AddDays((weekNumber - 1) * 7).ToString("dd.MM.yyyy")} – Тиждень {weekNumber}",
+                $"{_seasonStart.AddDays((_weekNumber - 1) * 7).ToString("dd.MM.yyyy")} – Тиждень {_weekNumber}",
                 font, Color.White, new Point(Xt, Yt1))
             );
 
             image.Mutate(m => m.DrawText
             (
-                $"Сезон \"{seasonName}\"",
+                $"Сезон \"{_seasonName}\"",
                 font, Color.White, new Point(Xt, Yt2))
             );
 
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
-            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{weekNumber}]");
+            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{_weekNumber}]");
 
             if (eververseWeekly is not null)
             {

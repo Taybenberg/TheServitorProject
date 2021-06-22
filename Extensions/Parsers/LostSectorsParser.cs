@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Extensions
 {
-    public static class LostSectorsParser
+    public class LostSectorsParser : IInventoryParser
     {
-        public static async Task<Stream> GetLostSectorsAsync()
+        public async Task<Stream> GetImageAsync()
         {
             using Image image = Image.Load(ExtensionsRes.LostSectorsBackground);
 

@@ -10,9 +10,9 @@ using System.Web;
 
 namespace Extensions
 {
-    public static class TrialsOfOsirisParser
+    public class TrialsOfOsirisParser : IInventoryParser
     {
-        public static async Task<Stream> GetOsirisInventoryAsync()
+        public async Task<Stream> GetImageAsync()
         {
             using Image image = Image.Load(ExtensionsRes.TrialsItemsBackground);
 

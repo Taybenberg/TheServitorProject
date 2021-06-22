@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Extensions
 {
-    public static class RoadmapParser
+    public class RoadmapParser : IInventoryParser
     {
-        public static Stream GetRoadmap() =>
+        public async Task<Stream> GetImageAsync() =>
             DateTime.Now.ToString("dd.MM") switch
             {
                 "11.05" => new MemoryStream(ExtensionsRes.RoadmapMay11),

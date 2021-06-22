@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Extensions
 {
-    public static class ResourcesParser
+    public class ResourcesParser : IInventoryParser
     {
-        public static async Task<Stream> GetResourcesAsync()
+        public async Task<Stream> GetImageAsync()
         {
             using var loader = new ImageLoader();
 
