@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.Processing;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Extensions
+namespace Extensions.Parsers
 {
     public class ResourcesParser : IInventoryParser
     {

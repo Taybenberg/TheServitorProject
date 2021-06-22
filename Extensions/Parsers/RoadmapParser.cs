@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Extensions
+namespace Extensions.Parsers
 {
     public class RoadmapParser : IInventoryParser
     {

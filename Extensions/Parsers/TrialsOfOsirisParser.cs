@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Extensions
+namespace Extensions.Parsers
 {
     public class TrialsOfOsirisParser : IInventoryParser
     {

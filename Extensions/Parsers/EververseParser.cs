@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Extensions
+namespace Extensions.Parsers
 {
     public class EververseParser : IInventoryParser
     {
