@@ -114,7 +114,7 @@ namespace Extensions.Parsers
                 {
                     await drawItemAsync(item, loader, image, font, x, y);
 
-                    x += 398;
+                    x += 433;
                 }
 
                 y += 281;

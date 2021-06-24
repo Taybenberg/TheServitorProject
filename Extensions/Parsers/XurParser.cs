@@ -18,7 +18,7 @@ namespace Extensions.Parsers
         private BungieNetApiClient _apiClient;
         private bool _getLocation;
 
-        public XurParser(BungieNetApiClient apiClient, bool getLocation = false) =>
+        public XurParser(BungieNetApiClient apiClient, bool getLocation) =>
             (_apiClient, _getLocation) = (apiClient, getLocation);
 
         public async Task<XurInventory> GetInventoryAsync()
