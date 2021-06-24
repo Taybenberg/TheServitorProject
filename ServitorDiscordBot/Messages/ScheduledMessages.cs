@@ -6,7 +6,6 @@ using Extensions.Parsers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,9 +60,9 @@ namespace ServitorDiscordBot
 
             await channel.SendMessageAsync(embed: builder.Build());
 
-            await GetResourcesPoolAsync();
+            await GetLostSectorsLootAsync(channel);
 
-            await GetLostSectorsLootAsync();
+            await GetResourcesPoolAsync(channel);
 
             IInventoryParser<RoadmapInventory> parser = new RoadmapParser();
 
@@ -130,7 +129,7 @@ namespace ServitorDiscordBot
 
                 await channel.SendMessageAsync(embed: builder.Build());
 
-                await GetEververseInventoryAsync(week: currWeek.ToString());
+                await GetEververseInventoryAsync(channel, week: currWeek.ToString());
             }
             else
             {
@@ -140,48 +139,21 @@ namespace ServitorDiscordBot
             }
         }
 
-        private ConcurrentDictionary<ulong, ulong> xurInventory = new();
-        public async Task XurNotificationAsync(IMessageChannel channel = null)
+        public async Task XurNotificationAsync()
         {
-            using var scope = _scopeFactory.CreateScope();
+            _logger.LogInformation($"{DateTime.Now} Xur arrived");
 
-            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+            var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
-            IInventoryParser<XurInventory> parser = new XurParser(apiCient, channel is not null);
+            var builder = new EmbedBuilder();
 
-            using var inventory = await parser.GetImageAsync();
+            builder.Color = GetColor(MessagesEnum.Xur);
 
-            if (channel is null)
-            {
-                _logger.LogInformation($"{DateTime.Now} Xur arrived");
+            builder.Title = $"Зур привіз свіжий крам";
 
-                channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
+            await channel.SendMessageAsync(embed: builder.Build());
 
-                var builder = new EmbedBuilder();
-
-                builder.Color = GetColor(MessagesEnum.Xur);
-
-                builder.Title = $"Зур привіз свіжий крам";
-
-                await channel.SendMessageAsync(embed: builder.Build());
-            }
-
-            var message = await channel.SendFileAsync(inventory, "XurInventory.png");
-
-            if (!xurInventory.TryAdd(channel.Id, message.Id))
-            {
-                var ch = _client.GetChannel(channel.Id) as IMessageChannel;
-
-                var msg = await ch.GetMessageAsync(xurInventory[channel.Id]);
-
-                try
-                {
-                    await msg.DeleteAsync();
-                }
-                catch (Exception) { }
-
-                xurInventory[channel.Id] = message.Id;
-            }
+            await GetXurInventoryAsync(channel, false);
         }
     }
 }

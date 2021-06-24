@@ -62,7 +62,7 @@ namespace ServitorDiscordBot
                     await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: false); break;
 
                 case string c when GetCommand(MessagesEnum.Xur).Contains(c):
-                    await ExecuteWaitMessageAsync(message, XurNotificationAsync, deleteSenderMessage: true); break;
+                    await ExecuteWaitMessageAsync(message, GetXurInventoryAsync, true, deleteSenderMessage: true); break;
 
                 case string c when GetCommand(MessagesEnum.Osiris).Contains(c):
                     await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync, deleteSenderMessage: true); break;

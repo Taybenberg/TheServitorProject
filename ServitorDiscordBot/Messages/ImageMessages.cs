@@ -1,6 +1,8 @@
-﻿using Discord;
+﻿using BungieNetApi;
+using Discord;
 using Extensions.Inventory;
 using Extensions.Parsers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
@@ -9,7 +11,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        public async Task GetEververseInventoryAsync(IMessageChannel channel = null, string week = null)
+        public async Task GetEververseInventoryAsync(IMessageChannel channel, string week = null)
         {
             int currWeek = 0;
             int.TryParse(week, out currWeek);
@@ -21,29 +23,23 @@ namespace ServitorDiscordBot
 
             using var inventory = await parser.GetImageAsync();
 
-            channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
-
             await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
 
-        private async Task GetResourcesPoolAsync(IMessageChannel channel = null)
+        private async Task GetResourcesPoolAsync(IMessageChannel channel)
         {
             IInventoryParser<ResourcesInventory> parser = new ResourcesParser();
 
             using var resources = await parser.GetImageAsync();
 
-            channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
-
             await channel.SendFileAsync(resources, "ResourcesPool.png");
         }
 
-        private async Task GetLostSectorsLootAsync(IMessageChannel channel = null)
+        private async Task GetLostSectorsLootAsync(IMessageChannel channel)
         {
             IInventoryParser<LostSectorsInventory> parser = new LostSectorsParser();
 
             using var sectors = await parser.GetImageAsync();
-
-            channel ??= _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
@@ -70,6 +66,35 @@ namespace ServitorDiscordBot
                 catch (Exception) { }
 
                 osirisInventory[channel.Id] = message.Id;
+            }
+        }
+
+        private ConcurrentDictionary<ulong, ulong> xurInventory = new();
+        private async Task GetXurInventoryAsync(IMessageChannel channel, bool getLocation = true)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+
+            IInventoryParser<XurInventory> parser = new XurParser(apiCient, getLocation);
+
+            using var inventory = await parser.GetImageAsync();
+
+            var message = await channel.SendFileAsync(inventory, "XurInventory.png");
+
+            if (!xurInventory.TryAdd(channel.Id, message.Id))
+            {
+                var ch = _client.GetChannel(channel.Id) as IMessageChannel;
+
+                var msg = await ch.GetMessageAsync(xurInventory[channel.Id]);
+
+                try
+                {
+                    await msg.DeleteAsync();
+                }
+                catch { }
+
+                xurInventory[channel.Id] = message.Id;
             }
         }
     }
