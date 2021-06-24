@@ -114,7 +114,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder();
 
-            builder.Title = $"БЕТА | Статистика клану {_serverName}";
+            builder.Title = $"БЕТА | Статистика клану {(channel as IGuildChannel).Guild.Name}";
 
             builder.Footer = GetFooter();
 

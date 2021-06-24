@@ -111,7 +111,7 @@ namespace ServitorDiscordBot
 
             builder.Color = GetColor(MessagesEnum.ClanActivities);
 
-            builder.Title = $"Активності клану {_serverName}";
+            builder.Title = $"Активності клану {(channel as IGuildChannel).Guild.Name}";
 
             var acts = await database.Activities.ToListAsync();
 

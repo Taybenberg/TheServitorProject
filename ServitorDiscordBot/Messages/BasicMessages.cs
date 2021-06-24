@@ -14,14 +14,17 @@ namespace ServitorDiscordBot
             builder.Color = GetColor(MessagesEnum.Help);
 
             builder.Author = new();
-            builder.Author.IconUrl = _serverIconUrl;
-            builder.Author.Name = $"На варті серверу {_serverName}";
+
+            var g = (channel as IGuildChannel).Guild;
+
+            builder.Author.IconUrl = g.IconUrl;
+            builder.Author.Name = $"На варті спільноти {g.Name}";
 
             builder.Title = "Допомога";
             builder.Description = $"Я **{_client.CurrentUser.Username}**, " +
                 $"дружній прислужник, якого на околицях сонячної системи підібрав відважний ґардіан. " +
                 $"Я не становлю загрози і присягаюсь служити на благо Останнього міста. " +
-                $"Наразі Авангард надав мені роль обчислювальної машини у H.E.L.M. для збору статистичних даних про діяльність вашого [клану]({_clanUrl})." +
+                $"Наразі Авангард надав мені роль обчислювальної машини у H.E.L.M. для збору статистичних даних про діяльність вашого [клану]({_clanUrl}).\n" +
                 $"\n**Зараз я вмію виконувати наступні функції:**\n" +
                 $"\n***біп*** - *запит на перевірку моєї працездатності*\n" +
                 $"\n***тиждень*** - *переглянути інформацію про поточний тиждень*\n" +

@@ -20,7 +20,7 @@ namespace ServitorDiscordBot
 
         private readonly Bumper _bumper;
 
-        private readonly string _serverIconUrl, _clanUrl, _serverName, _seasonName;
+        private readonly string _clanUrl, _seasonName;
 
         private readonly DateTime _seasonStart;
 
@@ -47,8 +47,6 @@ namespace ServitorDiscordBot
             _seasonName = configuration["Destiny2:SeasonName"];
             _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
 
-            _serverIconUrl = configuration["Discord:ServerIconURL"];
-            _serverName = configuration["Discord:ServerName"];
             _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
             _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
