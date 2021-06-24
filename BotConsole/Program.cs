@@ -1,6 +1,9 @@
 ﻿using BungieNetApi;
 using Coravel;
 using Database;
+using Extensions;
+using Extensions.Inventory;
+using Extensions.Parsers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +54,15 @@ namespace BotConsole
                 .ConfigureServices((host, services) =>
                 {
                     services.AddScheduler();
+
+                    services.AddTransient<IInventoryParser<EververseInventory>, EververseParser>();
+                    services.AddTransient<IInventoryParser<LostSectorsInventory>, LostSectorsParser>();
+                    services.AddTransient<IInventoryParser<ResourcesInventory>, ResourcesParser>();
+                    services.AddTransient<IInventoryParser<RoadmapInventory>, RoadmapParser>();
+                    services.AddTransient<IInventoryParser<OsirisInventory>, TrialsOfOsirisParser>();
+                    services.AddTransient<IInventoryParser<XurInventory>, XurParser>();
+
+                    services.AddScoped<ParserFactory>();
 
                     services.AddScoped<BungieNetApiClient>();
 

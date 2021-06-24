@@ -1,6 +1,4 @@
-﻿using Database;
-using Discord;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Discord;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,9 +36,7 @@ namespace ServitorDiscordBot
 
         private async Task RegisterMessageAsync(IMessage message)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+            var database = getDatabase();
 
             if (database.IsDiscordUserRegistered(message.Author.Id))
                 await UserAlreadyRegisteredAsync(message.Channel);
@@ -64,9 +60,7 @@ namespace ServitorDiscordBot
 
         private async Task TryRegisterUserAsync(IMessage message, string nickname)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+            var database = getDatabase();
 
             if (!database.IsDiscordUserRegistered(message.Author.Id))
             {

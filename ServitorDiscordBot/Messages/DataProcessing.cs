@@ -1,8 +1,5 @@
-﻿using BungieNetApi;
-using Database;
-using Discord;
+﻿using Discord;
 using Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,9 +9,7 @@ namespace ServitorDiscordBot
     {
         private async Task LeaderboardAsync(IMessage message, string mode)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+            var database = getDatabase();
 
             var currUser = await database.GetUserActivitiesAsync(message.Author.Id);
 
@@ -35,7 +30,7 @@ namespace ServitorDiscordBot
 
             if (pair.Value is not null)
             {
-                var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+                var apiClient = getApiClient();
 
                 builder.Title += $" | { pair.Value[0]}";
 
@@ -120,9 +115,7 @@ namespace ServitorDiscordBot
 
             if (pair.Value is not null)
             {
-                using var scope = _scopeFactory.CreateScope();
-
-                var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+                var apiClient = getApiClient();
 
                 builder.Title += $" | { pair.Value[0]}";
 

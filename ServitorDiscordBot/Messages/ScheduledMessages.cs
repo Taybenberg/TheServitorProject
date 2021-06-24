@@ -1,9 +1,5 @@
-﻿using BungieNetApi;
-using Discord;
+﻿using Discord;
 using Extensions;
-using Extensions.Inventory;
-using Extensions.Parsers;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -64,7 +60,7 @@ namespace ServitorDiscordBot
 
             await GetResourcesPoolAsync(channel);
 
-            IInventoryParser<RoadmapInventory> parser = new RoadmapParser();
+            var parser = getFactory().GetRoadmapParser();
 
             using var roadmap = await parser.GetImageAsync();
 
@@ -74,9 +70,7 @@ namespace ServitorDiscordBot
 
         public async Task GetWeeklyMilestoneAsync(IMessageChannel channel = null)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var apiCient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+            var apiCient = getApiClient();
 
             var milestone = await apiCient.GetMilestonesAsync();
 

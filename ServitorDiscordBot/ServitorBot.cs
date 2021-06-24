@@ -1,5 +1,8 @@
-﻿using Discord;
+﻿using BungieNetApi;
+using Database;
+using Discord;
 using Discord.WebSocket;
+using Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -86,6 +89,27 @@ namespace ServitorDiscordBot
             };
 
             _logger.Log(logLevel, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
+        }
+
+        private ParserFactory getFactory()
+        {
+            var scope = _scopeFactory.CreateScope();
+
+            return scope.ServiceProvider.GetRequiredService<ParserFactory>();
+        }
+
+        private ClanDatabase getDatabase()
+        {
+            var scope = _scopeFactory.CreateScope();
+
+            return scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+        }
+
+        private BungieNetApiClient getApiClient()
+        {
+            var scope = _scopeFactory.CreateScope();
+
+            return scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using BungieNetApi;
-using Database;
-using Discord;
+﻿using Discord;
 using Extensions;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -16,9 +13,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetUserActivitiesAsync(IMessage message)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+            var database = getDatabase();
 
             var user = await database.GetUserActivitiesAsync(message.Author.Id);
 
@@ -63,9 +58,7 @@ namespace ServitorDiscordBot
 
         private async Task GetUserPartnersAsync(IMessage message)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+            var database = getDatabase();
 
             if (!database.IsDiscordUserRegistered(message.Author.Id))
             {
@@ -103,9 +96,7 @@ namespace ServitorDiscordBot
 
         private async Task GetClanActivitiesAsync(IMessageChannel channel)
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
+            var database = getDatabase();
 
             var builder = new EmbedBuilder();
 
@@ -136,11 +127,9 @@ namespace ServitorDiscordBot
 
         private async Task FindSuspiciousAsync(IMessageChannel channel, bool nigthfalls)
         {
-            using var scope = _scopeFactory.CreateScope();
+            var database = getDatabase();
 
-            var database = scope.ServiceProvider.GetRequiredService<ClanDatabase>();
-
-            var apiClient = scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
+            var apiClient = getApiClient();
 
             ConcurrentDictionary<DateTime, string> activityDetails = new();
 
