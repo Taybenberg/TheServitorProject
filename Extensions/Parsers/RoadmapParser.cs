@@ -1,28 +1,42 @@
-﻿using System;
+﻿using Extensions.Inventory;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Extensions.Parsers
 {
-    public class RoadmapParser : IInventoryParser
+    public class RoadmapParser : IInventoryParser<RoadmapInventory>
     {
-        public async Task<Stream> GetImageAsync() =>
-            DateTime.Now.ToString("dd.MM") switch
+        public async Task<RoadmapInventory> GetInventoryAsync()
+        {
+            return new RoadmapInventory
             {
-                "11.05" => new MemoryStream(ExtensionsRes.RoadmapMay11),
-                "14.05" => new MemoryStream(ExtensionsRes.RoadmapMay14),
-                "18.05" => new MemoryStream(ExtensionsRes.RoadmapMay18),
-                "22.05" => new MemoryStream(ExtensionsRes.RoadmapMay22),
-                "25.05" => new MemoryStream(ExtensionsRes.RoadmapMay25),
-                "01.06" => new MemoryStream(ExtensionsRes.RoadmapJun1),
-                "08.06" => new MemoryStream(ExtensionsRes.RoadmapJun8),
-                "15.06" => new MemoryStream(ExtensionsRes.RoadmapJun15),
-                "22.06" => new MemoryStream(ExtensionsRes.RoadmapJun22),
-                "29.06" => new MemoryStream(ExtensionsRes.RoadmapJun29),
-                "06.07" => new MemoryStream(ExtensionsRes.RoadmapJul6),
-                "03.08" => new MemoryStream(ExtensionsRes.RoadmapAug3),
-                "10.08" => new MemoryStream(ExtensionsRes.RoadmapAug10),
-                _ => null
+                RoadmapImage = DateTime.Now.ToString("dd.MM") switch
+                {
+                    "11.05" => ExtensionsRes.RoadmapMay11,
+                    "14.05" => ExtensionsRes.RoadmapMay14,
+                    "18.05" => ExtensionsRes.RoadmapMay18,
+                    "22.05" => ExtensionsRes.RoadmapMay22,
+                    "25.05" => ExtensionsRes.RoadmapMay25,
+                    "01.06" => ExtensionsRes.RoadmapJun1,
+                    "08.06" => ExtensionsRes.RoadmapJun8,
+                    "15.06" => ExtensionsRes.RoadmapJun15,
+                    "22.06" => ExtensionsRes.RoadmapJun22,
+                    "29.06" => ExtensionsRes.RoadmapJun29,
+                    "06.07" => ExtensionsRes.RoadmapJul6,
+                    "03.08" => ExtensionsRes.RoadmapAug3,
+                    "10.08" => ExtensionsRes.RoadmapAug10,
+                    _ => null
+                }
             };
+        }
+
+        public async Task<Stream> GetImageAsync()
+        {
+            var inventory = await GetInventoryAsync();
+
+            return inventory.RoadmapImage is not null ?
+                new MemoryStream(inventory.RoadmapImage) : null;
+        }
     }
 }

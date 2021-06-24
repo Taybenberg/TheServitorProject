@@ -1,20 +1,22 @@
-﻿using Flurl.Http;
+﻿using Extensions.Inventory;
+using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace Extensions.Parsers
 {
-    public class TrialsOfOsirisParser : IInventoryParser
+    public class TrialsOfOsirisParser : IInventoryParser<OsirisInventory>
     {
-        public async Task<Stream> GetImageAsync()
+        public async Task<OsirisInventory> GetInventoryAsync()
         {
-            using Image image = Image.Load(ExtensionsRes.TrialsItemsBackground);
+            var inventory = new OsirisInventory();
 
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.light.gg/");
 
@@ -22,12 +24,16 @@ namespace Extensions.Parsers
 
             if (trialsBillboard is not null)
             {
-                int Xi = 252, Yi = 30;
-                int intervalX = 121, intervalY = 136;
+                var location = HttpUtility.HtmlEncode(trialsBillboard.SelectSingleNode("./div[1]/span/text()")?.InnerText.Trim() ?? string.Empty);
+
+                if (string.IsNullOrWhiteSpace(location))
+                    location = "Невизначено";
+
+                inventory.Location = location;
 
                 for (int i = 1; i <= 4; i++)
                 {
-                    int x = Xi, y = Yi;
+                    List<string> itemList = new();
 
                     for (int j = 1; j <= 3; j++)
                     {
@@ -36,28 +42,43 @@ namespace Extensions.Parsers
                         if (node is null)
                             break;
 
-                        try
-                        {
-                            using var stream = await node.Attributes["src"].Value.GetStreamAsync();
-                            using Image icon = await Image.LoadAsync(stream);
-                            image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-
-                        x += intervalX;
+                        itemList.Add(node.Attributes["src"].Value);
                     }
 
-                    Yi += intervalY;
+                    inventory.IconURLs.Add(itemList);
+                }
+            }
+            else
+                return inventory with { Location = "Невизначено" };
+
+            return inventory;
+        }
+
+        public async Task<Stream> GetImageAsync()
+        {
+            using Image image = Image.Load(ExtensionsRes.TrialsItemsBackground);
+
+            var inventory = await GetInventoryAsync();
+
+            Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
+            image.Mutate(m => m.DrawText(inventory.Location, locationFont, Color.White, new Point(257, 574)));
+
+            int y = 30;
+
+            foreach (var list in inventory.IconURLs)
+            {
+                int x = 252;
+
+                foreach (var link in list)
+                {
+                    using var stream = await link.GetStreamAsync();
+                    using Image icon = await Image.LoadAsync(stream);
+                    image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
+
+                    x += 121;
                 }
 
-                int Xt = 257, Yt = 574;
-
-                Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
-                var locationName = trialsBillboard.SelectSingleNode("./div[1]/span/text()")?.InnerText.Trim() ?? "Невизначено";
-                image.Mutate(m => m.DrawText(HttpUtility.HtmlEncode(locationName), locationFont, Color.White, new Point(Xt, Yt)));
+                y += 136;
             }
 
             var ms = new MemoryStream();

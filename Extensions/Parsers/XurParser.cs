@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using Extensions.Inventory;
 using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
@@ -12,7 +13,7 @@ using System.Web;
 
 namespace Extensions.Parsers
 {
-    public class XurParser : IInventoryParser
+    public class XurParser : IInventoryParser<XurInventory>
     {
         private BungieNetApiClient _apiClient;
         private bool _getLocation;
@@ -20,50 +21,70 @@ namespace Extensions.Parsers
         public XurParser(BungieNetApiClient apiClient, bool getLocation = false) =>
             (_apiClient, _getLocation) = (apiClient, getLocation);
 
-        public async Task<Stream> GetImageAsync()
+        public async Task<XurInventory> GetInventoryAsync()
         {
+            var inventory = new XurInventory();
+
             var items = await _apiClient.GetXurItemsAsync();
 
+            string location = string.Empty;
+
+            if (_getLocation)
+            {
+                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
+                location = HttpUtility.HtmlEncode(htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1")?.InnerText.Trim() ?? string.Empty);
+            }
+
+            if (string.IsNullOrWhiteSpace(location))
+                location = "Невизначено";
+
+            inventory.Location = location;
+
+            foreach (var item in items.Reverse())
+            {
+                inventory.XurItems.Add(new XurItem
+                {
+                    ItemName = item.ItemName,
+                    ItemClass = Localization.ItemNames[item.ItemTypeAndTier],
+                    ItemIconURL = item.ItemIconUrl
+                });
+            }
+
+            return inventory;
+        }
+
+        public async Task<Stream> GetImageAsync()
+        {
             using Image image = Image.Load(ExtensionsRes.XurItemsBackground);
 
-            int Xi = 30, Yi = 30;
-            int Xt1 = 146, Yt1 = 43;
-            int Xt2 = 153, Yt2 = 89;
+            var inventory = await GetInventoryAsync();
 
-            int interval = 136;
+            Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
+            image.Mutate(m => m.DrawText(inventory.Location, locationFont, Color.Black, new Point(257, 574)));
 
             Font itemName = new Font(SystemFonts.Find("Arial"), 34);
             Font itemType = new Font(SystemFonts.Find("Arial"), 23);
 
-            foreach (var item in items.Reverse())
-            {
-                using var stream = await item.ItemIconUrl.GetStreamAsync();
-                using Image icon = await Image.LoadAsync(stream);
-                image.Mutate(m => m.DrawImage(icon, new Point(Xi, Yi), 1));
+            int Yi = 30, Yt1 = 43, Yt2 = 89;
+            int interval = 136;
 
-                image.Mutate(m => m.DrawText(item.ItemName, itemName, Color.Black, new Point(Xt1, Yt1)));
-                image.Mutate(m => m.DrawText(Localization.ItemNames[item.ItemTypeAndTier], itemType, Color.Black, new Point(Xt2, Yt2)));
+            foreach (var item in inventory.XurItems)
+            {
+                using var stream = await item.ItemIconURL.GetStreamAsync();
+                using Image icon = await Image.LoadAsync(stream);
+
+                image.Mutate(m =>
+                {
+                    m.DrawImage(icon, new Point(30, Yi), 1);
+
+                    m.DrawText(item.ItemName, itemName, Color.Black, new Point(146, Yt1));
+                    m.DrawText(item.ItemClass, itemType, Color.Black, new Point(153, Yt2));
+                });
 
                 Yi += interval;
                 Yt1 += interval;
                 Yt2 += interval;
             }
-
-            int Xt = 257, Yt = 574;
-
-            Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
-
-            HtmlNode location = null;
-
-            if (_getLocation)
-            {
-                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
-                location = htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1");
-            }
-
-            var locationName = location?.InnerText.Trim() ?? "Невизначено";
-            image.Mutate(m => m.DrawText(HttpUtility.HtmlEncode(locationName), locationFont, Color.Black, new Point(Xt, Yt)));
-
             var ms = new MemoryStream();
 
             await image.SaveAsPngAsync(ms);
