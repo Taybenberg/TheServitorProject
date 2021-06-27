@@ -1,4 +1,4 @@
-﻿namespace BungieNetApi
+﻿namespace BungieNetApi.Enums
 {
     public enum ActivityType
     {

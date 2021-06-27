@@ -6,7 +6,7 @@ using Utf8Json;
 
 namespace BungieNetApi
 {
-    public partial class BungieNetApiClient
+    partial class BungieNetApiClient
     {
         /*
         /// <summary>
@@ -16,7 +16,7 @@ namespace BungieNetApi
         /// <returns>Returns the static definition of an entity of the given Type and hash identifier. Examine the API Documentation for the Type Names of entities that have their own definitions. Note that the return type will always *inherit from* DestinyDefinition, but the specific type returned will be the requested entity type if it can be found. Please don't use this as a chatty alternative to the Manifest database if you require large sets of data, but for simple and one-off accesses this should be handy.</returns>
         */
 
-        private async Task<API.Destiny2.Manifest.DestinyActivityDefinition.Response> getRawActivityDefinitionAsync(long entityHash)
+        public async Task<API.Destiny2.Manifest.DestinyActivityDefinition.Response> getRawActivityDefinitionAsync(long entityHash)
         {
             var entityReequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Manifest")
@@ -38,7 +38,7 @@ namespace BungieNetApi
             return result.Response;
         }
 
-        private async Task<API.Destiny2.Manifest.DestinyEntityDefinition.Response> getRawItemDefinitionAsync(long entityHash)
+        public async Task<API.Destiny2.Manifest.DestinyEntityDefinition.Response> getRawItemDefinitionAsync(long entityHash)
         {
             var entityReequest = API.Destiny2.Url.BaseURL
                 .AppendPathSegment("Manifest")

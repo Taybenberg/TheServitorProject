@@ -1,0 +1,107 @@
+﻿using BungieNetApi.Enums;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BungieNetApi.Entities
+{
+    public class Clan
+    {
+        public long ID { get; init; }
+
+        private readonly BungieNetApiClient _apiClient;
+        internal Clan(BungieNetApiClient apiClient, long clanID) => (_apiClient, ID) = (apiClient, clanID);
+
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            ConcurrentBag<User> users = new();
+
+            var rawClanMembers = await _apiClient.getRawUsersAsync(ID.ToString());
+
+            Parallel.ForEach(rawClanMembers, (rawuser) =>
+            {
+                var rawProfile = _apiClient.getRawProfileAsync(rawuser.destinyUserInfo.membershipType, rawuser.destinyUserInfo.membershipId).Result;
+
+                var userProfile = new User(_apiClient)
+                {
+                    MembershipId = long.Parse(rawuser.destinyUserInfo.membershipId),
+                    LastSeenDisplayName = rawuser.destinyUserInfo.LastSeenDisplayName,
+                    DateLastPlayed = rawProfile.data.dateLastPlayed,
+                    ClanJoinDate = rawuser.joinDate,
+                    MembershipType = (MembershipType)rawuser.destinyUserInfo.membershipType,
+                    CharacterIDs = rawProfile.data.characterIds
+                };
+
+                users.Add(userProfile);
+            });
+
+            return users;
+        }
+
+        public record ClanStat
+        {
+            public string Stat { get; internal set; }
+            public string Value { get; internal set; }
+        }
+
+        public async Task<IEnumerable<ClanStat>> GetClanStatsAsync(ActivityType activityType)
+        {
+            var rawStats = await _apiClient.getRawClanStatsAsync(ID.ToString(), (int)activityType);
+
+            return rawStats.Select(x => new ClanStat
+            {
+                Stat = x.statId,
+                Value = x.value.basic.displayValue
+            });
+        }
+
+        public record StatLeaders
+        {
+            public int Rank { get; internal set; }
+            public long UserID { get; internal set; }
+            public DestinyClass Class { get; internal set; }
+            public string Value { get; set; }
+        }
+
+        public record Leaderboard
+        {
+            public string Stat { get; internal set; }
+            public IEnumerable<StatLeaders> Leaders { get; internal set; }
+        }
+
+
+        public async Task<IEnumerable<Leaderboard>> GetClanLeaderboardAsync(ActivityType activityType, string[] modes)
+        {
+            ConcurrentBag<Leaderboard> leaderboard = new();
+
+            Parallel.ForEach(modes, (mode) =>
+            {
+                var rawLeaderboard = _apiClient.getRawClanLeaderboardAsync(ID.ToString(), (int)activityType, 100, mode).Result;
+
+                if (rawLeaderboard is not null && rawLeaderboard.Response.Any())
+                {
+                    var value = rawLeaderboard.Response.FirstOrDefault().Value;
+
+                    if (value.ContainsKey(mode))
+                    {
+                        leaderboard.Add(new Leaderboard
+                        {
+                            Stat = mode,
+                            Leaders = value[mode].entries.Select(x => new StatLeaders
+                            {
+                                Rank = x.rank,
+                                UserID = long.Parse(x.player.destinyUserInfo.membershipId),
+                                Class = Enum.Parse<DestinyClass>(x.player.characterClass),
+                                Value = x.value.basic.displayValue
+                            })
+                        });
+                    }
+                }
+            });
+
+            return leaderboard;
+        }
+    }
+}

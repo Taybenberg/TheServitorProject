@@ -1,4 +1,4 @@
-﻿namespace BungieNetApi
+﻿namespace BungieNetApi.Entities
 {
     public record Item
     {

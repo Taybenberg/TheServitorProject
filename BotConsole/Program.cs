@@ -64,7 +64,7 @@ namespace BotConsole
 
                     services.AddScoped<ParserFactory>();
 
-                    services.AddScoped<BungieNetApiClient>();
+                    services.AddScoped<IApiClient, ApiClient>();
 
                     services.AddDbContext<ClanDatabase>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
 
