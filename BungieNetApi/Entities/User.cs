@@ -14,23 +14,35 @@ namespace BungieNetApi.Entities
 
         public long MembershipId { get; internal set; }
 
-        public string LastSeenDisplayName { get; internal set; }
+        public MembershipType MembershipType { get; internal set; }
 
-        public DateTime DateLastPlayed { get; internal set; }
+        public string LastSeenDisplayName { get; internal set; }
 
         public DateTime ClanJoinDate { get; internal set; }
 
-        public MembershipType MembershipType { get; internal set; }
+        private DateTime? _dateLastPlayed = null;
+        public DateTime DateLastPlayed
+        {
+            get
+            {
+                if (_dateLastPlayed is null)
+                    initUserDetailsAsync().Wait();
 
-        internal string[] CharacterIDs { private get; set; }
+                return (DateTime)_dateLastPlayed;
+            }
+        }
 
+        string[] _characterIDs = null;
         public IEnumerable<Character> Characters
         {
             get
             {
+                if (_characterIDs is null)
+                    initUserDetailsAsync().Wait();
+
                 ConcurrentBag<Character> characters = new();
 
-                Parallel.ForEach(CharacterIDs, (chID) =>
+                Parallel.ForEach(_characterIDs, (chID) =>
                 {
                     var rawCharacter = _apiClient.getRawCharacterAsync((int)MembershipType, MembershipId.ToString(), chID).Result;
 
@@ -77,6 +89,14 @@ namespace BungieNetApi.Entities
             {
                 InstanceId = long.Parse(x.activityDetails.instanceId)
             });
+        }
+
+        private async Task initUserDetailsAsync()
+        {
+            var rawProfile = await _apiClient.getRawProfileAsync((int)MembershipType, MembershipId.ToString());
+
+            _dateLastPlayed = rawProfile.data.dateLastPlayed;
+            _characterIDs = rawProfile.data.characterIds;
         }
     }
 }

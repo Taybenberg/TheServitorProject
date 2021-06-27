@@ -20,24 +20,13 @@ namespace BungieNetApi.Entities
 
             var rawClanMembers = await _apiClient.getRawUsersAsync(ID.ToString());
 
-            Parallel.ForEach(rawClanMembers, (rawuser) =>
+            return rawClanMembers.Select(x => new User(_apiClient)
             {
-                var rawProfile = _apiClient.getRawProfileAsync(rawuser.destinyUserInfo.membershipType, rawuser.destinyUserInfo.membershipId).Result;
-
-                var userProfile = new User(_apiClient)
-                {
-                    MembershipId = long.Parse(rawuser.destinyUserInfo.membershipId),
-                    LastSeenDisplayName = rawuser.destinyUserInfo.LastSeenDisplayName,
-                    DateLastPlayed = rawProfile.data.dateLastPlayed,
-                    ClanJoinDate = rawuser.joinDate,
-                    MembershipType = (MembershipType)rawuser.destinyUserInfo.membershipType,
-                    CharacterIDs = rawProfile.data.characterIds
-                };
-
-                users.Add(userProfile);
+                MembershipId = long.Parse(x.destinyUserInfo.membershipId),
+                MembershipType = (MembershipType)x.destinyUserInfo.membershipType,
+                LastSeenDisplayName = x.destinyUserInfo.LastSeenDisplayName,
+                ClanJoinDate = x.joinDate
             });
-
-            return users;
         }
 
         public record ClanStat
