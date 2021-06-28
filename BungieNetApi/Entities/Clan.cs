@@ -22,7 +22,7 @@ namespace BungieNetApi.Entities
 
             return rawClanMembers.Select(x => new User(_apiClient)
             {
-                MembershipId = long.Parse(x.destinyUserInfo.membershipId),
+                MembershipID = long.Parse(x.destinyUserInfo.membershipId),
                 MembershipType = (MembershipType)x.destinyUserInfo.membershipType,
                 LastSeenDisplayName = x.destinyUserInfo.LastSeenDisplayName,
                 ClanJoinDate = x.joinDate
@@ -59,7 +59,6 @@ namespace BungieNetApi.Entities
             public string Stat { get; internal set; }
             public IEnumerable<StatLeaders> Leaders { get; internal set; }
         }
-
 
         public async Task<IEnumerable<Leaderboard>> GetClanLeaderboardAsync(ActivityType activityType, string[] modes)
         {

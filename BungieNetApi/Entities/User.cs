@@ -1,6 +1,5 @@
 ﻿using BungieNetApi.Enums;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,10 +8,7 @@ namespace BungieNetApi.Entities
 {
     public class User
     {
-        private readonly BungieNetApiClient _apiClient;
-        internal User(BungieNetApiClient apiClient) => _apiClient = apiClient;
-
-        public long MembershipId { get; internal set; }
+        public long MembershipID { get; internal set; }
 
         public MembershipType MembershipType { get; internal set; }
 
@@ -20,44 +16,50 @@ namespace BungieNetApi.Entities
 
         public DateTime ClanJoinDate { get; internal set; }
 
-        private DateTime? _dateLastPlayed = null;
+        private class UserContainer
+        {
+            public DateTime DateLastPlayed;
+
+            public string[] CharacterIDs;
+
+            internal UserContainer(BungieNetApiClient apiClient, MembershipType membershipType, long membershipID)
+            {
+                var rawProfile = apiClient.getRawProfileAsync((int)membershipType, membershipID.ToString()).Result;
+
+                DateLastPlayed = rawProfile.data.dateLastPlayed;
+                CharacterIDs = rawProfile.data.characterIds;
+            }
+        }
+
+        private Lazy<UserContainer> _container;
+
+        private readonly BungieNetApiClient _apiClient;
+
+        internal User(BungieNetApiClient apiClient)
+        {
+            _apiClient = apiClient;
+
+            _container = new(() => new UserContainer(_apiClient, MembershipType, MembershipID));
+        }
+
         public DateTime DateLastPlayed
         {
             get
             {
-                if (_dateLastPlayed is null)
-                    initUserDetailsAsync().Wait();
-
-                return (DateTime)_dateLastPlayed;
+                return _container.Value.DateLastPlayed;
             }
         }
 
-        string[] _characterIDs = null;
         public IEnumerable<Character> Characters
         {
             get
             {
-                if (_characterIDs is null)
-                    initUserDetailsAsync().Wait();
-
-                ConcurrentBag<Character> characters = new();
-
-                Parallel.ForEach(_characterIDs, (chID) =>
+                return _container.Value.CharacterIDs.Select(x => new Character(_apiClient)
                 {
-                    var rawCharacter = _apiClient.getRawCharacterAsync((int)MembershipType, MembershipId.ToString(), chID).Result;
-
-                    characters.Add(new Character
-                    {
-                        CharacterId = long.Parse(rawCharacter.data.characterId),
-                        MembershipId = long.Parse(rawCharacter.data.membershipId),
-                        DateLastPlayed = rawCharacter.data.dateLastPlayed,
-                        Class = (DestinyClass)rawCharacter.data.classType,
-                        Race = (DestinyRace)rawCharacter.data.raceType,
-                        Gender = (DestinyGender)rawCharacter.data.genderType
-                    });
+                    CharacterID = long.Parse(x),
+                    MembershipID = MembershipID,
+                    MembershipType = MembershipType
                 });
-
-                return characters;
             }
         }
 
@@ -69,34 +71,13 @@ namespace BungieNetApi.Entities
 
         public async Task<IEnumerable<ClanInfo>> GetUserClansAsync()
         {
-            var rawClans = await _apiClient.getRawUserClansAsync((int)MembershipType, MembershipId.ToString());
+            var rawClans = await _apiClient.getRawUserClansAsync((int)MembershipType, MembershipID.ToString());
 
             return rawClans.Select(x => new ClanInfo
             {
                 ClanSign = x.group.clanInfo.clanCallsign,
                 ClanName = x.group.name
             });
-        }
-
-        public async Task<IEnumerable<Activity>> GetUserActivitiesAsync(long characterId, int count, int page)
-        {
-            var rawUserActivities = await _apiClient.getRawActivitiesAsync((int)MembershipType, MembershipId.ToString(), characterId.ToString(), count, page);
-
-            if (rawUserActivities is null)
-                return new List<Activity>();
-
-            return rawUserActivities.Select(x => new Activity(_apiClient)
-            {
-                InstanceId = long.Parse(x.activityDetails.instanceId)
-            });
-        }
-
-        private async Task initUserDetailsAsync()
-        {
-            var rawProfile = await _apiClient.getRawProfileAsync((int)MembershipType, MembershipId.ToString());
-
-            _dateLastPlayed = rawProfile.data.dateLastPlayed;
-            _characterIDs = rawProfile.data.characterIds;
         }
     }
 }
