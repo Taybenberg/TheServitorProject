@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BungieNetApi.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +13,7 @@ namespace Database
 
         public DateTime Period { get; set; }
 
-        public BungieNetApi.ActivityType ActivityType { get; set; }
+        public ActivityType ActivityType { get; set; }
 
         public ICollection<ActivityUserStats> ActivityUserStats { get; set; }
 

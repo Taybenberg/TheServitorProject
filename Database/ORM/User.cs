@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BungieNetApi.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +17,7 @@ namespace Database
 
         public DateTime ClanJoinDate { get; set; }
 
-        public BungieNetApi.MembershipType MembershipType { get; set; }
+        public MembershipType MembershipType { get; set; }
 
         public ICollection<Character> Characters { get; set; }
 
