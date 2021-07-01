@@ -5,7 +5,7 @@ using System;
 
 namespace Extensions
 {
-    public class ParserFactory
+    public class ParserFactory : IParserFactory
     {
         IServiceScopeFactory _scopeFactory;
 
