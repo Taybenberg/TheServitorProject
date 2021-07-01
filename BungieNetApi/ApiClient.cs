@@ -21,6 +21,14 @@ namespace BungieNetApi
             _bungieNetApiClient = new(configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>());
         }
 
+        public IEntityFactory EntityFactory
+        {
+            get
+            {
+                return new EntityFactory(_bungieNetApiClient);
+            }
+        }
+
         public Clan Clan
         {
             get
@@ -70,7 +78,7 @@ namespace BungieNetApi
 
             var rawXurItems = await _bungieNetApiClient.getRawXurItemsAsync();
 
-            foreach (var rawItem in rawXurItems.saleItems.Values.Skip(1).SkipLast(1))
+            Parallel.ForEach(rawXurItems.saleItems.Values.Skip(1).SkipLast(1), (rawItem) =>
             {
                 var rawItemDetails = _bungieNetApiClient.getRawItemDefinitionAsync(rawItem.itemHash).Result;
 
@@ -84,7 +92,7 @@ namespace BungieNetApi
                         UniqueLabel = rawItemDetails.equippingBlock.uniqueLabel
                     });
                 }
-            }
+            });
 
             return items;
         }

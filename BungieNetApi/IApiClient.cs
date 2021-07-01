@@ -6,6 +6,8 @@ namespace BungieNetApi
 {
     public interface IApiClient
     {
+        IEntityFactory EntityFactory { get; }
+
         Clan Clan { get; }
 
         Task<Milestone> GetMilestonesAsync();
