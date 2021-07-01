@@ -155,7 +155,7 @@ namespace ServitorDiscordBot
                 {
                     var memberClans = apiClient.EntityFactory.GetUser(u.MembershipID, u.MembershipType).GetUserClansAsync().Result;
 
-                    members.Add($"\n{u.DisplayName} {HttpUtility.HtmlDecode(string.Join(",", memberClans))}");
+                    members.Add($"\n{u.DisplayName} {HttpUtility.HtmlDecode(string.Join(",", memberClans.Select(x => $"({x.ClanSign}, {x.ClanName})")))}");
                 }
 
                 details += string.Join(string.Empty, members.Distinct());

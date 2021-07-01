@@ -62,13 +62,13 @@ namespace ServitorDiscordBot
             _logger.LogInformation($"{DateTime.Now} Bump scheduled on {_bumper.NextBump}");
         }
 
-        public void Dispose() => 
+        public void Dispose() =>
             _client.Dispose();
 
-        public async Task StartAsync(CancellationToken cancellationToken) => 
+        public async Task StartAsync(CancellationToken cancellationToken) =>
             await _client.StartAsync();
 
-        public async Task StopAsync(CancellationToken cancellationToken) => 
+        public async Task StopAsync(CancellationToken cancellationToken) =>
             await _client.StopAsync();
 
         private async Task LogAsync(LogMessage log) =>

@@ -62,7 +62,7 @@ namespace BotConsole
                     services.AddTransient<IInventoryParser<OsirisInventory>, TrialsOfOsirisParser>();
                     services.AddTransient<IInventoryParser<XurInventory>, XurParser>();
 
-                    services.AddScoped<ParserFactory>();
+                    services.AddScoped<IParserFactory, ParserFactory>();
 
                     services.AddScoped<IApiClient, ApiClient>();
 
