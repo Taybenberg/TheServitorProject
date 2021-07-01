@@ -80,7 +80,7 @@ namespace DataProcessor.Parsers
 
                     m.DrawText(sector.SectorName, sectorFont, Color.Black, new Point(33 + i, 419));
 
-                    m.DrawText(Localization.ItemNames[sector.SectorReward], sectorFont, Color.Black, new Point(33 + i, 491));
+                    m.DrawText(Localization.TranslationDictionaries.ItemNames[sector.SectorReward], sectorFont, Color.Black, new Point(33 + i, 491));
                 });
 
                 i += 386;

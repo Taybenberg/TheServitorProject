@@ -1,5 +1,6 @@
-﻿using Discord;
-using DataProcessor;
+﻿using DataProcessor;
+using DataProcessor.Localization;
+using Discord;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace ServitorDiscordBot
             builder.Description = $"Неймовірно! **{acts.Count()}** активностей на рахунку {message.Author.Mention}! Так тримати!\n\n***По класах:***";
 
             foreach (var c in user.Characters.OrderByDescending(x => x.ActivityUserStats.Count))
-                builder.Description += $"\n**{Localization.ClassNames[c.Class]}** – ***{c.ActivityUserStats.Count}***";
+                builder.Description += $"\n**{TranslationDictionaries.ClassNames[c.Class]}** – ***{c.ActivityUserStats.Count}***";
 
             builder.Description += "\n\n***По типу активності:***";
 
@@ -46,7 +47,7 @@ namespace ServitorDiscordBot
 
             foreach (var count in counter.OrderByDescending(x => x.Count))
             {
-                var mode = Localization.ActivityNames[count.ActivityType];
+                var mode = TranslationDictionaries.ActivityNames[count.ActivityType];
 
                 builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
             }
@@ -115,7 +116,7 @@ namespace ServitorDiscordBot
 
             foreach (var count in counter.OrderByDescending(x => x.Count))
             {
-                var mode = Localization.ActivityNames[count.ActivityType];
+                var mode = TranslationDictionaries.ActivityNames[count.ActivityType];
 
                 builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
             }

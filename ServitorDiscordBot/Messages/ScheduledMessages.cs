@@ -1,5 +1,6 @@
-﻿using Discord;
-using DataProcessor;
+﻿using DataProcessor;
+using DataProcessor.Localization;
+using Discord;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -88,10 +89,10 @@ namespace ServitorDiscordBot
             {
                 builder.ThumbnailUrl = "https://bungie.net/common/destiny2_content/icons/0ee91b79ba1366243832cf810afc3b75.jpg";
 
-                additionalDescription = $"Доступний **{Localization.StatsActivityNames[BungieNetApi.Enums.ActivityType.IronBannerControl][0]}**!";
+                additionalDescription = $"Доступний **{TranslationDictionaries.StatsActivityNames[BungieNetApi.Enums.ActivityType.IronBannerControl][0]}**!";
             }
 
-            var mode = Localization.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
+            var mode = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
 
             builder.Fields = new()
             {

@@ -1,58 +1,11 @@
 ﻿using BungieNetApi.Enums;
 using System.Collections.Generic;
 using static BungieNetApi.Enums.ActivityType;
-using static BungieNetApi.Enums.DestinyClass;
-using static BungieNetApi.Enums.DestinyGender;
-using static BungieNetApi.Enums.DestinyRace;
 
-namespace DataProcessor
+namespace DataProcessor.Localization
 {
-    public static class Localization
+    public static partial class TranslationDictionaries
     {
-        public readonly static Dictionary<string, string> ItemNames = new()
-        {
-            ["Exotic Head Armor"] = "Екзотичний шолом",
-            ["Exotic Helmet"] = "Екзотичний шолом",
-            ["Exotic Arms Armor"] = "Екзотичні рукавиці",
-            ["Exotic Gauntlets"] = "Екзотичні рукавиці",
-            ["Exotic Chest Armor"] = "Екзотичний нагрудник",
-            ["Exotic Legs Armor"] = "Екзотичні поножі",
-            ["Exotic Leg Armor"] = "Екзотичні поножі",
-            ["Exotic Auto Rifle"] = "Екзотичний автомат",
-            ["Exotic Combat Bow"] = "Екзотичний лук",
-            ["Exotic Fusion Rifle"] = "Екзотична плазменна гвинтівка",
-            ["Exotic Grenade Launcher"] = "Екзотичний гранатомет",
-            ["Exotic Hand Cannon"] = "Екзотичний револьвер",
-            ["Exotic Linear Fusion Rifle"] = "Екзотична лінійно-плазменна гвинтівка",
-            ["Exotic Pulse Rifle"] = "Екзотична імпульсна гвинтівка",
-            ["Exotic Scout Rifle"] = "Екзотична гвинтівка розвідника",
-            ["Exotic Shotgun"] = "Екзотичний дробовик",
-            ["Exotic Sidearm"] = "Екзотичний пістолет",
-            ["Exotic Sniper Rifle"] = "Екзотична снайперська гвинтівка",
-            ["Exotic Submachine Gun"] = "Екзотичний пістолет-кулемет",
-            ["Exotic Sniper Rifle"] = "Екзотична снайперська гвинтівка",
-            ["Exotic Sword"] = "Екзотичний меч",
-            ["Exotic Rocket Launcher"] = "Екзотичний ракетомет",
-            ["Exotic Machine Gun"] = "Екзотичний кулемет",
-            ["Exotic Trace Rifle"] = "Екзотична променева гвинтівка"
-        };
-
-        public readonly static Dictionary<string, string> StatNames = new()
-        {
-            ["lbSingleGameKills"] = "Вбивств за гру",
-            ["lbPrecisionKills"] = "Прицільних вбивств",
-            ["lbAssists"] = "Ассісти",
-            ["lbDeaths"] = "Смертей",
-            ["lbKills"] = "Вбивств",
-            ["lbObjectivesCompleted"] = "Виконаних цілей",
-            ["lbMostPrecisionKills"] = "Прицільних вбивств за гру",
-            ["lbLongestKillSpree"] = "Найбільше вбивств за одне життя",
-            ["lbLongestKillDistance"] = "Найбільша дистанція вбивства",
-            ["lbFastestCompletionMs"] = "Найшвидше закриття",
-            ["lbLongestSingleLife"] = "Найдовше життя",
-            ["lbSingleGameScore"] = "Очок за гру"
-        };
-
         public readonly static Dictionary<ActivityType, string[]> StatsActivityNames = new()
         {
             [Story] = new[] { "Сюжет", "Story" },
@@ -167,29 +120,6 @@ namespace DataProcessor
             [Dungeon] = new[] { "Підземелля", "Dungeon" },
             [Sundial] = new[] { "Сонячний годинник", "Sundial" },
             [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" }
-        };
-
-        public readonly static Dictionary<DestinyClass, string> ClassNames = new()
-        {
-            [Titan] = "Титан",
-            [Hunter] = "Мисливець",
-            [Warlock] = "Варлок",
-            [DestinyClass.Unknown] = "Невідомо"
-        };
-
-        public readonly static Dictionary<DestinyGender, string> GenderNames = new()
-        {
-            [Male] = "Чоловік",
-            [Female] = "Жінка",
-            [DestinyGender.Unknown] = "Невідомо"
-        };
-
-        public readonly static Dictionary<DestinyRace, string> RaceNames = new()
-        {
-            [Human] = "Людина",
-            [Awoken] = "Пробуджена",
-            [Exo] = "Екзо",
-            [DestinyRace.Unknown] = "Невідомо"
         };
     }
 }

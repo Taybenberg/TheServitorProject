@@ -1,5 +1,5 @@
-﻿using Discord;
-using DataProcessor;
+﻿using DataProcessor.Localization;
+using Discord;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -70,7 +70,7 @@ namespace ServitorDiscordBot
 
             builder.Description = string.Empty;
 
-            foreach (var mode in Localization.StatsActivityNames.Values.OrderBy(x => x[0]))
+            foreach (var mode in TranslationDictionaries.StatsActivityNames.Values.OrderBy(x => x[0]))
                 builder.Description += $"**{mode[0]}** | {mode[1]}\n";
 
             builder.Footer = GetFooter();

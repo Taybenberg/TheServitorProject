@@ -1,8 +1,8 @@
 ﻿using BungieNetApi;
 using Database;
+using DataProcessor;
 using Discord;
 using Discord.WebSocket;
-using DataProcessor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

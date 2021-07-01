@@ -1,5 +1,5 @@
-﻿using Discord;
-using DataProcessor;
+﻿using DataProcessor.Localization;
+using Discord;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +20,7 @@ namespace ServitorDiscordBot
                 return;
             }
 
-            var pair = Localization.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
+            var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
             var builder = new EmbedBuilder();
 
@@ -34,7 +34,7 @@ namespace ServitorDiscordBot
 
                 builder.Title += $" | { pair.Value[0]}";
 
-                var leaderboard = await apiClient.Clan.GetClanLeaderboardAsync(pair.Key, Localization.StatNames.Keys.ToArray());
+                var leaderboard = await apiClient.Clan.GetClanLeaderboardAsync(pair.Key, TranslationDictionaries.StatNames.Keys.ToArray());
 
                 if (leaderboard.Any())
                 {
@@ -62,12 +62,12 @@ namespace ServitorDiscordBot
 
                             if (u.UserID == currUser.UserID)
                             {
-                                usrs += $"***{user.Rank}, {u.UserName}, {Localization.ClassNames[user.Class]}, {user.Value}***\n";
+                                usrs += $"***{user.Rank}, {u.UserName}, {TranslationDictionaries.ClassNames[user.Class]}, {user.Value}***\n";
 
                                 userFound = true;
                             }
                             else
-                                usrs += $"{user.Rank}, {u.UserName}, {Localization.ClassNames[user.Class]}, {user.Value}\n";
+                                usrs += $"{user.Rank}, {u.UserName}, {TranslationDictionaries.ClassNames[user.Class]}, {user.Value}\n";
                         }
 
                         if (!userFound)
@@ -75,12 +75,12 @@ namespace ServitorDiscordBot
                             var u = entry.Leaders.FirstOrDefault(x => x.UserID == currUser.UserID);
 
                             if (!u.Equals(default))
-                                usrs += $"***{u.Rank}, {currUser.UserName}, {Localization.ClassNames[u.Class]}, {u.Value}***\n";
+                                usrs += $"***{u.Rank}, {currUser.UserName}, {TranslationDictionaries.ClassNames[u.Class]}, {u.Value}***\n";
                         }
 
                         builder.Fields.Add(new EmbedFieldBuilder
                         {
-                            Name = Localization.StatNames[entry.Stat],
+                            Name = TranslationDictionaries.StatNames[entry.Stat],
                             Value = usrs,
                             IsInline = false
                         });
@@ -105,7 +105,7 @@ namespace ServitorDiscordBot
 
         private async Task ClanStatsAsync(IMessageChannel channel, string mode)
         {
-            var pair = Localization.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
+            var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
             var builder = new EmbedBuilder();
 
@@ -131,7 +131,7 @@ namespace ServitorDiscordBot
                     {
                         builder.Fields.Add(new EmbedFieldBuilder
                         {
-                            Name = Localization.StatNames[clanStat.Stat],
+                            Name = TranslationDictionaries.StatNames[clanStat.Stat],
                             Value = clanStat.Value,
                             IsInline = false
                         });
