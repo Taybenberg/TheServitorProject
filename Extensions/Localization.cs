@@ -1,9 +1,9 @@
-﻿using BungieNetApi;
+﻿using BungieNetApi.Enums;
 using System.Collections.Generic;
-using static BungieNetApi.ActivityType;
-using static BungieNetApi.DestinyClass;
-using static BungieNetApi.DestinyGender;
-using static BungieNetApi.DestinyRace;
+using static BungieNetApi.Enums.ActivityType;
+using static BungieNetApi.Enums.DestinyClass;
+using static BungieNetApi.Enums.DestinyGender;
+using static BungieNetApi.Enums.DestinyRace;
 
 namespace Extensions
 {

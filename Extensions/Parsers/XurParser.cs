@@ -15,10 +15,10 @@ namespace Extensions.Parsers
 {
     public class XurParser : IInventoryParser<XurInventory>
     {
-        private ApiClient _apiClient;
+        private IApiClient _apiClient;
         private bool _getLocation;
 
-        public XurParser(ApiClient apiClient, bool getLocation) =>
+        public XurParser(IApiClient apiClient, bool getLocation) =>
             (_apiClient, _getLocation) = (apiClient, getLocation);
 
         public async Task<XurInventory> GetInventoryAsync()

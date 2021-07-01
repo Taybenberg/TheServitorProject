@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using BungieNetApi.Entities;
 using HtmlAgilityPack;
 using System.Threading.Tasks;
 
@@ -15,9 +16,19 @@ namespace Extensions
             return ibBillboard is not null;
         }
 
-        public static async Task<Activity> GetActivityAdditionalDetailsAsync(this Database.Activity activity, BungieNetApiClient apiClient)
+        public static Activity GetDestinyActivity(this Database.Activity activity, ApiClient apiClient)
         {
-            return await apiClient.GetActivityDetailsAsync(activity.ActivityID.ToString());
+            return apiClient.EntityFactory.GetActivity(activity.ActivityID);
+        }
+
+        public static User GetDestinyUser(this Database.User user, ApiClient apiClient)
+        {
+            return apiClient.EntityFactory.GetUser(user.UserID, user.MembershipType);
+        }
+
+        public static Character GetDestinyCharacter(this Database.Character character, ApiClient apiClient)
+        {
+            return apiClient.EntityFactory.GetCharacter(character.CharacterID, character.UserID, character.User.MembershipType);
         }
     }
 }
