@@ -62,54 +62,35 @@ namespace ServitorDiscordBot
             _logger.LogInformation($"{DateTime.Now} Bump scheduled on {_bumper.NextBump}");
         }
 
-        public void Dispose()
-        {
+        public void Dispose() => 
             _client.Dispose();
-        }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
+        public async Task StartAsync(CancellationToken cancellationToken) => 
             await _client.StartAsync();
-        }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
+        public async Task StopAsync(CancellationToken cancellationToken) => 
             await _client.StopAsync();
-        }
 
-        private async Task LogAsync(LogMessage log)
-        {
-            var logLevel = log.Severity switch
+        private async Task LogAsync(LogMessage log) =>
+            _logger.Log(log.Severity switch
             {
                 LogSeverity.Critical => LogLevel.Critical,
                 LogSeverity.Warning => LogLevel.Warning,
                 LogSeverity.Debug => LogLevel.Debug,
                 LogSeverity.Error => LogLevel.Error,
                 _ => LogLevel.Information
-            };
+            }, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
 
-            _logger.Log(logLevel, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
-        }
+        private ClanDatabase getDatabase() =>
+            _scopeFactory.CreateScope().ServiceProvider
+                .GetRequiredService<ClanDatabase>();
 
-        private ParserFactory getFactory()
-        {
-            var scope = _scopeFactory.CreateScope();
+        private IParserFactory getFactory() =>
+            _scopeFactory.CreateScope().ServiceProvider
+            .GetRequiredService<IParserFactory>();
 
-            return scope.ServiceProvider.GetRequiredService<ParserFactory>();
-        }
-
-        private ClanDatabase getDatabase()
-        {
-            var scope = _scopeFactory.CreateScope();
-
-            return scope.ServiceProvider.GetRequiredService<ClanDatabase>();
-        }
-
-        private BungieNetApiClient getApiClient()
-        {
-            var scope = _scopeFactory.CreateScope();
-
-            return scope.ServiceProvider.GetRequiredService<BungieNetApiClient>();
-        }
+        private IApiClient getApiClient() =>
+            _scopeFactory.CreateScope().ServiceProvider
+            .GetRequiredService<IApiClient>();
     }
 }

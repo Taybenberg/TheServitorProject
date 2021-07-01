@@ -39,7 +39,7 @@ namespace ServitorDiscordBot
 
             builder.Description += "\n\n***По типу активності:***";
 
-            List<(BungieNetApi.ActivityType ActivityType, int Count)> counter = new();
+            List<(BungieNetApi.Enums.ActivityType ActivityType, int Count)> counter = new();
 
             foreach (var type in acts.Select(x => x.Activity.ActivityType).Distinct())
                 counter.Add((type, acts.Count(x => x.Activity.ActivityType == type)));
@@ -108,7 +108,7 @@ namespace ServitorDiscordBot
 
             builder.Description = $"Нічого собі! **{acts.Count}** активностей на рахунку клану!\n\n***По типу активності:***";
 
-            List<(BungieNetApi.ActivityType ActivityType, int Count)> counter = new();
+            List<(BungieNetApi.Enums.ActivityType ActivityType, int Count)> counter = new();
 
             foreach (var type in acts.Select(x => x.ActivityType).Distinct())
                 counter.Add((type, acts.Count(x => x.ActivityType == type)));
@@ -139,11 +139,11 @@ namespace ServitorDiscordBot
             {
                 string details = $" {activity.ActivityType}";
 
-                var act = activity.GetActivityAdditionalDetailsAsync(apiClient).Result;
+                var act = activity.GetDestinyActivity(apiClient);
 
-                if (activity.ActivityType == BungieNetApi.ActivityType.ScoredNightfall)
+                if (activity.ActivityType == BungieNetApi.Enums.ActivityType.ScoredNightfall)
                 {
-                    var u = act.ActivityUserStats.FirstOrDefault();
+                    var u = act.UserStats.FirstOrDefault();
 
                     if (u is not null)
                         details += $" {u.TeamScore}";
@@ -151,9 +151,9 @@ namespace ServitorDiscordBot
 
                 List<string> members = new();
 
-                foreach (var u in act.ActivityUserStats)
+                foreach (var u in act.UserStats)
                 {
-                    var memberClans = apiClient.GetUserClansAsync(u.MembershipType, u.MembershipId).Result;
+                    var memberClans = apiClient.EntityFactory.GetUser(u.MembershipID, u.MembershipType).GetUserClansAsync().Result;
 
                     members.Add($"\n{u.DisplayName} {HttpUtility.HtmlDecode(string.Join(",", memberClans))}");
                 }

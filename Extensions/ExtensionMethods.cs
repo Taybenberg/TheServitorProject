@@ -16,17 +16,17 @@ namespace Extensions
             return ibBillboard is not null;
         }
 
-        public static Activity GetDestinyActivity(this Database.Activity activity, ApiClient apiClient)
+        public static Activity GetDestinyActivity(this Database.Activity activity, IApiClient apiClient)
         {
             return apiClient.EntityFactory.GetActivity(activity.ActivityID);
         }
 
-        public static User GetDestinyUser(this Database.User user, ApiClient apiClient)
+        public static User GetDestinyUser(this Database.User user, IApiClient apiClient)
         {
             return apiClient.EntityFactory.GetUser(user.UserID, user.MembershipType);
         }
 
-        public static Character GetDestinyCharacter(this Database.Character character, ApiClient apiClient)
+        public static Character GetDestinyCharacter(this Database.Character character, IApiClient apiClient)
         {
             return apiClient.EntityFactory.GetCharacter(character.CharacterID, character.UserID, character.User.MembershipType);
         }

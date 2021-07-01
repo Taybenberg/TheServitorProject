@@ -34,7 +34,7 @@ namespace ServitorDiscordBot
 
                 builder.Title += $" | { pair.Value[0]}";
 
-                var leaderboard = await apiClient.GetClanLeaderboardAsync(pair.Key, Localization.StatNames.Keys.ToArray());
+                var leaderboard = await apiClient.Clan.GetClanLeaderboardAsync(pair.Key, Localization.StatNames.Keys.ToArray());
 
                 if (leaderboard.Any())
                 {
@@ -46,41 +46,41 @@ namespace ServitorDiscordBot
 
                     foreach (var entry in leaderboard)
                     {
-                        if (entry.users.Count() == 0)
+                        if (entry.Leaders.Count() == 0)
                             continue;
 
                         string usrs = string.Empty;
 
                         bool userFound = false;
 
-                        foreach (var user in entry.users.Take(3))
+                        foreach (var user in entry.Leaders.Take(3))
                         {
-                            var u = users.FirstOrDefault(x => x.UserID == user.userId);
+                            var u = users.FirstOrDefault(x => x.UserID == user.UserID);
 
                             if (u is null)
                                 continue;
 
                             if (u.UserID == currUser.UserID)
                             {
-                                usrs += $"***{user.rank}, {u.UserName}, {Localization.ClassStrNames[user.className]}, {user.value}***\n";
+                                usrs += $"***{user.Rank}, {u.UserName}, {Localization.ClassNames[user.Class]}, {user.Value}***\n";
 
                                 userFound = true;
                             }
                             else
-                                usrs += $"{user.rank}, {u.UserName}, {Localization.ClassStrNames[user.className]}, {user.value}\n";
+                                usrs += $"{user.Rank}, {u.UserName}, {Localization.ClassNames[user.Class]}, {user.Value}\n";
                         }
 
                         if (!userFound)
                         {
-                            var u = entry.users.FirstOrDefault(x => x.userId == currUser.UserID);
+                            var u = entry.Leaders.FirstOrDefault(x => x.UserID == currUser.UserID);
 
                             if (!u.Equals(default))
-                                usrs += $"***{u.rank}, {currUser.UserName}, {Localization.ClassStrNames[u.className]}, {u.value}***\n";
+                                usrs += $"***{u.Rank}, {currUser.UserName}, {Localization.ClassNames[u.Class]}, {u.Value}***\n";
                         }
 
                         builder.Fields.Add(new EmbedFieldBuilder
                         {
-                            Name = Localization.StatNames[entry.stat],
+                            Name = Localization.StatNames[entry.Stat],
                             Value = usrs,
                             IsInline = false
                         });
@@ -119,7 +119,7 @@ namespace ServitorDiscordBot
 
                 builder.Title += $" | { pair.Value[0]}";
 
-                var clanStats = await apiClient.GetClanStatsAsync(pair.Key);
+                var clanStats = await apiClient.Clan.GetClanStatsAsync(pair.Key);
 
                 if (clanStats.Count() > 0)
                 {
@@ -131,8 +131,8 @@ namespace ServitorDiscordBot
                     {
                         builder.Fields.Add(new EmbedFieldBuilder
                         {
-                            Name = Localization.StatNames[clanStat.stat],
-                            Value = clanStat.value,
+                            Name = Localization.StatNames[clanStat.Stat],
+                            Value = clanStat.Value,
                             IsInline = false
                         });
                     }
