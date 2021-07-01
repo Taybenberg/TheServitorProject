@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Extensions.Inventory
+namespace DataProcessor.Inventory
 {
     public record XurInventory
     {

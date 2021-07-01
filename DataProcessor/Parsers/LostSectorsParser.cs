@@ -1,4 +1,4 @@
-﻿using Extensions.Inventory;
+﻿using DataProcessor.Inventory;
 using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Extensions.Parsers
+namespace DataProcessor.Parsers
 {
     public class LostSectorsParser : IInventoryParser<LostSectorsInventory>
     {

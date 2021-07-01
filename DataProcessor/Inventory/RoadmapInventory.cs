@@ -1,4 +1,4 @@
-﻿namespace Extensions.Inventory
+﻿namespace DataProcessor.Inventory
 {
     public record RoadmapInventory
     {

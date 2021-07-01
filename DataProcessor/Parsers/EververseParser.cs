@@ -1,4 +1,4 @@
-﻿using Extensions.Inventory;
+﻿using DataProcessor.Inventory;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Extensions.Parsers
+namespace DataProcessor.Parsers
 {
     public class EververseParser : IInventoryParser<EververseInventory>
     {

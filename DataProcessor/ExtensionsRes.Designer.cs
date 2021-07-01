@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Extensions {
+namespace DataProcessor {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Extensions {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Extensions.ExtensionsRes", typeof(ExtensionsRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DataProcessor.ExtensionsRes", typeof(ExtensionsRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

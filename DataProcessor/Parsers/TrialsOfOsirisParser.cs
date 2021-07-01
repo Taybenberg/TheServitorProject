@@ -1,4 +1,4 @@
-﻿using Extensions.Inventory;
+﻿using DataProcessor.Inventory;
 using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Extensions.Parsers
+namespace DataProcessor.Parsers
 {
     public class TrialsOfOsirisParser : IInventoryParser<OsirisInventory>
     {

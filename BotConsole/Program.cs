@@ -1,9 +1,9 @@
 ﻿using BungieNetApi;
 using Coravel;
 using Database;
-using Extensions;
-using Extensions.Inventory;
-using Extensions.Parsers;
+using DataProcessor;
+using DataProcessor.Inventory;
+using DataProcessor.Parsers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -3,7 +3,7 @@ using BungieNetApi.Entities;
 using HtmlAgilityPack;
 using System.Threading.Tasks;
 
-namespace Extensions
+namespace DataProcessor
 {
     public static class ExtensionMethods
     {

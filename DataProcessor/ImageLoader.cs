@@ -5,9 +5,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace Extensions
+namespace DataProcessor
 {
-    public class ImageLoader : IDisposable
+    internal class ImageLoader : IDisposable
     {
         private ConcurrentDictionary<string, Image> cachedImages = new();
 

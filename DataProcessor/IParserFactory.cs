@@ -1,8 +1,8 @@
-﻿using Extensions.Inventory;
-using Extensions.Parsers;
+﻿using DataProcessor.Inventory;
+using DataProcessor.Parsers;
 using System;
 
-namespace Extensions
+namespace DataProcessor
 {
     public interface IParserFactory
     {

@@ -1,5 +1,5 @@
 ﻿using BungieNetApi;
-using Extensions.Inventory;
+using DataProcessor.Inventory;
 using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Extensions.Parsers
+namespace DataProcessor.Parsers
 {
     public class XurParser : IInventoryParser<XurInventory>
     {

@@ -1,9 +1,9 @@
-﻿using Extensions.Inventory;
+﻿using DataProcessor.Inventory;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Extensions.Parsers
+namespace DataProcessor.Parsers
 {
     public class RoadmapParser : IInventoryParser<RoadmapInventory>
     {

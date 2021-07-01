@@ -5,7 +5,7 @@ using static BungieNetApi.Enums.DestinyClass;
 using static BungieNetApi.Enums.DestinyGender;
 using static BungieNetApi.Enums.DestinyRace;
 
-namespace Extensions
+namespace DataProcessor
 {
     public static class Localization
     {

@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BungieNetApi\BungieNetApi.csproj" />
     <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
     <ProjectReference Include="..\ServitorDiscordBot\ServitorDiscordBot.csproj" />
   </ItemGroup>
 
