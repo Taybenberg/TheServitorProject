@@ -8,6 +8,8 @@ namespace BungieNetApi.Entities
     {
         public long InstanceID { get; internal set; }
 
+        public DateTime Period { get; internal set; }
+
         public record ActivityUserStats
         {
             public long CharacterID { get; internal set; }
@@ -26,7 +28,6 @@ namespace BungieNetApi.Entities
 
         private class ActivityContainer
         {
-            public DateTime Period;
             public ActivityType ActivityType;
             public ActivityUserStats[] UserStats;
 
@@ -36,7 +37,6 @@ namespace BungieNetApi.Entities
 
                 if (rawActivity is not null)
                 {
-                    Period = rawActivity.period;
                     ActivityType = (ActivityType)rawActivity.activityDetails.mode;
                     UserStats = new ActivityUserStats[rawActivity.entries.Length];
 
@@ -70,14 +70,6 @@ namespace BungieNetApi.Entities
         internal Activity(BungieNetApiClient apiClient)
         {
             _container = new(() => new ActivityContainer(apiClient, InstanceID));
-        }
-
-        public DateTime Period
-        {
-            get
-            {
-                return _container.Value.Period;
-            }
         }
 
         public ActivityType ActivityType

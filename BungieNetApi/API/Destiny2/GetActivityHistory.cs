@@ -26,9 +26,7 @@ namespace API.Destiny2.GetActivityHistory
 
     public class Activity
     {
-        [IgnoreDataMember]
         public DateTime period { get; set; }
-
         public Activitydetails activityDetails { get; set; }
 
         [IgnoreDataMember]

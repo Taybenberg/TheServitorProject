@@ -22,8 +22,8 @@ namespace API.Destiny2.GetPostGameCarnageReport
 
     public class Response
     {
+        [IgnoreDataMember]
         public DateTime period { get; set; }
-
         [IgnoreDataMember]
         public int startingPhaseIndex { get; set; }
 

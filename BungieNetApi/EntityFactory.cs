@@ -19,9 +19,9 @@ namespace BungieNetApi
         public Character GetCharacter(long characterID, long membershipID, MembershipType membershipType) =>
             new Character(_apiClient)
             {
-                    CharacterID = characterID,
-                    MembershipID = membershipID,
-                    MembershipType = membershipType
+                CharacterID = characterID,
+                MembershipID = membershipID,
+                MembershipType = membershipType
             };
 
         public Activity GetActivity(long instanceID) =>

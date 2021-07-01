@@ -84,7 +84,8 @@ namespace BungieNetApi.Entities
 
             return rawUserActivities.Select(x => new Activity(_apiClient)
             {
-                InstanceID = long.Parse(x.activityDetails.instanceId)
+                InstanceID = long.Parse(x.activityDetails.instanceId),
+                Period = x.period
             });
         }
     }
