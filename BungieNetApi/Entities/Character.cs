@@ -38,6 +38,8 @@ namespace BungieNetApi.Entities
 
         internal Character(BungieNetApiClient apiClient)
         {
+            _apiClient = apiClient;
+
             _container = new(() => new CharacterContainer(_apiClient, MembershipType, MembershipID, CharacterID));
         }
 
