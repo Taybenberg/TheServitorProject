@@ -2,8 +2,8 @@
 using Coravel;
 using Database;
 using DataProcessor;
-using DataProcessor.Inventory;
 using DataProcessor.Parsers;
+using DataProcessor.Parsers.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,6 +55,8 @@ namespace BotConsole
                 {
                     services.AddScheduler();
 
+                    services.AddScoped<IApiClient, ApiClient>();
+
                     services.AddTransient<IInventoryParser<EververseInventory>, EververseParser>();
                     services.AddTransient<IInventoryParser<LostSectorsInventory>, LostSectorsParser>();
                     services.AddTransient<IInventoryParser<ResourcesInventory>, ResourcesParser>();
@@ -64,9 +66,9 @@ namespace BotConsole
 
                     services.AddScoped<IParserFactory, ParserFactory>();
 
-                    services.AddScoped<IApiClient, ApiClient>();
+                    services.AddDbContext<ClanContext>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
 
-                    services.AddDbContext<ClanDatabase>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
+                    services.AddScoped<IClanDB, ClanUoW>();
 
                     services.AddSingleton<ServitorBot>();
                     services.AddHostedService(p => p.GetRequiredService<ServitorBot>());
@@ -74,7 +76,7 @@ namespace BotConsole
 
         private static async Task syncDB(IHost host)
         {
-            var db = host.Services.GetService<ClanDatabase>();
+            var db = host.Services.GetService<IClanDB>();
 
             await db.SyncUsersAsync();
 

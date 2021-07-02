@@ -81,9 +81,9 @@ namespace ServitorDiscordBot
                 _ => LogLevel.Information
             }, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
 
-        private ClanDatabase getDatabase() =>
+        private IClanDB getDatabase() =>
             _scopeFactory.CreateScope().ServiceProvider
-                .GetRequiredService<ClanDatabase>();
+                .GetRequiredService<IClanDB>();
 
         private IParserFactory getFactory() =>
             _scopeFactory.CreateScope().ServiceProvider

@@ -105,9 +105,9 @@ namespace ServitorDiscordBot
 
             builder.Title = $"Активності клану {(channel as IGuildChannel).Guild.Name}";
 
-            var acts = await database.Activities.ToListAsync();
+            var acts = await database.GetActivitiesAsync();
 
-            builder.Description = $"Нічого собі! **{acts.Count}** активностей на рахунку клану!\n\n***По типу активності:***";
+            builder.Description = $"Нічого собі! **{acts.Count()}** активностей на рахунку клану!\n\n***По типу активності:***";
 
             List<(BungieNetApi.Enums.ActivityType ActivityType, int Count)> counter = new();
 
