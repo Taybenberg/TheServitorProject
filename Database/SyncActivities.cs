@@ -1,5 +1,6 @@
 ﻿using BungieNetApi;
 using BungieNetApi.Enums;
+using Database.ORM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Database
 {
-    public partial class ClanDatabase
+    public partial class ClanUoW
     {
         public async Task SyncActivitiesAsync()
         {
@@ -25,7 +26,7 @@ namespace Database
 
             DateTime date = DateTime.Now.AddDays(-7);
 
-            var lastKnownActivities = await Characters.Include(x => x.User).Select(c => new
+            var lastKnownActivities = await _context.Characters.Include(x => x.User).Select(c => new
             {
                 Character = c,
                 Activity = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault().Activity
@@ -107,11 +108,11 @@ namespace Database
                 });
             });
 
-            var lastActivitiesIds = Activities.Where(x => x.Period > date).Select(y => y.ActivityID).ToHashSet();
+            var lastActivitiesIds = _context.Activities.Where(x => x.Period > date).Select(y => y.ActivityID).ToHashSet();
 
-            Activities.AddRange(newActivities.Where(x => !lastActivitiesIds.Contains(x.ActivityID)));
+            _context.Activities.AddRange(newActivities.Where(x => !lastActivitiesIds.Contains(x.ActivityID)));
 
-            await SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             _logger.LogInformation($"{DateTime.Now} Activities synced");
         }

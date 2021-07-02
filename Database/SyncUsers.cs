@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using Database.ORM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Database
 {
-    public partial class ClanDatabase
+    public partial class ClanUoW
     {
         public async Task SyncUsersAsync()
         {
@@ -22,7 +23,7 @@ namespace Database
 
             var clanUsers = (await apiClient.Clan.GetUsersAsync()).ToDictionary(x => x.MembershipID, x => x);
 
-            var dbUsers = await Users.Include("Characters").ToDictionaryAsync(x => x.UserID, x => x);
+            var dbUsers = await _context.Users.Include("Characters").ToDictionaryAsync(x => x.UserID, x => x);
 
             ConcurrentBag<User> newUsers = new();
             ConcurrentBag<User> updUsers = new();
@@ -101,15 +102,15 @@ namespace Database
                 }
             });
 
-            Users.RemoveRange(diffDbUsers);
-            Users.AddRange(newUsers);
-            Users.UpdateRange(updUsers);
+            _context.Users.RemoveRange(diffDbUsers);
+            _context.Users.AddRange(newUsers);
+            _context.Users.UpdateRange(updUsers);
 
-            Characters.RemoveRange(diffChars);
-            Characters.AddRange(newChars);
-            Characters.UpdateRange(updChars);
+            _context.Characters.RemoveRange(diffChars);
+            _context.Characters.AddRange(newChars);
+            _context.Characters.UpdateRange(updChars);
 
-            await SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             _logger.LogInformation($"{DateTime.Now} Users synced");
         }
