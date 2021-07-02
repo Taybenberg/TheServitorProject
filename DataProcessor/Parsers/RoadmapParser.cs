@@ -1,4 +1,4 @@
-﻿using DataProcessor.Inventory;
+﻿using DataProcessor.Parsers.Inventory;
 using System;
 using System.IO;
 using System.Threading.Tasks;

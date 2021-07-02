@@ -1,4 +1,4 @@
-﻿namespace DataProcessor.Inventory
+﻿namespace DataProcessor.Parsers.Inventory
 {
     public record RoadmapInventory
     {

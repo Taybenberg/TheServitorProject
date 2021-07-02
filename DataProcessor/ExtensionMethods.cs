@@ -16,19 +16,13 @@ namespace DataProcessor
             return ibBillboard is not null;
         }
 
-        public static Activity GetDestinyActivity(this Database.Activity activity, IApiClient apiClient)
-        {
-            return apiClient.EntityFactory.GetActivity(activity.ActivityID);
-        }
+        public static Activity GetDestinyActivity(this Database.ORM.Activity activity, IApiClient apiClient) =>
+            apiClient.EntityFactory.GetActivity(activity.ActivityID);
 
-        public static User GetDestinyUser(this Database.User user, IApiClient apiClient)
-        {
-            return apiClient.EntityFactory.GetUser(user.UserID, user.MembershipType);
-        }
+        public static User GetDestinyUser(this Database.ORM.User user, IApiClient apiClient) =>
+            apiClient.EntityFactory.GetUser(user.UserID, user.MembershipType);
 
-        public static Character GetDestinyCharacter(this Database.Character character, IApiClient apiClient)
-        {
-            return apiClient.EntityFactory.GetCharacter(character.CharacterID, character.UserID, character.User.MembershipType);
-        }
+        public static Character GetDestinyCharacter(this Database.ORM.Character character, IApiClient apiClient) =>
+            apiClient.EntityFactory.GetCharacter(character.CharacterID, character.UserID, character.User.MembershipType);
     }
 }

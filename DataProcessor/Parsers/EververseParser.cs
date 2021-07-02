@@ -1,4 +1,4 @@
-﻿using DataProcessor.Inventory;
+﻿using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;

@@ -1,5 +1,5 @@
-﻿using DataProcessor.Inventory;
-using DataProcessor.Parsers;
+﻿using DataProcessor.Parsers;
+using DataProcessor.Parsers.Inventory;
 using System;
 
 namespace DataProcessor

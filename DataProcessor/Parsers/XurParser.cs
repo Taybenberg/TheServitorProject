@@ -1,5 +1,5 @@
 ﻿using BungieNetApi;
-using DataProcessor.Inventory;
+using DataProcessor.Parsers.Inventory;
 using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
