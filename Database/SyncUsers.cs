@@ -23,7 +23,7 @@ namespace Database
 
             var clanUsers = (await apiClient.Clan.GetUsersAsync()).ToDictionary(x => x.MembershipID, x => x);
 
-            var dbUsers = await _context.Users.Include("Characters").ToDictionaryAsync(x => x.UserID, x => x);
+            var dbUsers = await _context.Users.Include(c => c.Characters).ToDictionaryAsync(x => x.UserID, x => x);
 
             ConcurrentBag<User> newUsers = new();
             ConcurrentBag<User> updUsers = new();
@@ -34,7 +34,7 @@ namespace Database
 
             var diffDbUsers = dbUsers.Where(x => !clanUsers.ContainsKey(x.Key)).Select(x => x.Value);
 
-            Parallel.ForEach(clanUsers, new ParallelOptions { MaxDegreeOfParallelism = 3 }, (usr) =>
+            Parallel.ForEach(clanUsers, (usr) =>
             {
                 var dbUsr = dbUsers.GetValueOrDefault(usr.Key);
 

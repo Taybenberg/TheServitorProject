@@ -37,31 +37,33 @@ namespace Database
 
             ConcurrentDictionary<long, BungieNetApi.Entities.Activity> newActivitiesDictionary = new();
 
-            Parallel.ForEach(lastKnownActivities, new ParallelOptions { MaxDegreeOfParallelism = 3 }, (last) =>
+            Parallel.ForEach(lastKnownActivities, (last) =>
             {
                 if (last.Character.DateLastPlayed > date)
                 {
-                    Func<BungieNetApi.Entities.Activity, bool> newActivitiesFilter = last.Activity is not null ?
-                        (x => x.Period > last.Character.User.ClanJoinDate && x.Period > last.Activity.Period) :
-                        (x => x.Period > last.Character.User.ClanJoinDate && x.Period > date);
+                    Func<BungieNetApi.Entities.Activity, bool> newActivitiesFilter =
+                        x => x.Period > last.Character.User.ClanJoinDate && x.Period > (last?.Activity?.Period ?? date);
 
                     var dChar = factory.GetCharacter(last.Character.CharacterID, last.Character.UserID, last.Character.User.MembershipType);
 
-                    IEnumerable<BungieNetApi.Entities.Activity> newActivitiesBuffer;
-
-                    int page = 0, count = 25;
-
-                    while ((newActivitiesBuffer = dChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
+                    if (dChar.GetActivitiesAsync(1, 0).Result.Where(newActivitiesFilter).Any())
                     {
-                        foreach (var act in newActivitiesBuffer)
-                            newActivitiesDictionary.TryAdd(act.InstanceID, act);
+                        IEnumerable<BungieNetApi.Entities.Activity> newActivitiesBuffer;
+
+                        int page = 0, count = 25;
+
+                        while ((newActivitiesBuffer = dChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
+                        {
+                            foreach (var act in newActivitiesBuffer)
+                                newActivitiesDictionary.TryAdd(act.InstanceID, act);
+                        }
                     }
                 }
             });
 
             ConcurrentBag<Activity> newActivities = new();
 
-            Parallel.ForEach(newActivitiesDictionary, new ParallelOptions { MaxDegreeOfParallelism = 3 }, (act) =>
+            Parallel.ForEach(newActivitiesDictionary, (act) =>
             {
                 int? suspicionIndex = null;
 
