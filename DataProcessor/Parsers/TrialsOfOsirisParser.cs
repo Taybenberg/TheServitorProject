@@ -56,6 +56,8 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var loader = new ImageLoader();
+
             using Image image = Image.Load(ExtensionsRes.TrialsItemsBackground);
 
             var inventory = await GetInventoryAsync();
@@ -71,8 +73,8 @@ namespace DataProcessor.Parsers
 
                 foreach (var link in list)
                 {
-                    using var stream = await link.GetStreamAsync();
-                    using Image icon = await Image.LoadAsync(stream);
+                    using Image icon = await loader.GetImageAsync(link);
+
                     image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
 
                     x += 121;

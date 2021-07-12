@@ -4,21 +4,40 @@ using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
 
 namespace DataProcessor
 {
-    internal class ImageLoader : IDisposable
+    internal class ImageLoader
     {
-        private ConcurrentDictionary<string, Image> cachedImages = new();
+        private static string cachePath;
 
-        public async Task<Image> GetImage(string url)
+        private static ConcurrentBag<string> cachedImages;
+
+        static ImageLoader()
         {
-            if (!cachedImages.ContainsKey(url))
+            cachePath = Path.Combine(Path.GetTempPath(), "ServitorBotTemp");
+
+            if (!Directory.Exists(cachePath))
+                Directory.CreateDirectory(cachePath);
+
+            cachedImages = new(Directory.GetFiles(cachePath));
+        }
+
+        public async Task<Image> GetImageAsync(string url)
+        {
+            string filename = Path.Combine(cachePath, Path.GetFileName(url));
+
+            if (!cachedImages.Contains(filename))
             {
                 try
                 {
-                    using var stream = await url.GetStreamAsync();
-                    cachedImages.TryAdd(url, await Image.LoadAsync(stream));
+                    var bytes = await url.GetBytesAsync();
+
+                    await File.WriteAllBytesAsync(filename, bytes);
+
+                    cachedImages.Add(filename);
                 }
                 catch
                 {
@@ -26,14 +45,7 @@ namespace DataProcessor
                 }
             }
 
-            return cachedImages[url];
-        }
-        public void Dispose()
-        {
-            foreach (var image in cachedImages)
-                image.Value.Dispose();
-
-            cachedImages.Clear();
+            return await Image.LoadAsync(filename);
         }
     }
 }

@@ -52,6 +52,8 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var loader = new ImageLoader();
+
             using Image image = Image.Load(ExtensionsRes.LostSectorsBackground);
 
             var inventory = await GetInventoryAsync();
@@ -68,8 +70,8 @@ namespace DataProcessor.Parsers
 
             foreach (var sector in inventory.LostSectors)
             {
-                using var stream = await sector.SectorIconURL.GetStreamAsync();
-                using Image icon = await Image.LoadAsync(stream);
+                using Image icon = await loader.GetImageAsync(sector.SectorIconURL);
+
                 icon.Mutate(m => m.Resize(346, 194));
 
                 image.Mutate(m =>

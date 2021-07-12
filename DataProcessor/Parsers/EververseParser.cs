@@ -74,7 +74,7 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
-            using var loader = new ImageLoader();
+            var loader = new ImageLoader();
 
             using Image image = Image.Load(ExtensionsRes.EververseItemsBackground);
 
@@ -84,7 +84,9 @@ namespace DataProcessor.Parsers
             {
                 Font font = new Font(SystemFonts.Find("Arial"), 30, FontStyle.Bold);
 
-                Image icon = (await loader.GetImage(inventory.SeasonIconURL)).Clone(m => m.Resize(192, 192));
+                using Image icon = await loader.GetImageAsync(inventory.SeasonIconURL);
+                
+                icon.Mutate(m => m.Resize(192, 192));
 
                 image.Mutate(m =>
                 {
@@ -107,14 +109,16 @@ namespace DataProcessor.Parsers
                     {
                         if (item.Icon1URL is not null)
                         {
-                            icon = await loader.GetImage(item.Icon1URL);
-                            image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
+                            using Image icon1 = await loader.GetImageAsync(item.Icon1URL);
+
+                            image.Mutate(m => m.DrawImage(icon1, new Point(x, y), 1));
                         }
 
                         if (item.Icon2URL is not null)
                         {
-                            icon = await loader.GetImage(item.Icon2URL);
-                            image.Mutate(m => m.DrawImage(icon, new Point(x, y), 1));
+                            using Image icon2 = await loader.GetImageAsync(item.Icon2URL);
+
+                            image.Mutate(m => m.DrawImage(icon2, new Point(x, y), 1));
                         }
 
                         x += 106;

@@ -81,7 +81,7 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
-            using var loader = new ImageLoader();
+            var loader = new ImageLoader();
 
             using Image image = Image.Load(ExtensionsRes.ResourcesBackground);
 
@@ -131,10 +131,11 @@ namespace DataProcessor.Parsers
 
         private async Task drawItemAsync(ResourceItem item, ImageLoader loader, Image image, Font font, int x, int y)
         {
-            Image currencyIcon = await loader.GetImage(item.ResourceCurrencyIconURL);
+            using Image currencyIcon = await loader.GetImageAsync(item.ResourceCurrencyIconURL);
+
             currencyIcon.Mutate(m => m.Resize(40, 40));
 
-            Image resIcon = await loader.GetImage(item.ResourceIconURL);
+            using Image resIcon = await loader.GetImageAsync(item.ResourceIconURL);
 
             image.Mutate(m =>
             {

@@ -55,6 +55,8 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var loader = new ImageLoader();
+
             using Image image = Image.Load(ExtensionsRes.XurItemsBackground);
 
             var inventory = await GetInventoryAsync();
@@ -70,8 +72,7 @@ namespace DataProcessor.Parsers
 
             foreach (var item in inventory.XurItems)
             {
-                using var stream = await item.ItemIconURL.GetStreamAsync();
-                using Image icon = await Image.LoadAsync(stream);
+                using Image icon = await loader.GetImageAsync(item.ItemIconURL); 
 
                 image.Mutate(m =>
                 {
