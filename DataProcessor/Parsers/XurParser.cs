@@ -1,6 +1,5 @@
 ﻿using BungieNetApi;
 using DataProcessor.Parsers.Inventory;
-using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -55,13 +54,14 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var inventory = await GetInventoryAsync();
+
             var loader = new ImageLoader();
 
             using Image image = Image.Load(ExtensionsRes.XurItemsBackground);
 
-            var inventory = await GetInventoryAsync();
-
             Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
+
             image.Mutate(m => m.DrawText(inventory.Location, locationFont, Color.Black, new Point(257, 574)));
 
             Font itemName = new Font(SystemFonts.Find("Arial"), 34);
@@ -72,7 +72,7 @@ namespace DataProcessor.Parsers
 
             foreach (var item in inventory.XurItems)
             {
-                using Image icon = await loader.GetImageAsync(item.ItemIconURL); 
+                using Image icon = await loader.GetImageAsync(item.ItemIconURL);
 
                 image.Mutate(m =>
                 {
@@ -86,6 +86,7 @@ namespace DataProcessor.Parsers
                 Yt1 += interval;
                 Yt2 += interval;
             }
+
             var ms = new MemoryStream();
 
             await image.SaveAsPngAsync(ms);

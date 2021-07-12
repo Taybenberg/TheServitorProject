@@ -81,11 +81,11 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var inventory = await GetInventoryAsync();
+
             var loader = new ImageLoader();
 
             using Image image = Image.Load(ExtensionsRes.ResourcesBackground);
-
-            var inventory = await GetInventoryAsync();
 
             Font dateFont = new Font(SystemFonts.Find("Arial"), 24, FontStyle.Bold);
 

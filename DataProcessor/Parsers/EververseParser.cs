@@ -74,18 +74,18 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var inventory = await GetInventoryAsync();
+
             var loader = new ImageLoader();
 
             using Image image = Image.Load(ExtensionsRes.EververseItemsBackground);
-
-            var inventory = await GetInventoryAsync();
 
             if (inventory is not null)
             {
                 Font font = new Font(SystemFonts.Find("Arial"), 30, FontStyle.Bold);
 
                 using Image icon = await loader.GetImageAsync(inventory.SeasonIconURL);
-                
+
                 icon.Mutate(m => m.Resize(192, 192));
 
                 image.Mutate(m =>

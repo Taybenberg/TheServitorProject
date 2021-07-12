@@ -1,5 +1,4 @@
 ﻿using DataProcessor.Parsers.Inventory;
-using Flurl.Http;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -52,11 +51,11 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync()
         {
+            var inventory = await GetInventoryAsync();
+
             var loader = new ImageLoader();
 
             using Image image = Image.Load(ExtensionsRes.LostSectorsBackground);
-
-            var inventory = await GetInventoryAsync();
 
             Font dateFont = new Font(SystemFonts.Find("Arial"), 32, FontStyle.Bold);
             Font lightFont = new Font(SystemFonts.Find("Arial"), 32);
