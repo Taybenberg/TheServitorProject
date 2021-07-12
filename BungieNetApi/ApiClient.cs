@@ -74,27 +74,13 @@ namespace BungieNetApi
 
         public async Task<IEnumerable<Item>> GetXurItemsAsync()
         {
-            ConcurrentBag<Item> items = new();
-
             var rawXurItems = await _bungieNetApiClient.getRawXurItemsAsync();
 
-            Parallel.ForEach(rawXurItems.saleItems.Values.Skip(1).SkipLast(1), (rawItem) =>
+            return rawXurItems.saleItems.Values.Skip(1).SkipLast(1).Select(x =>
+            new Item(_bungieNetApiClient)
             {
-                var rawItemDetails = _bungieNetApiClient.getRawItemDefinitionAsync(rawItem.itemHash).Result;
-
-                if (rawItemDetails is not null)
-                {
-                    items.Add(new Item
-                    {
-                        ItemName = rawItemDetails.displayProperties.name,
-                        ItemIconUrl = BungieNetApiClient.BUNGIE_NET_URL.AppendPathSegment(rawItemDetails.displayProperties.icon),
-                        ItemTypeAndTier = rawItemDetails.itemTypeAndTierDisplayName,
-                        UniqueLabel = rawItemDetails.equippingBlock.uniqueLabel
-                    });
-                }
-            });
-
-            return items;
+                ItemHash = x.itemHash
+            }).Reverse();
         }
     }
 }
