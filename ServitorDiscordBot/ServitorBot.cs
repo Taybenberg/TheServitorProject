@@ -85,9 +85,9 @@ namespace ServitorDiscordBot
             _scopeFactory.CreateScope().ServiceProvider
                 .GetRequiredService<IClanDB>();
 
-        private IParserFactory getFactory() =>
+        private IImageFactory getFactory() =>
             _scopeFactory.CreateScope().ServiceProvider
-            .GetRequiredService<IParserFactory>();
+            .GetRequiredService<IImageFactory>();
 
         private IApiClient getApiClient() =>
             _scopeFactory.CreateScope().ServiceProvider

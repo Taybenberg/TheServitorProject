@@ -65,6 +65,7 @@ namespace BotConsole
                     services.AddTransient<IInventoryParser<XurInventory>, XurParser>();
 
                     services.AddScoped<IParserFactory, ParserFactory>();
+                    services.AddScoped<IImageFactory, ImageFactory>();
 
                     services.AddDbContext<ClanContext>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
 
