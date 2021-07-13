@@ -39,9 +39,9 @@ namespace ServitorDiscordBot
         {
             using var inventory = await getFactory().GetOsirisAsync();
 
-            var message = await channel.SendFileAsync(inventory, "OsirisInventory.png");
+            var msg = await channel.SendFileAsync(inventory, "OsirisInventory.png");
 
-            await antiFlood(osirisInventory, channel.Id, message.Id);
+            await antiFlood(osirisInventory, channel.Id, msg.Id);
         }
 
         private ConcurrentDictionary<ulong, ulong> xurInventory = new();
@@ -49,9 +49,9 @@ namespace ServitorDiscordBot
         {
             using var inventory = await getFactory().GetXurAsync(getLocation);
 
-            var message = await channel.SendFileAsync(inventory, "XurInventory.png");
+            var msg = await channel.SendFileAsync(inventory, "XurInventory.png");
 
-            await antiFlood(xurInventory, channel.Id, message.Id);
+            await antiFlood(xurInventory, channel.Id, msg.Id);
         }
 
         private async Task antiFlood(ConcurrentDictionary<ulong, ulong> dictionary, ulong channelID, ulong messageID)

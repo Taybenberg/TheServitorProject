@@ -15,18 +15,14 @@ namespace ServitorDiscordBot
 
             if (currUser is null)
             {
-                await UserIsNotRegisteredAsync(message.Channel);
+                await UserIsNotRegisteredAsync(message);
 
                 return;
             }
 
             var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
-            var builder = new EmbedBuilder();
-
-            builder.Title = $"БЕТА | Дошка лідерів";
-
-            builder.Footer = GetFooter();
+            var builder = GetBuilder(MessagesEnum.Leaderboard, message);
 
             if (pair.Value is not null)
             {
@@ -39,8 +35,6 @@ namespace ServitorDiscordBot
                 if (leaderboard.Any())
                 {
                     builder.Fields = new();
-
-                    builder.Color = GetColor(MessagesEnum.Leaderboard);
 
                     var users = await database.GetUsersAsync();
 
@@ -103,15 +97,11 @@ namespace ServitorDiscordBot
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task ClanStatsAsync(IMessageChannel channel, string mode)
+        private async Task ClanStatsAsync(IMessage message, string mode)
         {
             var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
-            var builder = new EmbedBuilder();
-
-            builder.Title = $"БЕТА | Статистика клану {(channel as IGuildChannel).Guild.Name}";
-
-            builder.Footer = GetFooter();
+            var builder = GetBuilder(MessagesEnum.ClanStats, message);
 
             if (pair.Value is not null)
             {
@@ -123,8 +113,6 @@ namespace ServitorDiscordBot
 
                 if (clanStats.Count() > 0)
                 {
-                    builder.Color = GetColor(MessagesEnum.ClanStats);
-
                     builder.Fields = new();
 
                     foreach (var clanStat in clanStats)
@@ -151,7 +139,7 @@ namespace ServitorDiscordBot
                 builder.Description = "Сталася помилка при обробці вашого запиту, переконайтеся, що ви правильно вказали тип активності.\nДля цього введіть команду ***режими***.";
             }
 
-            await channel.SendMessageAsync(embed: builder.Build());
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
     }
 }

@@ -42,7 +42,7 @@ namespace ServitorDiscordBot
 
             _client.Log += LogAsync;
 
-            _client.MessageReceived += MessageReceivedAsync;
+            _client.MessageReceived += OnMessageReceivedAsync;
 
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 

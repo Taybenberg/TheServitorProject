@@ -31,9 +31,9 @@ namespace ServitorDiscordBot
                         {
                             var m = await message.Channel.GetMessageAsync(message.Reference.MessageId.Value);
 
-                            await message.Channel.SendMessageAsync(m.GetJumpUrl());
+                            await SendTemporaryMessageAsync(message, m.GetJumpUrl());
                         }
-                        catch (Exception) { }
+                        catch { }
 
                         return true;
                     }
@@ -42,7 +42,7 @@ namespace ServitorDiscordBot
                     {
                         if (!CheckModerationRole(message.Author))
                         {
-                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                            await SendTemporaryMessageAsync(message, "У вас відсутні права на видалення повідомлень.");
 
                             return true;
                         }
@@ -55,7 +55,7 @@ namespace ServitorDiscordBot
 
                             await message.DeleteAsync();
                         }
-                        catch (Exception) { }
+                        catch { }
 
                         return true;
                     }
@@ -64,7 +64,7 @@ namespace ServitorDiscordBot
                     {
                         if (!CheckModerationRole(message.Author))
                         {
-                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                            await SendTemporaryMessageAsync(message, "У вас відсутні права на видалення повідомлень.");
 
                             return true;
                         }
@@ -75,7 +75,7 @@ namespace ServitorDiscordBot
 
                             if (strs.Length < 2)
                             {
-                                await message.Channel.SendMessageAsync($"Ви ввели команду в хибному форматі. Перевірте формат.");
+                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
 
                                 return true;
                             }
@@ -101,10 +101,10 @@ namespace ServitorDiscordBot
                             }
                             else
                             {
-                                await message.Channel.SendMessageAsync($"Ви ввели команду в хибному форматі. Перевірте формат.");
+                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
                             }
                         }
-                        catch (Exception) { }
+                        catch { }
 
                         return true;
                     }
@@ -113,7 +113,7 @@ namespace ServitorDiscordBot
                     {
                         if (!CheckModerationRole(message.Author))
                         {
-                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                            await SendTemporaryMessageAsync(message, "У вас відсутні права на видалення повідомлень.");
 
                             return true;
                         }
@@ -126,7 +126,7 @@ namespace ServitorDiscordBot
 
                             if (strs.Length < 3)
                             {
-                                await message.Channel.SendMessageAsync($"Ви ввели команду в хибному форматі. Перевірте формат.");
+                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
 
                                 return true;
                             }
@@ -152,10 +152,10 @@ namespace ServitorDiscordBot
                             }
                             else
                             {
-                                await message.Channel.SendMessageAsync($"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
+                                await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
                             }
                         }
-                        catch (Exception) { }
+                        catch { }
 
                         return true;
                     }
@@ -164,7 +164,7 @@ namespace ServitorDiscordBot
                     {
                         if (!CheckModerationRole(message.Author))
                         {
-                            await message.Channel.SendMessageAsync($"У вас відсутні права на видалення повідомлень.");
+                            await SendTemporaryMessageAsync(message, "У вас відсутні права на видалення повідомлень.");
 
                             return true;
                         }
@@ -183,10 +183,10 @@ namespace ServitorDiscordBot
                             }
                             else
                             {
-                                await message.Channel.SendMessageAsync($"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
+                                await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
                             }
                         }
-                        catch (Exception) { }
+                        catch { }
 
                         return true;
                     }

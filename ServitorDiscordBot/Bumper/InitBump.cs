@@ -23,9 +23,7 @@ namespace ServitorDiscordBot
 
                     _bumper.AddUser(mention);
 
-                    var builder = new EmbedBuilder();
-
-                    builder.Color = GetColor(MessagesEnum.Bumped);
+                    var builder = GetBuilder(MessagesEnum.Bumped, message, false);
 
                     builder.Description = $":alarm_clock: :ok_hand:\n:fast_forward: {_bumper.NextBump.ToString("HH:mm:ss")}";
 

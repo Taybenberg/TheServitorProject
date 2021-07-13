@@ -17,9 +17,7 @@ namespace ServitorDiscordBot
 
             IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.BumpNotification);
+            var builder = GetBuilder(MessagesEnum.BumpNotification, null);
 
             builder.Description = "Саме час **!bump**-нути :alarm_clock:";
 
@@ -43,13 +41,7 @@ namespace ServitorDiscordBot
         {
             _logger.LogInformation($"{DateTime.Now} Daily reset");
 
-            int currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
-
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.Reset);
-
-            builder.Title = $"Тиждень {currWeek}";
+            var builder = GetBuilder(MessagesEnum.Reset, null);
 
             builder.Description = "Відбувся денний ресет";
 
@@ -61,9 +53,7 @@ namespace ServitorDiscordBot
 
             await GetResourcesPoolAsync(channel);
 
-            var parser = getFactory().GetRoadmapParser();
-
-            using var roadmap = await parser.GetImageAsync();
+            using var roadmap = await getFactory().GetRoadmapAsync();
 
             if (roadmap is not null)
                 await channel.SendFileAsync(roadmap, "Roadmap.png");
@@ -75,13 +65,7 @@ namespace ServitorDiscordBot
 
             var milestone = await apiCient.GetMilestonesAsync();
 
-            int currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
-
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.Reset);
-
-            builder.Title = $"Тиждень {currWeek}";
+            var builder = GetBuilder(MessagesEnum.Reset, null);
 
             string additionalDescription = string.Empty;
 
@@ -112,8 +96,6 @@ namespace ServitorDiscordBot
 
             builder.ImageUrl = milestone.NightfallTheOrdealImage;
 
-            builder.Footer = GetFooter();
-
             if (channel is null)
             {
                 _logger.LogInformation($"{DateTime.Now} Weekly reset");
@@ -124,7 +106,7 @@ namespace ServitorDiscordBot
 
                 await channel.SendMessageAsync(embed: builder.Build());
 
-                await GetEververseInventoryAsync(channel, week: currWeek.ToString());
+                await GetEververseInventoryAsync(channel);
             }
             else
             {
@@ -140,11 +122,7 @@ namespace ServitorDiscordBot
 
             var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.Xur);
-
-            builder.Title = $"Зур привіз свіжий крам";
+            var builder = GetBuilder(MessagesEnum.Xur, null, false);
 
             await channel.SendMessageAsync(embed: builder.Build());
 

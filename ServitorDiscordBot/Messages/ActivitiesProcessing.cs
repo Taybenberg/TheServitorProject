@@ -20,16 +20,12 @@ namespace ServitorDiscordBot
 
             if (user is null)
             {
-                await UserIsNotRegisteredAsync(message.Channel);
+                await UserIsNotRegisteredAsync(message);
 
                 return;
             }
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.MyActivities);
-
-            builder.Title = $"Активності {message.Author.Username}";
+            var builder = GetBuilder(MessagesEnum.MyActivities, message);
 
             var acts = user.Characters.SelectMany(c => c.ActivityUserStats);
 
@@ -52,8 +48,6 @@ namespace ServitorDiscordBot
                 builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
             }
 
-            builder.Footer = GetFooter();
-
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
@@ -63,18 +57,14 @@ namespace ServitorDiscordBot
 
             if (!database.IsDiscordUserRegistered(message.Author.Id))
             {
-                await UserIsNotRegisteredAsync(message.Channel);
+                await UserIsNotRegisteredAsync(message);
 
                 return;
             }
 
             var partners = await database.GetUserPartnersAsync(message.Author.Id);
 
-            var builder = new EmbedBuilder();
-
-            builder.Title = $"Побратими {message.Author.Username}";
-
-            builder.Footer = GetFooter();
+            var builder = GetBuilder(MessagesEnum.MyPartners, message);
 
             if (!partners.Any())
             {
@@ -84,8 +74,6 @@ namespace ServitorDiscordBot
             }
             else
             {
-                builder.Color = GetColor(MessagesEnum.MyPartners);
-
                 builder.Description = string.Empty;
 
                 foreach (var p in partners)
@@ -95,15 +83,11 @@ namespace ServitorDiscordBot
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task GetClanActivitiesAsync(IMessageChannel channel)
+        private async Task GetClanActivitiesAsync(IMessage message)
         {
             var database = getDatabase();
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.ClanActivities);
-
-            builder.Title = $"Активності клану {(channel as IGuildChannel).Guild.Name}";
+            var builder = GetBuilder(MessagesEnum.ClanActivities, message);
 
             var acts = await database.GetActivitiesAsync();
 
@@ -121,12 +105,10 @@ namespace ServitorDiscordBot
                 builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
             }
 
-            builder.Footer = GetFooter();
-
-            await channel.SendMessageAsync(embed: builder.Build());
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task FindSuspiciousAsync(IMessageChannel channel, bool nigthfalls)
+        private async Task FindSuspiciousAsync(IMessage message, bool nigthfalls)
         {
             var database = getDatabase();
 
@@ -164,13 +146,9 @@ namespace ServitorDiscordBot
                 activityDetails.TryAdd(activity.Period, details);
             });
 
-            var builder = new EmbedBuilder();
+            var builder = GetBuilder(MessagesEnum.Suspicious, message);
 
-            builder.Color = GetColor(MessagesEnum.Suspicious);
-
-            builder.Title = $"Виявлено активностей: {activityDetails.Count}";
-
-            string list = "Увага, чутливим не читати! Останні активності:\n||";
+            string list = $"Виявлено активностей за останні 7 днів: {activityDetails.Count}\nУвага, чутливим не читати! Останні активності:\n||";
 
             foreach (var act in activityDetails.OrderByDescending(x => x.Key))
             {
@@ -182,9 +160,7 @@ namespace ServitorDiscordBot
 
             builder.Description = list;
 
-            builder.Footer = GetFooter();
-
-            await channel.SendMessageAsync(embed: builder.Build());
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
     }
 }

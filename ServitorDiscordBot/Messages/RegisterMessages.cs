@@ -6,32 +6,22 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task UserIsNotRegisteredAsync(IMessageChannel channel)
+        private async Task UserIsNotRegisteredAsync(IMessage message)
         {
-            var builder = new EmbedBuilder();
+            var builder = GetBuilder(MessagesEnum.NotRegistered, message);
 
-            builder.Color = GetColor(MessagesEnum.NotRegistered);
-
-            builder.Title = "Реєстрація";
             builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
 
-            builder.Footer = GetFooter();
-
-            await channel.SendMessageAsync(embed: builder.Build());
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task UserAlreadyRegisteredAsync(IMessageChannel channel)
+        private async Task UserAlreadyRegisteredAsync(IMessage message)
         {
-            var builder = new EmbedBuilder();
+            var builder = GetBuilder(MessagesEnum.AlreadyRegistered, message);
 
-            builder.Color = GetColor(MessagesEnum.AlreadyRegistered);
-
-            builder.Title = "Реєстрація";
             builder.Description = "Ґардіане, ви вже зареєстровані…";
 
-            builder.Footer = GetFooter();
-
-            await channel.SendMessageAsync(embed: builder.Build());
+            await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
         private async Task RegisterMessageAsync(IMessage message)
@@ -39,20 +29,15 @@ namespace ServitorDiscordBot
             var database = getDatabase();
 
             if (database.IsDiscordUserRegistered(message.Author.Id))
-                await UserAlreadyRegisteredAsync(message.Channel);
+                await UserAlreadyRegisteredAsync(message);
             else
             {
-                var builder = new EmbedBuilder();
+                var builder = GetBuilder(MessagesEnum.Register, message);
 
-                builder.Color = GetColor(MessagesEnum.Register);
-
-                builder.Title = "Реєстрація";
                 builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**. " +
                     $"Якщо це так, можемо продовжити.\nВведіть команду ***зареєструватися [ваш нікнейм у Steam]*** (або іншій платформі, з якої ви вступили до клану)\n" +
                     $"Приклад команди: ***зареєструватися {message.Author.Username}***\n" +
                     $"Регістр літер не має значення, можете написати лише фрагмент нікнейму, але він має містити достатню кількіть символів для точної ідентифікації профілю.";
-
-                builder.Footer = GetFooter();
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
@@ -64,11 +49,7 @@ namespace ServitorDiscordBot
 
             if (!database.IsDiscordUserRegistered(message.Author.Id))
             {
-                var builder = new EmbedBuilder();
-
-                builder.Title = "Реєстрація";
-
-                builder.Footer = GetFooter();
+                var builder = GetBuilder(MessagesEnum.Register, message);
 
                 if (nickname.Length > 0)
                 {
@@ -107,7 +88,7 @@ namespace ServitorDiscordBot
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
             else
-                await UserAlreadyRegisteredAsync(message.Channel);
+                await UserAlreadyRegisteredAsync(message);
         }
     }
 }
