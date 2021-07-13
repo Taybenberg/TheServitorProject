@@ -1,5 +1,4 @@
-﻿using DataProcessor.Localization;
-using Discord;
+﻿using Discord;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +10,9 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.Modes, message);
 
-            builder.Description = string.Empty;
+            var modes = await getStatsFactory().GetModesAsync();
 
-            foreach (var mode in TranslationDictionaries.StatsActivityNames.Values.OrderBy(x => x[0]))
-                builder.Description += $"**{mode[0]}** | {mode[1]}\n";
+            builder.Description = string.Join("\n", modes.Select(x => $"**{x[0]}** | {x[1]}"));
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }

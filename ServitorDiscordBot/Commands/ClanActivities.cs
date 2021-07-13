@@ -9,7 +9,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.ClanActivities, message);
 
-            var counter = await getStatsFactory().GetClanActivitiesCounterAsync();
+            var counter = await getStatsFactory().GetClanActivitiesAsync();
 
             builder.Description = $"Нічого собі! **{counter.Count}** активностей на рахунку клану!\n\n***По типу активності:***";
 

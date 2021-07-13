@@ -11,7 +11,7 @@ namespace ServitorDiscordBot
         {
             var database = getDatabase();
 
-            var currUser = await database.GetUserActivitiesAsync(message.Author.Id);
+            var currUser = await database.GetUserByDiscordId(message.Author.Id);
 
             if (currUser is null)
             {

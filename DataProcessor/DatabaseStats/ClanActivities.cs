@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataProcessor.DatabaseStats
 {
-    public class ClanActivitiesCounter
+    public class ClanActivities : IStats
     {
         public record ModeCounter
         {
@@ -24,9 +24,9 @@ namespace DataProcessor.DatabaseStats
 
         private readonly IClanDB _clanDB;
 
-        internal ClanActivitiesCounter(IClanDB clanDB) => _clanDB = clanDB;
+        internal ClanActivities(IClanDB clanDB) => _clanDB = clanDB;
 
-        internal async Task InitAsync()
+        public async Task InitAsync()
         {
             var acts = await _clanDB.GetActivitiesAsync();
 

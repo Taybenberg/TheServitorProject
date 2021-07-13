@@ -29,7 +29,6 @@ namespace DataProcessor
 
         public IInventoryParser<XurInventory> GetXurParser(bool getLocation)
         {
-
             using var scope = _scopeFactory.CreateScope();
 
             IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
