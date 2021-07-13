@@ -55,12 +55,13 @@ namespace BotConsole
 
                     services.AddScoped<IApiClient, ApiClient>();
 
-                    services.AddScoped<IParserFactory, ParserFactory>();
-                    services.AddScoped<IImageFactory, ImageFactory>();
-
                     services.AddDbContext<ClanContext>(options => options.UseSqlite(host.Configuration.GetConnectionString("ClanDatabase")));
 
                     services.AddScoped<IClanDB, ClanUoW>();
+
+                    services.AddScoped<IParserFactory, ParserFactory>();
+                    services.AddScoped<IImageFactory, ImageFactory>();
+                    services.AddScoped<IStatsFactory, StatsFactory>();
 
                     services.AddSingleton<ServitorBot>();
                     services.AddHostedService(p => p.GetRequiredService<ServitorBot>());

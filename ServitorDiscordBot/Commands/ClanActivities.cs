@@ -1,7 +1,4 @@
-﻿using DataProcessor.Localization;
-using Discord;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Discord;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -10,25 +7,14 @@ namespace ServitorDiscordBot
     {
         private async Task GetClanActivitiesAsync(IMessage message)
         {
-            var database = getDatabase();
-
             var builder = GetBuilder(MessagesEnum.ClanActivities, message);
 
-            var acts = await database.GetActivitiesAsync();
+            var counter = await getStatsFactory().GetClanActivitiesCounterAsync();
 
-            builder.Description = $"Нічого собі! **{acts.Count()}** активностей на рахунку клану!\n\n***По типу активності:***";
+            builder.Description = $"Нічого собі! **{counter.Count}** активностей на рахунку клану!\n\n***По типу активності:***";
 
-            List<(BungieNetApi.Enums.ActivityType ActivityType, int Count)> counter = new();
-
-            foreach (var type in acts.Select(x => x.ActivityType).Distinct())
-                counter.Add((type, acts.Count(x => x.ActivityType == type)));
-
-            foreach (var count in counter.OrderByDescending(x => x.Count))
-            {
-                var mode = TranslationDictionaries.ActivityNames[count.ActivityType];
-
-                builder.Description += $"\n**{mode[0]}** | {mode[1]} – ***{count.Count}***";
-            }
+            foreach (var count in counter.Modes)
+                builder.Description += $"\n**{count.Modes[0]}** | {count.Modes[1]} – ***{count.Count}***";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
