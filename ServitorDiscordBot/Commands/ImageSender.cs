@@ -7,7 +7,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        public async Task GetEververseInventoryAsync(IMessageChannel channel, string week = null)
+        private async Task GetEververseInventoryAsync(IMessageChannel channel, string week = null)
         {
             int currWeek = 0;
             int.TryParse(week, out currWeek);
@@ -15,21 +15,29 @@ namespace ServitorDiscordBot
             if (currWeek < 1 || currWeek > 15)
                 currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
-            using var inventory = await getFactory().GetEververseAsync(_seasonName, _seasonStart, currWeek);
+            using var inventory = await getImageFactory().GetEververseAsync(_seasonName, _seasonStart, currWeek);
 
             await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
 
+        private async Task GetRoadmapAsync(IMessageChannel channel)
+        {
+            using var roadmap = await getImageFactory().GetRoadmapAsync();
+
+            if (roadmap is not null)
+                await channel.SendFileAsync(roadmap, "Roadmap.png");
+        }
+
         private async Task GetResourcesPoolAsync(IMessageChannel channel)
         {
-            using var resources = await getFactory().GetResourcesAsync();
+            using var resources = await getImageFactory().GetResourcesAsync();
 
             await channel.SendFileAsync(resources, "ResourcesPool.png");
         }
 
         private async Task GetLostSectorsLootAsync(IMessageChannel channel)
         {
-            using var sectors = await getFactory().GetLostSectorsAsync();
+            using var sectors = await getImageFactory().GetLostSectorsAsync();
 
             await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
@@ -37,7 +45,7 @@ namespace ServitorDiscordBot
         private ConcurrentDictionary<ulong, ulong> osirisInventory = new();
         private async Task GetOsirisInventoryAsync(IMessageChannel channel)
         {
-            using var inventory = await getFactory().GetOsirisAsync();
+            using var inventory = await getImageFactory().GetOsirisAsync();
 
             var msg = await channel.SendFileAsync(inventory, "OsirisInventory.png");
 
@@ -47,7 +55,7 @@ namespace ServitorDiscordBot
         private ConcurrentDictionary<ulong, ulong> xurInventory = new();
         private async Task GetXurInventoryAsync(IMessageChannel channel, bool getLocation = true)
         {
-            using var inventory = await getFactory().GetXurAsync(getLocation);
+            using var inventory = await getImageFactory().GetXurAsync(getLocation);
 
             var msg = await channel.SendFileAsync(inventory, "XurInventory.png");
 

@@ -18,7 +18,7 @@ namespace ServitorDiscordBot
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
             Reset => $"Тиждень {(int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1}",
             Xur => $"Зур привіз свіжий крам",
-            Bip => $"Біп…",
+            Bip => $"біп…",
             Modes => $"Режими",
             _ => string.Empty
         };

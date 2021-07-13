@@ -5,7 +5,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetHelpMessageAsync(IMessage message)
+        private async Task GetHelpAsync(IMessage message)
         {
             var builder = GetBuilder(MessagesEnum.Help, message);
 
@@ -55,15 +55,6 @@ namespace ServitorDiscordBot
                 $"\n***100K*** - *виявити потенційно небезпечні нальоти з сумою очок більше 100К*\n" +
 
                 $"\n***реєстрація*** - *прив'язати акаунт Destiny 2 до профілю в Discord*";
-
-            await message.Channel.SendMessageAsync(embed: builder.Build());
-        }
-
-        private async Task GetHelpOnCommandAsync(IMessage message, string command)
-        {
-            var builder = GetBuilder(MessagesEnum.Help, message);
-
-            builder.Description = $"Тут буде довідка на команду {command}";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }

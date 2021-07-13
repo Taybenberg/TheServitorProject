@@ -34,7 +34,7 @@ namespace BotConsole
                     switch (DateTime.Now.DayOfWeek)
                     {
                         case DayOfWeek.Tuesday:
-                            await bot.GetWeeklyMilestoneAsync();
+                            await bot.WeeklyResetNotificationAsync();
                             break;
 
                         case DayOfWeek.Friday:

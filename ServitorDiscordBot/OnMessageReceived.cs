@@ -28,13 +28,13 @@ namespace ServitorDiscordBot
                 case string c
                 when messageCommands[MessagesEnum.Bip]
                 .Contains(c):
-                    await GetBipMessageAsync(message);
+                    await BipAsync(message);
                     break;
 
                 case string c
                 when messageCommands[MessagesEnum.Help]
                 .Contains(c):
-                    await GetHelpMessageAsync(message);
+                    await GetHelpAsync(message);
                     break;
 
                 case string c
@@ -72,7 +72,7 @@ namespace ServitorDiscordBot
                 case string c
                 when messageCommands[MessagesEnum.Weekly]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync);
+                    await ExecuteWaitMessageAsync(message, WeeklyResetNotificationAsync);
                     break;
 
                 case string c
@@ -100,7 +100,7 @@ namespace ServitorDiscordBot
                         .Replace(messageCommands[MessagesEnum.ClanStats]
                         .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
                         .TrimStart();
-                    await ExecuteWaitMessageAsync(message, ClanStatsAsync, csMode);
+                    await ExecuteWaitMessageAsync(message, GetClanStatsAsync, csMode);
                     break;
 
                 case string c
@@ -110,31 +110,31 @@ namespace ServitorDiscordBot
                         .Replace(messageCommands[MessagesEnum.Leaderboard]
                         .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
                         .TrimStart();
-                    await ExecuteWaitMessageAsync(message, LeaderboardAsync, lbMode);
+                    await ExecuteWaitMessageAsync(message, GetLeaderboardAsync, lbMode);
                     break;
 
                 case string c
                 when messageCommands[MessagesEnum.MyActivities]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetUserActivitiesAsync);
+                    await ExecuteWaitMessageAsync(message, GetMyActivitiesAsync);
                     break;
 
                 case string c
                 when messageCommands[MessagesEnum.MyPartners]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetUserPartnersAsync);
+                    await ExecuteWaitMessageAsync(message, GetMyPartnersAsync);
                     break;
 
                 case string c
                 when messageCommands[MessagesEnum._100K]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: true);
+                    await ExecuteWaitMessageAsync(message, GetSuspiciousActivitiesAsync, arg: true);
                     break;
 
                 case string c
                 when messageCommands[MessagesEnum.Apostates]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: false);
+                    await ExecuteWaitMessageAsync(message, GetSuspiciousActivitiesAsync, arg: false);
                     break;
 
                 case string c
