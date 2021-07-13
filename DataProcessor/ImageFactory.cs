@@ -6,7 +6,7 @@ namespace DataProcessor
 {
     public class ImageFactory : IImageFactory
     {
-        IParserFactory _factory;
+        private readonly IParserFactory _factory;
 
         public ImageFactory(IParserFactory factory) => _factory = factory;
 

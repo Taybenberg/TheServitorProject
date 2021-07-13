@@ -8,7 +8,7 @@ namespace DataProcessor
 {
     public class ParserFactory : IParserFactory
     {
-        IServiceScopeFactory _scopeFactory;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         public ParserFactory(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
@@ -32,7 +32,7 @@ namespace DataProcessor
 
             using var scope = _scopeFactory.CreateScope();
 
-            IApiClient apiClient = ActivatorUtilities.CreateInstance<IApiClient>(scope.ServiceProvider);
+            IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
             return new XurParser(apiClient, getLocation);
         }
