@@ -25,16 +25,16 @@ namespace ServitorDiscordBot
 
             switch (command)
             {
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Bip]
                 .Contains(c):
-                    await GetBipMessageAsync(message); 
+                    await GetBipMessageAsync(message);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Help]
                 .Contains(c):
-                    await GetHelpMessageAsync(message); 
+                    await GetHelpMessageAsync(message);
                     break;
 
                 case string c
@@ -69,28 +69,28 @@ namespace ServitorDiscordBot
                     await GetModesAsync(message);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Weekly]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync); 
+                    await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Sectors]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetLostSectorsLootAsync); 
+                    await ExecuteWaitMessageAsync(message, GetLostSectorsLootAsync);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Resources]
                 .Contains(c):
                     await ExecuteWaitMessageAsync(message, GetResourcesPoolAsync);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.ClanActivities]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetClanActivitiesAsync); 
+                    await ExecuteWaitMessageAsync(message, GetClanActivitiesAsync);
                     break;
 
                 case string c
@@ -113,43 +113,43 @@ namespace ServitorDiscordBot
                     await ExecuteWaitMessageAsync(message, LeaderboardAsync, lbMode);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.MyActivities]
                 .Contains(c):
                     await ExecuteWaitMessageAsync(message, GetUserActivitiesAsync);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.MyPartners]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetUserPartnersAsync); 
+                    await ExecuteWaitMessageAsync(message, GetUserPartnersAsync);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum._100K]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: true); 
+                    await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: true);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Apostates]
                 .Contains(c):
                     await ExecuteWaitMessageAsync(message, FindSuspiciousAsync, arg: false);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Xur]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetXurInventoryAsync, true, deleteSenderMessage: true); 
+                    await ExecuteWaitMessageAsync(message, GetXurInventoryAsync, true, deleteSenderMessage: true);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Osiris]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync, deleteSenderMessage: true); 
+                    await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync, deleteSenderMessage: true);
                     break;
 
-                case string c 
+                case string c
                 when messageCommands[MessagesEnum.Eververse]
                 .Any(x => c.IndexOf(x) == 0):
                     var week = c

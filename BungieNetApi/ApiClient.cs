@@ -1,7 +1,6 @@
 ﻿using BungieNetApi.Entities;
 using Flurl;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

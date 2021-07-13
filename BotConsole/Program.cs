@@ -2,8 +2,6 @@
 using Coravel;
 using Database;
 using DataProcessor;
-using DataProcessor.Parsers;
-using DataProcessor.Parsers.Inventory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,13 +54,6 @@ namespace BotConsole
                     services.AddScheduler();
 
                     services.AddScoped<IApiClient, ApiClient>();
-
-                    services.AddTransient<IInventoryParser<EververseInventory>, EververseParser>();
-                    services.AddTransient<IInventoryParser<LostSectorsInventory>, LostSectorsParser>();
-                    services.AddTransient<IInventoryParser<ResourcesInventory>, ResourcesParser>();
-                    services.AddTransient<IInventoryParser<RoadmapInventory>, RoadmapParser>();
-                    services.AddTransient<IInventoryParser<OsirisInventory>, TrialsOfOsirisParser>();
-                    services.AddTransient<IInventoryParser<XurInventory>, XurParser>();
 
                     services.AddScoped<IParserFactory, ParserFactory>();
                     services.AddScoped<IImageFactory, ImageFactory>();

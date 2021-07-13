@@ -1,4 +1,5 @@
-﻿using DataProcessor.Parsers;
+﻿using BungieNetApi;
+using DataProcessor.Parsers;
 using DataProcessor.Parsers.Inventory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,46 +12,29 @@ namespace DataProcessor
 
         public ParserFactory(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
-        public IInventoryParser<EververseInventory> GetEververseParser(string seasonName, DateTime seasonStart, int weekNumber)
-        {
-            using var scope = _scopeFactory.CreateScope();
+        public IInventoryParser<EververseInventory> GetEververseParser(string seasonName, DateTime seasonStart, int weekNumber) =>
+            new EververseParser(seasonName, seasonStart, weekNumber);
 
-            return ActivatorUtilities.CreateInstance<EververseParser>(scope.ServiceProvider, seasonName, seasonStart, weekNumber);
-        }
+        public IInventoryParser<LostSectorsInventory> GetLostSectorsParser() =>
+            new LostSectorsParser();
 
-        public IInventoryParser<LostSectorsInventory> GetLostSectorsParser()
-        {
-            using var scope = _scopeFactory.CreateScope();
+        public IInventoryParser<ResourcesInventory> GetResourcesParser() =>
+            new ResourcesParser();
 
-            return ActivatorUtilities.CreateInstance<LostSectorsParser>(scope.ServiceProvider);
-        }
+        public IInventoryParser<OsirisInventory> GetOsirisParser() =>
+            new TrialsOfOsirisParser();
 
-        public IInventoryParser<ResourcesInventory> GetResourcesParser()
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            return ActivatorUtilities.CreateInstance<ResourcesParser>(scope.ServiceProvider);
-        }
-
-        public IInventoryParser<OsirisInventory> GetOsirisParser()
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            return ActivatorUtilities.CreateInstance<TrialsOfOsirisParser>(scope.ServiceProvider);
-        }
-
-        public IInventoryParser<RoadmapInventory> GetRoadmapParser()
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            return ActivatorUtilities.CreateInstance<RoadmapParser>(scope.ServiceProvider);
-        }
+        public IInventoryParser<RoadmapInventory> GetRoadmapParser() =>
+            new RoadmapParser();
 
         public IInventoryParser<XurInventory> GetXurParser(bool getLocation)
         {
+
             using var scope = _scopeFactory.CreateScope();
 
-            return ActivatorUtilities.CreateInstance<XurParser>(scope.ServiceProvider, getLocation);
+            IApiClient apiClient = ActivatorUtilities.CreateInstance<IApiClient>(scope.ServiceProvider);
+
+            return new XurParser(apiClient, getLocation);
         }
     }
 }
