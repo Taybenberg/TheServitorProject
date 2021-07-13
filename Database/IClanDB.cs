@@ -21,7 +21,7 @@ namespace Database
 
         Task<IEnumerable<User>> GetUsersAsync();
 
-        Task<User> GetUserByDiscordId(ulong discordID);
+        Task<User> GetUserByDiscordIdAsync(ulong discordID);
 
         Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName);
 

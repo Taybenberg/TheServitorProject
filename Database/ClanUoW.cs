@@ -30,7 +30,7 @@ namespace Database
 
         public bool IsDiscordUserRegistered(ulong discordID) => _context.Users.Any(x => x.DiscordUserID == discordID);
 
-        public async Task<User> GetUserByDiscordId(ulong discordID) => await _context.Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+        public async Task<User> GetUserByDiscordIdAsync(ulong discordID) => await _context.Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
         public async Task<User> GetUserActivitiesAsync(ulong discordID) => await _context.Users.Include(x => x.Characters).ThenInclude(y => y.ActivityUserStats).ThenInclude(a => a.Activity).FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
