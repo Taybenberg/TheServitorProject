@@ -27,10 +27,7 @@ namespace ServitorDiscordBot
                     builder.Description += $"\n<@{user.Key}> – *{user.Value.ToString("HH:mm:ss")}*";
             }
 
-            string mentions = string.Empty;
-
-            foreach (var id in _bumpPingUsers.Where(x => !users.ContainsKey(x)))
-                mentions += $"<@{id}> ";
+            string mentions = string.Join(" ", _bumpPingUsers.Where(x => !users.ContainsKey(x)).Select(y => $"<@{y}>"));
 
             await channel.SendMessageAsync(mentions, embed: builder.Build());
         }

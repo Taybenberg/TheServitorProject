@@ -19,9 +19,7 @@ namespace ServitorDiscordBot
         {
             var command = message.Content.ToLower();
 
-            var builder = new EmbedBuilder();
-
-            builder.Color = GetColor(MessagesEnum.Wait);
+            var builder = GetBuilder(MessagesEnum.Wait, null, false);
 
             builder.Description = new Random().Next(20) switch
             {

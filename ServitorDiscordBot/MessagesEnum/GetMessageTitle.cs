@@ -8,6 +8,7 @@ namespace ServitorDiscordBot
     {
         string GetTitle(MessagesEnum messagesEnum, IMessage message) => messagesEnum switch
         {
+            Wait => "…",
             Leaderboard => $"БЕТА | Дошка лідерів",
             ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
             MyActivities => $"Активності {message.Author.Username}",

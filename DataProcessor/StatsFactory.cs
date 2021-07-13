@@ -45,5 +45,20 @@ namespace DataProcessor
         {
             return TranslationDictionaries.StatsActivityNames.Values.OrderBy(x => x[0]);
         }
+
+        public async Task<Leaderboard> GetLeaderboardAsync(string mode, ulong discordUserID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
+
+            var leaderboard = new Leaderboard(clanDB, apiClient, mode, discordUserID);
+
+            await leaderboard.InitAsync();
+
+            return leaderboard;
+        }
     }
 }

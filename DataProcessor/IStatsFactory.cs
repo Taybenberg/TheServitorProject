@@ -11,5 +11,7 @@ namespace DataProcessor
         Task<ClanStats> GetClanStatsAsync(string mode);
 
         Task<IEnumerable<string[]>> GetModesAsync();
+
+        Task<Leaderboard> GetLeaderboardAsync(string mode, ulong discordUserID);
     }
 }

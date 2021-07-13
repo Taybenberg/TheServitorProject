@@ -14,7 +14,6 @@ namespace DataProcessor.DatabaseStats
         public record ModeCounter
         {
             public string[] Modes { get; internal set; }
-
             public int Count { get; internal set; }
         }
 

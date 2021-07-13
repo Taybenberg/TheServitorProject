@@ -11,7 +11,6 @@ namespace DataProcessor.DatabaseStats
         public record Stat
         {
             public string Name { get; internal set; }
-
             public string Value { get; internal set; }
         }
 
