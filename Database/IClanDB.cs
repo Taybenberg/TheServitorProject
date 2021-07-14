@@ -1,5 +1,4 @@
 ﻿using Database.ORM;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,8 +32,8 @@ namespace Database
 
         Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync();
 
-        Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime afterDate);
+        Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync();
 
-        Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate);
+        Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync();
     }
 }

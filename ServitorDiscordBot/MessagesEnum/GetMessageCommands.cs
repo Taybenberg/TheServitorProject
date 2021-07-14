@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
             [MyActivities] = new string[] { "мої активності", "my activities" },
             [MyPartners] = new string[] { "мої побратими", "my partners" },
             [Register] = new string[] { "реєстрація", "registration" },
-            [_100K] = new string[] { "100к", "register" },
+            [_100K] = new string[] { "100к", "100k" },
             [Apostates] = new string[] { "відступники", "apostates" },
             [Xur] = new string[] { "зур", "xur" },
             [Osiris] = new string[] { "осіріс", "сосіріс", "osiris" },

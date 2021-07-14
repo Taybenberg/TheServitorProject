@@ -1,6 +1,4 @@
-﻿using DataProcessor.Localization;
-using Discord;
-using System.Collections.Generic;
+﻿using Discord;
 using System.Linq;
 using System.Threading.Tasks;
 

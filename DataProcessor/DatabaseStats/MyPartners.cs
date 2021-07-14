@@ -1,6 +1,4 @@
-﻿using BungieNetApi;
-using Database;
-using DataProcessor.Localization;
+﻿using Database;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;

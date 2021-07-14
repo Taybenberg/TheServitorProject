@@ -14,7 +14,7 @@ namespace ServitorDiscordBot
             MyActivities => $"Активності {message.Author.Username}",
             MyPartners => $"Побратими {message.Author.Username}",
             ClanActivities => $"Активності клану {(message.Channel as IGuildChannel).Guild.Name}",
-            Suspicious => $"Відступники",
+            Suspicious => $"Останні активності",
             Help => $"Допомога",
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
             Reset => $"Тиждень {(int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1}",
