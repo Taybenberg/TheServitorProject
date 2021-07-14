@@ -13,26 +13,28 @@ namespace Database
 
         bool IsDiscordUserRegistered(ulong discordID);
 
+        Task RegisterUserAsync(long userID, ulong discordID);
+
+        Task<User> GetUserByDiscordIdAsync(ulong discordID);
+
+        Task<User> GetUserWithActivitiesAsync(ulong discordID);
+
+        Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID);
+
+        Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName);
+
+        Task<IEnumerable<User>> GetUsersAsync();
+
+        Task<IEnumerable<User>> GetUsersWithCharactersAsync();
+
         Task<IEnumerable<Character>> GetCharactersAsync();
 
         Task<IEnumerable<Activity>> GetActivitiesAsync();
 
         Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync();
 
-        Task<IEnumerable<User>> GetUsersAsync();
-
-        Task<User> GetUserByDiscordIdAsync(ulong discordID);
-
-        Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName);
-
-        Task<User> GetUserActivitiesAsync(ulong discordID);
-
         Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime afterDate);
 
         Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate);
-
-        Task RegisterUserAsync(long userID, ulong discordID);
-
-        Task<IEnumerable<(string UserName, int Count)>> GetUserPartnersAsync(ulong discordID);
     }
 }

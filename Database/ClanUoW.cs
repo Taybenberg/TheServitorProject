@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,25 +27,9 @@ namespace Database
             _context = context;
         }
 
-        public bool IsDiscordUserRegistered(ulong discordID) => _context.Users.Any(x => x.DiscordUserID == discordID);
-
-        public async Task<User> GetUserByDiscordIdAsync(ulong discordID) => await _context.Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
-
-        public async Task<User> GetUserActivitiesAsync(ulong discordID) => await _context.Users.Include(x => x.Characters).ThenInclude(y => y.ActivityUserStats).ThenInclude(a => a.Activity).FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
-
-        public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) => await _context.Users.Where(x => x.UserName.ToLower().Contains(userName)).ToListAsync();
-
-        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime afterDate) => await _context.Activities.Where(x => x.Period >= afterDate && x.ActivityType != ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
-
-        public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate) => await _context.Activities.Where(x => x.Period >= afterDate && x.ActivityType == ActivityType.ScoredNightfall && x.SuspicionIndex > 0).ToListAsync();
-
-        public async Task<IEnumerable<User>> GetUsersAsync() => await _context.Users.ToListAsync();
-
-        public async Task<IEnumerable<Character>> GetCharactersAsync() => await _context.Characters.ToListAsync();
-
-        public async Task<IEnumerable<Activity>> GetActivitiesAsync() => await _context.Activities.ToListAsync();
-
-        public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() => await _context.ActivityUserStats.ToListAsync();
+        public bool IsDiscordUserRegistered(ulong discordID) => 
+            _context.Users
+            .Any(x => x.DiscordUserID == discordID);
 
         public async Task RegisterUserAsync(long userID, ulong discordID)
         {
@@ -62,25 +45,59 @@ namespace Database
             }
         }
 
-        public async Task<IEnumerable<(string UserName, int Count)>> GetUserPartnersAsync(ulong discordID)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+        public async Task<User> GetUserByDiscordIdAsync(ulong discordID) => 
+            await _context.Users
+            .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
-            ConcurrentBag<(string userName, int count)> relations = new();
+        public async Task<User> GetUserWithActivitiesAsync(ulong discordID) => 
+            await _context.Users
+            .Include(x => x.Characters)
+            .ThenInclude(y => y.ActivityUserStats)
+            .ThenInclude(a => a.Activity)
+            .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
-            if (user is not null)
-            {
-                var acts = await _context.Activities.Include(a => a.ActivityUserStats).ThenInclude(c => c.Character).Where(x => x.ActivityUserStats.Any(y => y.Character.UserID == user.UserID)).ToListAsync();
+        public async Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID) => 
+            await _context.Users
+            .Include(x => x.Characters)
+            .ThenInclude(y => y.ActivityUserStats)
+            .ThenInclude(a => a.Activity)
+            .ThenInclude(u => u.ActivityUserStats)
+            .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
-                var users = _context.Users.Where(x => x.UserID != user.UserID);
+        public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) => 
+            await _context.Users
+            .Where(x => x.UserName.ToLower().Contains(userName))
+            .ToListAsync();
 
-                Parallel.ForEach(users, usr =>
-                {
-                    relations.Add((usr.UserName, acts.Where(x => x.ActivityUserStats.Any(x => x.Character.UserID == usr.UserID)).Count()));
-                });
-            }
+        public async Task<IEnumerable<User>> GetUsersAsync() =>
+            await _context.Users
+            .ToListAsync();
 
-            return relations.Where(x => x.count > 0).OrderByDescending(x => x.count);
-        }
+        public async Task<IEnumerable<User>> GetUsersWithCharactersAsync() =>
+            await _context.Users
+            .Include(x => x.Characters)
+            .ToListAsync();
+
+        public async Task<IEnumerable<Character>> GetCharactersAsync() => 
+            await _context.Characters
+            .ToListAsync();
+
+        public async Task<IEnumerable<Activity>> GetActivitiesAsync() => 
+            await _context.Activities
+            .ToListAsync();
+
+        public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() => 
+            await _context.ActivityUserStats
+            .ToListAsync();
+
+        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync(DateTime afterDate) =>
+            await _context.Activities
+            .Where(x => x.Period >= afterDate && x.ActivityType != ActivityType.ScoredNightfall && x.SuspicionIndex > 0)
+            .ToListAsync();
+
+        public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync(DateTime afterDate) =>
+            await _context.Activities
+            .Where(x => x.Period >= afterDate && x.ActivityType == ActivityType.ScoredNightfall && x.SuspicionIndex > 0)
+            .ToListAsync();
     }
 }
