@@ -13,5 +13,13 @@ namespace DataProcessor
         Task<IEnumerable<string[]>> GetModesAsync();
 
         Task<Leaderboard> GetLeaderboardAsync(string mode, ulong discordUserID);
+
+        Task<MyActivities> GetMyActivitiesAsync(ulong discordUserID);
+
+        Task<MyPartners> GetMyPartnersAsync(ulong discordUserID);
+
+        Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly);
+
+        Task<WeeklyMilestone> GetWeeklyMilestoneAsync();
     }
 }

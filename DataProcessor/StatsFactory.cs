@@ -21,11 +21,11 @@ namespace DataProcessor
 
             IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
 
-            var counter = new ClanActivities(clanDB);
+            var activities = new ClanActivities(clanDB);
 
-            await counter.InitAsync();
+            await activities.InitAsync();
 
-            return counter;
+            return activities;
         }
 
         public async Task<ClanStats> GetClanStatsAsync(string mode)
@@ -59,6 +59,60 @@ namespace DataProcessor
             await leaderboard.InitAsync();
 
             return leaderboard;
+        }
+
+        public async Task<MyActivities> GetMyActivitiesAsync(ulong discordUserID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            var activities = new MyActivities(clanDB, discordUserID);
+
+            await activities.InitAsync();
+
+            return activities;
+        }
+
+        public async Task<MyPartners> GetMyPartnersAsync(ulong discordUserID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            var activities = new MyPartners(clanDB, discordUserID);
+
+            await activities.InitAsync();
+
+            return activities;
+        }
+
+        public async Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
+
+            var activities = new SuspiciousActivities(clanDB, apiClient, isNightfallsOnly);
+
+            await activities.InitAsync();
+
+            return activities;
+        }
+
+        public async Task<WeeklyMilestone> GetWeeklyMilestoneAsync()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
+
+            var milestone = new WeeklyMilestone(apiClient);
+
+            await milestone.InitAsync();
+
+            return milestone;
         }
     }
 }
