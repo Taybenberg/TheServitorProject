@@ -69,7 +69,7 @@ namespace BungieNetApi.Entities
             public string ClanName { get; internal set; }
         }
 
-        public async Task<IEnumerable<ClanInfo>> GetUserClansAsync()
+        public async Task<ClanInfo> GetUserClanAsync()
         {
             var rawClans = await _apiClient.getRawUserClansAsync((int)MembershipType, MembershipID.ToString());
 
@@ -77,7 +77,7 @@ namespace BungieNetApi.Entities
             {
                 ClanSign = x.group.clanInfo.clanCallsign,
                 ClanName = x.group.name
-            });
+            }).FirstOrDefault();
         }
     }
 }
