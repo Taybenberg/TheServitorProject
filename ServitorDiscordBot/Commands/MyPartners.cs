@@ -8,32 +8,25 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyPartnersAsync(IMessage message)
         {
-            var database = getDatabase();
+            var activities = await getStatsFactory().GetMyPartnersAsync(message.Author.Id);
 
-            if (!database.IsDiscordUserRegistered(message.Author.Id))
+            if (!activities.IsUserRegistered)
             {
                 await UserIsNotRegisteredAsync(message);
 
                 return;
             }
 
-            var partners = await database.GetUserPartnersAsync(message.Author.Id);
-
             var builder = GetBuilder(MessagesEnum.MyPartners, message);
 
-            if (!partners.Any())
+            if (!activities.Partners.Any())
             {
                 builder.Color = GetColor(MessagesEnum.Error);
 
-                builder.Description = "Я не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали у цьому році.";
+                builder.Description = "Не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали цього року.";
             }
             else
-            {
-                builder.Description = string.Empty;
-
-                foreach (var p in partners)
-                    builder.Description += $"**{p.UserName}** – ***{p.Count}***\n";
-            }
+                builder.Description = string.Join("\n", activities.Partners.Select(x => $"**{x.UserName}** – ***{x.Count}***"));
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
