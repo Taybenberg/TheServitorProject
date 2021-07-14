@@ -7,7 +7,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace DataProcessor.DatabaseStats
 {
@@ -73,8 +72,8 @@ namespace DataProcessor.DatabaseStats
                         {
                             IsClanMember = false,
                             UserName = user.DisplayName.Replace("*", ""),
-                            ClanSign = HttpUtility.HtmlDecode(clan?.ClanSign)?.Replace("*", ""),
-                            ClanName = HttpUtility.HtmlDecode(clan?.ClanName)?.Replace("*", "")
+                            ClanSign = clan?.ClanSign?.Replace("*", ""),
+                            ClanName = clan?.ClanName?.Replace("*", "")
                         });
                     }
                 });

@@ -16,11 +16,11 @@ namespace ServitorDiscordBot
 
             foreach (var act in acts.Activities)
             {
-                var s = $"**{act.Period} {act.Type} {act.Score}**\n" + string
+                var s = $"**{act.Period}, {act.Type} {act.Score}**\n" + string
                     .Join("\n", act.Users
                     .Select(y => y.IsClanMember ?
-                    $"***{y.UserName} [{y.ClanSign}]***" :
-                    $"{y.UserName} *[{y.ClanSign}]* {y.ClanName}"));
+                    $"**{y.UserName} [{y.ClanSign}]**" :
+                    $"{y.UserName} [{y.ClanSign}] {y.ClanName}"));
 
                 if ((sus + s).Length > 2000)
                     break;

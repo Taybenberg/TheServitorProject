@@ -1,10 +1,9 @@
-﻿using DataProcessor;
-using DataProcessor.Localization;
-using Discord;
+﻿using Discord;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace ServitorDiscordBot
 {
@@ -12,40 +11,27 @@ namespace ServitorDiscordBot
     {
         public async Task WeeklyResetNotificationAsync(IMessageChannel channel = null)
         {
-            var apiCient = getApiClient();
-
-            var milestone = await apiCient.GetMilestonesAsync();
-
             var builder = GetBuilder(MessagesEnum.Reset, null);
+
+            var milestone = await getStatsFactory().GetWeeklyMilestoneAsync();
 
             string additionalDescription = string.Empty;
 
-            if (await ExtensionMethods.IsIronBannerAvailableAsync())
+            if (milestone.IsIronBannerAvailable)
             {
-                builder.ThumbnailUrl = "https://bungie.net/common/destiny2_content/icons/0ee91b79ba1366243832cf810afc3b75.jpg";
+                builder.ThumbnailUrl = milestone.IronBannerImageURL;
 
-                additionalDescription = $"Доступний **{TranslationDictionaries.StatsActivityNames[BungieNetApi.Enums.ActivityType.IronBannerControl][0]}**!";
+                additionalDescription += $"Доступний **{milestone.IronBannerName}**!";
             }
 
-            var mode = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
+            builder.ImageUrl = milestone.NightfallImageURL;
 
-            builder.Fields = new()
+            builder.Fields = milestone.Fields.Select(x => new EmbedFieldBuilder
             {
-                new EmbedFieldBuilder
-                {
-                    Name = "Найтфол",
-                    Value = milestone.NightfallTheOrdealName,
-                    IsInline = true
-                },
-                new EmbedFieldBuilder
-                {
-                    Name = "Ротація горнила",
-                    Value = $"{mode[0]} | {mode[1]}",
-                    IsInline = true
-                }
-            };
-
-            builder.ImageUrl = milestone.NightfallTheOrdealImage;
+                Name = x.Name,
+                Value = x.Value,
+                IsInline = true
+            }).ToList();
 
             if (channel is null)
             {
