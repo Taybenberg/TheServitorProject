@@ -4,7 +4,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
