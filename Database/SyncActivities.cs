@@ -37,26 +37,23 @@ namespace Database
 
             ConcurrentDictionary<long, BungieNetApi.Entities.Activity> newActivitiesDictionary = new();
 
-            Parallel.ForEach(lastKnownActivities, (last) =>
+            Parallel.ForEach(lastKnownActivities.Where(x => x.Character.DateLastPlayed > date), (last) =>
             {
-                if (last.Character.DateLastPlayed > date)
+                Func<BungieNetApi.Entities.Activity, bool> newActivitiesFilter =
+                    x => x.Period > last.Character.User.ClanJoinDate && x.Period > (last?.Activity?.Period ?? date);
+
+                var dChar = factory.GetCharacter(last.Character.CharacterID, last.Character.UserID, last.Character.User.MembershipType);
+
+                if (dChar.GetActivitiesAsync(1, 0).Result.Where(newActivitiesFilter).Any())
                 {
-                    Func<BungieNetApi.Entities.Activity, bool> newActivitiesFilter =
-                        x => x.Period > last.Character.User.ClanJoinDate && x.Period > (last?.Activity?.Period ?? date);
+                    IEnumerable<BungieNetApi.Entities.Activity> newActivitiesBuffer;
 
-                    var dChar = factory.GetCharacter(last.Character.CharacterID, last.Character.UserID, last.Character.User.MembershipType);
+                    int page = 0, count = 25;
 
-                    if (dChar.GetActivitiesAsync(1, 0).Result.Where(newActivitiesFilter).Any())
+                    while ((newActivitiesBuffer = dChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
                     {
-                        IEnumerable<BungieNetApi.Entities.Activity> newActivitiesBuffer;
-
-                        int page = 0, count = 25;
-
-                        while ((newActivitiesBuffer = dChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
-                        {
-                            foreach (var act in newActivitiesBuffer)
-                                newActivitiesDictionary.TryAdd(act.InstanceID, act);
-                        }
+                        foreach (var act in newActivitiesBuffer)
+                            newActivitiesDictionary.TryAdd(act.InstanceID, act);
                     }
                 }
             });
