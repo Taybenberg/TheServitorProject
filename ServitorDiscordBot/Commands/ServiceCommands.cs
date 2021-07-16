@@ -28,6 +28,15 @@ namespace ServitorDiscordBot
 
                     return true;
 
+                case string c when c.StartsWith("!echo"):
+                    try
+                    {
+                        await message.Channel.SendMessageAsync(c.Split(' ')[1]);
+                    }
+                    catch { }
+
+                    return true;
+
                 case "!delete_this":
                     if (!CheckModerationRole(message.Author))
                         return await NoDeletePermissionsAsync(message);

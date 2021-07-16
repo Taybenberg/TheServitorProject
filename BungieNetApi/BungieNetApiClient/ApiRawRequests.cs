@@ -194,7 +194,7 @@ namespace BungieNetApi
                 .AppendPathSegment(membershipType)
                 .AppendPathSegment("Profile")
                 .AppendPathSegment(membershipId)
-                .SetQueryParam("components", new int[]{ 100, 200 })
+                .SetQueryParam("components", new int[] { 100, 200 })
                 .WithHeader(_xApiKey.Name, _xApiKey.Value);
 
             var result = await JsonSerializer.DeserializeAsync<API.Destiny2.DestinyComponentType.Components100and200.Rootobject>(await profileRequest.GetStreamAsync());
