@@ -14,66 +14,17 @@ namespace BungieNetApi.Entities
 
         public MembershipType MembershipType { get; internal set; }
 
-        private class CharacterContainer
-        {
-            public DateTime DateLastPlayed;
-            public DestinyClass Class;
-            public DestinyRace Race;
-            public DestinyGender Gender;
+        public DateTime DateLastPlayed { get; internal set; }
 
-            internal CharacterContainer(BungieNetApiClient apiClient, MembershipType membershipType, long membershipID, long characterID)
-            {
-                var rawCharacter = apiClient.getRawCharacterAsync((int)membershipType, membershipID.ToString(), characterID.ToString()).Result;
+        public DestinyClass Class { get; internal set; }
 
-                DateLastPlayed = rawCharacter.data.dateLastPlayed;
-                Class = (DestinyClass)rawCharacter.data.classType;
-                Race = (DestinyRace)rawCharacter.data.raceType;
-                Gender = (DestinyGender)rawCharacter.data.genderType;
-            }
-        }
+        public DestinyRace Race { get; internal set; }
 
-        private Lazy<CharacterContainer> _container;
+        public DestinyGender Gender { get; internal set; }
 
         private readonly BungieNetApiClient _apiClient;
 
-        internal Character(BungieNetApiClient apiClient)
-        {
-            _apiClient = apiClient;
-
-            _container = new(() => new CharacterContainer(_apiClient, MembershipType, MembershipID, CharacterID));
-        }
-
-        public DateTime DateLastPlayed
-        {
-            get
-            {
-                return _container.Value.DateLastPlayed;
-            }
-        }
-
-        public DestinyClass Class
-        {
-            get
-            {
-                return _container.Value.Class;
-            }
-        }
-
-        public DestinyRace Race
-        {
-            get
-            {
-                return _container.Value.Race;
-            }
-        }
-
-        public DestinyGender Gender
-        {
-            get
-            {
-                return _container.Value.Gender;
-            }
-        }
+        internal Character(BungieNetApiClient apiClient) => _apiClient = apiClient;
 
         public async Task<IEnumerable<Activity>> GetActivitiesAsync(int count, int page)
         {

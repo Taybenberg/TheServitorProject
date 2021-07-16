@@ -19,15 +19,25 @@ namespace BungieNetApi.Entities
         private class UserContainer
         {
             public DateTime DateLastPlayed;
-
-            public string[] CharacterIDs;
+            public IEnumerable<Character> Characters;
 
             internal UserContainer(BungieNetApiClient apiClient, MembershipType membershipType, long membershipID)
             {
-                var rawProfile = apiClient.getRawProfileAsync((int)membershipType, membershipID.ToString()).Result;
+                var rawProfile = apiClient.getRawProfileWithCharactersAsync((int)membershipType, membershipID.ToString()).Result;
 
-                DateLastPlayed = rawProfile.data.dateLastPlayed;
-                CharacterIDs = rawProfile.data.characterIds;
+                DateLastPlayed = rawProfile.profile.data.dateLastPlayed;
+
+                Characters = rawProfile.characters.data.Values.Select(x =>
+                new Character(apiClient)
+                {
+                    CharacterID = long.Parse(x.characterId),
+                    MembershipID = membershipID,
+                    MembershipType = membershipType,
+                    DateLastPlayed = x.dateLastPlayed,
+                    Class = (DestinyClass)x.classType,
+                    Race = (DestinyRace)x.raceType,
+                    Gender = (DestinyGender)x.genderType
+                });
             }
         }
 
@@ -54,12 +64,7 @@ namespace BungieNetApi.Entities
         {
             get
             {
-                return _container.Value.CharacterIDs.Select(x => new Character(_apiClient)
-                {
-                    CharacterID = long.Parse(x),
-                    MembershipID = MembershipID,
-                    MembershipType = MembershipType
-                });
+                return _container.Value.Characters;
             }
         }
 

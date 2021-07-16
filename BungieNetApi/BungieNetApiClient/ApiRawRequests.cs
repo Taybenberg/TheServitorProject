@@ -188,6 +188,25 @@ namespace BungieNetApi
         /// Path: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/
         /// </summary>
         /// <returns>Returns Destiny Profile information for the supplied membership.</returns>
+        public async Task<API.Destiny2.DestinyComponentType.Components100and200.Response> getRawProfileWithCharactersAsync(int membershipType, string membershipId)
+        {
+            var profileRequest = API.Destiny2.Url.BaseURL
+                .AppendPathSegment(membershipType)
+                .AppendPathSegment("Profile")
+                .AppendPathSegment(membershipId)
+                .SetQueryParam("components", new int[]{ 100, 200 })
+                .WithHeader(_xApiKey.Name, _xApiKey.Value);
+
+            var result = await JsonSerializer.DeserializeAsync<API.Destiny2.DestinyComponentType.Components100and200.Rootobject>(await profileRequest.GetStreamAsync());
+
+            return result.Response;
+        }
+
+        /// <summary>
+        /// Destiny2.GetProfile
+        /// Path: /Destiny2/{membershipType}/Profile/{destinyMembershipId}/
+        /// </summary>
+        /// <returns>Returns Destiny Profile information for the supplied membership.</returns>
         public async Task<API.Destiny2.DestinyComponentType.Components100.Profile> getRawProfileAsync(int membershipType, string membershipId)
         {
             var profileRequest = API.Destiny2.Url.BaseURL
