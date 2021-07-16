@@ -48,7 +48,7 @@ namespace DataProcessor.Localization
             [Strike] = new[] { "Наліт", "Strike" },
             [Raid] = new[] { "Рейд", "Raid" },
             [AllPvP] = new[] { "ПвП", "PvP" },
-            [Patrol] = new[] { "Патруль", "Patrol" },
+            [Patrol] = new[] { "Фріплей", "Freeplay" },
             [AllPvE] = new[] { "ПвЕ", "PvE" },
             [Reserved9] = new[] { "Зарезервовано_9", "Reserved_9" },
             [Control] = new[] { "Контроль, легасі", "Control, legacy" },

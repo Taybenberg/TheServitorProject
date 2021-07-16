@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using DataProcessor.DiscordEmoji;
+using Discord;
 using System;
 using static ServitorDiscordBot.MessagesEnum;
 
@@ -8,7 +9,7 @@ namespace ServitorDiscordBot
     {
         string GetTitle(MessagesEnum messagesEnum, IMessage message) => messagesEnum switch
         {
-            Wait => "…",
+            Wait => EmojiContainer.Loading,
             Leaderboard => $"БЕТА | Дошка лідерів",
             ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
             MyActivities => $"Активності {message.Author.Username}",
