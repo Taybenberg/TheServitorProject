@@ -22,6 +22,8 @@ namespace ServitorDiscordBot
             {
                 builder.Title += $" | { stats.Mode }";
 
+                builder.ThumbnailUrl = Emote.Parse(stats.Emoji).Url;
+
                 if (stats.Stats.Count() > 0)
                 {
                     builder.Fields = stats.Stats.Select(x =>

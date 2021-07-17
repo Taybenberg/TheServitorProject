@@ -1,7 +1,7 @@
 ﻿using BungieNetApi;
 using Database;
-using DataProcessor.DiscordEmoji;
 using DataProcessor.DatabaseStats;
+using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;

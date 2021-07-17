@@ -22,6 +22,8 @@ namespace ServitorDiscordBot
             {
                 builder.Title += $" | { leaderboard.Mode }";
 
+                builder.ThumbnailUrl = Emote.Parse(leaderboard.Emoji).Url;
+
                 if (!leaderboard.Stats.Any())
                 {
                     builder.Color = GetColor(MessagesEnum.Error);

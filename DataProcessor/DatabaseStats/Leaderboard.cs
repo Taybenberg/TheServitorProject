@@ -1,5 +1,6 @@
 ﻿using BungieNetApi;
 using Database;
+using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace DataProcessor.DatabaseStats
 
         public string Mode { get; private set; }
 
+        public string Emoji { get; private set; }
+
         public bool UserRegistered { get; private set; }
 
         private string _mode;
@@ -52,6 +55,8 @@ namespace DataProcessor.DatabaseStats
                 return;
 
             Mode = pair.Value[0];
+
+            Emoji = EmojiContainer.GetActivityEmoji(pair.Key);
 
             var leaderboard = await _apiClient.Clan.GetClanLeaderboardAsync(pair.Key, TranslationDictionaries.StatNames.Keys.ToArray());
 

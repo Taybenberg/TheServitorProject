@@ -29,6 +29,19 @@ namespace DataProcessor.DiscordEmoji
                 Strike => "<:StrikePlaylist:865898510930673685>",
                 ScoredNightfall => "<:NightfallTheOrdeal:865899405886226483>",
                 Nightfall => "<:Nightfall:865900085978857502>",
+                AllPvP => "<:Crucible:865902464456982558>",
+                AllPvE => "<:Vanguard:865903711615057942>",
+                GambitPrime => "<:GambitPrime:865904580747591680>",
+                BlackArmoryRun => "<:BlackArmoryForge:865905807035727873>",
+                Reckoning => "<:Reckoning:865906388344242198>",
+                Menagerie => "<:Menagerie:865907583784189962>",
+                Sundial => "<:Sundial:865909660846653450>",
+                VexOffensive => "<:VexOffensive:865911332203921408>",
+                Breakthrough => "<:Breakthrough:865914217076359169>",
+                TrialsOfTheNine => "<:TrialsOfTheNine:865916272843161621>",
+                Countdown => "<:Countdown:866018142445371402>",
+                Supremacy => "<:Supremacy:866020056437489724>",
+                Lockdown => "<:Lockdown:866023853486899220>",
                 _ => NoData
             };
     }

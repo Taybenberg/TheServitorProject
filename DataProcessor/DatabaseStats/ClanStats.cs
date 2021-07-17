@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace DataProcessor.DatabaseStats
 
         public string Mode { get; private set; }
 
+        public string Emoji { get; private set; }
+
         public IEnumerable<Stat> Stats { get; private set; }
 
         private string _mode;
@@ -34,6 +37,8 @@ namespace DataProcessor.DatabaseStats
                 return;
 
             Mode = pair.Value[0];
+
+            Emoji = EmojiContainer.GetActivityEmoji(pair.Key);
 
             var clanStats = await _apiClient.Clan.GetClanStatsAsync(pair.Key);
 
