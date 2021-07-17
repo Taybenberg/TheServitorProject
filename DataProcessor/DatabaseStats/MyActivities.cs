@@ -84,15 +84,7 @@ namespace DataProcessor.DatabaseStats
 
             Modes = modeCounter.OrderByDescending(x => x.Count);
 
-            var quickChartString = "{\"type\":\"outlabeledPie\",\"data\":" +
-                "{\"labels\":[\"ПвЕ\",\"ПвП\",\"ПвПвЕ\"],\"datasets\":" +
-                "[{\"backgroundColor\":[\"#f9a825\",\"#ff5722\",\"#81c784\"]," +
-                "\"data\":[" + string.Join(",", cumulativeCounter.Count) + "]}]}," +
-                "\"options\":{\"plugins\":{\"legend\":false,\"outlabels\":" +
-                "{\"text\":\"%l %p\",\"color\":\"white\",\"stretch\":35," +
-                "\"font\":{\"resizable\":true,\"minSize\":16,\"maxSize\":18}}}}}";
-
-            QuickChartURL = $"https://quickchart.io/chart?c={HttpUtility.UrlEncode(quickChartString)}";
+            QuickChartURL = cumulativeCounter.QuickChartURL;
         }
     }
 }

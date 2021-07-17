@@ -1,5 +1,6 @@
 ﻿using BungieNetApi;
 using Database;
+using DataProcessor.DiscordEmoji;
 using DataProcessor.DatabaseStats;
 using DataProcessor.Localization;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,9 +42,11 @@ namespace DataProcessor
             return stats;
         }
 
-        public async Task<IEnumerable<string[]>> GetModesAsync()
+        public async Task<IEnumerable<(string, string[])>> GetModesAsync()
         {
-            return TranslationDictionaries.StatsActivityNames.Values.OrderBy(x => x[0]);
+            return TranslationDictionaries.StatsActivityNames
+                .OrderBy(x => x.Value[0])
+                .Select(y => (EmojiContainer.GetActivityEmoji(y.Key), y.Value));
         }
 
         public async Task<Leaderboard> GetLeaderboardAsync(string mode, ulong discordUserID)

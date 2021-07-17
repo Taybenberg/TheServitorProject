@@ -24,6 +24,7 @@ namespace DataProcessor.Localization
             [Rumble] = new[] { "Сутичка", "Rumble" },
             [Showdown] = new[] { "Поєдинок", "Showdown" },
             [Lockdown] = new[] { "Ізоляція", "Lockdown" },
+            [ScorchedTeam] = new[] { "Командне обпалення", "Scorched Team" },
             [Gambit] = new[] { "Гамбіт", "Gambit" },
             [Breakthrough] = new[] { "Прорив", "Breakthrough" },
             [BlackArmoryRun] = new[] { "Активація кузні", "Black Armory" },

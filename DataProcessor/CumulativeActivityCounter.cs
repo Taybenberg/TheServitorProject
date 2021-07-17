@@ -1,4 +1,5 @@
 ﻿using BungieNetApi.Enums;
+using System.Web;
 using static BungieNetApi.Enums.ActivityType;
 
 namespace DataProcessor
@@ -6,8 +7,24 @@ namespace DataProcessor
     class CumulativeActivityCounter
     {
         private static readonly object obj = new object();
-        
+
         public int[] Count { get; private set; } = new int[3];
+
+        public string QuickChartURL
+        {
+            get
+            {
+                var quickChartString = "{\"type\":\"outlabeledPie\",\"data\":" +
+                "{\"labels\":[\"ПвЕ\",\"ПвП\",\"ПвПвЕ\"],\"datasets\":" +
+                "[{\"backgroundColor\":[\"#f9a825\",\"#ff5722\",\"#81c784\"]," +
+                "\"data\":[" + string.Join(",", Count) + "]}]}," +
+                "\"options\":{\"plugins\":{\"legend\":false,\"outlabels\":" +
+                "{\"text\":\"%l %p\",\"color\":\"white\",\"stretch\":35," +
+                "\"font\":{\"resizable\":true,\"minSize\":16,\"maxSize\":18}}}}}";
+
+                return $"https://quickchart.io/chart?c={HttpUtility.UrlEncode(quickChartString)}";
+            }
+        }
 
         public void Add(ActivityType activityType, int count)
         {

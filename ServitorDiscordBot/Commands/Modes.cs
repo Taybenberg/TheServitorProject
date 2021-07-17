@@ -12,7 +12,7 @@ namespace ServitorDiscordBot
 
             var modes = await getStatsFactory().GetModesAsync();
 
-            builder.Description = string.Join("\n", modes.Select(x => $"**{x[0]}** | {x[1]}"));
+            builder.Description = string.Join("\n", modes.Select(x => $"{x.Item1} **{x.Item2[0]}** | {x.Item2[1]}"));
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
