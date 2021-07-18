@@ -1,13 +1,6 @@
-﻿using Database;
-using Database.ORM;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BungieNetApi.Enums;
+﻿using BungieNetApi.Enums;
 using Database;
-using DataProcessor.DiscordEmoji;
-using DataProcessor.Localization;
+using Database.ORM;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

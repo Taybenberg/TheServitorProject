@@ -15,7 +15,7 @@ namespace DataProcessor
             get
             {
                 var quickChartString = "{type:'outlabeledPie',data:{labels:['ПвЕ','ПвП','ПвПвЕ']," +
-                    "datasets:[{backgroundColor:['#7986cb','#ff7043','#81c784'],data:[" + 
+                    "datasets:[{backgroundColor:['#7986cb','#ff7043','#81c784'],data:[" +
                     string.Join(',', Count) + "]}]},options:{plugins:{'legend':false,outlabels:{text:" +
                     "'%l %p',color:'white',stretch:35,font:{resizable:true,minSize:16,maxSize:18}}}}}";
 

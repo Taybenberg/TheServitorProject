@@ -1,6 +1,6 @@
 ﻿using BungieNetApi.Enums;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using static BungieNetApi.Enums.ActivityType;
 
 namespace DataProcessor.Localization
@@ -46,7 +46,7 @@ namespace DataProcessor.Localization
                 TrialsOfOsiris
                 ).ToDictionary(x => x.Key, x => x.Value);
             }
-        } 
+        }
 
         public readonly static Dictionary<ActivityType, string[]> ActivityNames = new()
         {
