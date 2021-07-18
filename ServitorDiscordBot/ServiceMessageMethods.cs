@@ -15,6 +15,21 @@ namespace ServitorDiscordBot
             x.Name.ToLower() is "raid lead" ||
             x.Name.ToLower() is "old");
 
+        private string GetActivityCountImpression(int count, string username) =>
+            new Random().Next(10) switch
+            {
+                0 => $"Неймовірно! **{count}** активностей на рахунку {username}! Так тримати!",
+                1 => $"Оце так! **{count}** активнностей на рахунку {username}! Куди там залізним лордам до вас!",
+                2 => $"Надзвичайно! **{count}** активнностей на рахунку {username}! Та ви скажені!",
+                3 => $"Непосильно! **{count}** активнностей на рахунку {username}! Вас варто боятися!",
+                4 => $"Парадоксально! **{count}** активнностей на рахунку {username}! Марі Сов варто повернутися лишень заради того, щоб побачити вас!",
+                5 => $"Фантастика! **{count}** активнностей на рахунку {username}! Це ви вбиваєте богів? Тоді я не здивований.",
+                6 => $"Немислимо! **{count}** активнностей на рахунку {username}! Від вашого світла можна осліпнути!",
+                7 => $"Незрівнянно! **{count}** активнностей на рахунку {username}! Ви виняткові!",
+                8 => $"Непомірно! **{count}** активнностей на рахунку {username}! Ви ще не розтрощили якесь небесне тіло? Саме пора!",
+                _ => $"Нічого собі! **{count}** активностей на рахунку {username}! Авангард шокований!"
+            };
+
         private async Task<IUserMessage> GetWaitMessageAsync(IMessage message)
         {
             var command = message.Content.ToLower();

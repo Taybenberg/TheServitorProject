@@ -11,10 +11,12 @@ namespace ServitorDiscordBot
 
             var counter = await getStatsFactory().GetClanActivitiesAsync();
 
-            builder.Description = $"Нічого собі! **{counter.Count}** активностей на рахунку клану!\n\n***По типу активності:***";
+            builder.ThumbnailUrl = (message.Channel as IGuildChannel).Guild.IconUrl;
+
+            builder.Description = $"{GetActivityCountImpression(counter.Count, "клану")}\n\n***По типу активності:***";
 
             foreach (var count in counter.Modes)
-                builder.Description += $"\n{count.Emoji} **{count.Modes[0]}** | {count.Modes[1]} – ***{count.Count}***";
+                builder.Description += $"\n{count.Emoji} **{count.Modes[0]}** | {count.Modes[1]} – **{count.Count}**";
 
             builder.ImageUrl = counter.QuickChartURL;
 

@@ -19,9 +19,11 @@ namespace ServitorDiscordBot
 
             var builder = GetBuilder(MessagesEnum.MyActivities, message);
 
-            builder.Description = $"Неймовірно! **{activities.Count}** активностей на рахунку {message.Author.Mention}! Так тримати!\n" +
-                $"\n***По класах:***\n{string.Join("\n", activities.Classes.Select(x => $"{x.Emoji} **{x.Class}** – ***{x.Count}***"))}\n" +
-                $"\n***По типу активності:***\n{string.Join("\n", activities.Modes.Select(x => $"{x.Emoji} **{x.Modes[0]}** | {x.Modes[1]} – ***{x.Count}***"))}";
+            builder.ThumbnailUrl = message.Author.GetAvatarUrl();
+
+            builder.Description = $"{GetActivityCountImpression(activities.Count, message.Author.Mention)}\n" +
+                $"\n***По класах:***\n{string.Join("\n", activities.Classes.Select(x => $"{x.Emoji} **{x.Class}** – **{x.Count}**"))}\n" +
+                $"\n***По типу активності:***\n{string.Join("\n", activities.Modes.Select(x => $"{x.Emoji} **{x.Modes[0]}** | {x.Modes[1]} – **{x.Count}**"))}";
 
             builder.ImageUrl = activities.QuickChartURL;
 

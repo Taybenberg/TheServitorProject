@@ -41,7 +41,7 @@ namespace ServitorDiscordBot
                         IsInline = false,
                         Name = x.Name,
                         Value = string.Join("\n", x.Entries.Select(y => y.IsCurrUser ?
-                        $"***{y.Rank}, {y.UserName}, {y.Class}, {y.Value}***" :
+                        $"**{y.Rank}, {y.UserName}, {y.Class}, {y.Value}**" :
                         $"{y.Rank}, {y.UserName}, {y.Class}, {y.Value}"))
                     }).ToList();
                 }

@@ -19,6 +19,8 @@ namespace ServitorDiscordBot
 
             var builder = GetBuilder(MessagesEnum.MyPartners, message);
 
+            builder.ThumbnailUrl = message.Author.GetAvatarUrl();
+
             if (!activities.Partners.Any())
             {
                 builder.Color = GetColor(MessagesEnum.Error);
@@ -26,7 +28,7 @@ namespace ServitorDiscordBot
                 builder.Description = "Не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали цього року.";
             }
             else
-                builder.Description = string.Join("\n", activities.Partners.Select(x => $"**{x.UserName}** – ***{x.Count}***"));
+                builder.Description = string.Join("\n", activities.Partners.Select(x => $"**{x.UserName}** – **{x.Count}**"));
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
