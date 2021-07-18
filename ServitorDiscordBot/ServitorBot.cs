@@ -82,7 +82,7 @@ namespace ServitorDiscordBot
         private IImageFactory getImageFactory()
         {
             using var scope = _scopeFactory.CreateScope();
-            
+
             return scope.ServiceProvider.GetRequiredService<IImageFactory>();
         }
 
