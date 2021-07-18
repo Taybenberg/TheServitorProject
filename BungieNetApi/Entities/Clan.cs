@@ -81,7 +81,7 @@ namespace BungieNetApi.Entities
                             {
                                 Rank = x.rank,
                                 UserID = long.Parse(x.player.destinyUserInfo.membershipId),
-                                Class = Enum.Parse<DestinyClass>(x.player.characterClass),
+                                Class = Enum.Parse<DestinyClass>(x.player.characterClass ?? "Unknown"),
                                 Value = x.value.basic.displayValue
                             })
                         });
