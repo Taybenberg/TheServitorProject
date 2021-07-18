@@ -10,7 +10,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.ClanStats, message);
 
-            var stats = await getStatsFactory().GetClanStatsAsync(mode);
+            var stats = await getWrapperFactory().GetClanStatsAsync(mode);
 
             if (!stats.IsSuccessful)
             {

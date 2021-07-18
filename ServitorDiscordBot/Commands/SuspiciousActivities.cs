@@ -10,7 +10,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.Suspicious, message, false);
 
-            var acts = await getStatsFactory().GetSuspiciousActivitiesAsync(nigthfalls);
+            var acts = await getWrapperFactory().GetSuspiciousActivitiesAsync(nigthfalls);
 
             string sus = string.Empty;
 

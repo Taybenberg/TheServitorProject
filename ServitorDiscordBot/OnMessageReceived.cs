@@ -50,7 +50,7 @@ namespace ServitorDiscordBot
                 case string c
                 when messageCommands[MessagesEnum.Register]
                 .Contains(c):
-                    await RegisterMessageAsync(message);
+                    await ExecuteWaitMessageAsync<string>(message, TryRegisterUserAsync, arg: null);
                     break;
 
                 case string c
@@ -60,7 +60,7 @@ namespace ServitorDiscordBot
                         .Replace(messageCommands[MessagesEnum.NotRegistered]
                         .Where(x => c.IndexOf(x) == 0).First(), string.Empty)
                         .TrimStart();
-                    await TryRegisterUserAsync(message, nickname);
+                    await ExecuteWaitMessageAsync(message, TryRegisterUserAsync, nickname);
                     break;
 
                 case string c

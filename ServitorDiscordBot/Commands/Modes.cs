@@ -10,7 +10,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.Modes, message);
 
-            var modes = await getStatsFactory().GetModesAsync();
+            var modes = await getWrapperFactory().GetModesAsync();
 
             builder.Description = string.Join("\n", modes.Select(x => $"{x.Item1} **{x.Item2[0]}** | {x.Item2[1]}"));
 

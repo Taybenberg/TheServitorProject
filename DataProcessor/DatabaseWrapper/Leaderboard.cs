@@ -8,9 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace DataProcessor.DatabaseStats
+namespace DataProcessor.DatabaseWrapper
 {
-    public class Leaderboard : IStats
+    public class Leaderboard : IWrapper
     {
         public record Entry
         {

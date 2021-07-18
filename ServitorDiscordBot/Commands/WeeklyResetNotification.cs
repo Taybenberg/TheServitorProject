@@ -12,7 +12,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.Reset, null);
 
-            var milestone = await getStatsFactory().GetWeeklyMilestoneAsync();
+            var milestone = await getWrapperFactory().GetWeeklyMilestoneAsync();
 
             string additionalDescription = string.Empty;
 

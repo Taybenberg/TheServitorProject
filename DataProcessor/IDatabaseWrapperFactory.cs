@@ -1,10 +1,10 @@
-﻿using DataProcessor.DatabaseStats;
+﻿using DataProcessor.DatabaseWrapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataProcessor
 {
-    public interface IStatsFactory
+    public interface IDatabaseWrapperFactory
     {
         Task<ClanActivities> GetClanActivitiesAsync();
 
@@ -21,5 +21,9 @@ namespace DataProcessor
         Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly);
 
         Task<WeeklyMilestone> GetWeeklyMilestoneAsync();
+
+        Task<FindUserByName> GetUserWithSimilarUserNameAsync(ulong discordUserID, string discordUserName);
+
+        Task<bool> RegisterUserAsync(long userID, ulong discordUserID);
     }
 }

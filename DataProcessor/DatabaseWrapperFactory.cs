@@ -1,6 +1,6 @@
 ﻿using BungieNetApi;
 using Database;
-using DataProcessor.DatabaseStats;
+using DataProcessor.DatabaseWrapper;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DataProcessor
 {
-    public class StatsFactory : IStatsFactory
+    public class DatabaseWrapperFactory : IDatabaseWrapperFactory
     {
         private readonly IServiceScopeFactory _scopeFactory;
 
-        public StatsFactory(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
+        public DatabaseWrapperFactory(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
         public async Task<ClanActivities> GetClanActivitiesAsync()
         {
@@ -116,6 +116,28 @@ namespace DataProcessor
             await milestone.InitAsync();
 
             return milestone;
+        }
+
+        public async Task<FindUserByName> GetUserWithSimilarUserNameAsync(ulong discordUserID, string discordUserName)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            var user = new FindUserByName(clanDB, discordUserID, discordUserName);
+
+            await user.InitAsync();
+
+            return user;
+        }
+
+        public async Task<bool> RegisterUserAsync(long userID, ulong discordUserID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            return await clanDB.RegisterUserAsync(userID, discordUserID);
         }
     }
 }

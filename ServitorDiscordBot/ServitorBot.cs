@@ -1,6 +1,4 @@
-﻿using BungieNetApi;
-using Database;
-using DataProcessor;
+﻿using DataProcessor;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -81,20 +79,18 @@ namespace ServitorDiscordBot
                 _ => LogLevel.Information
             }, $"{DateTime.Now} {log.Exception?.ToString() ?? log.Message}");
 
-        private IClanDB getDatabase() =>
-            _scopeFactory.CreateScope().ServiceProvider
-                .GetRequiredService<IClanDB>();
+        private IImageFactory getImageFactory()
+        {
+            using var scope = _scopeFactory.CreateScope();
+            
+            return scope.ServiceProvider.GetRequiredService<IImageFactory>();
+        }
 
-        private IImageFactory getImageFactory() =>
-            _scopeFactory.CreateScope().ServiceProvider
-            .GetRequiredService<IImageFactory>();
+        private IDatabaseWrapperFactory getWrapperFactory()
+        {
+            using var scope = _scopeFactory.CreateScope();
 
-        private IStatsFactory getStatsFactory() =>
-             _scopeFactory.CreateScope().ServiceProvider
-            .GetRequiredService<IStatsFactory>();
-
-        private IApiClient getApiClient() =>
-            _scopeFactory.CreateScope().ServiceProvider
-            .GetRequiredService<IApiClient>();
+            return scope.ServiceProvider.GetRequiredService<IDatabaseWrapperFactory>();
+        }
     }
 }

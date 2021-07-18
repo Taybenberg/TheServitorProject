@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace DataProcessor.DatabaseStats
+namespace DataProcessor.DatabaseWrapper
 {
-    internal interface IStats
+    internal interface IWrapper
     {
         Task InitAsync();
     }

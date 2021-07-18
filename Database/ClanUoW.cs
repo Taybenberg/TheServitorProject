@@ -31,18 +31,20 @@ namespace Database
             _context.Users
             .Any(x => x.DiscordUserID == discordID);
 
-        public async Task RegisterUserAsync(long userID, ulong discordID)
+        public async Task<bool> RegisterUserAsync(long userID, ulong discordID)
         {
             var user = _context.Users.Find(userID);
 
-            if (user is not null)
-            {
-                user.DiscordUserID = discordID;
+            if (user is null)
+                return false;
 
-                _context.Users.Update(user);
+            user.DiscordUserID = discordID;
 
-                await _context.SaveChangesAsync();
-            }
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<User> GetUserByDiscordIdAsync(ulong discordID) =>
@@ -63,11 +65,6 @@ namespace Database
             .ThenInclude(a => a.Activity)
             .ThenInclude(u => u.ActivityUserStats)
             .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
-
-        public async Task<IEnumerable<User>> GetUsersByUserNameAsync(string userName) =>
-            await _context.Users
-            .Where(x => x.UserName.ToLower().Contains(userName))
-            .ToListAsync();
 
         public async Task<IEnumerable<User>> GetUsersAsync() =>
             await _context.Users

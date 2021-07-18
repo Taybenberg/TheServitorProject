@@ -61,7 +61,7 @@ namespace BotConsole
 
                     services.AddScoped<IParserFactory, ParserFactory>();
                     services.AddScoped<IImageFactory, ImageFactory>();
-                    services.AddScoped<IStatsFactory, StatsFactory>();
+                    services.AddScoped<IDatabaseWrapperFactory, DatabaseWrapperFactory>();
 
                     services.AddSingleton<ServitorBot>();
                     services.AddHostedService(p => p.GetRequiredService<ServitorBot>());

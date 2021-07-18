@@ -8,7 +8,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyPartnersAsync(IMessage message)
         {
-            var activities = await getStatsFactory().GetMyPartnersAsync(message.Author.Id);
+            var activities = await getWrapperFactory().GetMyPartnersAsync(message.Author.Id);
 
             if (!activities.IsUserRegistered)
             {

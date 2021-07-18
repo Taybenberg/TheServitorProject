@@ -9,7 +9,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.ClanActivities, message);
 
-            var counter = await getStatsFactory().GetClanActivitiesAsync();
+            var counter = await getWrapperFactory().GetClanActivitiesAsync();
 
             builder.ThumbnailUrl = (message.Channel as IGuildChannel).Guild.IconUrl;
 

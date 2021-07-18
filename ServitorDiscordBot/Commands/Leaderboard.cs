@@ -10,7 +10,7 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.Leaderboard, message);
 
-            var leaderboard = await getStatsFactory().GetLeaderboardAsync(mode, message.Author.Id);
+            var leaderboard = await getWrapperFactory().GetLeaderboardAsync(mode, message.Author.Id);
 
             if (!leaderboard.IsSuccessful)
             {

@@ -10,7 +10,8 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.NotRegistered, message);
 
-            builder.Description = "Я розумію ваш запал, але ж спершу зареєструйтеся!\nКоманда: ***реєстрація***";
+            builder.Description = "Ґардіане, спершу вас необідно ідентифікувати у базі даних Авангарду.\n" +
+                "Це здійснюється шляхом виконання процедури реєстрації.\nДля цього скористайтеся командою **реєстрація**";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
@@ -19,76 +20,65 @@ namespace ServitorDiscordBot
         {
             var builder = GetBuilder(MessagesEnum.AlreadyRegistered, message);
 
-            builder.Description = "Ґардіане, ви вже зареєстровані…";
+            builder.Description = "Ґардіане, ви вже зареєстровані, а отже перед вами розкрито весь потенціал моїх обчислювальних потужностей.\n" +
+                "Переглянути список моїх команд можна за допомогою команди **допомога**";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
-        private async Task RegisterMessageAsync(IMessage message)
+        private async Task TryRegisterUserAsync(IMessage message, string nickname = null)
         {
-            var database = getDatabase();
+            var wrapper = getWrapperFactory();
 
-            if (database.IsDiscordUserRegistered(message.Author.Id))
+            var similarUsers = await wrapper.GetUserWithSimilarUserNameAsync(message.Author.Id, nickname ?? message.Author.Username);
+
+            if (similarUsers.UserRegistered)
                 await UserAlreadyRegisteredAsync(message);
             else
             {
                 var builder = GetBuilder(MessagesEnum.Register, message);
 
-                builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**. " +
-                    $"Якщо це так, можемо продовжити.\nВведіть команду ***зареєструватися [ваш нікнейм у Steam]*** (або іншій платформі, з якої ви вступили до клану)\n" +
-                    $"Приклад команди: ***зареєструватися {message.Author.Username}***\n" +
-                    $"Регістр літер не має значення, можете написати лише фрагмент нікнейму, але він має містити достатню кількіть символів для точної ідентифікації профілю.";
+                var userSimilarity = similarUsers.UserSimilarities.FirstOrDefault();
 
-                await message.Channel.SendMessageAsync(embed: builder.Build());
-            }
-        }
-
-        private async Task TryRegisterUserAsync(IMessage message, string nickname)
-        {
-            var database = getDatabase();
-
-            if (!database.IsDiscordUserRegistered(message.Author.Id))
-            {
-                var builder = GetBuilder(MessagesEnum.Register, message);
-
-                if (nickname.Length > 0)
+                if ((nickname is not null || nickname?.Length == 0) && !similarUsers.UserSimilarities.Any())
                 {
-                    var users = (await database.GetUsersByUserNameAsync(nickname)).Where(x => x.DiscordUserID is null);
+                    builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
 
-                    if (users.Count() < 1)
+                    builder.Description = "Не вдалося знайти користувача. Уточніть, будь ласка, нікнейм тієї платформи, з якої ви вступали до клану.\n" +
+                        "Потім введіть цей нікнейм у команді **зареєструватися %нікнейм%**";
+                }
+                else if ((nickname is not null || nickname?.Length == 0) && similarUsers.UserSimilarities.Count() > 1)
+                {
+                    builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
+
+                    builder.Description = $"Уточніть, будь ласка, нікнейм, бо за цим шаблоном знайдено кілька гравців: " +
+                        $"{string.Join(", ", similarUsers.UserSimilarities.Select(x => x.UserName))}";
+                }
+                else if (userSimilarity is not null)
+                {
+                    if (await wrapper.RegisterUserAsync(userSimilarity.UserId, message.Author.Id))
                     {
-                        builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
+                        builder.Color = GetColor(MessagesEnum.RegisterSuccessful);
 
-                        builder.Description = "Не можу знайти гравця. Перевірте запит.";
-                    }
-                    else if (users.Count() > 1)
-                    {
-                        builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
-
-                        builder.Description = $"Уточніть нікнейм, бо за цим шаблоном знайдено кілька гравців: {string.Join(", ", users.Select(x => x.UserName))}";
+                        builder.Description = $"Зареєстровано {message.Author.Mention} як гравця платформи {userSimilarity.MembershipType} **{userSimilarity.UserName}**";
                     }
                     else
                     {
-                        var user = users.First();
+                        builder.Color = GetColor(MessagesEnum.Error);
 
-                        await database.RegisterUserAsync(user.UserID, message.Author.Id);
-
-                        builder.Color = GetColor(MessagesEnum.RegisterSuccessful);
-
-                        builder.Description = $"Зареєстровано {message.Author.Mention} як гравця {user.UserName}";
+                        builder.Description = $"Сталася помилка під час реєстрації. Спробуйте пізніше.";
                     }
                 }
                 else
                 {
-                    builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
-
-                    builder.Description = "Ви не написати свій нікнейм, повторіть команду, тільки цього разу допишіть свій нікнейм.";
+                    builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**.\n" +
+                        $"Введіть команду **зареєструватися %ваш нікнейм у Steam%** (або іншій платформі, з якої ви вступили до клану)\n" +
+                        $"Приклад: **зареєструватися {message.Author.Username}**\n" +
+                        $"Якщо не пам'ятаєте нікнейм повністю, не проблема, я можу знайти його за частковим збігом.";
                 }
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
-            else
-                await UserAlreadyRegisteredAsync(message);
         }
     }
 }

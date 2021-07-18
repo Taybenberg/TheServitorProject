@@ -8,9 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace DataProcessor.DatabaseStats
+namespace DataProcessor.DatabaseWrapper
 {
-    public class MyPartners : IStats
+    public class MyPartners : IWrapper
     {
         public record PartnerCounter
         {
