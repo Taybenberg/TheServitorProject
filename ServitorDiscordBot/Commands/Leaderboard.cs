@@ -33,7 +33,9 @@ namespace ServitorDiscordBot
                 else
                 {
                     if (!leaderboard.UserRegistered)
-                        builder.Description = "Зареєструйтеся (команда ***реєстрація***), щоб побачити свої позиції у дошці лідерів.";
+                        builder.Description = "Зареєструйтеся (команда ***реєстрація***), щоб отримати найкращий досвід використання команди.";
+                    else
+                        builder.ImageUrl = leaderboard.QuickChartURL;
 
                     builder.Fields = leaderboard.Stats.Select(x =>
                     new EmbedFieldBuilder

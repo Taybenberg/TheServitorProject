@@ -6,15 +6,15 @@ namespace DataProcessor.Localization
     {
         public readonly static Dictionary<string, string> StatNames = new()
         {
-            ["lbSingleGameKills"] = "Вбивств за гру",
-            ["lbPrecisionKills"] = "Прицільних вбивств",
+            ["lbSingleGameKills"] = "Убивств за гру",
+            ["lbPrecisionKills"] = "Прицільних убивств",
             ["lbAssists"] = "Ассісти",
             ["lbDeaths"] = "Смертей",
-            ["lbKills"] = "Вбивств",
+            ["lbKills"] = "Убивств",
             ["lbObjectivesCompleted"] = "Виконаних цілей",
-            ["lbMostPrecisionKills"] = "Прицільних вбивств за гру",
-            ["lbLongestKillSpree"] = "Найбільше вбивств за одне життя",
-            ["lbLongestKillDistance"] = "Найбільша дистанція вбивства",
+            ["lbMostPrecisionKills"] = "Прицільних убивств за гру",
+            ["lbLongestKillSpree"] = "Найбільше убивств за одне життя",
+            ["lbLongestKillDistance"] = "Найбільша дистанція убивства",
             ["lbFastestCompletionMs"] = "Найшвидше закриття",
             ["lbLongestSingleLife"] = "Найдовше життя",
             ["lbSingleGameScore"] = "Очок за гру"

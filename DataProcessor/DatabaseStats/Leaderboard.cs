@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DataProcessor.DatabaseStats
 {
@@ -35,6 +36,8 @@ namespace DataProcessor.DatabaseStats
         public string Emoji { get; private set; }
 
         public bool UserRegistered { get; private set; }
+
+        public string QuickChartURL { get; private set; }
 
         private string _mode;
 
@@ -127,6 +130,17 @@ namespace DataProcessor.DatabaseStats
             });
 
             Stats = stats.OrderBy(x => x.Name);
+
+            if (UserRegistered)
+            {
+                var quickChartString = "{type:'radar',data:{labels:[" + string.Join(',', Stats.Select(x => $"'{x.Name}'")) +
+                    "],datasets:[{borderColor:'#25C486',backgroundColor:'rgba(37,196,134,0.5)',pointBackgroundColor:'#25C486'," +
+                    "data:[" + string.Join(',', Stats.Select(x => 100 - x.Entries.First(y => y.IsCurrUser).Rank)) + "]}],}," +
+                    "options:{legend:{display:false},scale:{angleLines:{color:'rgba(255,255,255,0.5)'},ticks:{display:false," +
+                    "suggestedMin:0,suggestedMax:99},gridLines:{color:'rgba(255,255,255,0.5)'},pointLabels:{fontColor:'white'}}}}";
+
+                QuickChartURL = $"https://quickchart.io/chart?c={HttpUtility.UrlEncode(quickChartString)}";
+            }
         }
     }
 }

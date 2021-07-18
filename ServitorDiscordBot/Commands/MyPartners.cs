@@ -28,7 +28,11 @@ namespace ServitorDiscordBot
                 builder.Description = "Не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали цього року.";
             }
             else
+            {
                 builder.Description = string.Join("\n", activities.Partners.Select(x => $"**{x.UserName}** – **{x.Count}**"));
+
+                builder.ImageUrl = activities.QuickChartURL;
+            }
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }

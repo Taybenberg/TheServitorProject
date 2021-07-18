@@ -6,7 +6,7 @@ namespace DataProcessor
 {
     class CumulativeActivityCounter
     {
-        private static readonly object obj = new object();
+        private readonly object obj = new object();
 
         public int[] Count { get; private set; } = new int[3];
 
@@ -14,13 +14,10 @@ namespace DataProcessor
         {
             get
             {
-                var quickChartString = "{\"type\":\"outlabeledPie\",\"data\":" +
-                "{\"labels\":[\"ПвЕ\",\"ПвП\",\"ПвПвЕ\"],\"datasets\":" +
-                "[{\"backgroundColor\":[\"#f9a825\",\"#ff5722\",\"#81c784\"]," +
-                "\"data\":[" + string.Join(",", Count) + "]}]}," +
-                "\"options\":{\"plugins\":{\"legend\":false,\"outlabels\":" +
-                "{\"text\":\"%l %p\",\"color\":\"white\",\"stretch\":35," +
-                "\"font\":{\"resizable\":true,\"minSize\":16,\"maxSize\":18}}}}}";
+                var quickChartString = "{type:'outlabeledPie',data:{labels:['ПвЕ','ПвП','ПвПвЕ']," +
+                    "datasets:[{backgroundColor:['#7986cb','#ff7043','#81c784'],data:[" + 
+                    string.Join(',', Count) + "]}]},options:{plugins:{'legend':false,outlabels:{text:" +
+                    "'%l %p',color:'white',stretch:35,font:{resizable:true,minSize:16,maxSize:18}}}}}";
 
                 return $"https://quickchart.io/chart?c={HttpUtility.UrlEncode(quickChartString)}";
             }
