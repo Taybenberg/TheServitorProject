@@ -1,4 +1,5 @@
 ﻿using BungieNetApi.Enums;
+using System.Linq;
 using System.Collections.Generic;
 using static BungieNetApi.Enums.ActivityType;
 
@@ -6,41 +7,46 @@ namespace DataProcessor.Localization
 {
     public static partial class TranslationDictionaries
     {
-        public readonly static Dictionary<ActivityType, string[]> StatsActivityNames = new()
+        public static Dictionary<ActivityType, string[]> StatsActivityNames
         {
-            [Story] = new[] { "Сюжет", "Story" },
-            [Strike] = new[] { "Наліт", "Strike" },
-            [Raid] = new[] { "Рейд", "Raid" },
-            [AllPvP] = new[] { "ПвП", "PvP" },
-            [Patrol] = new[] { "Патруль", "Patrol" },
-            [AllPvE] = new[] { "ПвЕ", "PvE" },
-            [AllMayhem] = new[] { "Хаос", "Mayhem" },
-            [Supremacy] = new[] { "Панування", "Supremacy" },
-            [Survival] = new[] { "Виживання", "Survival" },
-            [Countdown] = new[] { "Зворотний відлік", "Countdown" },
-            [TrialsOfTheNine] = new[] { "Випробування Дев'яти", "Trials Of The Nine" },
-            [IronBannerControl] = new[] { "Залізний стяг", "Iron Banner" },
-            [ScoredNightfall] = new[] { "Найтфол", "Nightfall" },
-            [Rumble] = new[] { "Сутичка", "Rumble" },
-            [Showdown] = new[] { "Поєдинок", "Showdown" },
-            [Lockdown] = new[] { "Ізоляція", "Lockdown" },
-            [ScorchedTeam] = new[] { "Командне обпалення", "Scorched Team" },
-            [Gambit] = new[] { "Гамбіт", "Gambit" },
-            [Breakthrough] = new[] { "Прорив", "Breakthrough" },
-            [BlackArmoryRun] = new[] { "Активація кузні", "Black Armory" },
-            [ClashQuickplay] = new[] { "Зіткнення", "Clash" },
-            [ControlQuickplay] = new[] { "Контроль", "Control" },
-            [GambitPrime] = new[] { "Гамбіт Прайм", "Gambit Prime" },
-            [Reckoning] = new[] { "Суд", "Reckoning" },
-            [Menagerie] = new[] { "Паноптикум", "Menagerie" },
-            [VexOffensive] = new[] { "Наступ вексів", "Vex Offensive" },
-            [NightmareHunt] = new[] { "Полювання на кошмарів", "Nightmare Hunt" },
-            [Elimination] = new[] { "Ліквідація", "Elimination" },
-            [Momentum] = new[] { "Управління інерцією", "Momentum Control" },
-            [Dungeon] = new[] { "Підземелля", "Dungeon" },
-            [Sundial] = new[] { "Сонячний годинник", "Sundial" },
-            [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" }
-        };
+            get
+            {
+                return ActivityNames.Where(x => x.Key is
+                Story or
+                Strike or
+                Raid or
+                AllPvP or
+                Patrol or
+                AllPvE or
+                AllMayhem or
+                Supremacy or
+                Survival or
+                Countdown or
+                TrialsOfTheNine or
+                IronBannerControl or
+                ScoredNightfall or
+                Rumble or
+                Showdown or
+                Lockdown or
+                ScorchedTeam or
+                Gambit or
+                Breakthrough or
+                BlackArmoryRun or
+                ClashQuickplay or
+                ControlQuickplay or
+                GambitPrime or
+                Reckoning or
+                Menagerie or
+                VexOffensive or
+                NightmareHunt or
+                Elimination or
+                Momentum or
+                Dungeon or
+                Sundial or
+                TrialsOfOsiris
+                ).ToDictionary(x => x.Key, x => x.Value);
+            }
+        } 
 
         public readonly static Dictionary<ActivityType, string[]> ActivityNames = new()
         {
