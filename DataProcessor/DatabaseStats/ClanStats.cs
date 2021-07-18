@@ -46,7 +46,7 @@ namespace DataProcessor.DatabaseStats
             {
                 Name = TranslationDictionaries.StatNames[x.Stat],
                 Value = x.Value
-            });
+            }).OrderBy(x => x.Name);
         }
     }
 }

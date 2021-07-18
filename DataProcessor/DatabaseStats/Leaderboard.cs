@@ -107,7 +107,7 @@ namespace DataProcessor.DatabaseStats
                     {
                         var u = entry.Leaders.FirstOrDefault(x => x.UserID == currUser.UserID);
 
-                        if (!u.Equals(default))
+                        if (u is not null)
                             entries.Add(new Entry
                             {
                                 IsCurrUser = true,
@@ -126,7 +126,7 @@ namespace DataProcessor.DatabaseStats
                 }
             });
 
-            Stats = stats;
+            Stats = stats.OrderBy(x => x.Name);
         }
     }
 }
