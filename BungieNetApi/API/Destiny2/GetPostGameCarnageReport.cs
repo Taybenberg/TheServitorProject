@@ -26,8 +26,9 @@ namespace API.Destiny2.GetPostGameCarnageReport
         public DateTime period { get; set; }
         [IgnoreDataMember]
         public int startingPhaseIndex { get; set; }
-
+        [IgnoreDataMember]
         public Activitydetails activityDetails { get; set; }
+
         public Entry[] entries { get; set; }
 
         [IgnoreDataMember]
@@ -36,19 +37,12 @@ namespace API.Destiny2.GetPostGameCarnageReport
 
     public class Activitydetails
     {
-        [IgnoreDataMember]
         public long referenceId { get; set; }
-        [IgnoreDataMember]
         public long directorActivityHash { get; set; }
-
         public string instanceId { get; set; }
         public int mode { get; set; }
-
-        [IgnoreDataMember]
         public int[] modes { get; set; }
-        [IgnoreDataMember]
         public bool isPrivate { get; set; }
-        [IgnoreDataMember]
         public int membershipType { get; set; }
     }
 

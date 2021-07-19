@@ -42,18 +42,19 @@ namespace Database
                 Func<BungieNetApi.Entities.Activity, bool> newActivitiesFilter =
                     x => x.Period > last.Character.User.ClanJoinDate && x.Period > (last?.Activity?.Period ?? date);
 
-                var dChar = factory.GetCharacter(last.Character.CharacterID, last.Character.UserID, last.Character.User.MembershipType);
+                var rawChar = factory.GetCharacter(last.Character.CharacterID, last.Character.UserID, last.Character.User.MembershipType);
 
-                if (dChar.GetActivitiesAsync(1, 0).Result.Where(newActivitiesFilter).Any())
+                if (rawChar.GetActivitiesAsync(1, 0).Result.Where(newActivitiesFilter).Any())
                 {
                     IEnumerable<BungieNetApi.Entities.Activity> newActivitiesBuffer;
 
                     int page = 0, count = 25;
 
-                    while ((newActivitiesBuffer = dChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
+                    while ((newActivitiesBuffer = rawChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
                     {
-                        foreach (var act in newActivitiesBuffer)
-                            newActivitiesDictionary.TryAdd(act.InstanceID, act);
+                        foreach (var act in newActivitiesBuffer) 
+                            if (!newActivitiesDictionary.TryAdd(act.InstanceID, act))
+                                newActivitiesDictionary[act.InstanceID].MergeUserStats(act.UserStats);
                     }
                 }
             });
@@ -64,25 +65,29 @@ namespace Database
             {
                 int? suspicionIndex = null;
 
-                var clanmateStats = act.Value.UserStats.Where(x => userIDs.Contains(x.MembershipID));
+                var clanmateStats = act.Value.UserStats;
 
-                if (act.Value.UserStats.Count() > clanmateStats.Count() &&
-                act.Value.ActivityType switch
+                if (act.Value.ActivityType is ActivityType.TrialsOfOsiris or ActivityType.Raid or ActivityType.Dungeon or ActivityType.ScoredNightfall)
                 {
-                    ActivityType.TrialsOfOsiris or
-                    ActivityType.Raid or
-                    ActivityType.Dungeon => true,
-                    ActivityType.ScoredNightfall => clanmateStats.First().TeamScore > 100000,
-                    _ => false
-                })
-                {
-                    if (act.Value.ActivityType == ActivityType.TrialsOfOsiris)
-                        suspicionIndex = act.Value.UserStats.Select(x => x.MembershipID).Distinct().Count() - clanmateStats.Count() - 3;
-                    else
-                        suspicionIndex = act.Value.UserStats.Count() - clanmateStats.Count();
+                    var rawAct = factory.GetActivity(act.Key);
 
-                    if (suspicionIndex <= 0)
-                        suspicionIndex = null;
+                    clanmateStats = rawAct.UserStats.Where(x => userIDs.Contains(x.MembershipID));
+
+                    if (rawAct.UserStats.Count() > clanmateStats.Count())
+                    {               
+                        if (act.Value.ActivityType == ActivityType.TrialsOfOsiris)
+                            suspicionIndex = rawAct.UserStats.Select(x => x.MembershipID).Distinct().Count() - clanmateStats.Count() - 3;
+                        else if (act.Value.ActivityType == ActivityType.ScoredNightfall)
+                        {
+                            if (clanmateStats.First().TeamScore > 100000)
+                                suspicionIndex = rawAct.UserStats.Count() - clanmateStats.Count();
+                        }
+                        else
+                            suspicionIndex = rawAct.UserStats.Count() - clanmateStats.Count();
+
+                        if (suspicionIndex <= 0)
+                            suspicionIndex = null;
+                    }
                 }
 
                 newActivities.Add(new Activity

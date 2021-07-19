@@ -1,6 +1,8 @@
 ﻿using BungieNetApi.Enums;
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace BungieNetApi.Entities
 {
@@ -9,6 +11,8 @@ namespace BungieNetApi.Entities
         public long InstanceID { get; internal set; }
 
         public DateTime Period { get; internal set; }
+
+        public ActivityType ActivityType { get; internal set; }
 
         public record ActivityUserStats
         {
@@ -28,7 +32,6 @@ namespace BungieNetApi.Entities
 
         private class ActivityContainer
         {
-            public ActivityType ActivityType;
             public ActivityUserStats[] UserStats;
 
             internal ActivityContainer(BungieNetApiClient apiClient, long instanceID)
@@ -37,30 +40,13 @@ namespace BungieNetApi.Entities
 
                 if (rawActivity is not null)
                 {
-                    ActivityType = (ActivityType)rawActivity.activityDetails.mode;
-                    UserStats = new ActivityUserStats[rawActivity.entries.Length];
-
-                    for (int i = 0; i < UserStats.Length; i++)
+                    UserStats = rawActivity.entries.Select(x => new ActivityUserStats
                     {
-                        UserStats[i] = new ActivityUserStats
-                        {
-                            CharacterID = long.Parse(rawActivity.entries[i].characterId),
-                            MembershipID = long.Parse(rawActivity.entries[i].player.destinyUserInfo.membershipId),
-                            MembershipType = (MembershipType)rawActivity.entries[i].player.destinyUserInfo.membershipType,
-                            DisplayName = rawActivity.entries[i].player.destinyUserInfo.displayName,
-                            ActivityDurationSeconds = rawActivity.entries[i].values.activityDurationSeconds.basic.value,
-                            Completed = rawActivity.entries[i].values.completed.basic.value > 0,
-                            CompletionReasonValue = rawActivity.entries[i].values.completionReason.basic.value,
-                            CompletionReasonDisplayValue = rawActivity.entries[i].values.completionReason.basic.displayValue,
-                            Score = rawActivity.entries[i].values.score.basic.value,
-                            TeamScore = rawActivity.entries[i].values.teamScore.basic.value
-                        };
-
-                        (UserStats[i].StandingValue, UserStats[i].StandingDisplayValue) =
-                            (rawActivity.entries[i].values.standing is not null ?
-                            (rawActivity.entries[i].values.standing.basic.value, rawActivity.entries[i].values.standing.basic.displayValue) :
-                            (-1.0f, "Unknown"));
-                    }
+                        CharacterID = long.Parse(x.characterId),
+                        MembershipID = long.Parse(x.player.destinyUserInfo.membershipId),
+                        MembershipType = (MembershipType)x.player.destinyUserInfo.membershipType,
+                        DisplayName = x.player.destinyUserInfo.displayName,
+                    }).ToArray();
                 }
             }
         }
@@ -72,20 +58,19 @@ namespace BungieNetApi.Entities
             _container = new(() => new ActivityContainer(apiClient, InstanceID));
         }
 
-        public ActivityType ActivityType
-        {
-            get
-            {
-                return _container.Value.ActivityType;
-            }
-        }
-
+        public ConcurrentBag<ActivityUserStats> _userStats;
         public IEnumerable<ActivityUserStats> UserStats
         {
             get
             {
-                return _container.Value.UserStats;
+                return _userStats?.ToArray() ?? _container.Value.UserStats;
             }
+        }
+
+        public void MergeUserStats(IEnumerable<ActivityUserStats> stats)
+        {
+            foreach (var stat in stats)
+                _userStats.Add(stat);
         }
     }
 }

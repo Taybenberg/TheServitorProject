@@ -36,7 +36,25 @@ namespace BungieNetApi.Entities
             return rawUserActivities.Select(x => new Activity(_apiClient)
             {
                 InstanceID = long.Parse(x.activityDetails.instanceId),
-                Period = x.period
+                Period = x.period,
+                ActivityType = (ActivityType)x.activityDetails.mode,
+                _userStats = new()
+                {
+                    new Activity.ActivityUserStats
+                    {
+                        CharacterID = CharacterID,
+                        MembershipID = MembershipID,
+                        MembershipType = MembershipType,
+                        ActivityDurationSeconds = x.values.activityDurationSeconds.basic.value,
+                        Completed = x.values.completed.basic.value > 0,
+                        CompletionReasonValue = x.values.completionReason.basic.value,
+                        CompletionReasonDisplayValue = x.values.completionReason.basic.displayValue,
+                        Score = x.values.score.basic.value,
+                        TeamScore = x.values.teamScore.basic.value,
+                        StandingValue = x.values.standing?.basic.value ?? -1.0f,
+                        StandingDisplayValue = x.values.standing?.basic.displayValue ?? "Unknown"
+                    }
+                }
             });
         }
     }

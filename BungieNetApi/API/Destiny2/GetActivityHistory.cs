@@ -28,8 +28,6 @@ namespace API.Destiny2.GetActivityHistory
     {
         public DateTime period { get; set; }
         public Activitydetails activityDetails { get; set; }
-
-        [IgnoreDataMember]
         public Values values { get; set; }
     }
 
@@ -41,9 +39,8 @@ namespace API.Destiny2.GetActivityHistory
         public long directorActivityHash { get; set; }
 
         public string instanceId { get; set; }
-
-        [IgnoreDataMember]
         public int mode { get; set; }
+
         [IgnoreDataMember]
         public int[] modes { get; set; }
         [IgnoreDataMember]
@@ -54,24 +51,46 @@ namespace API.Destiny2.GetActivityHistory
 
     public class Values
     {
+        [IgnoreDataMember]
         public Assists assists { get; set; }
+
         public Score score { get; set; }
+
+        [IgnoreDataMember]
         public Kills kills { get; set; }
+        [IgnoreDataMember]
         public Averagescoreperkill averageScorePerKill { get; set; }
+        [IgnoreDataMember]
         public Deaths deaths { get; set; }
+
         public Averagescoreperlife averageScorePerLife { get; set; }
         public Completed completed { get; set; }
+
+        [IgnoreDataMember]
         public Opponentsdefeated opponentsDefeated { get; set; }
+        [IgnoreDataMember]
         public Efficiency efficiency { get; set; }
+        [IgnoreDataMember]
         public Killsdeathsratio killsDeathsRatio { get; set; }
+        [IgnoreDataMember]
         public Killsdeathsassists killsDeathsAssists { get; set; }
+
         public Activitydurationseconds activityDurationSeconds { get; set; }
+
+        [IgnoreDataMember]
         public Team team { get; set; }
+
         public Completionreason completionReason { get; set; }
+
+        [IgnoreDataMember]
         public Fireteamid fireteamId { get; set; }
+        [IgnoreDataMember]
         public Startseconds startSeconds { get; set; }
+        [IgnoreDataMember]
         public Timeplayedseconds timePlayedSeconds { get; set; }
+        [IgnoreDataMember]
         public Playercount playerCount { get; set; }
+
         public Teamscore teamScore { get; set; }
         public Standing standing { get; set; }
     }
