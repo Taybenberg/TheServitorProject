@@ -52,7 +52,7 @@ namespace Database
 
                     while ((newActivitiesBuffer = rawChar.GetActivitiesAsync(count, page++).Result.Where(newActivitiesFilter)).Any())
                     {
-                        foreach (var act in newActivitiesBuffer) 
+                        foreach (var act in newActivitiesBuffer)
                             if (!newActivitiesDictionary.TryAdd(act.InstanceID, act))
                                 newActivitiesDictionary[act.InstanceID].MergeUserStats(act.UserStats);
                     }
@@ -74,7 +74,7 @@ namespace Database
                     clanmateStats = rawAct.UserStats.Where(x => userIDs.Contains(x.MembershipID));
 
                     if (rawAct.UserStats.Count() > clanmateStats.Count())
-                    {               
+                    {
                         if (act.Value.ActivityType == ActivityType.TrialsOfOsiris)
                             suspicionIndex = rawAct.UserStats.Select(x => x.MembershipID).Distinct().Count() - clanmateStats.Count() - 3;
                         else if (act.Value.ActivityType == ActivityType.ScoredNightfall)

@@ -1,8 +1,8 @@
 ﻿using BungieNetApi.Enums;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BungieNetApi.Entities
 {
