@@ -38,6 +38,8 @@ namespace BungieNetApi.Entities
                 InstanceID = long.Parse(x.activityDetails.instanceId),
                 Period = x.period,
                 ActivityType = (ActivityType)x.activityDetails.mode,
+                ReferenceID = x.activityDetails.referenceId,
+                DirectorActivityHash = x.activityDetails.directorActivityHash,
                 _userStats = new()
                 {
                     new Activity.ActivityUserStats

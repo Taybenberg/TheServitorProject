@@ -14,6 +14,10 @@ namespace BungieNetApi.Entities
 
         public ActivityType ActivityType { get; internal set; }
 
+        public long ReferenceID { get; internal set; }
+
+        public long DirectorActivityHash { get; internal set; }
+
         public record ActivityUserStats
         {
             public long CharacterID { get; internal set; }

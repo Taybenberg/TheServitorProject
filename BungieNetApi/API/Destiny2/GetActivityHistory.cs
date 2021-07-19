@@ -33,11 +33,8 @@ namespace API.Destiny2.GetActivityHistory
 
     public class Activitydetails
     {
-        [IgnoreDataMember]
         public long referenceId { get; set; }
-        [IgnoreDataMember]
         public long directorActivityHash { get; set; }
-
         public string instanceId { get; set; }
         public int mode { get; set; }
 

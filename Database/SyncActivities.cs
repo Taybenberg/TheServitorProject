@@ -96,6 +96,8 @@ namespace Database
                     Period = act.Value.Period,
                     ActivityType = act.Value.ActivityType,
                     SuspicionIndex = suspicionIndex,
+                    ReferenceHash = act.Value.ReferenceID,
+                    ActivityHash = act.Value.DirectorActivityHash,
                     ActivityUserStats = clanmateStats
                     .Where(x => charIDs.Contains(x.CharacterID)).Select(y =>
                     new ActivityUserStats

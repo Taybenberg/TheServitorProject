@@ -18,5 +18,9 @@ namespace Database.ORM
         public ICollection<ActivityUserStats> ActivityUserStats { get; set; }
 
         public int? SuspicionIndex { get; set; }
+
+        public long? ReferenceHash { get; set; }
+
+        public long? ActivityHash { get; set; }
     }
 }
