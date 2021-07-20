@@ -30,7 +30,7 @@ namespace DataProcessor.DatabaseWrapper
 
         public IEnumerable<Activity> Activities { get; private set; }
 
-        private bool _isNightfallsOnly;
+        private readonly bool _isNightfallsOnly;
 
         private readonly IApiClient _apiClient;
 

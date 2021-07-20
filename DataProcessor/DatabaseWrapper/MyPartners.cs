@@ -24,7 +24,7 @@ namespace DataProcessor.DatabaseWrapper
 
         public IEnumerable<PartnerCounter> Partners { get; private set; }
 
-        private ulong _userID;
+        private readonly ulong _userID;
 
         private readonly IClanDB _clanDB;
 

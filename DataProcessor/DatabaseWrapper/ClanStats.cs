@@ -23,7 +23,7 @@ namespace DataProcessor.DatabaseWrapper
 
         public IEnumerable<Stat> Stats { get; private set; }
 
-        private string _mode;
+        private readonly string _mode;
 
         private readonly IApiClient _apiClient;
 

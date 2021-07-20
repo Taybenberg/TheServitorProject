@@ -39,9 +39,9 @@ namespace DataProcessor.DatabaseWrapper
 
         public string QuickChartURL { get; private set; }
 
-        private string _mode;
+        private readonly string _mode;
 
-        private ulong _userID;
+        private readonly ulong _userID;
 
         private readonly IApiClient _apiClient;
 
