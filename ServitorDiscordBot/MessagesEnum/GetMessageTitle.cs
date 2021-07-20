@@ -11,6 +11,7 @@ namespace ServitorDiscordBot
             Wait => EmojiContainer.Loading,
             Leaderboard => $"БЕТА | Дошка лідерів",
             ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
+            MyRaids => $"Рейди {message.Author.Username}",
             MyActivities => $"Активності {message.Author.Username}",
             MyPartners => $"Побратими {message.Author.Username}",
             ClanActivities => $"Активності клану {(message.Channel as IGuildChannel).Guild.Name}",

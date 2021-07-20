@@ -1,4 +1,5 @@
 ﻿using Database.ORM;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@ namespace Database
         Task<User> GetUserWithActivitiesAsync(ulong discordID);
 
         Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID);
+
+        Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate);
 
         Task<IEnumerable<User>> GetUsersAsync();
 

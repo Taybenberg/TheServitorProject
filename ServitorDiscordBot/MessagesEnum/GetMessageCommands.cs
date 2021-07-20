@@ -14,6 +14,7 @@ namespace ServitorDiscordBot
             [Resources] = new string[] { "ресурси", "resources" },
             [Modes] = new string[] { "режими", "modes" },
             [ClanActivities] = new string[] { "кланові активності", "clan activities" },
+            [MyRaids] = new string[] { "мої рейди", "my raids" },
             [MyActivities] = new string[] { "мої активності", "my activities" },
             [MyPartners] = new string[] { "мої побратими", "my partners" },
             [Register] = new string[] { "реєстрація", "registration" },
@@ -24,7 +25,7 @@ namespace ServitorDiscordBot
             [Eververse] = new string[] { "еверверс", "eververse" },
             [NotRegistered] = new string[] { "зареєструватися", "register" },
             [ClanStats] = new string[] { "статистика клану", "clan stats" },
-            [Leaderboard] = new string[] { "дошка лідерів", "leaderboard" }
+            [Leaderboard] = new string[] { "дошка лідерів", "leaderboard" },
         };
     }
 }

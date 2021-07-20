@@ -49,6 +49,7 @@ namespace Database
 
         public async Task<User> GetUserByDiscordIdAsync(ulong discordID) =>
             await _context.Users
+            .Include(c => c.Characters)
             .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
         public async Task<User> GetUserWithActivitiesAsync(ulong discordID) =>
@@ -65,6 +66,13 @@ namespace Database
             .ThenInclude(a => a.Activity)
             .ThenInclude(u => u.ActivityUserStats)
             .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
+
+        public async Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate) =>
+            await _context.Activities
+            .Include(s => s.ActivityUserStats)
+            .Where(x => x.Period > afterDate && x.ActivityType == ActivityType.Raid &&
+            x.ActivityUserStats.Any(y => y.Character.User.DiscordUserID == discordID))
+            .ToListAsync();
 
         public async Task<IEnumerable<User>> GetUsersAsync() =>
             await _context.Users

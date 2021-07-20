@@ -114,6 +114,12 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
+                when messageCommands[MessagesEnum.MyRaids]
+                .Contains(c):
+                    await ExecuteWaitMessageAsync(message, GetMyRaidsAsync);
+                    break;
+
+                case string c
                 when messageCommands[MessagesEnum.MyActivities]
                 .Contains(c):
                     await ExecuteWaitMessageAsync(message, GetMyActivitiesAsync);

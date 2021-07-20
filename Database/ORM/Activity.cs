@@ -19,8 +19,8 @@ namespace Database.ORM
 
         public int? SuspicionIndex { get; set; }
 
-        public long? ReferenceHash { get; set; }
+        public long ReferenceHash { get; set; }
 
-        public long? ActivityHash { get; set; }
+        public long ActivityHash { get; set; }
     }
 }

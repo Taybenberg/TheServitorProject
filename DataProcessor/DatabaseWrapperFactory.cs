@@ -4,6 +4,7 @@ using DataProcessor.DatabaseWrapper;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -138,6 +139,19 @@ namespace DataProcessor
             IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
 
             return await clanDB.RegisterUserAsync(userID, discordUserID);
+        }
+
+        public async Task<MyRaids> GetMyRaidsAsync(ulong discordUserID, DateTime seasonStart, int weekNumber)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            var raids = new MyRaids(clanDB, discordUserID, seasonStart, weekNumber);
+
+            await raids.InitAsync();
+
+            return raids;
         }
     }
 }

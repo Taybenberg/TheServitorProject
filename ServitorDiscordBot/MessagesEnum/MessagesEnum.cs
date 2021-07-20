@@ -28,6 +28,7 @@
         Osiris,
         Reset,
         ClanStats,
-        Leaderboard
+        Leaderboard,
+        MyRaids
     }
 }

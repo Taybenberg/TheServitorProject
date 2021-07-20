@@ -1,4 +1,5 @@
 ﻿using DataProcessor.DatabaseWrapper;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,5 +26,7 @@ namespace DataProcessor
         Task<FindUserByName> GetUserWithSimilarUserNameAsync(ulong discordUserID, string discordUserName);
 
         Task<bool> RegisterUserAsync(long userID, ulong discordUserID);
+
+        Task<MyRaids> GetMyRaidsAsync(ulong discordUserID, DateTime seasonStart, int weekNumber);
     }
 }
