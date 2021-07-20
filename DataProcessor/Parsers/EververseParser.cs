@@ -95,7 +95,7 @@ namespace DataProcessor.Parsers
                     m.DrawText(inventory.Week, font, Color.White, new Point(212, 12));
 
                     m.DrawText
-                        ($"{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}", 
+                        ($"{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}",
                         font, Color.White, new Point(212, 73));
 
                     image.Mutate(m => m.DrawImage(icon, new Point(0, 0), 1));
