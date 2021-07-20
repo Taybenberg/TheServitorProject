@@ -15,9 +15,9 @@ namespace ServitorDiscordBot
 
             IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
 
-            var builder = GetBuilder(MessagesEnum.BumpNotification, null);
+            var builder = GetBuilder(MessagesEnum.BumpNotification, null, false);
 
-            builder.Description = "Саме час **!bump**-нути :alarm_clock:";
+            builder.Description = "Саме час **!bump**-нути :fire:";
 
             if (users.Count > 0)
             {
