@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DataProcessor.Parsers.Inventory
 {
@@ -6,7 +7,9 @@ namespace DataProcessor.Parsers.Inventory
     {
         public string Week { get; set; }
 
-        public string Season { get; set; }
+        public DateTime WeekBegin { get; set; }
+
+        public DateTime WeekEnd { get; set; }
 
         public string SeasonIconURL { get; set; }
 

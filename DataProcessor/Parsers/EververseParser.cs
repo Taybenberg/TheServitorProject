@@ -24,8 +24,10 @@ namespace DataProcessor.Parsers
         {
             var inventory = new EververseInventory();
 
-            inventory.Week = $"{_seasonStart.AddDays((_weekNumber - 1) * 7).ToString("dd.MM.yyyy")} – Тиждень {_weekNumber}";
-            inventory.Season = $"Сезон \"{_seasonName}\"";
+            inventory.WeekBegin = _seasonStart.AddDays((_weekNumber - 1) * 7).ToLocalTime();
+            inventory.WeekEnd = inventory.WeekBegin.AddDays(7);
+
+            inventory.Week = $"Тиждень {_weekNumber}. Сезон \"{_seasonName}\"";
 
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
             var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{_weekNumber}]");
@@ -92,7 +94,9 @@ namespace DataProcessor.Parsers
                 {
                     m.DrawText(inventory.Week, font, Color.White, new Point(212, 12));
 
-                    m.DrawText(inventory.Season, font, Color.White, new Point(212, 73));
+                    m.DrawText
+                        ($"{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}", 
+                        font, Color.White, new Point(212, 73));
 
                     image.Mutate(m => m.DrawImage(icon, new Point(0, 0), 1));
                 });
