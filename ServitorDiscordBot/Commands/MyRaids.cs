@@ -21,8 +21,6 @@ namespace ServitorDiscordBot
 
             builder.ThumbnailUrl = message.Author.GetAvatarUrl();
 
-            builder.ImageUrl = raids.QuickChartURL;
-
             builder.Description = "Закриття за поточний тиждень:";
 
             builder.Fields = raids.Classes.Select(x => new EmbedFieldBuilder

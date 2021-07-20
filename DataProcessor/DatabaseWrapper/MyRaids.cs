@@ -3,11 +3,9 @@ using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using DataProcessor.RaidManager;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace DataProcessor.DatabaseWrapper
 {
@@ -30,8 +28,6 @@ namespace DataProcessor.DatabaseWrapper
 
         public IEnumerable<ClassContainer> Classes { get; private set; }
 
-        public string QuickChartURL { get; private set; }
-
         private readonly DateTime _seasonStart;
 
         private readonly int _weekNumber;
@@ -52,19 +48,13 @@ namespace DataProcessor.DatabaseWrapper
 
             var raids = await _clanDB.GetUserRaidsAsync(_userID, _seasonStart.AddDays((_weekNumber - 1) * 7).ToLocalTime());
 
-            int[] classes = new int[3];
-
-            ConcurrentBag<ClassContainer> containers = new();
-
-            Parallel.ForEach(user.Characters, (c) =>
+            Classes = user.Characters.Select(c =>
             {
                 var charRaids = raids.Where(x => x.ActivityUserStats.Any(y => y.Completed && y.CharacterID == c.CharacterID));
 
                 var types = charRaids.OrderBy(x => x.Period).Select(x => Raid.GetRaidType(x.ReferenceHash)).Distinct();
 
-                classes[(int)c.Class] = types.Count();
-
-                containers.Add(new ClassContainer
+                return new ClassContainer
                 {
                     Emoji = EmojiContainer.GetClassEmoji(c.Class),
                     Class = TranslationDictionaries.ClassNames[c.Class],
@@ -73,17 +63,8 @@ namespace DataProcessor.DatabaseWrapper
                         Emoji = EmojiContainer.GetRaidEmoji(t),
                         Name = TranslationDictionaries.RaidTypes[t]
                     })
-                });
-            });
-
-            Classes = containers.OrderByDescending(x => x.Raids.Count());
-
-            var quickChartString = "{type:'polarArea',data:{datasets:[{data:[" +
-                string.Join(',', classes) + "],backgroundColor:['#D81B60','#1976D2'," +
-                "'#FFC400'],},],labels:['Титан','Мисливець','Варлок'],},options:" +
-                "{legend:{labels:{fontColor:'white'}},scale:{display:false}}}";
-
-            QuickChartURL = $"https://quickchart.io/chart?c={HttpUtility.UrlEncode(quickChartString)}";
+                };
+            }).OrderByDescending(x => x.Raids.Count());
         }
     }
 }
