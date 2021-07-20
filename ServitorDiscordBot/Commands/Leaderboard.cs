@@ -16,7 +16,7 @@ namespace ServitorDiscordBot
             {
                 builder.Color = GetColor(MessagesEnum.Error);
 
-                builder.Description = "Ви вказали хибний тип активності.\nЩоб переглянути список типів активностей, введіть команду ***режими***.";
+                builder.Description = "Ви вказали хибний тип активності.\nЩоб переглянути список типів активностей, введіть команду **режими**.";
             }
             else
             {
@@ -33,7 +33,7 @@ namespace ServitorDiscordBot
                 else
                 {
                     if (!leaderboard.UserRegistered)
-                        builder.Description = "Зареєструйтеся (команда ***реєстрація***), щоб отримати найкращий досвід використання команди.";
+                        builder.Description = "Зареєструйтеся (команда **реєстрація**), щоб отримати найкращий досвід використання команди.";
                     else
                         builder.ImageUrl = leaderboard.QuickChartURL;
 

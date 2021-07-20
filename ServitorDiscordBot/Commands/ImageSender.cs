@@ -13,7 +13,7 @@ namespace ServitorDiscordBot
             int.TryParse(week, out currWeek);
 
             if (currWeek < 1 || currWeek > 15)
-                currWeek = (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+                currWeek = GetWeekNumber();
 
             using var inventory = await getImageFactory().GetEververseAsync(_seasonName, _seasonStart, currWeek);
 

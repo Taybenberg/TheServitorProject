@@ -16,7 +16,7 @@ namespace ServitorDiscordBot
             {
                 builder.Color = GetColor(MessagesEnum.Error);
 
-                builder.Description = "Ви вказали хибний тип активності.\nЩоб переглянути список типів активностей, введіть команду ***режими***.";
+                builder.Description = "Ви вказали хибний тип активності.\nЩоб переглянути список типів активностей, введіть команду **режими**.";
             }
             else
             {

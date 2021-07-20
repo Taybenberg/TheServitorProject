@@ -8,6 +8,9 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private int GetWeekNumber() => 
+            (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+
         private bool CheckModerationRole(IUser user) =>
             ((SocketGuildUser)user).Roles.Any(x =>
             x.Name.ToLower() is "administrator" ||

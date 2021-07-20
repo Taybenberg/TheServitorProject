@@ -18,7 +18,7 @@ namespace ServitorDiscordBot
             Suspicious => $"Останні активності",
             Help => $"Допомога",
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
-            Reset => $"Тиждень {(int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1}",
+            Reset => $"Тиждень {GetWeekNumber()}",
             Xur => $"Зур привіз свіжий крам",
             Bip => $"біп…",
             Modes => $"Режими",
