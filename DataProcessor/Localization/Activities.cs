@@ -104,7 +104,7 @@ namespace DataProcessor.Localization
             [Showdown] = new[] { "Поєдинок", "Showdown" },
             [Lockdown] = new[] { "Ізоляція", "Lockdown" },
             [Scorched] = new[] { "Обпалення", "Scorched" },
-            [ScorchedTeam] = new[] { "Командне обпалення", "Scorched Team" },
+            [ScorchedTeam] = new[] { "Командне обпалення", "Team Scorched" },
             [Gambit] = new[] { "Гамбіт", "Gambit" },
             [AllPvECompetitive] = new[] { "ПвЕ змагальне", "PvE Competitive" },
             [Breakthrough] = new[] { "Прорив", "Breakthrough" },
