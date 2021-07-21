@@ -15,6 +15,7 @@ namespace ServitorDiscordBot
             Help => new Color(0xbe5bef),
             Modes => new Color(0xe4e65e),
             ClanActivities => new Color(0xffb95a),
+            MyGrandmasters => new Color(0xd81b60),
             MyRaids => new Color(0xa4c9fc),
             MyActivities => new Color(0xfacc3f),
             MyPartners => new Color(0xb4a647),

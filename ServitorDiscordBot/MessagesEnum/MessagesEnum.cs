@@ -19,6 +19,8 @@
         ClanActivities,
         MyActivities,
         MyPartners,
+        MyRaids,
+        MyGrandmasters,
         NotRegistered,
         AlreadyRegistered,
         Register,
@@ -28,7 +30,6 @@
         Osiris,
         Reset,
         ClanStats,
-        Leaderboard,
-        MyRaids
+        Leaderboard
     }
 }

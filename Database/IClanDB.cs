@@ -21,6 +21,8 @@ namespace Database
 
         Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID);
 
+        Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID);
+
         Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate);
 
         Task<IEnumerable<User>> GetUsersAsync();

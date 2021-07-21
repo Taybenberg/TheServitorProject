@@ -28,5 +28,7 @@ namespace DataProcessor
         Task<bool> RegisterUserAsync(long userID, ulong discordUserID);
 
         Task<MyRaids> GetMyRaidsAsync(ulong discordUserID, DateTime seasonStart, int weekNumber);
+
+        Task<MyGrandmasters> GetMyGrandmastersAsync(ulong discordUserID, DateTime seasonStart);
     }
 }

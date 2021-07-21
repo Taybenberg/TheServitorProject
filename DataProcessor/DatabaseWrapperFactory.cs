@@ -153,5 +153,18 @@ namespace DataProcessor
 
             return raids;
         }
+
+        public async Task<MyGrandmasters> GetMyGrandmastersAsync(ulong discordUserID, DateTime seasonStart)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
+            var nfs = new MyGrandmasters(clanDB, discordUserID, seasonStart);
+
+            await nfs.InitAsync();
+
+            return nfs;
+        }
     }
 }

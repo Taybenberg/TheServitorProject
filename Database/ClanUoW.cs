@@ -67,6 +67,13 @@ namespace Database
             .ThenInclude(u => u.ActivityUserStats)
             .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
+        public async Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID) =>
+            await _context.Activities
+            .Include(s => s.ActivityUserStats)
+            .Where(x => x.ActivityType == ActivityType.ScoredNightfall &&
+            x.ActivityUserStats.Any(y => y.Completed && y.Character.User.DiscordUserID == discordID))
+            .ToListAsync();
+
         public async Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate) =>
             await _context.Activities
             .Include(s => s.ActivityUserStats)
