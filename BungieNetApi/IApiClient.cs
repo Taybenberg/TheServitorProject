@@ -10,6 +10,8 @@ namespace BungieNetApi
 
         Clan Clan { get; }
 
+        Task<Nightfall> GetNightfallAsync(long activityHash);
+
         Task<Milestone> GetMilestonesAsync();
 
         Task<IEnumerable<Item>> GetXurItemsAsync();

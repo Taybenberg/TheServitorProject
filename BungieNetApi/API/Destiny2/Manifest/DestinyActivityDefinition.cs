@@ -24,9 +24,8 @@ namespace API.Destiny2.Manifest.DestinyActivityDefinition
         public Displayproperties displayProperties { get; set; }
 
         public Originaldisplayproperties originalDisplayProperties { get; set; }
-
-        [IgnoreDataMember]
         public Selectionscreendisplayproperties selectionScreenDisplayProperties { get; set; }
+
         [IgnoreDataMember]
         public string releaseIcon { get; set; }
         [IgnoreDataMember]
@@ -111,8 +110,12 @@ namespace API.Destiny2.Manifest.DestinyActivityDefinition
 
     public class Selectionscreendisplayproperties
     {
+        [IgnoreDataMember]
         public string description { get; set; }
+
         public string name { get; set; }
+
+        [IgnoreDataMember]
         public bool hasIcon { get; set; }
     }
 

@@ -36,6 +36,19 @@ namespace BungieNetApi
             }
         }
 
+        public async Task<Nightfall> GetNightfallAsync(long activityHash)
+        {
+            var nf = new Nightfall();
+
+            var nightfall = await _bungieNetApiClient.getRawActivityDefinitionAsync(activityHash);
+
+            nf.Name = nightfall.originalDisplayProperties.description;
+            nf.Type = nightfall.selectionScreenDisplayProperties.name;
+            nf.Image = BungieNetApiClient.BUNGIE_NET_URL.AppendPathSegment(nightfall.pgcrImage);
+
+            return nf;
+        }
+
         public async Task<Milestone> GetMilestonesAsync()
         {
             var milestone = new Milestone();
