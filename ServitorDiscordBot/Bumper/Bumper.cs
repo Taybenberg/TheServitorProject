@@ -12,13 +12,13 @@ namespace ServitorDiscordBot
 {
     class Bumper : IDisposable
     {
-        const int bumpPreIntervalMs = 10000;
+        const int bumpPreIntervalMs = 20000;
 
         public event Func<Dictionary<string, DateTime>, Task> Notify;
 
         class Bump
         {
-            const int userBumpCooldownHours = 12;
+            const int userBumpCooldownHours = 24;
             const int bumpCooldownHours = 4;
 
             public ConcurrentDictionary<string, DateTime> bumpList { get; set; } = new();
