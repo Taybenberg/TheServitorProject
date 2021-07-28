@@ -50,6 +50,14 @@ namespace BungieNetApi.Entities
                         MembershipID = long.Parse(x.player.destinyUserInfo.membershipId),
                         MembershipType = (MembershipType)x.player.destinyUserInfo.membershipType,
                         DisplayName = x.player.destinyUserInfo.displayName,
+                        ActivityDurationSeconds = x.values.activityDurationSeconds.basic.value,
+                        Completed = x.values.completed.basic.value > 0,
+                        CompletionReasonValue = x.values.completionReason.basic.value,
+                        CompletionReasonDisplayValue = x.values.completionReason.basic.displayValue,
+                        Score = x.values.score.basic.value,
+                        TeamScore = x.values.teamScore.basic.value,
+                        StandingValue = x.values.standing?.basic.value ?? -1.0f,
+                        StandingDisplayValue = x.values.standing?.basic.displayValue ?? "Unknown"
                     }).ToArray();
                 }
             }
