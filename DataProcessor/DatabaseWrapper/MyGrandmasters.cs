@@ -1,4 +1,5 @@
 ﻿using Database;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,10 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly IClanDB _clanDB;
 
-        internal MyGrandmasters(IClanDB clanDB, ulong discordUserID, DateTime seasonStart) =>
-            (_clanDB, _userID, _seasonStart) = (clanDB, discordUserID, seasonStart);
+        private readonly IDictionary<string, string> _GMs;
+
+        internal MyGrandmasters(IClanDB clanDB, ulong discordUserID, DateTime seasonStart, IConfiguration configuration) =>
+            (_clanDB, _userID, _seasonStart, _GMs) = (clanDB, discordUserID, seasonStart, configuration.GetSection("Destiny2:Grandmasters").Get<IDictionary<string, string>>());
 
         public async Task InitAsync()
         {
@@ -32,29 +35,11 @@ namespace DataProcessor.DatabaseWrapper
 
             var nightfalls = await _clanDB.GetUserNightfallsAsync(_userID);
 
-            var gms = nightfalls.Where(x => getGMname(x.ReferenceHash) is not null).OrderByDescending(x => x.Period);
+            var gms = nightfalls.Where(x => _GMs.ContainsKey(x.ReferenceHash.ToString())).OrderByDescending(x => x.Period);
 
-            Seasonal = gms.Where(x => x.Period > _seasonStart).Select(x => getGMname(x.ReferenceHash)).Distinct();
+            Seasonal = gms.Where(x => x.Period > _seasonStart).Select(x => _GMs[x.ReferenceHash.ToString()]).Distinct();
 
-            AllTime = gms.Select(x => getGMname(x.ReferenceHash)).Distinct();
+            AllTime = gms.Select(x => _GMs[x.ReferenceHash.ToString()]).Distinct();
         }
-
-        private string getGMname(long hash) =>
-            hash switch
-            {
-                3812135451 => "The Glassway",
-                2136458560 => "The Disgraced",
-                265186825 => "Broodhold",
-                2599001919 => "The Inverted Spire",
-                1495545956 => "The Scarlet Keep",
-                3233498454 => "Exodus Crash",
-                1203950592 => "The Devils' Lair",
-                1753547901 => "The Arms Dealer",
-                2103025315 => "Proving Grounds",
-                3293630132 => "Fallen S.A.B.E.R.",
-                3029388704 => "The Insight Terminus",
-                557845334 => "Warden of Nothing",
-                _ => null
-            };
     }
 }

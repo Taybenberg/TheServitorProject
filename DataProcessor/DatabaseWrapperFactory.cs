@@ -3,6 +3,7 @@ using Database;
 using DataProcessor.DatabaseWrapper;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -160,7 +161,9 @@ namespace DataProcessor
 
             IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
 
-            var nfs = new MyGrandmasters(clanDB, discordUserID, seasonStart);
+            IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+            var nfs = new MyGrandmasters(clanDB, discordUserID, seasonStart, configuration);
 
             await nfs.InitAsync();
 

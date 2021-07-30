@@ -1,6 +1,7 @@
 ﻿using BungieNetApi.Enums;
 using Database.ORM;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,18 +15,14 @@ namespace Database
     {
         private readonly ILogger _logger;
 
+        private readonly IConfiguration _configuration;
+
         private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly ClanContext _context;
 
-        public ClanUoW(ILogger<ClanUoW> logger, IServiceScopeFactory scopeFactory, ClanContext context)
-        {
-            _logger = logger;
-
-            _scopeFactory = scopeFactory;
-
-            _context = context;
-        }
+        public ClanUoW(IConfiguration configuration, ILogger<ClanUoW> logger, IServiceScopeFactory scopeFactory, ClanContext context) =>
+            (_configuration, _logger, _scopeFactory, _context) = (configuration, logger, scopeFactory, context);
 
         public bool IsDiscordUserRegistered(ulong discordID) =>
             _context.Users

@@ -2,6 +2,7 @@
 using BungieNetApi.Enums;
 using Database.ORM;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -59,6 +60,8 @@ namespace Database
                 }
             });
 
+            var nfIDs = _configuration.GetSection("Destiny2:NoMatchmakingNightfalls").Get<HashSet<long>>();
+
             ConcurrentBag<Activity> newActivities = new();
 
             Parallel.ForEach(newActivitiesDictionary, (act) =>
@@ -79,7 +82,7 @@ namespace Database
                             suspicionIndex = rawAct.UserStats.Select(x => x.MembershipID).Distinct().Count() - clanmateStats.Count() - 3;
                         else if (act.Value.ActivityType == ActivityType.ScoredNightfall)
                         {
-                            if (clanmateStats.First().TeamScore > 100000)
+                            if (nfIDs.Contains(act.Value.ReferenceID) || clanmateStats.First().TeamScore > 150000)
                                 suspicionIndex = rawAct.UserStats.Count() - clanmateStats.Count();
                         }
                         else
