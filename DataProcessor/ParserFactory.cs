@@ -12,6 +12,9 @@ namespace DataProcessor
 
         public ParserFactory(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
+        public IInventoryParser<(LostSectorsInventory, ResourcesInventory)> GetDailyResetParser(string seasonName, int weekNumber) =>
+            new DailyResetParser(seasonName, weekNumber);
+
         public IInventoryParser<EververseInventory> GetEververseParser(string seasonName, DateTime seasonStart, int weekNumber) =>
             new EververseParser(seasonName, seasonStart, weekNumber);
 

@@ -6,6 +6,8 @@ namespace DataProcessor
 {
     public interface IParserFactory
     {
+        IInventoryParser<(LostSectorsInventory, ResourcesInventory)> GetDailyResetParser(string seasonName, int weekNumber);
+
         IInventoryParser<EververseInventory> GetEververseParser(string seasonName, DateTime seasonStart, int weekNumber);
 
         IInventoryParser<LostSectorsInventory> GetLostSectorsParser();

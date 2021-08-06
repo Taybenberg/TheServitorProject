@@ -99,7 +99,7 @@ namespace DataProcessor.Parsers
 
             foreach (var item in inventory.SpiderResources)
             {
-                await drawItemAsync(item, loader, image, font, x, y);
+                await DrawItemAsync(item, loader, image, font, x, y);
 
                 y += 135;
             }
@@ -112,7 +112,7 @@ namespace DataProcessor.Parsers
 
                 foreach (var item in itemList)
                 {
-                    await drawItemAsync(item, loader, image, font, x, y);
+                    await DrawItemAsync(item, loader, image, font, x, y);
 
                     x += 433;
                 }
@@ -129,7 +129,7 @@ namespace DataProcessor.Parsers
             return ms;
         }
 
-        private async Task drawItemAsync(ResourceItem item, ImageLoader loader, Image image, Font font, int x, int y)
+        internal static async Task DrawItemAsync(ResourceItem item, ImageLoader loader, Image image, Font font, int x, int y)
         {
             using Image currencyIcon = await loader.GetImageAsync(item.ResourceCurrencyIconURL);
 

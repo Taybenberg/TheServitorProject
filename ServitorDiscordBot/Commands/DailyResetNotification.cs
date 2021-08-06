@@ -11,17 +11,9 @@ namespace ServitorDiscordBot
         {
             _logger.LogInformation($"{DateTime.Now} Daily reset");
 
-            var builder = GetBuilder(MessagesEnum.Reset, null);
-
-            builder.Description = "Відбувся денний ресет";
-
             var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
-            await channel.SendMessageAsync(embed: builder.Build());
-
-            await GetLostSectorsLootAsync(channel);
-
-            await GetResourcesPoolAsync(channel);
+            await GetDailyResetAsync(channel);
 
             await GetRoadmapAsync(channel);
         }

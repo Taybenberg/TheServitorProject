@@ -6,6 +6,13 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private async Task GetDailyResetAsync(IMessageChannel channel)
+        {
+            using var reset = await getImageFactory().GetDailyResetAsync(_seasonName, GetWeekNumber());
+
+            await channel.SendFileAsync(reset, "DailyReset.png");
+        }
+
         private async Task GetEververseInventoryAsync(IMessageChannel channel, string week = null)
         {
             int currWeek = 0;

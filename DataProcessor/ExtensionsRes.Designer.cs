@@ -63,6 +63,16 @@ namespace DataProcessor {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] DailyResetBackground {
+            get {
+                object obj = ResourceManager.GetObject("DailyResetBackground", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] EververseItemsBackground {
             get {
                 object obj = ResourceManager.GetObject("EververseItemsBackground", resourceCulture);

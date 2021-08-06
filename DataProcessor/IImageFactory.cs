@@ -6,6 +6,8 @@ namespace DataProcessor
 {
     public interface IImageFactory
     {
+        Task<Stream> GetDailyResetAsync(string seasonName, int weekNumber);
+
         Task<Stream> GetEververseAsync(string seasonName, DateTime seasonStart, int weekNumber);
 
         Task<Stream> GetLostSectorsAsync();

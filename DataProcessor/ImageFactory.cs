@@ -10,6 +10,13 @@ namespace DataProcessor
 
         public ImageFactory(IParserFactory factory) => _factory = factory;
 
+        public async Task<Stream> GetDailyResetAsync(string seasonName, int weekNumber)
+        {
+            var parser = _factory.GetDailyResetParser(seasonName, weekNumber);
+
+            return await parser.GetImageAsync();
+        }
+
         public async Task<Stream> GetEververseAsync(string seasonName, DateTime seasonStart, int weekNumber)
         {
             var parser = _factory.GetEververseParser(seasonName, seasonStart, weekNumber);
