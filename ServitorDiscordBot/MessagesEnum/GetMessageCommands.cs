@@ -24,6 +24,7 @@ namespace ServitorDiscordBot
             [Xur] = new string[] { "зур", "xur" },
             [Osiris] = new string[] { "осіріс", "сосіріс", "osiris" },
             [Eververse] = new string[] { "еверверс", "eververse" },
+            [EververseAll] = new string[] { "еверверс все", "eververse all" },
             [NotRegistered] = new string[] { "зареєструватися", "register" },
             [ClanStats] = new string[] { "статистика клану", "clan stats" },
             [Leaderboard] = new string[] { "дошка лідерів", "leaderboard" },

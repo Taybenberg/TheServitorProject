@@ -9,6 +9,7 @@
         _100K,
         Apostates,
         Eververse,
+        EververseAll,
         Wait,
         Error,
         BumpNotification,

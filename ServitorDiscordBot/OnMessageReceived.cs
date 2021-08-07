@@ -162,6 +162,12 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
+                when messageCommands[MessagesEnum.EververseAll]
+                .Contains(c):
+                    await ExecuteWaitMessageAsync(message, GetEververseFullInventoryAsync);
+                    break;
+
+                case string c
                 when messageCommands[MessagesEnum.Eververse]
                 .Any(x => c.IndexOf(x) == 0):
                     var week = c

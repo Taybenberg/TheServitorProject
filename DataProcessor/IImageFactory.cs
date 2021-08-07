@@ -12,6 +12,8 @@ namespace DataProcessor
 
         Task<Stream> GetEververseAsync(string seasonName, DateTime seasonStart, int weekNumber);
 
+        Task<Stream> GetEververseFullAsync(string seasonName, DateTime seasonStart, DateTime seasonEnd);
+
         Task<Stream> GetLostSectorsAsync();
 
         Task<Stream> GetResourcesAsync();

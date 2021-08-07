@@ -20,6 +20,13 @@ namespace ServitorDiscordBot
             await channel.SendFileAsync(reset, "WeeklyReset.png");
         }
 
+        private async Task GetEververseFullInventoryAsync(IMessageChannel channel)
+        {
+            using var inventory = await getImageFactory().GetEververseFullAsync(_seasonName, _seasonStart, _seasonEnd);
+
+            await channel.SendFileAsync(inventory, "EververseFullInventory.png");
+        }
+
         private async Task GetEververseInventoryAsync(IMessageChannel channel, string week = null)
         {
             int currWeek = 0;

@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
@@ -20,17 +21,24 @@ namespace DataProcessor.Parsers
         public EververseParser(string seasonName, DateTime seasonStart, int weekNumber) =>
             (_seasonName, _seasonStart, _weekNumber) = (seasonName, seasonStart, weekNumber);
 
-        public async Task<EververseInventory> GetInventoryAsync()
+        private HtmlDocument htmlDoc = null;
+
+        public async Task<EververseInventory> GetInventoryAsync() => await GetInventoryAsync(null);
+
+        public async Task<EververseInventory> GetInventoryAsync(int? weekNumber)
         {
             var inventory = new EververseInventory();
 
-            inventory.WeekBegin = _seasonStart.AddDays((_weekNumber - 1) * 7).ToLocalTime();
+            htmlDoc ??= await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
+
+            int week = weekNumber ?? _weekNumber;
+
+            inventory.WeekBegin = _seasonStart.AddDays((week - 1) * 7).ToLocalTime();
             inventory.WeekEnd = inventory.WeekBegin.AddDays(7);
 
-            inventory.Week = $"Тиждень {_weekNumber}. Сезон \"{_seasonName}\"";
+            inventory.Week = $"Тиждень {week}. Сезон \"{_seasonName}\"";
 
-            var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
-            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{_weekNumber}]");
+            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{week}]");
 
             if (eververseWeekly is not null)
             {
@@ -72,9 +80,11 @@ namespace DataProcessor.Parsers
             return inventory;
         }
 
-        public async Task<Stream> GetImageAsync()
+        public async Task<Stream> GetImageAsync() => await GetImageAsync(null);
+
+        public async Task<Stream> GetImageAsync(int? weekNumber)
         {
-            var inventory = await GetInventoryAsync();
+            var inventory = await GetInventoryAsync(weekNumber);
 
             var loader = new ImageLoader();
 
@@ -137,6 +147,45 @@ namespace DataProcessor.Parsers
 
                 image.Mutate(m => m.DrawImage(icon2, new Point(x, y), 1));
             }
+        }
+
+        public async Task<Stream> GetFullInventoryAsync(DateTime seasonEnd)
+        {
+            var weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7;
+
+            int rows = (int)Math.Sqrt(weeksTotal);
+            int columns = weeksTotal / rows;
+
+            var currWeek = _seasonStart;
+
+            using var image = new Image<Rgba32>(columns * 802, rows * 902);
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    int week = (int)(currWeek - _seasonStart).TotalDays / 7 + 1;
+
+                    if (week <= weeksTotal)
+                    {
+                        using var stream = await GetImageAsync(week);
+
+                        using var img = Image.Load(stream);
+
+                        image.Mutate(m => m.DrawImage(img, new Point(j * 802, i * 902), 1));
+                    }
+
+                    currWeek = currWeek.AddDays(7);
+                }
+            }
+
+            var ms = new MemoryStream();
+
+            await image.SaveAsPngAsync(ms);
+
+            ms.Position = 0;
+
+            return ms;
         }
     }
 }

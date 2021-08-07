@@ -39,6 +39,8 @@ namespace ServitorDiscordBot
 
                 $"\n**{messageCommands[Eververse][0]} %тиждень%** - переглянути асортимент Тесс Еверіс за визначений тиждень (1-15)\n" +
 
+                $"\n**{messageCommands[EververseAll][0]}** - переглянути весь сезонний асортимент Тесс Еверіс\n" +
+
                 $"\n**{messageCommands[MyGrandmasters][0]}** - переглянути закриті ґардіаном найтфоли складності грандмайстер\n" +
 
                 $"\n**{messageCommands[MyRaids][0]}** - переглянути закриті ґардіаном рейди цього тижня\n" +

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataProcessor.Parsers;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -29,6 +30,13 @@ namespace DataProcessor
             var parser = _factory.GetEververseParser(seasonName, seasonStart, weekNumber);
 
             return await parser.GetImageAsync();
+        }
+
+        public async Task<Stream> GetEververseFullAsync(string seasonName, DateTime seasonStart, DateTime seasonEnd)
+        {
+            var parser = _factory.GetEververseParser(seasonName, seasonStart, -1) as EververseParser;
+
+            return await parser.GetFullInventoryAsync(seasonEnd);
         }
 
         public async Task<Stream> GetLostSectorsAsync()
