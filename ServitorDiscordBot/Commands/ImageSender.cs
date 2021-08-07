@@ -13,12 +13,19 @@ namespace ServitorDiscordBot
             await channel.SendFileAsync(reset, "DailyReset.png");
         }
 
+        private async Task GetWeeklyResetAsync(IMessageChannel channel)
+        {
+            using var reset = await getImageFactory().GetWeeklyResetAsync(_seasonName, _seasonStart, GetWeekNumber());
+
+            await channel.SendFileAsync(reset, "WeeklyReset.png");
+        }
+
         private async Task GetEververseInventoryAsync(IMessageChannel channel, string week = null)
         {
             int currWeek = 0;
             int.TryParse(week, out currWeek);
 
-            if (currWeek < 1 || currWeek > 15)
+            if (currWeek < 1 || ((_seasonEnd - _seasonStart).TotalDays / 7) < currWeek)
                 currWeek = GetWeekNumber();
 
             using var inventory = await getImageFactory().GetEververseAsync(_seasonName, _seasonStart, currWeek);

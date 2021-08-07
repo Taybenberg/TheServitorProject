@@ -68,8 +68,6 @@ namespace DataProcessor.Parsers
                     }
                 }
             }
-            else
-                return null;
 
             return inventory;
         }
@@ -82,51 +80,36 @@ namespace DataProcessor.Parsers
 
             using Image image = Image.Load(ExtensionsRes.EververseItemsBackground);
 
-            if (inventory is not null)
+            Font font = new Font(SystemFonts.Find("Arial"), 30, FontStyle.Bold);
+
+            using Image icon = await loader.GetImageAsync(inventory.SeasonIconURL);
+
+            icon.Mutate(m => m.Resize(192, 192));
+
+            image.Mutate(m =>
             {
-                Font font = new Font(SystemFonts.Find("Arial"), 30, FontStyle.Bold);
+                m.DrawText(inventory.Week, font, Color.White, new Point(212, 12));
 
-                using Image icon = await loader.GetImageAsync(inventory.SeasonIconURL);
+                m.DrawText
+                    ($"{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}",
+                    font, Color.White, new Point(212, 73));
 
-                icon.Mutate(m => m.Resize(192, 192));
+                m.DrawImage(icon, new Point(0, 0), 1);
+            });
 
-                image.Mutate(m =>
+            int[] Y = { 178, 361, 467, 650 };
+
+            int i = 0;
+
+            foreach (var itemList in inventory.EververseItems)
+            {
+                int x = 35, y = Y[i++];
+
+                foreach (var item in itemList)
                 {
-                    m.DrawText(inventory.Week, font, Color.White, new Point(212, 12));
+                    await DrawItemAsync(item, loader, image, x, y);
 
-                    m.DrawText
-                        ($"{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}",
-                        font, Color.White, new Point(212, 73));
-
-                    image.Mutate(m => m.DrawImage(icon, new Point(0, 0), 1));
-                });
-
-                int[] Y = { 178, 361, 467, 650 };
-
-                int i = 0;
-
-                foreach (var itemList in inventory.EververseItems)
-                {
-                    int x = 35, y = Y[i++];
-
-                    foreach (var item in itemList)
-                    {
-                        if (item.Icon1URL is not null)
-                        {
-                            using Image icon1 = await loader.GetImageAsync(item.Icon1URL);
-
-                            image.Mutate(m => m.DrawImage(icon1, new Point(x, y), 1));
-                        }
-
-                        if (item.Icon2URL is not null)
-                        {
-                            using Image icon2 = await loader.GetImageAsync(item.Icon2URL);
-
-                            image.Mutate(m => m.DrawImage(icon2, new Point(x, y), 1));
-                        }
-
-                        x += 106;
-                    }
+                    x += 106;
                 }
             }
 
@@ -137,6 +120,23 @@ namespace DataProcessor.Parsers
             ms.Position = 0;
 
             return ms;
+        }
+
+        internal static async Task DrawItemAsync(EververseItem item, ImageLoader loader, Image image, int x, int y)
+        {
+            if (item.Icon1URL is not null)
+            {
+                using Image icon1 = await loader.GetImageAsync(item.Icon1URL);
+
+                image.Mutate(m => m.DrawImage(icon1, new Point(x, y), 1));
+            }
+
+            if (item.Icon2URL is not null)
+            {
+                using Image icon2 = await loader.GetImageAsync(item.Icon2URL);
+
+                image.Mutate(m => m.DrawImage(icon2, new Point(x, y), 1));
+            }
         }
     }
 }

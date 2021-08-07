@@ -23,7 +23,7 @@ namespace ServitorDiscordBot
 
         private readonly string _clanUrl, _seasonName;
 
-        private readonly DateTime _seasonStart;
+        private readonly DateTime _seasonStart, _seasonEnd;
 
         private readonly ulong[] _channelId;
         private readonly ulong _bumpChannelId;
@@ -45,8 +45,10 @@ namespace ServitorDiscordBot
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 
             _clanUrl = configuration["Destiny2:ClanURL"];
+
             _seasonName = configuration["Destiny2:SeasonName"];
             _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
+            _seasonEnd = configuration.GetSection("Destiny2:SeasonEnd").Get<DateTime>();
 
             _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();

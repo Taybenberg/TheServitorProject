@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using DataProcessor.DatabaseWrapper;
 using DataProcessor.Parsers;
 using DataProcessor.Parsers.Inventory;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,15 @@ namespace DataProcessor
 
         public IInventoryParser<(LostSectorsInventory, ResourcesInventory)> GetDailyResetParser(string seasonName, int weekNumber) =>
             new DailyResetParser(seasonName, weekNumber);
+
+        public IInventoryParser<(EververseInventory, WeeklyMilestone)> GetWeeklyResetParser(string seasonName, DateTime seasonStart, int weekNumber)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            IDatabaseWrapperFactory wrapperFactory = scope.ServiceProvider.GetRequiredService<IDatabaseWrapperFactory>();
+
+            return new WeeklyResetParser(wrapperFactory, seasonName, seasonStart, weekNumber);
+        }
 
         public IInventoryParser<EververseInventory> GetEververseParser(string seasonName, DateTime seasonStart, int weekNumber) =>
             new EververseParser(seasonName, seasonStart, weekNumber);

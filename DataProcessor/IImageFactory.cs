@@ -8,6 +8,8 @@ namespace DataProcessor
     {
         Task<Stream> GetDailyResetAsync(string seasonName, int weekNumber);
 
+        Task<Stream> GetWeeklyResetAsync(string seasonName, DateTime seasonStart, int weekNumber);
+
         Task<Stream> GetEververseAsync(string seasonName, DateTime seasonStart, int weekNumber);
 
         Task<Stream> GetLostSectorsAsync();

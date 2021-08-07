@@ -72,7 +72,7 @@ namespace ServitorDiscordBot
                 case string c
                 when messageCommands[MessagesEnum.Weekly]
                 .Contains(c):
-                    await ExecuteWaitMessageAsync(message, WeeklyResetNotificationAsync);
+                    await ExecuteWaitMessageAsync(message, GetWeeklyMilestoneAsync);
                     break;
 
                 case string c

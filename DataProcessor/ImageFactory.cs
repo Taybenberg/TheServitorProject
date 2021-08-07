@@ -17,6 +17,13 @@ namespace DataProcessor
             return await parser.GetImageAsync();
         }
 
+        public async Task<Stream> GetWeeklyResetAsync(string seasonName, DateTime seasonStart, int weekNumber)
+        {
+            var parser = _factory.GetWeeklyResetParser(seasonName, seasonStart, weekNumber);
+
+            return await parser.GetImageAsync();
+        }
+
         public async Task<Stream> GetEververseAsync(string seasonName, DateTime seasonStart, int weekNumber)
         {
             var parser = _factory.GetEververseParser(seasonName, seasonStart, weekNumber);
