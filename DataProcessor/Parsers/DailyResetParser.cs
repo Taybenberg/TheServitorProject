@@ -12,8 +12,8 @@ namespace DataProcessor.Parsers
 {
     public class DailyResetParser : IInventoryParser<(LostSectorsInventory, ResourcesInventory)>
     {
-        private string _seasonName;
-        private int _weekNumber;
+        private readonly string _seasonName;
+        private readonly int _weekNumber;
 
         public DailyResetParser(string seasonName, int weekNumber) =>
             (_seasonName, _weekNumber) = (seasonName, weekNumber);

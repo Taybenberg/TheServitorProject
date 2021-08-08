@@ -14,14 +14,23 @@ namespace DataProcessor.Parsers
 {
     public class EververseParser : IInventoryParser<EververseInventory>
     {
-        private string _seasonName;
-        private DateTime _seasonStart;
-        private int _weekNumber;
+        private readonly Lazy<Task<HtmlDocument>> htmlDocument;
 
-        public EververseParser(string seasonName, DateTime seasonStart, int weekNumber) =>
-            (_seasonName, _seasonStart, _weekNumber) = (seasonName, seasonStart, weekNumber);
+        private readonly string _seasonName;
+        private readonly DateTime _seasonStart;
+        private readonly int _weekNumber;
 
-        private HtmlDocument htmlDoc = null;
+        public EververseParser(string seasonName, DateTime seasonStart, int weekNumber)
+        {
+            _seasonName = seasonName;
+
+            _seasonStart = seasonStart;
+
+            _weekNumber = weekNumber;
+
+            htmlDocument = new Lazy<Task<HtmlDocument>>(async () => await new HtmlWeb()
+           .LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly"));
+        }
 
         public async Task<EververseInventory> GetInventoryAsync() => await GetInventoryAsync(null);
 
@@ -29,7 +38,7 @@ namespace DataProcessor.Parsers
         {
             var inventory = new EververseInventory();
 
-            htmlDoc ??= await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly");
+            var htmlDoc = await htmlDocument.Value;
 
             int week = weekNumber ?? _weekNumber;
 
@@ -151,31 +160,36 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetFullInventoryAsync(DateTime seasonEnd)
         {
-            var weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7;
+            int weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7;
 
             int rows = (int)Math.Sqrt(weeksTotal);
-            int columns = weeksTotal / rows;
+            int columns = (int)Math.Ceiling((double)weeksTotal / rows);
 
-            var currWeek = _seasonStart;
+            Stream[] streams = new Stream[weeksTotal];
+
+            Parallel.For(0, weeksTotal, (i) =>
+            {
+                streams[i] = GetImageAsync(i + 1).Result;
+            });
 
             using var image = new Image<Rgba32>(columns * 802, rows * 902);
+
+            int week = 0;
 
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    int week = (int)(currWeek - _seasonStart).TotalDays / 7 + 1;
-
-                    if (week <= weeksTotal)
+                    if (week < weeksTotal)
                     {
-                        using var stream = await GetImageAsync(week);
+                        using var str = streams[week];
 
-                        using var img = Image.Load(stream);
+                        using var img = Image.Load(str);
 
                         image.Mutate(m => m.DrawImage(img, new Point(j * 802, i * 902), 1));
                     }
 
-                    currWeek = currWeek.AddDays(7);
+                    week++;
                 }
             }
 

@@ -14,9 +14,9 @@ namespace DataProcessor.Parsers
     {
         private readonly IDatabaseWrapperFactory _wrapperFactory;
 
-        private string _seasonName;
-        private DateTime _seasonStart;
-        private int _weekNumber;
+        private readonly string _seasonName;
+        private readonly DateTime _seasonStart;
+        private readonly int _weekNumber;
 
         public WeeklyResetParser(IDatabaseWrapperFactory wrapperFactory, string seasonName, DateTime seasonStart, int weekNumber) =>
             (_wrapperFactory, _seasonName, _seasonStart, _weekNumber) = (wrapperFactory, seasonName, seasonStart, weekNumber);

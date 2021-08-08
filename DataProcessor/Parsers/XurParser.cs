@@ -14,8 +14,9 @@ namespace DataProcessor.Parsers
 {
     public class XurParser : IInventoryParser<XurInventory>
     {
-        private IApiClient _apiClient;
-        private bool _getLocation;
+        private readonly IApiClient _apiClient;
+
+        private readonly bool _getLocation;
 
         public XurParser(IApiClient apiClient, bool getLocation) =>
             (_apiClient, _getLocation) = (apiClient, getLocation);
