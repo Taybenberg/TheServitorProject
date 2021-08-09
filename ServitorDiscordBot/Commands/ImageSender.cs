@@ -88,7 +88,7 @@ namespace ServitorDiscordBot
             {
                 var ch = _client.GetChannel(channelID) as IMessageChannel;
 
-                var msg = await ch.GetMessageAsync(xurInventory[channelID]);
+                var msg = await ch.GetMessageAsync(dictionary[channelID]);
 
                 await DeleteMessageAsync(msg);
 

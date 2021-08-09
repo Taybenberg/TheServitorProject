@@ -120,7 +120,8 @@ namespace ServitorDiscordBot
                     return;
                 }
 
-                int limit = int.Parse(strs[1]);
+                int limit = -1;
+                int.TryParse(strs[1], out limit);
 
                 if (limit > 0)
                 {
@@ -141,9 +142,10 @@ namespace ServitorDiscordBot
                     return;
                 }
 
-                int limit = int.Parse(strs[1]);
+                int limit = -1;
+                int.TryParse(strs[1], out limit);
 
-                (var gl, var ch, var ms) = await GetChannelMessageAsync(str);
+                (var gl, var ch, var ms) = await GetChannelMessageAsync(strs[2]);
 
                 if (limit > 0 && gl.Id == gid && ms is not null && ch is not null)
                 {
