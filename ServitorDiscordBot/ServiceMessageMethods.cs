@@ -74,7 +74,7 @@ namespace ServitorDiscordBot
 
             await method(message);
 
-            await wait.DeleteAsync();
+            await DeleteMessageAsync(wait);
         }
 
         private async Task ExecuteWaitMessageAsync<T>(IMessage message, Func<IMessage, T, Task> method, T arg, bool deleteSenderMessage = false)
@@ -85,7 +85,7 @@ namespace ServitorDiscordBot
 
             await method(message, arg);
 
-            await wait.DeleteAsync();
+            await DeleteMessageAsync(wait);
         }
 
         private async Task ExecuteWaitMessageAsync(IMessage message, Func<IMessageChannel, Task> method, bool deleteSenderMessage = false)
@@ -96,7 +96,7 @@ namespace ServitorDiscordBot
 
             await method(message.Channel);
 
-            await wait.DeleteAsync();
+            await DeleteMessageAsync(wait);
         }
 
         private async Task ExecuteWaitMessageAsync<T>(IMessage message, Func<IMessageChannel, T, Task> method, T arg, bool deleteSenderMessage = false)
@@ -107,7 +107,7 @@ namespace ServitorDiscordBot
 
             await method(message.Channel, arg);
 
-            await wait.DeleteAsync();
+            await DeleteMessageAsync(wait);
         }
 
         private async Task<(IGuild, IMessageChannel, IMessage)> GetChannelMessageAsync(string link)
@@ -132,18 +132,14 @@ namespace ServitorDiscordBot
         {
             var msg = await message.Channel.SendMessageAsync(text);
 
-            try
-            {
-                await message.DeleteAsync();
-            }
-            catch { }
+            await DeleteMessageAsync(message);
 
             await Task.Delay(5000);
 
-            await msg.DeleteAsync();
+            await DeleteMessageAsync(message);
         }
 
-        private async Task DeleteMessageAsync(IMessage message, bool confirmation)
+        private async Task DeleteMessageAsync(IMessage message, bool confirmation = true)
         {
             if (confirmation)
             {

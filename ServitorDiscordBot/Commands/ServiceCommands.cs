@@ -41,30 +41,27 @@ namespace ServitorDiscordBot
                     if (!CheckModerationRole(message.Author))
                         return await NoDeletePermissionsAsync(message);
 
-                    try
+                    var msgId = message?.Reference?.MessageId.Value;
+
+                    if (msgId is not null)
                     {
-                        var msgId = message?.Reference?.MessageId.Value;
+                        var msg = await message.Channel.GetMessageAsync((ulong)msgId);
 
-                        if (msgId is not null)
-                        {
-                            var msg = await message.Channel.GetMessageAsync((ulong)msgId);
-                            await msg.DeleteAsync();
-                        }
-                        else
-                        {
-                            var gid = (message.Channel as IGuildChannel).GuildId;
-
-                            (var gl, _, var ms) = await GetChannelMessageAsync(c);
-
-                            if (gl.Id == gid && ms is not null)
-                                await ms.DeleteAsync();
-                            else
-                                await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
-                        }
-
-                        await message.DeleteAsync();
+                        await DeleteMessageAsync(msg);
                     }
-                    catch { }
+                    else
+                    {
+                        var gid = (message.Channel as IGuildChannel).GuildId;
+
+                        (var gl, _, var ms) = await GetChannelMessageAsync(c);
+
+                        if (gl.Id == gid && ms is not null)
+                            await DeleteMessageAsync(ms);
+                        else
+                            await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
+                    }
+
+                    await DeleteMessageAsync(message);
 
                     return true;
 
@@ -102,63 +99,59 @@ namespace ServitorDiscordBot
             var notification = await userMessage.Channel.SendMessageAsync($"Чистка {messages.Count} повідомлень...");
 
             foreach (var m in messages)
-                await m.DeleteAsync();
+                await DeleteMessageAsync(m);
 
-            await notification.DeleteAsync();
+            await DeleteMessageAsync(notification);
 
-            await userMessage.DeleteAsync();
+            await DeleteMessageAsync(userMessage);
         }
 
         private async Task DeleteInDirectonAsync(IMessage message, string str, Direction dir)
         {
-            try
+            var strs = str.Split(' ');
+
+            var msgId = message?.Reference?.MessageId.Value;
+
+            if (msgId is not null)
             {
-                var strs = str.Split(' ');
-
-                var msgId = message?.Reference?.MessageId.Value;
-
-                if (msgId is not null)
+                if (strs.Length < 2)
                 {
-                    if (strs.Length < 2)
-                    {
-                        await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
-                        return;
-                    }
+                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
+                    return;
+                }
 
-                    int limit = int.Parse(strs[1]);
+                int limit = int.Parse(strs[1]);
 
-                    if (limit > 0)
-                    {
-                        var msg = await message.Channel.GetMessageAsync((ulong)msgId);
+                if (limit > 0)
+                {
+                    var msg = await message.Channel.GetMessageAsync((ulong)msgId);
 
-                        await DeleteMessagesAsync(message, msg.Channel, msg, limit, dir);
-                    }
-                    else
-                        await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
+                    await DeleteMessagesAsync(message, msg.Channel, msg, limit, dir);
                 }
                 else
-                {
-                    var gid = (message.Channel as IGuildChannel).GuildId;
-
-                    if (strs.Length < 3)
-                    {
-                        await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
-                        return;
-                    }
-
-                    int limit = int.Parse(strs[1]);
-
-                    (var gl, var ch, var ms) = await GetChannelMessageAsync(str);
-
-                    if (limit > 0 && gl.Id == gid && ms is not null && ch is not null)
-                    {
-                        await DeleteMessagesAsync(message, ch, ms, limit, dir);
-                    }
-                    else
-                        await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
-                }
+                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
             }
-            catch { }
+            else
+            {
+                var gid = (message.Channel as IGuildChannel).GuildId;
+
+                if (strs.Length < 3)
+                {
+                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
+                    return;
+                }
+
+                int limit = int.Parse(strs[1]);
+
+                (var gl, var ch, var ms) = await GetChannelMessageAsync(str);
+
+                if (limit > 0 && gl.Id == gid && ms is not null && ch is not null)
+                {
+                    await DeleteMessagesAsync(message, ch, ms, limit, dir);
+                }
+                else
+                    await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
+            }
         }
     }
 }

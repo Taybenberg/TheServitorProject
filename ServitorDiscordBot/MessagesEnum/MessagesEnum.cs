@@ -31,6 +31,7 @@
         Osiris,
         Reset,
         ClanStats,
-        Leaderboard
+        Leaderboard,
+        Raid
     }
 }

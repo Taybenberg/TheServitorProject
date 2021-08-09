@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -73,7 +74,7 @@ namespace ServitorDiscordBot
 
         public DateTime NextBump { get { return _bump.NextBump; } }
 
-        public Bumper()
+        public Bumper(ILogger<ServitorBot> logger)
         {
             if (File.Exists(path))
                 _bump = JsonSerializer.Deserialize<Bump>(File.ReadAllText(path));
@@ -92,6 +93,8 @@ namespace ServitorDiscordBot
             };
 
             _timer.Start();
+
+            logger.LogInformation($"{DateTime.Now} Bump scheduled on {NextBump}");
         }
 
         public void AddUser(string userID)

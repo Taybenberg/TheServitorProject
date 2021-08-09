@@ -90,11 +90,7 @@ namespace ServitorDiscordBot
 
                 var msg = await ch.GetMessageAsync(xurInventory[channelID]);
 
-                try
-                {
-                    await msg.DeleteAsync();
-                }
-                catch { }
+                await DeleteMessageAsync(msg);
 
                 dictionary[channelID] = messageID;
             }

@@ -6,7 +6,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        string GetTitle(MessagesEnum messagesEnum, IMessage message) => messagesEnum switch
+        private string GetTitle(MessagesEnum messagesEnum, IMessage message) => messagesEnum switch
         {
             Wait => EmojiContainer.Loading,
             Leaderboard => $"БЕТА | Дошка лідерів",
@@ -23,6 +23,7 @@ namespace ServitorDiscordBot
             Xur => $"Зур привіз свіжий крам",
             Bip => $"біп…",
             Modes => $"Режими",
+            Raid => $"Рейд",
             _ => string.Empty
         };
     }

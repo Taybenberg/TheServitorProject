@@ -5,7 +5,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        Color GetColor(MessagesEnum messagesEnum) => messagesEnum switch
+        private Color GetColor(MessagesEnum messagesEnum) => messagesEnum switch
         {
             Wait => new Color(0x76766b),
             Error => new Color(0xd50000),
@@ -29,6 +29,7 @@ namespace ServitorDiscordBot
             Reset => new Color(0xd5e1f6),
             ClanStats => new Color(0x8Be18a),
             Leaderboard => new Color(0x25c486),
+            Raid => new Color(0x7c4dff),
             _ => new Color(0xfafafa)
         };
     }
