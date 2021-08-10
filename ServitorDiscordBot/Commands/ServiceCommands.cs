@@ -69,7 +69,15 @@ namespace ServitorDiscordBot
                     if (!CheckModerationRole(message.Author))
                         return await NoDeletePermissionsAsync(message);
 
-                    await DeleteInDirectonAsync(message, c, Direction.Before);
+                    await DeleteInDirectonAsync(message, c, Direction.Before, true);
+
+                    return true;
+
+                case string c when c.StartsWith("!delete_slow_before"):
+                    if (!CheckModerationRole(message.Author))
+                        return await NoDeletePermissionsAsync(message);
+
+                    await DeleteInDirectonAsync(message, c, Direction.Before, false);
 
                     return true;
 
@@ -77,7 +85,15 @@ namespace ServitorDiscordBot
                     if (!CheckModerationRole(message.Author))
                         return await NoDeletePermissionsAsync(message);
 
-                    await DeleteInDirectonAsync(message, c, Direction.After);
+                    await DeleteInDirectonAsync(message, c, Direction.After, true);
+
+                    return true;
+
+                case string c when c.StartsWith("!delete_slow_after"):
+                    if (!CheckModerationRole(message.Author))
+                        return await NoDeletePermissionsAsync(message);
+
+                    await DeleteInDirectonAsync(message, c, Direction.After, false);
 
                     return true;
 
@@ -92,21 +108,32 @@ namespace ServitorDiscordBot
             return true;
         }
 
-        private async Task DeleteMessagesAsync(IMessage userMessage, IMessageChannel chDel, IMessage msDel, int limit, Direction dir)
+        private async Task DeleteMessagesAsync(IMessage userMessage, IMessageChannel chDel, IMessage msDel, int limit, Direction dir, bool isFast)
         {
             var messages = await chDel.GetMessagesAsync(msDel, dir, limit).Flatten().ToListAsync();
 
             var notification = await userMessage.Channel.SendMessageAsync($"Чистка {messages.Count} повідомлень...");
 
-            foreach (var m in messages)
-                await DeleteMessageAsync(m);
+            if (isFast)
+            {
+                try
+                {
+                    await ((ITextChannel)chDel).DeleteMessagesAsync(messages);
+                }
+                catch { }
+            }
+            else
+            {
+                foreach (var m in messages)
+                    await DeleteMessageAsync(m);
+            }
 
             await DeleteMessageAsync(notification);
 
             await DeleteMessageAsync(userMessage);
         }
 
-        private async Task DeleteInDirectonAsync(IMessage message, string str, Direction dir)
+        private async Task DeleteInDirectonAsync(IMessage message, string str, Direction dir, bool isFast)
         {
             var strs = str.Split(' ');
 
@@ -127,7 +154,7 @@ namespace ServitorDiscordBot
                 {
                     var msg = await message.Channel.GetMessageAsync((ulong)msgId);
 
-                    await DeleteMessagesAsync(message, msg.Channel, msg, limit, dir);
+                    await DeleteMessagesAsync(message, msg.Channel, msg, limit, dir, isFast);
                 }
                 else
                     await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
@@ -149,7 +176,7 @@ namespace ServitorDiscordBot
 
                 if (limit > 0 && gl.Id == gid && ms is not null && ch is not null)
                 {
-                    await DeleteMessagesAsync(message, ch, ms, limit, dir);
+                    await DeleteMessagesAsync(message, ch, ms, limit, dir, isFast);
                 }
                 else
                     await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
