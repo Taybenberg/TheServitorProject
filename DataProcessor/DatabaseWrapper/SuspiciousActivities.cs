@@ -53,27 +53,27 @@ namespace DataProcessor.DatabaseWrapper
 
                 ConcurrentBag<User> users = new();
 
-                Parallel.ForEach(act.UserStats, (user) =>
+                Parallel.ForEach(act.UserStats.Select(x => Tuple.Create(x.MembershipID, x.MembershipType, x.DisplayName)).Distinct(), (user) =>
                 {
-                    if (userIDs.Any(x => x == user.MembershipID))
+                    if (userIDs.Any(x => x == user.Item1))
                     {
                         users.Add(new User
                         {
                             IsClanMember = true,
-                            UserName = user.DisplayName.Replace("*", ""),
+                            UserName = user.Item3,
                             ClanSign = "UA"
                         });
                     }
                     else
                     {
-                        var clan = _apiClient.EntityFactory.GetUser(user.MembershipID, user.MembershipType).GetUserClanAsync().Result;
+                        var clan = _apiClient.EntityFactory.GetUser(user.Item1, user.Item2).GetUserClanAsync().Result;
 
                         users.Add(new User
                         {
                             IsClanMember = false,
-                            UserName = user.DisplayName.Replace("*", ""),
-                            ClanSign = clan?.ClanSign?.Replace("*", ""),
-                            ClanName = clan?.ClanName?.Replace("*", "")
+                            UserName = user.Item3,
+                            ClanSign = clan?.ClanSign,
+                            ClanName = clan?.ClanName
                         });
                     }
                 });

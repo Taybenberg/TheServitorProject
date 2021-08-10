@@ -21,7 +21,7 @@ namespace ServitorDiscordBot
             var builder = GetBuilder(MessagesEnum.AlreadyRegistered, message);
 
             builder.Description = "Ґардіане, ви вже зареєстровані, а отже перед вами розкрито весь потенціал моїх обчислювальних потужностей.\n" +
-                "Переглянути список моїх команд можна за допомогою команди **допомога**";
+                "Переглянути список моїх команд можна за допомогою команди **допомога**.";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
         }
