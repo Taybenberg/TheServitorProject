@@ -15,8 +15,7 @@ namespace ServitorDiscordBot
             ((SocketGuildUser)user).Roles.Any(x =>
             x.Name.ToLower() is "administrator" ||
             x.Name.ToLower() is "moderator" ||
-            x.Name.ToLower() is "raid lead" ||
-            x.Name.ToLower() is "old");
+            x.Name.ToLower() is "raid lead");
 
         private string GetActivityCountImpression(int count, string username) =>
             new Random().Next(10) switch
