@@ -9,12 +9,16 @@ namespace BungieNetApi
 {
     public class ApiClient : IApiClient
     {
+        private readonly IConfiguration _configuration;
+
         private readonly BungieNetApiClient _bungieNetApiClient;
 
         private readonly long _clanId;
 
         public ApiClient(IConfiguration configuration)
         {
+            _configuration = configuration;
+
             _clanId = configuration.GetSection("Destiny2:ClanID").Get<long>();
 
             _bungieNetApiClient = new(configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>());
@@ -72,7 +76,9 @@ namespace BungieNetApi
 
                 if (rawMilestones.ContainsKey("1942283261"))
                 {
-                    var rawNightfall = rawMilestones["1942283261"].activities.FirstOrDefault();
+                    var nfIDs = _configuration.GetSection("Destiny2:NoMatchmakingNightfalls").Get<HashSet<long>>();
+
+                    var rawNightfall = rawMilestones["1942283261"].activities.Where(x => !nfIDs.Any(y => y == x.activityHash)).FirstOrDefault();
 
                     var nightfall = await _bungieNetApiClient.getRawActivityDefinitionAsync(rawNightfall.activityHash);
 
