@@ -54,7 +54,7 @@ namespace DataProcessor.DatabaseWrapper
                 Emoji = EmojiContainer.GetClassEmoji(c.Class),
                 Class = TranslationDictionaries.ClassNames[c.Class],
                 Count = c.ActivityUserStats.Count
-            });
+            }).OrderByDescending(x => x.Count);
 
             var acts = user.Characters.SelectMany(c => c.ActivityUserStats.Select(z => z.Activity)).Distinct();
 
