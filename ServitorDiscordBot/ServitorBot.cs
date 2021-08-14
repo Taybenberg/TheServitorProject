@@ -21,11 +21,16 @@ namespace ServitorDiscordBot
 
         private readonly Bumper _bumper;
 
+        private readonly RaidManager _raidManager;
+
         private readonly string _clanUrl, _seasonName;
 
         private readonly DateTime _seasonStart, _seasonEnd;
 
+        private readonly ulong _destinyRoleId;
+
         private readonly ulong[] _channelId;
+        private readonly ulong _raidChannelId;
         private readonly ulong _bumpChannelId;
 
         private readonly string[] _bumpPingUsers;
@@ -41,6 +46,8 @@ namespace ServitorDiscordBot
             _client.Log += LogAsync;
 
             _client.MessageReceived += OnMessageReceivedAsync;
+            _client.ReactionAdded += OnMessageReactionAddedAsync;
+            _client.MessageDeleted += OnMessageDeletedAsync;
 
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 
@@ -50,20 +57,33 @@ namespace ServitorDiscordBot
             _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
             _seasonEnd = configuration.GetSection("Destiny2:SeasonEnd").Get<DateTime>();
 
+            _destinyRoleId = configuration.GetSection("Discord:DestinyRoleID").Get<ulong>();
+
             _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
+            _raidChannelId = configuration.GetSection("Discord:RaidChannelID").Get<ulong>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
             _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
 
             _client.SetGameAsync("Destiny 2").Wait();
 
-            _bumper = new();
+            _bumper = new(logger);
             _bumper.Notify += Bumper_Notify;
 
-            _logger.LogInformation($"{DateTime.Now} Bump scheduled on {_bumper.NextBump}");
+            _raidManager = new(logger);
+            _raidManager.Notify += Event_Notify;
+            _raidManager.Update += Event_Update;
+            _raidManager.Delete += Event_Delete;
+            _raidManager.Load();
         }
 
-        public void Dispose() =>
+        public void Dispose()
+        {
+            _raidManager.Dispose();
+
+            _bumper.Dispose();
+
             _client.Dispose();
+        }
 
         public async Task StartAsync(CancellationToken cancellationToken) =>
             await _client.StartAsync();
