@@ -31,7 +31,7 @@ namespace ServitorDiscordBot
                 case string c when c.StartsWith("!echo"):
                     try
                     {
-                        await message.Channel.SendMessageAsync(c.Split(' ')[1]);
+                        await message.Channel.SendMessageAsync(c.Replace("!echo ", string.Empty));
                     }
                     catch { }
 
