@@ -68,7 +68,7 @@ namespace Database
             await _context.Activities
             .Include(s => s.ActivityUserStats)
             .Where(x => x.ActivityType == ActivityType.ScoredNightfall &&
-            x.ActivityUserStats.Any(y => y.Completed && y.Character.User.DiscordUserID == discordID))
+            x.ActivityUserStats.Any(y => y.Completed && y.CompletionReasonValue == 0 && y.Character.User.DiscordUserID == discordID))
             .ToListAsync();
 
         public async Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate) =>
