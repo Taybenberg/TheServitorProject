@@ -70,7 +70,7 @@ namespace ServitorDiscordBot
 
             raid.Start();
 
-            _logger.LogInformation($"{DateTime.Now} New raid scheduled on {raid.PlannedDate}");
+            _logger.LogInformation($"{DateTime.Now} New raid {messageID} scheduled on {raid.PlannedDate}");
 
             Backup();
         }
