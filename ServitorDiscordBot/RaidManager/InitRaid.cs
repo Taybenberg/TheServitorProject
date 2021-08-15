@@ -72,7 +72,7 @@ namespace ServitorDiscordBot
 
                 builder.Description = $"Сталася помилка під час створення рейду. Перевірте, чи формат команди коректний.\nЩоби переглянути довідку, скористайтеся командою **допомога**.";
 
-                await message.Channel.SendMessageAsync(embed: builder.Build());
+                await SendTemporaryMessageAsync(message, builder);
             }
         }
     }
