@@ -20,7 +20,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("рейд"):
+                when c.StartsWith("рейд") || c.StartsWith("!рейд"):
                     {
                         await InitRaidAsync(message);
 

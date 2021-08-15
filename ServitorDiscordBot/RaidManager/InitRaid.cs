@@ -19,7 +19,7 @@ namespace ServitorDiscordBot
             {
                 var raid = new RaidContainer();
 
-                var command = message.Content.Substring(5);
+                var command = message.Content.Substring(5).TrimStart();
 
                 var raidType = command.Substring(0, command.IndexOf(' '));
 

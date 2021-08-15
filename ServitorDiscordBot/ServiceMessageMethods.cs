@@ -135,7 +135,7 @@ namespace ServitorDiscordBot
 
             await Task.Delay(5000);
 
-            await DeleteMessageAsync(message);
+            await DeleteMessageAsync(msg);
         }
 
         private async Task SendTemporaryMessageAsync(IMessage message, EmbedBuilder builder)
@@ -146,7 +146,7 @@ namespace ServitorDiscordBot
 
             await Task.Delay(5000);
 
-            await DeleteMessageAsync(message);
+            await DeleteMessageAsync(msg);
         }
 
         private async Task DeleteMessageAsync(IMessage message, bool confirmation = true)
