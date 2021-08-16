@@ -44,7 +44,7 @@ namespace DataProcessor.DatabaseWrapper
                     UserName = x.UserName,
                     UserId = x.UserID,
                     MembershipType = x.MembershipType,
-                    Similarity = jw.Similarity(_discordUserName, x.UserName)
+                    Similarity = jw.Similarity(_discordUserName, x.UserName.ToLower())
                 })
                 .Where(x => x.Similarity > 0.9)
                 .OrderByDescending(x => x.Similarity)
