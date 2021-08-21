@@ -46,7 +46,7 @@ namespace DataProcessor.DatabaseWrapper
             if (!(IsUserRegistered = user is not null))
                 return;
 
-            var raids = await _clanDB.GetUserRaidsAsync(_userID, _seasonStart.AddDays((_weekNumber - 1) * 7));
+            var raids = await _clanDB.GetUserRaidsAsync(_userID, _seasonStart.AddDays((_weekNumber - 1) * 7).ToUniversalTime());
 
             Classes = user.Characters.Select(c =>
             {
