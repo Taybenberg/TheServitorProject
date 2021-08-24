@@ -37,7 +37,7 @@ namespace DataProcessor.DatabaseWrapper
         private readonly IClanDB _clanDB;
 
         internal MyRaids(IClanDB clanDB, ulong discordUserID, DateTime seasonStart, int weekNumber) =>
-            (_clanDB, _userID, _seasonStart, _weekNumber) = (clanDB, discordUserID, seasonStart, weekNumber);
+            (_clanDB, _userID, _seasonStart, _weekNumber) = (clanDB, discordUserID, seasonStart.ToUniversalTime(), weekNumber);
 
         public async Task InitAsync()
         {
@@ -46,7 +46,7 @@ namespace DataProcessor.DatabaseWrapper
             if (!(IsUserRegistered = user is not null))
                 return;
 
-            var raids = await _clanDB.GetUserRaidsAsync(_userID, _seasonStart.AddDays((_weekNumber - 1) * 7).ToUniversalTime());
+            var raids = await _clanDB.GetUserRaidsAsync(_userID, _seasonStart.AddDays((_weekNumber - 1) * 7));
 
             Classes = user.Characters.Select(c =>
             {

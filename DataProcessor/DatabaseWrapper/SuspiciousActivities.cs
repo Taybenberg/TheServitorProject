@@ -81,7 +81,7 @@ namespace DataProcessor.DatabaseWrapper
                 acts.Add(new Activity
                 {
                     Type = TranslationDictionaries.ActivityNames[activity.ActivityType][0],
-                    Period = activity.Period,
+                    Period = TimeZoneInfo.ConvertTime(activity.Period, TimeZoneInfo.Utc, TimeZoneInfo.Local),
                     Score = activity.ActivityType == ActivityType.ScoredNightfall ? act.UserStats.FirstOrDefault()?.TeamScore : null,
                     Users = users
                 });
