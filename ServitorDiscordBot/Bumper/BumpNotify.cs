@@ -23,7 +23,7 @@ namespace ServitorDiscordBot
             {
                 builder.Description += "\nКулдаун до:";
 
-                foreach (var user in users)
+                foreach (var user in users.OrderBy(x => x.Value))
                     builder.Description += $"\n<@{user.Key}> – *{user.Value.ToString("HH:mm:ss")}*";
             }
 
