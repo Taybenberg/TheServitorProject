@@ -29,7 +29,7 @@ namespace DataProcessor.Parsers
             _weekNumber = weekNumber;
 
             htmlDocument = new Lazy<Task<HtmlDocument>>(async () => await new HtmlWeb()
-           .LoadFromWebAsync("https://www.todayindestiny.com/eververseWeekly"));
+           .LoadFromWebAsync("https://www.todayindestiny.com/eververseCalendar"));
         }
 
         public async Task<EververseInventory> GetInventoryAsync() => await GetInventoryAsync(null);
@@ -47,7 +47,7 @@ namespace DataProcessor.Parsers
 
             inventory.Week = $"Тиждень {week}. Сезон \"{_seasonName}\"";
 
-            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div/div[{week}]");
+            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div[1]/div[{week}]");
 
             if (eververseWeekly is not null)
             {
@@ -55,7 +55,8 @@ namespace DataProcessor.Parsers
 
                 for (int i = 1; i <= 4; i++)
                 {
-                    var container = eververseWeekly.SelectSingleNode($"./div[2]/div[{i}]/div");
+                    var container = eververseWeekly.SelectSingleNode($"./div[2]/div/div[{i}]/div[2]/div")
+                       ?? eververseWeekly.SelectSingleNode($"./div[2]/div/div[{i}]/div[1]/div");
 
                     if (container is not null)
                     {
@@ -65,13 +66,13 @@ namespace DataProcessor.Parsers
                         {
                             var item = new EververseItem();
 
-                            var node = container.SelectSingleNode($"./div[{j}]/div[1]/div/img[3]")
-                            ?? container.SelectSingleNode($"./div[{j}]/div[1]/div/img[2]");
+                            var node = container.SelectSingleNode($"./div[{j}]/div[1]/img[3]")
+                            ?? container.SelectSingleNode($"./div[{j}]/div[1]/img[2]");
 
                             if (node is not null)
                                 item.Icon1URL = node.Attributes["src"].Value;
 
-                            node = container.SelectSingleNode($"./div[{j}]/div[1]/div/img[1]");
+                            node = container.SelectSingleNode($"./div[{j}]/div[1]/img[1]");
 
                             if (node is null)
                                 break;
@@ -160,7 +161,7 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetFullInventoryAsync(DateTime seasonEnd)
         {
-            int weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7;
+            int weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7 + 1;
 
             int rows = (int)Math.Sqrt(weeksTotal);
             int columns = (int)Math.Ceiling((double)weeksTotal / rows);
