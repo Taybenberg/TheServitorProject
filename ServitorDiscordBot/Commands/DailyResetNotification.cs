@@ -14,8 +14,6 @@ namespace ServitorDiscordBot
             var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
 
             await GetDailyResetAsync(channel);
-
-            await GetRoadmapAsync(channel);
         }
     }
 }

@@ -60,13 +60,6 @@ namespace DataProcessor
             return await parser.GetImageAsync();
         }
 
-        public async Task<Stream> GetRoadmapAsync()
-        {
-            var parser = _factory.GetRoadmapParser();
-
-            return await parser.GetImageAsync();
-        }
-
         public async Task<Stream> GetXurAsync(bool getLocation)
         {
             var parser = _factory.GetXurParser(getLocation);

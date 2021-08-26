@@ -37,9 +37,6 @@ namespace DataProcessor
         public IInventoryParser<OsirisInventory> GetOsirisParser() =>
             new TrialsOfOsirisParser();
 
-        public IInventoryParser<RoadmapInventory> GetRoadmapParser() =>
-            new RoadmapParser();
-
         public IInventoryParser<XurInventory> GetXurParser(bool getLocation)
         {
             using var scope = _scopeFactory.CreateScope();

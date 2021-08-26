@@ -130,45 +130,6 @@
   <data name="ResourcesBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ResourcesBackground.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="RoadmapAug10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapaug10.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapAug3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapaug3.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapJul6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapjul6.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapJun1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapjun1.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapJun15" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapjun15.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapJun22" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapjun22.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapJun29" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapjun29.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapJun8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapjun8.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapMay11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapmay11.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapMay14" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapmay14.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapMay18" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapmay18.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapMay22" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapmay22.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="RoadmapMay25" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\roadmap\roadmapmay25.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="TrialsItemsBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\trialsitemsbackground.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

@@ -20,8 +20,6 @@ namespace DataProcessor
 
         Task<Stream> GetOsirisAsync();
 
-        Task<Stream> GetRoadmapAsync();
-
         Task<Stream> GetXurAsync(bool getLocation);
     }
 }

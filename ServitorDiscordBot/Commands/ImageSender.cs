@@ -40,14 +40,6 @@ namespace ServitorDiscordBot
             await channel.SendFileAsync(inventory, "EververseInventory.png");
         }
 
-        private async Task GetRoadmapAsync(IMessageChannel channel)
-        {
-            using var roadmap = await getImageFactory().GetRoadmapAsync();
-
-            if (roadmap is not null)
-                await channel.SendFileAsync(roadmap, "Roadmap.png");
-        }
-
         private async Task GetResourcesPoolAsync(IMessageChannel channel)
         {
             using var resources = await getImageFactory().GetResourcesAsync();
