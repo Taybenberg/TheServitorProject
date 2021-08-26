@@ -49,7 +49,7 @@ namespace BungieNetApi.Entities
                         CharacterID = long.Parse(x.characterId),
                         MembershipID = long.Parse(x.player.destinyUserInfo.membershipId),
                         MembershipType = (MembershipType)x.player.destinyUserInfo.membershipType,
-                        DisplayName = x.player.destinyUserInfo.displayName,
+                        DisplayName = $"{x.player.destinyUserInfo.bungieGlobalDisplayName}#{x.player.destinyUserInfo.bungieGlobalDisplayNameCode}",
                         ActivityDurationSeconds = x.values.activityDurationSeconds.basic.value,
                         Completed = x.values.completed.basic.value > 0,
                         CompletionReasonValue = x.values.completionReason.basic.value,

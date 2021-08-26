@@ -8,20 +8,20 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyPartnersAsync(IMessage message)
         {
-            var activities = await getWrapperFactory().GetMyPartnersAsync(message.Author.Id);
+            var partners = await getWrapperFactory().GetMyPartnersAsync(message.Author.Id);
 
-            if (!activities.IsUserRegistered)
+            if (!partners.IsUserRegistered)
             {
                 await UserIsNotRegisteredAsync(message);
 
                 return;
             }
 
-            var builder = GetBuilder(MessagesEnum.MyPartners, message);
+            var builder = GetBuilder(MessagesEnum.MyPartners, message, userName: partners.UserName);
 
             builder.ThumbnailUrl = message.Author.GetAvatarUrl();
 
-            if (!activities.Partners.Any())
+            if (!partners.Partners.Any())
             {
                 builder.Color = GetColor(MessagesEnum.Error);
 
@@ -29,9 +29,9 @@ namespace ServitorDiscordBot
             }
             else
             {
-                builder.Description = string.Join("\n", activities.Partners.Select(x => $"**{x.UserName}** – **{x.Count}**"));
+                builder.Description = string.Join("\n", partners.Partners.Select(x => $"**{x.UserName}** – **{x.Count}**"));
 
-                builder.ImageUrl = activities.QuickChartURL;
+                builder.ImageUrl = partners.QuickChartURL;
             }
 
             await message.Channel.SendMessageAsync(embed: builder.Build());

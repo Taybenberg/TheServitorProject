@@ -28,6 +28,8 @@ namespace DataProcessor.DatabaseWrapper
 
         public bool IsUserRegistered { get; private set; }
 
+        public string UserName { get; private set; }
+
         public int Count { get; private set; }
 
         public string QuickChartURL { get; private set; }
@@ -48,6 +50,8 @@ namespace DataProcessor.DatabaseWrapper
 
             if (!(IsUserRegistered = user is not null))
                 return;
+
+            UserName = user.UserName;
 
             Classes = user.Characters.Select(c => new ClassCounter
             {

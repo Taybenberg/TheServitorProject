@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
                 return;
             }
 
-            var builder = GetBuilder(MessagesEnum.MyRaids, message);
+            var builder = GetBuilder(MessagesEnum.MyRaids, message, userName: raids.UserName);
 
             builder.ThumbnailUrl = message.Author.GetAvatarUrl();
 

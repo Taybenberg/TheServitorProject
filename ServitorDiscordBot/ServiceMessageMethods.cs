@@ -161,11 +161,11 @@ namespace ServitorDiscordBot
             }
         }
 
-        private EmbedBuilder GetBuilder(MessagesEnum messagesEnum, IMessage message, bool getFooter = true)
+        private EmbedBuilder GetBuilder(MessagesEnum messagesEnum, IMessage message, bool getFooter = true, string userName = null)
         {
             var builder = new EmbedBuilder();
 
-            builder.Title = GetTitle(messagesEnum, message);
+            builder.Title = GetTitle(messagesEnum, message, userName);
 
             builder.Color = GetColor(messagesEnum);
 

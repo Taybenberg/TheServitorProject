@@ -60,8 +60,8 @@ namespace API.GroupV2.GetMembersOfGroup
 
     public class Destinyuserinfo
     {
+        [IgnoreDataMember]
         public string LastSeenDisplayName { get; set; }
-
         [IgnoreDataMember]
         public int LastSeenDisplayNameType { get; set; }
         [IgnoreDataMember]
@@ -78,6 +78,9 @@ namespace API.GroupV2.GetMembersOfGroup
 
         [IgnoreDataMember]
         public string displayName { get; set; }
+
+        public string bungieGlobalDisplayName { get; set; }
+        public int bungieGlobalDisplayNameCode { get; set; }
     }
 
     public class Bungienetuserinfo

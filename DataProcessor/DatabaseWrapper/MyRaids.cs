@@ -26,6 +26,8 @@ namespace DataProcessor.DatabaseWrapper
 
         public bool IsUserRegistered { get; private set; }
 
+        public string UserName { get; private set; }
+
         public IEnumerable<ClassContainer> Classes { get; private set; }
 
         private readonly DateTime _seasonStart;
@@ -45,6 +47,8 @@ namespace DataProcessor.DatabaseWrapper
 
             if (!(IsUserRegistered = user is not null))
                 return;
+
+            UserName = user.UserName;
 
             var raids = await _clanDB.GetUserRaidsAsync(_userID, _seasonStart.AddDays((_weekNumber - 1) * 7));
 

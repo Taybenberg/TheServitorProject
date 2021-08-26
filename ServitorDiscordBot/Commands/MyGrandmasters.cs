@@ -9,16 +9,16 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyGrandmastersAsync(IMessage message)
         {
-            var gms = await getWrapperFactory().GetMyGrandmastersAsync(message.Author.Id, _seasonStart);
+            var grandmasters = await getWrapperFactory().GetMyGrandmastersAsync(message.Author.Id, _seasonStart);
 
-            if (!gms.IsUserRegistered)
+            if (!grandmasters.IsUserRegistered)
             {
                 await UserIsNotRegisteredAsync(message);
 
                 return;
             }
 
-            var builder = GetBuilder(MessagesEnum.MyGrandmasters, message);
+            var builder = GetBuilder(MessagesEnum.MyGrandmasters, message, userName: grandmasters.UserName);
 
             builder.ThumbnailUrl = message.Author.GetAvatarUrl();
 
@@ -27,13 +27,13 @@ namespace ServitorDiscordBot
                 new EmbedFieldBuilder
                 {
                     Name = $"Сезон {_seasonName}",
-                    Value = gms.Seasonal.Any() ? string.Join("\n", gms.Seasonal) : "Немає",
+                    Value = grandmasters.Seasonal.Any() ? string.Join("\n", grandmasters.Seasonal) : "Немає",
                     IsInline = false
                 },
                 new EmbedFieldBuilder
                 {
                     Name = $"Весь час",
-                    Value = gms.AllTime.Any() ? string.Join("\n", gms.AllTime) : "Немає",
+                    Value = grandmasters.AllTime.Any() ? string.Join("\n", grandmasters.AllTime) : "Немає",
                     IsInline = false
                 }
             };

@@ -24,7 +24,7 @@ namespace BungieNetApi.Entities
             {
                 MembershipID = long.Parse(x.destinyUserInfo.membershipId),
                 MembershipType = (MembershipType)x.destinyUserInfo.membershipType,
-                LastSeenDisplayName = x.destinyUserInfo.LastSeenDisplayName,
+                BungieName = $"{x.destinyUserInfo.bungieGlobalDisplayName}#{x.destinyUserInfo.bungieGlobalDisplayNameCode}",
                 ClanJoinDate = x.joinDate
             });
         }

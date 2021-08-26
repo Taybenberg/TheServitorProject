@@ -11,6 +11,8 @@ namespace DataProcessor.DatabaseWrapper
     {
         public bool IsUserRegistered { get; private set; }
 
+        public string UserName { get; private set; }
+
         public IEnumerable<string> Seasonal { get; private set; }
 
         public IEnumerable<string> AllTime { get; private set; }
@@ -32,6 +34,8 @@ namespace DataProcessor.DatabaseWrapper
 
             if (!(IsUserRegistered = user is not null))
                 return;
+
+            UserName = user.UserName;
 
             var nightfalls = await _clanDB.GetUserNightfallsAsync(_userID);
 

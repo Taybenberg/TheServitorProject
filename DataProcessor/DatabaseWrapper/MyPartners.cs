@@ -20,6 +20,8 @@ namespace DataProcessor.DatabaseWrapper
 
         public bool IsUserRegistered { get; private set; }
 
+        public string UserName { get; private set; }
+
         public string QuickChartURL { get; private set; }
 
         public IEnumerable<PartnerCounter> Partners { get; private set; }
@@ -36,6 +38,8 @@ namespace DataProcessor.DatabaseWrapper
 
             if (!(IsUserRegistered = user is not null))
                 return;
+
+            UserName = user.UserName;
 
             var acts = user.Characters.SelectMany(x => x.ActivityUserStats.Select(y => y.Activity)).Distinct();
 

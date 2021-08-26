@@ -12,7 +12,7 @@ namespace BungieNetApi.Entities
 
         public MembershipType MembershipType { get; internal set; }
 
-        public string LastSeenDisplayName { get; internal set; }
+        public string BungieName { get; internal set; }
 
         public DateTime ClanJoinDate { get; internal set; }
 

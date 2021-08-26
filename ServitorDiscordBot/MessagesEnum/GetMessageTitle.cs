@@ -6,15 +6,15 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private string GetTitle(MessagesEnum messagesEnum, IMessage message) => messagesEnum switch
+        private string GetTitle(MessagesEnum messagesEnum, IMessage message, string userName) => messagesEnum switch
         {
             Wait => EmojiContainer.Loading,
             Leaderboard => $"БЕТА | Дошка лідерів",
             ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
-            MyGrandmasters => $"Грандмайстри {message.Author.Username}",
-            MyRaids => $"Рейди {message.Author.Username}",
-            MyActivities => $"Активності {message.Author.Username}",
-            MyPartners => $"Побратими {message.Author.Username}",
+            MyGrandmasters => $"Грандмайстри {userName}",
+            MyRaids => $"Рейди {userName}",
+            MyActivities => $"Активності {userName}",
+            MyPartners => $"Побратими {userName}",
             ClanActivities => $"Активності клану {(message.Channel as IGuildChannel).Guild.Name}",
             Suspicious => $"Останні активності",
             Help => $"Допомога",

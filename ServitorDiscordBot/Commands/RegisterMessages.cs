@@ -44,7 +44,7 @@ namespace ServitorDiscordBot
                 {
                     builder.Color = GetColor(MessagesEnum.RegisterNeedMoreInfo);
 
-                    builder.Description = "Не вдалося знайти користувача. Уточніть, будь ласка, нікнейм тієї платформи, з якої ви вступали до клану.\n" +
+                    builder.Description = "Не вдалося знайти користувача. Уточніть, будь ласка, свій нікнейм Bungie.\n" +
                         "Потім введіть цей нікнейм у команді **зареєструватися %нікнейм%**";
                 }
                 else if ((nickname is not null || nickname?.Length == 0) && similarUsers.UserSimilarities.Count() > 1)
@@ -72,8 +72,8 @@ namespace ServitorDiscordBot
                 else
                 {
                     builder.Description = $"Добре, давайте ж запишемо вас. Важливо, аби ви були учасником клану **хоча б один день**.\n" +
-                        $"Введіть команду **зареєструватися %ваш нікнейм у Steam%** (або іншій платформі, з якої ви вступили до клану)\n" +
-                        $"Приклад: **зареєструватися {message.Author.Username}**\n" +
+                        $"Введіть команду **зареєструватися %ваш нікнейм Bungie%**\n" +
+                        $"Приклад: **зареєструватися {message.Author.Username}#1234**\n" +
                         $"Якщо не пам'ятаєте нікнейм повністю, не проблема, я можу знайти його за частковим збігом.";
                 }
 

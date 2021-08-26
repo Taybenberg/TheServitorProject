@@ -43,7 +43,7 @@ namespace Database
                     newUsers.Add(new User
                     {
                         UserID = usr.Value.MembershipID,
-                        UserName = usr.Value.LastSeenDisplayName,
+                        UserName = usr.Value.BungieName,
                         DateLastPlayed = usr.Value.DateLastPlayed,
                         ClanJoinDate = usr.Value.ClanJoinDate,
                         MembershipType = usr.Value.MembershipType,
@@ -61,7 +61,7 @@ namespace Database
                 }
                 else if (dbUsr.DateLastPlayed < usr.Value.DateLastPlayed)
                 {
-                    dbUsr.UserName = usr.Value.LastSeenDisplayName;
+                    dbUsr.UserName = usr.Value.BungieName;
                     dbUsr.DateLastPlayed = usr.Value.DateLastPlayed;
                     dbUsr.ClanJoinDate = usr.Value.ClanJoinDate;
                     dbUsr.MembershipType = usr.Value.MembershipType;

@@ -105,7 +105,12 @@ namespace API.Destiny2.GetPostGameCarnageReport
 
         public int membershipType { get; set; }
         public string membershipId { get; set; }
+
+        [IgnoreDataMember]
         public string displayName { get; set; }
+
+        public string bungieGlobalDisplayName { get; set; }
+        public int bungieGlobalDisplayNameCode { get; set; }
     }
 
     public class Values
