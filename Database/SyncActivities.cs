@@ -70,7 +70,7 @@ namespace Database
 
                 var clanmateStats = act.Value.UserStats;
 
-                if (act.Value.ActivityType is ActivityType.TrialsOfOsiris or ActivityType.Raid or ActivityType.Dungeon or ActivityType.ScoredNightfall)
+                if (act.Value.ActivityType is ActivityType.Raid or ActivityType.Dungeon or ActivityType.ScoredNightfall)
                 {
                     var rawAct = factory.GetActivity(act.Key);
 
@@ -78,9 +78,7 @@ namespace Database
 
                     if (rawAct.UserStats.Count() > clanmateStats.Count())
                     {
-                        if (act.Value.ActivityType == ActivityType.TrialsOfOsiris)
-                            suspicionIndex = rawAct.UserStats.Select(x => x.MembershipID).Distinct().Count() - clanmateStats.Count() - 3;
-                        else if (act.Value.ActivityType == ActivityType.ScoredNightfall)
+                        if (act.Value.ActivityType == ActivityType.ScoredNightfall)
                         {
                             if (nfIDs.Contains(act.Value.ReferenceID) || clanmateStats.First().TeamScore > 150000)
                                 suspicionIndex = rawAct.UserStats.Count() - clanmateStats.Count();
