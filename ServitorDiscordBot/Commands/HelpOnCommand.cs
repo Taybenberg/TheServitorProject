@@ -323,7 +323,7 @@ namespace ServitorDiscordBot
                             $"то вас буде зареєстровано автоматично одразу після виклику команди **{messageCommands[MessagesEnum.Register][0]}**.\n" +
                             $"Інакше вам потрібно буде уточнити свій нікнейм вручну у якості динамічного параметра " +
                             $"для команди **{messageCommands[MessagesEnum.NotRegistered][0]}**.\n" +
-                            $"Потрібно вказувати нікнейм саме тієї платформи, з якої відбулося приєднання до клану.";
+                            $"Потрібно вказувати глобальний нікнейм Bungie.";
 
                         builder.ImageUrl = "https://i.imgur.com/tEsgGor.png";
 
