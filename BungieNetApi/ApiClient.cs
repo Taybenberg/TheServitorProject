@@ -94,7 +94,7 @@ namespace BungieNetApi
         {
             var rawXurItems = await _bungieNetApiClient.getRawXurItemsAsync();
 
-            return rawXurItems.saleItems.Values.Skip(1).SkipLast(1).Select(x =>
+            return rawXurItems.saleItems.Values.Skip(1).Take(4).Select(x =>
             new Item(_bungieNetApiClient)
             {
                 ItemHash = x.itemHash
