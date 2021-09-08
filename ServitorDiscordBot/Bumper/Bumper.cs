@@ -13,7 +13,7 @@ namespace ServitorDiscordBot
 {
     class Bumper : IDisposable
     {
-        const int bumpPreIntervalMs = 20000;
+        const int bumpPreIntervalMs = 15000;
 
         public event Func<Dictionary<string, DateTime>, Task> Notify;
 
