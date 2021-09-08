@@ -34,7 +34,7 @@ namespace DataProcessor.Parsers
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/vendors");
 
             int[][] vendorsInt = { new int[] { 3, 1, 1 }, new int[] { 7, 2, 2 } };
-            string[] vendors = { "//*[contains(@hash,'863940356')]/div[2]/div[5]/div", "//*[contains(@hash,'672118013')]/div[2]/div[4]/div", "//*[contains(@hash,'350061650')]/div[2]/div[4]/div" };
+            string[] vendors = { "//*[@id=\"vendors_863940356_content\"]/div[5]/div", "//*[@id=\"vendors_672118013_content\"]/div[4]/div", "//*[@id=\"vendors_350061650_content\"]/div[4]/div" };
 
             int i = 0;
 
@@ -46,16 +46,28 @@ namespace DataProcessor.Parsers
                 {
                     for (int j = vendorsInt[0][i]; j <= vendorsInt[1][i]; j++)
                     {
-                        var currencyEntry = container.SelectSingleNode($"./div[{j}]/div[3]/div[2]/div[2]/div[1]");
-
                         var item = new ResourceItem
                         {
-                            ResourceName = container.SelectSingleNode($"./div[{j}]/div[3]/div[1]/p[1]").InnerText.Replace("Purchase ", ""),
-                            ResourceIconURL = (container.SelectSingleNode($"./div[{j}]/div[1]/div/img[2]") ?? container.SelectSingleNode($"./div[{j}]/div[1]/div/img")).Attributes["src"].Value,
-                            ResourceCurrencyQuantity = currencyEntry.SelectSingleNode($"./p[2]").InnerText,
-                            ResourceCurrencyIconURL = currencyEntry.SelectSingleNode($"./div/img").Attributes["src"].Value
-                        };
+                            ResourceName = container.SelectSingleNode($"./div[{j}]/div[3]/div[1]/p")
+                            .InnerText.Replace("Purchase ", ""),
 
+                            ResourceIconURL = (container.SelectSingleNode($"./div[{j}]/div[1]/img[2]") ?? 
+                            container.SelectSingleNode($"./div[{j}]/div[1]/img"))
+                            .Attributes["src"].Value,
+
+                            ResourceCurrencyQuantity = 
+                            (container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[3]/div/p[2]") ??
+                            container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[4]/div/p[2]") ?? 
+                            container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[5]/div/p[2]"))
+                            .InnerText,
+
+                            ResourceCurrencyIconURL = 
+                            (container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[3]/div/div/img") ??
+                            container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[4]/div/div/img") ??
+                            container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[5]/div/div/img"))
+                            .Attributes["src"].Value
+                        };
+        
                         switch (i)
                         {
                             case 0:
