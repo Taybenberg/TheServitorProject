@@ -124,23 +124,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.Osiris]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Osiris][0]}** " +
-                            $"генерує інформаційну картку (дизайнер картки – <@679220982082174977>) " +
-                            $"з відомостями про лутпул Випробувань Осіріса. Якщо на момент виклику команди випробування ще не активні, " +
-                            $"то буде згенеровано порожню картку, якщо лутпул відомо лише частково – картка буде частково заповненою.\n" +
-                            $"З метою уникнення флуду команда користувача та попередньо згенерована картка видаляються.\n" +
-                            $"Інформація підтягується з ресурсу https://www.light.gg";
-
-                        builder.ImageUrl = "https://i.imgur.com/kpgx3SK.png";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Eververse]
                 .Any(x => c.StartsWith(x)):
                     {

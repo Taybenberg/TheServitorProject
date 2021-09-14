@@ -28,7 +28,6 @@
         RegisterSuccessful,
         RegisterNeedMoreInfo,
         Xur,
-        Osiris,
         Reset,
         ClanStats,
         Leaderboard,

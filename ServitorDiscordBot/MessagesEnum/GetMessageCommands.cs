@@ -22,7 +22,6 @@ namespace ServitorDiscordBot
             [_100K] = new string[] { "100к", "100k" },
             [Apostates] = new string[] { "відступники", "apostates" },
             [Xur] = new string[] { "зур", "xur" },
-            [Osiris] = new string[] { "осіріс", "сосіріс", "osiris" },
             [Eververse] = new string[] { "еверверс", "eververse" },
             [EververseAll] = new string[] { "еверверс все", "eververse all" },
             [NotRegistered] = new string[] { "зареєструватися", "register" },

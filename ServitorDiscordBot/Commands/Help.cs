@@ -36,8 +36,6 @@ namespace ServitorDiscordBot
 
                 $"\n**{messageCommands[Xur][0]}** - переглянути інвентар Зура\n" +
 
-                $"\n**{messageCommands[Osiris][0]}** - переглянути нагороди за випробування Осіріса\n" +
-
                 $"\n**{messageCommands[Eververse][0]}** - переглянути поточний асортимент Тесс Еверіс\n" +
 
                 $"\n**{messageCommands[Eververse][0]} %тиждень%** - переглянути асортимент Тесс Еверіс за визначений тиждень (1-{(int)(_seasonEnd - _seasonStart).TotalDays / 7 + 1})\n" +

@@ -54,16 +54,6 @@ namespace ServitorDiscordBot
             await channel.SendFileAsync(sectors, "LostSectorsLoot.png");
         }
 
-        private ConcurrentDictionary<ulong, ulong> osirisInventory = new();
-        private async Task GetOsirisInventoryAsync(IMessageChannel channel)
-        {
-            using var inventory = await getImageFactory().GetOsirisAsync();
-
-            var msg = await channel.SendFileAsync(inventory, "OsirisInventory.png");
-
-            await antiFlood(osirisInventory, channel.Id, msg.Id);
-        }
-
         private ConcurrentDictionary<ulong, ulong> xurInventory = new();
         private async Task GetXurInventoryAsync(IMessageChannel channel, bool getLocation = true)
         {

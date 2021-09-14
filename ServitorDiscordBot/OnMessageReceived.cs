@@ -162,12 +162,6 @@ namespace ServitorDiscordBot
                         break;
 
                     case string c
-                    when messageCommands[MessagesEnum.Osiris]
-                    .Contains(c):
-                        await ExecuteWaitMessageAsync(message, GetOsirisInventoryAsync, deleteSenderMessage: true);
-                        break;
-
-                    case string c
                     when messageCommands[MessagesEnum.EververseAll]
                     .Contains(c):
                         await ExecuteWaitMessageAsync(message, GetEververseFullInventoryAsync);

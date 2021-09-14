@@ -46,13 +46,6 @@ namespace DataProcessor
             return await parser.GetImageAsync();
         }
 
-        public async Task<Stream> GetOsirisAsync()
-        {
-            var parser = _factory.GetOsirisParser();
-
-            return await parser.GetImageAsync();
-        }
-
         public async Task<Stream> GetResourcesAsync()
         {
             var parser = _factory.GetResourcesParser();

@@ -17,8 +17,6 @@ namespace DataProcessor
 
         IInventoryParser<ResourcesInventory> GetResourcesParser();
 
-        IInventoryParser<OsirisInventory> GetOsirisParser();
-
         IInventoryParser<XurInventory> GetXurParser(bool getLocation);
     }
 }
