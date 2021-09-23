@@ -38,7 +38,7 @@ namespace ServitorDiscordBot
 
             var builder = GetBuilder(MessagesEnum.Wait, null, false);
 
-            builder.Description = new Random().Next(20) switch
+            builder.Description = new Random().Next(30) switch
             {
                 0 => $"Я займусь командою \"{command}\", а ви поки порахуйте бейбі фоленів.",
                 1 => $"\"{command}\" туди, \"{command}\" сюди…",
@@ -174,12 +174,27 @@ namespace ServitorDiscordBot
                 var footer = new EmbedFooterBuilder();
 
                 footer.IconUrl = _client.CurrentUser.GetAvatarUrl();
-                footer.Text = $"Ваш відданий {_client.CurrentUser.Username}";
+                footer.Text = $"Ваш відданий {_client.CurrentUser.Username} | !donate – підтримати автора";
 
                 builder.Footer = footer;
             }
 
             return builder;
+        }
+
+        private async Task SendDonateMessageAsync(IMessageChannel channel)
+        {
+            var builder = new EmbedBuilder();
+
+            builder.Color = Color.Gold;
+
+            builder.ThumbnailUrl = _client.GetUser(228896926991515649).GetAvatarUrl();
+
+            builder.Title = "Підтримати автора";
+
+            builder.Description = $"Ви завжди можете підтримати <@228896926991515649> чашкою кави на сервісі [Buy Me a Coffee](https://www.buymeacoffee.com/servitor).";
+
+            await channel.SendMessageAsync(embed: builder.Build());
         }
     }
 }

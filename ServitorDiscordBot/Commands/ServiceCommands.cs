@@ -10,6 +10,10 @@ namespace ServitorDiscordBot
         {
             switch (command)
             {
+                case "!donate":
+                    await SendDonateMessageAsync(message.Channel);
+                    return true;
+
                 case "!my_id":
                     await SendTemporaryMessageAsync(message, message.Author.Id.ToString());
                     return true;
