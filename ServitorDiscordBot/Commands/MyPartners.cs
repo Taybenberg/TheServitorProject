@@ -6,9 +6,11 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetMyPartnersAsync(IMessage message)
+        private async Task GetMyPartnersAsync(IMessage message, string period)
         {
-            var partners = await getWrapperFactory().GetMyPartnersAsync(message.Author.Id);
+            (var date, var title) = GetPeriod(period);
+
+            var partners = await getWrapperFactory().GetMyPartnersAsync(message.Author.Id, date);
 
             if (!partners.IsUserRegistered)
             {
@@ -19,13 +21,15 @@ namespace ServitorDiscordBot
 
             var builder = GetBuilder(MessagesEnum.MyPartners, message, userName: partners.UserName);
 
+            builder.Title += title;
+
             builder.ThumbnailUrl = message.Author.GetAvatarUrl();
 
             if (!partners.Partners.Any())
             {
                 builder.Color = GetColor(MessagesEnum.Error);
 
-                builder.Description = "Не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали цього року.";
+                builder.Description = "Не можу знайти інформацію про ваші активності. Можливо ви новачок у клані, або ще ні з ким не грали за вказаний період.";
             }
             else
             {

@@ -7,7 +7,7 @@ namespace DataProcessor
 {
     public interface IDatabaseWrapperFactory
     {
-        Task<ClanActivities> GetClanActivitiesAsync();
+        Task<ClanActivities> GetClanActivitiesAsync(DateTime? period);
 
         Task<ClanStats> GetClanStatsAsync(string mode);
 
@@ -15,9 +15,9 @@ namespace DataProcessor
 
         Task<Leaderboard> GetLeaderboardAsync(string mode, ulong discordUserID);
 
-        Task<MyActivities> GetMyActivitiesAsync(ulong discordUserID);
+        Task<MyActivities> GetMyActivitiesAsync(ulong discordUserID, DateTime? period);
 
-        Task<MyPartners> GetMyPartnersAsync(ulong discordUserID);
+        Task<MyPartners> GetMyPartnersAsync(ulong discordUserID, DateTime? period);
 
         Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly);
 

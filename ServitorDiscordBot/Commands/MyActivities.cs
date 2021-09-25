@@ -6,9 +6,11 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetMyActivitiesAsync(IMessage message)
+        private async Task GetMyActivitiesAsync(IMessage message, string period)
         {
-            var activities = await getWrapperFactory().GetMyActivitiesAsync(message.Author.Id);
+            (var date, var title) = GetPeriod(period);
+
+            var activities = await getWrapperFactory().GetMyActivitiesAsync(message.Author.Id, date);
 
             if (!activities.IsUserRegistered)
             {
@@ -18,6 +20,8 @@ namespace ServitorDiscordBot
             }
 
             var builder = GetBuilder(MessagesEnum.MyActivities, message, userName: activities.UserName);
+
+            builder.Title += title;
 
             builder.ThumbnailUrl = message.Author.GetAvatarUrl();
 

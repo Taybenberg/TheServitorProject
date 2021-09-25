@@ -95,8 +95,12 @@ namespace ServitorDiscordBot
 
                     case string c
                     when messageCommands[MessagesEnum.ClanActivities]
-                    .Contains(c):
-                        await ExecuteWaitMessageAsync(message, GetClanActivitiesAsync);
+                    .Any(x => c.StartsWith(x)):
+                        var cPeriod = c
+                            .Replace(messageCommands[MessagesEnum.ClanActivities]
+                            .Where(x => c.StartsWith(x)).First(), string.Empty)
+                            .TrimStart();
+                        await ExecuteWaitMessageAsync(message, GetClanActivitiesAsync, cPeriod);
                         break;
 
                     case string c
@@ -133,14 +137,22 @@ namespace ServitorDiscordBot
 
                     case string c
                     when messageCommands[MessagesEnum.MyActivities]
-                    .Contains(c):
-                        await ExecuteWaitMessageAsync(message, GetMyActivitiesAsync);
+                    .Any(x => c.StartsWith(x)):
+                        var aPeriod = c
+                            .Replace(messageCommands[MessagesEnum.MyActivities]
+                            .Where(x => c.StartsWith(x)).First(), string.Empty)
+                            .TrimStart();
+                        await ExecuteWaitMessageAsync(message, GetMyActivitiesAsync, aPeriod);
                         break;
 
                     case string c
                     when messageCommands[MessagesEnum.MyPartners]
-                    .Contains(c):
-                        await ExecuteWaitMessageAsync(message, GetMyPartnersAsync);
+                    .Any(x => c.StartsWith(x)):
+                        var pPeriod = c
+                            .Replace(messageCommands[MessagesEnum.MyPartners]
+                            .Where(x => c.StartsWith(x)).First(), string.Empty)
+                            .TrimStart();
+                        await ExecuteWaitMessageAsync(message, GetMyPartnersAsync, pPeriod);
                         break;
 
                     case string c

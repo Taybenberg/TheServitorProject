@@ -3,7 +3,6 @@ using Database;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,36 +26,47 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly IClanDB _clanDB;
 
-        internal ClanActivities(IClanDB clanDB) => _clanDB = clanDB;
+        private readonly DateTime? _period;
+
+        internal ClanActivities(IClanDB clanDB, DateTime? period) => (_clanDB, _period) = (clanDB, period);
 
         public async Task InitAsync()
         {
             var acts = await _clanDB.GetActivitiesAsync();
 
+            if (_period is not null)
+                acts = acts.Where(p => p.Period > _period);
+
             Count = acts.Count();
+
+            Dictionary<ActivityType, int> counter = new();
+
+            foreach (var at in Enum.GetValues<ActivityType>())
+                counter.Add(at, 0);
+
+            foreach (var act in acts)
+                counter[act.ActivityType]++;
 
             var cumulativeCounter = new CumulativeActivityCounter();
 
-            ConcurrentBag<ModeCounter> counter = new();
+            List<ModeCounter> modeCounter = new();
 
-            Parallel.ForEach((ActivityType[])Enum.GetValues(typeof(ActivityType)), (type) =>
+            foreach (var pair in counter)
             {
-                var count = acts.Count(x => x.ActivityType == type);
-
-                if (count > 0)
+                if (pair.Value > 0)
                 {
-                    cumulativeCounter.Add(type, count);
+                    cumulativeCounter.Add(pair.Key, pair.Value);
 
-                    counter.Add(new ModeCounter
+                    modeCounter.Add(new ModeCounter
                     {
-                        Emoji = EmojiContainer.GetActivityEmoji(type),
-                        Modes = TranslationDictionaries.ActivityNames[type],
-                        Count = count
+                        Emoji = EmojiContainer.GetActivityEmoji(pair.Key),
+                        Modes = TranslationDictionaries.ActivityNames[pair.Key],
+                        Count = pair.Value
                     });
                 }
-            });
+            }
 
-            Modes = counter.OrderByDescending(x => x.Count);
+            Modes = modeCounter.OrderByDescending(x => x.Count);
 
             QuickChartURL = cumulativeCounter.QuickChartURL;
         }

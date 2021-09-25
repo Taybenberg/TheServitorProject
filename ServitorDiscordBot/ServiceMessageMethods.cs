@@ -11,6 +11,14 @@ namespace ServitorDiscordBot
         private int GetWeekNumber() =>
             (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
 
+        private (DateTime?, string) GetPeriod(string period) =>
+            period switch
+            {
+                "тиждень" => (DateTime.UtcNow.AddDays(-7), " за останній тиждень"),
+                "місяць" => (DateTime.UtcNow.AddMonths(-1), " за останній місяць"),
+                _ => (null, " за весь час")
+            };
+
         private bool CheckModerationRole(IUser user) =>
             ((SocketGuildUser)user).Roles.Any(x =>
             x.Name.ToLower() is "administrator" ||

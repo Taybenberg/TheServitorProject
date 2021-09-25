@@ -18,13 +18,13 @@ namespace DataProcessor
 
         public DatabaseWrapperFactory(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
-        public async Task<ClanActivities> GetClanActivitiesAsync()
+        public async Task<ClanActivities> GetClanActivitiesAsync(DateTime? period)
         {
             using var scope = _scopeFactory.CreateScope();
 
             IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
 
-            var activities = new ClanActivities(clanDB);
+            var activities = new ClanActivities(clanDB, period);
 
             await activities.InitAsync();
 
@@ -66,26 +66,26 @@ namespace DataProcessor
             return leaderboard;
         }
 
-        public async Task<MyActivities> GetMyActivitiesAsync(ulong discordUserID)
+        public async Task<MyActivities> GetMyActivitiesAsync(ulong discordUserID, DateTime? period)
         {
             using var scope = _scopeFactory.CreateScope();
 
             IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
 
-            var activities = new MyActivities(clanDB, discordUserID);
+            var activities = new MyActivities(clanDB, discordUserID, period);
 
             await activities.InitAsync();
 
             return activities;
         }
 
-        public async Task<MyPartners> GetMyPartnersAsync(ulong discordUserID)
+        public async Task<MyPartners> GetMyPartnersAsync(ulong discordUserID, DateTime? period)
         {
             using var scope = _scopeFactory.CreateScope();
 
             IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
 
-            var activities = new MyPartners(clanDB, discordUserID);
+            var activities = new MyPartners(clanDB, discordUserID, period);
 
             await activities.InitAsync();
 

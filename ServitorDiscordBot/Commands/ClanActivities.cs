@@ -5,11 +5,15 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task GetClanActivitiesAsync(IMessage message)
+        private async Task GetClanActivitiesAsync(IMessage message, string period)
         {
+            (var date, var title) = GetPeriod(period);
+
             var builder = GetBuilder(MessagesEnum.ClanActivities, message);
 
-            var counter = await getWrapperFactory().GetClanActivitiesAsync();
+            builder.Title += title;
+
+            var counter = await getWrapperFactory().GetClanActivitiesAsync(date);
 
             builder.ThumbnailUrl = (message.Channel as IGuildChannel).Guild.IconUrl;
 

@@ -30,7 +30,9 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly IClanDB _clanDB;
 
-        internal MyPartners(IClanDB clanDB, ulong discordUserID) => (_clanDB, _userID) = (clanDB, discordUserID);
+        private readonly DateTime? _period;
+
+        internal MyPartners(IClanDB clanDB, ulong discordUserID, DateTime? period) => (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
 
         public async Task InitAsync()
         {
@@ -42,6 +44,9 @@ namespace DataProcessor.DatabaseWrapper
             UserName = user.UserName;
 
             var acts = user.Characters.SelectMany(x => x.ActivityUserStats.Select(y => y.Activity)).Distinct();
+
+            if (_period is not null)
+                acts = acts.Where(p => p.Period > _period);
 
             var users = (await _clanDB.GetUsersWithCharactersAsync()).Where(x => x.UserID != user.UserID);
 
@@ -69,15 +74,21 @@ namespace DataProcessor.DatabaseWrapper
 
             Parallel.ForEach(partners.Take(10), (partner) =>
             {
+                Dictionary<ActivityType, int> counter = new();
+
+                foreach (var at in Enum.GetValues<ActivityType>())
+                    counter.Add(at, 0);
+
+                foreach (var act in partner.activities)
+                    counter[act.ActivityType]++;
+
                 var cumulativeCounter = new CumulativeActivityCounter();
 
-                Parallel.ForEach((ActivityType[])Enum.GetValues(typeof(ActivityType)), (type) =>
+                foreach (var pair in counter)
                 {
-                    var count = partner.activities.Count(x => x.ActivityType == type);
-
-                    if (count > 0)
-                        cumulativeCounter.Add(type, count);
-                });
+                    if (pair.Value > 0)
+                        cumulativeCounter.Add(pair.Key, pair.Value);
+                }
 
                 userCumulativeCounter.Add((partner.userName, cumulativeCounter));
             });

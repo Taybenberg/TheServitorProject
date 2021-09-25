@@ -51,23 +51,23 @@ namespace DataProcessor.Parsers
                             ResourceName = container.SelectSingleNode($"./div[{j}]/div[3]/div[1]/p")
                             .InnerText.Replace("Purchase ", ""),
 
-                            ResourceIconURL = (container.SelectSingleNode($"./div[{j}]/div[1]/img[2]") ?? 
+                            ResourceIconURL = (container.SelectSingleNode($"./div[{j}]/div[1]/img[2]") ??
                             container.SelectSingleNode($"./div[{j}]/div[1]/img"))
                             .Attributes["src"].Value,
 
-                            ResourceCurrencyQuantity = 
+                            ResourceCurrencyQuantity =
                             (container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[3]/div/p[2]") ??
-                            container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[4]/div/p[2]") ?? 
+                            container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[4]/div/p[2]") ??
                             container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[5]/div/p[2]"))
                             .InnerText,
 
-                            ResourceCurrencyIconURL = 
+                            ResourceCurrencyIconURL =
                             (container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[3]/div/div/img") ??
                             container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[4]/div/div/img") ??
                             container.SelectSingleNode($"./div[{j}]/div[2]/div[2]/div[5]/div/div/img"))
                             .Attributes["src"].Value
                         };
-        
+
                         switch (i)
                         {
                             case 0:
