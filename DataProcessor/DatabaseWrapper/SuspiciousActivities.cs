@@ -51,9 +51,9 @@ namespace DataProcessor.DatabaseWrapper
             {
                 var act = _apiClient.EntityFactory.GetActivity(activity.ActivityID);
 
-                ConcurrentBag<User> users = new();
+                List<User> users = new();
 
-                Parallel.ForEach(act.UserStats.Select(x => Tuple.Create(x.MembershipID, x.MembershipType, x.DisplayName)).Distinct(), (user) =>
+                foreach (var user in act.UserStats.Select(x => Tuple.Create(x.MembershipID, x.MembershipType, x.DisplayName)).Distinct())
                 {
                     if (userIDs.Any(x => x == user.Item1))
                     {
@@ -76,7 +76,7 @@ namespace DataProcessor.DatabaseWrapper
                             ClanName = clan?.ClanName
                         });
                     }
-                });
+                }
 
                 acts.Add(new Activity
                 {

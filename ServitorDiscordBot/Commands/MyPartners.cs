@@ -1,4 +1,5 @@
 ﻿using Discord;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,7 +34,8 @@ namespace ServitorDiscordBot
             }
             else
             {
-                builder.Description = string.Join("\n", partners.Partners.Select(x => $"**{x.UserName}** – **{x.Count}**"));
+                builder.Description = $"Всього кооперативних активностей: **{partners.CoopCount}/{partners.AllCount} ({Math.Round(partners.CoopCount * 100.0 / partners.AllCount, 2)}%)**\n" +
+                    $"\n{string.Join("\n", partners.Partners.Select(x => $"**{x.UserName}** – **{x.Count}**"))}";
 
                 builder.ImageUrl = partners.QuickChartURL;
             }

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\a\" />
+  </ItemGroup>
+
 </Project>

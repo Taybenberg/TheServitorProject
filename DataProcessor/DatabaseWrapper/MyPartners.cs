@@ -22,6 +22,10 @@ namespace DataProcessor.DatabaseWrapper
 
         public string UserName { get; private set; }
 
+        public int AllCount { get; private set; }
+
+        public int CoopCount { get; private set; }
+
         public string QuickChartURL { get; private set; }
 
         public IEnumerable<PartnerCounter> Partners { get; private set; }
@@ -48,13 +52,19 @@ namespace DataProcessor.DatabaseWrapper
             if (_period is not null)
                 acts = acts.Where(p => p.Period > _period);
 
+            var coopActs = acts.Where(x => x.ActivityUserStats.Any(y => !user.Characters.Any(c => c.CharacterID == y.CharacterID)));
+
+            AllCount = acts.Count();
+
+            CoopCount = coopActs.Count();
+
             var users = (await _clanDB.GetUsersWithCharactersAsync()).Where(x => x.UserID != user.UserID);
 
             ConcurrentBag<(string userName, IEnumerable<Activity> activities, int count)> counter = new();
 
             Parallel.ForEach(users, (usr) =>
             {
-                var activities = acts.Where(x => x.ActivityUserStats.Any(y => usr.Characters.Any(c => c.CharacterID == y.CharacterID)));
+                var activities = coopActs.Where(x => x.ActivityUserStats.Any(y => usr.Characters.Any(c => c.CharacterID == y.CharacterID)));
 
                 var count = activities.Count();
 
