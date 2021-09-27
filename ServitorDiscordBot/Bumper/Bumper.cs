@@ -13,8 +13,6 @@ namespace ServitorDiscordBot
 {
     class Bumper : IDisposable
     {
-        const int bumpPreIntervalMs = 15000;
-
         public event Func<Dictionary<string, DateTime>, Task> Notify;
 
         class Bump
@@ -83,7 +81,7 @@ namespace ServitorDiscordBot
 
             _timer.AutoReset = false;
 
-            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds - bumpPreIntervalMs;
+            _timer.Interval = (_bump.NextBump - DateTime.Now).TotalMilliseconds;
 
             _timer.Elapsed += (_, _) =>
             {
@@ -101,7 +99,7 @@ namespace ServitorDiscordBot
         {
             _timer.Stop();
 
-            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds - bumpPreIntervalMs;
+            _timer.Interval = (_bump.AddUser(userID) - DateTime.Now).TotalMilliseconds;
 
             _timer.Start();
 
