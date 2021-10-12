@@ -40,7 +40,7 @@ namespace BungieNetApi.Entities
                 ActivityType = (ActivityType)x.activityDetails.mode,
                 ReferenceID = x.activityDetails.referenceId,
                 DirectorActivityHash = x.activityDetails.directorActivityHash,
-                _userStats = new()
+                RawUserStats = new()
                 {
                     new Activity.ActivityUserStats
                     {

@@ -8,7 +8,7 @@ namespace BungieNetApi
     {
         IEntityFactory EntityFactory { get; }
 
-        Clan Clan { get; }
+        Clan GetClan(long clanID);
 
         Task<Nightfall> GetNightfallAsync(long activityHash);
 

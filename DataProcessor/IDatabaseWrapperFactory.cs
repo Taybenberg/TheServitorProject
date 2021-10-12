@@ -9,7 +9,7 @@ namespace DataProcessor
     {
         Task<ClanActivities> GetClanActivitiesAsync(DateTime? period);
 
-        Task<ClanStats> GetClanStatsAsync(string mode);
+        Task<ClanStats> GetClanStatsAsync(string mode, ulong discordUserID);
 
         Task<IEnumerable<(string, string[])>> GetModesAsync();
 

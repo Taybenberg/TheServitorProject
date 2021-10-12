@@ -35,7 +35,7 @@ namespace DataProcessor.DatabaseWrapper
 
         public string Emoji { get; private set; }
 
-        public bool UserRegistered { get; private set; }
+        public bool IsUserRegistered { get; private set; }
 
         public string QuickChartURL { get; private set; }
 
@@ -52,6 +52,13 @@ namespace DataProcessor.DatabaseWrapper
 
         public async Task InitAsync()
         {
+            var currUser = await _clanDB.GetUserByDiscordIdAsync(_userID);
+
+            IsUserRegistered = currUser is not null;
+
+            if (!IsUserRegistered)
+                return;
+
             var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == _mode));
 
             if (!(IsSuccessful = pair.Value is not null))
@@ -61,7 +68,7 @@ namespace DataProcessor.DatabaseWrapper
 
             Emoji = EmojiContainer.GetActivityEmoji(pair.Key);
 
-            var leaderboard = await _apiClient.Clan.GetClanLeaderboardAsync(pair.Key, TranslationDictionaries.StatNames.Keys.ToArray());
+            var leaderboard = await _apiClient.GetClan(currUser.ClanID).GetClanLeaderboardAsync(pair.Key, TranslationDictionaries.StatNames.Keys.ToArray());
 
             if (!leaderboard.Any())
             {
@@ -69,10 +76,6 @@ namespace DataProcessor.DatabaseWrapper
 
                 return;
             }
-
-            var currUser = await _clanDB.GetUserByDiscordIdAsync(_userID);
-
-            UserRegistered = currUser is not null;
 
             var users = await _clanDB.GetUsersAsync();
 
@@ -106,7 +109,7 @@ namespace DataProcessor.DatabaseWrapper
                         });
                     }
 
-                    if (!userFound && UserRegistered)
+                    if (!userFound && IsUserRegistered)
                     {
                         var u = entry.Leaders.FirstOrDefault(x => x.UserID == currUser.UserID);
 
@@ -131,7 +134,7 @@ namespace DataProcessor.DatabaseWrapper
 
             Stats = stats.OrderBy(x => x.Name);
 
-            if (UserRegistered)
+            if (IsUserRegistered)
             {
                 var quickChartString = "{type:'radar',data:{labels:[" + string.Join(',', Stats.Select(x => $"'{x.Name}'")) +
                     "],datasets:[{borderColor:'#25C486',backgroundColor:'rgba(37,196,134,0.5)',pointBackgroundColor:'#25C486'," +

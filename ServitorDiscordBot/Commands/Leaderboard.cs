@@ -12,6 +12,13 @@ namespace ServitorDiscordBot
 
             var leaderboard = await getWrapperFactory().GetLeaderboardAsync(mode, message.Author.Id);
 
+            if (!leaderboard.IsUserRegistered)
+            {
+                await UserIsNotRegisteredAsync(message);
+
+                return;
+            }
+
             if (!leaderboard.IsSuccessful)
             {
                 builder.Color = GetColor(MessagesEnum.Error);
@@ -32,10 +39,7 @@ namespace ServitorDiscordBot
                 }
                 else
                 {
-                    if (!leaderboard.UserRegistered)
-                        builder.Description = "Зареєструйтеся (команда **реєстрація**), щоб отримати найкращий досвід використання команди.";
-                    else
-                        builder.ImageUrl = leaderboard.QuickChartURL;
+                    builder.ImageUrl = leaderboard.QuickChartURL;
 
                     builder.Fields = leaderboard.Stats.Select(x =>
                     new EmbedFieldBuilder

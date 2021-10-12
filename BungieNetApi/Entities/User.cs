@@ -16,6 +16,8 @@ namespace BungieNetApi.Entities
 
         public DateTime ClanJoinDate { get; internal set; }
 
+        public long ClanID { get; internal set; }
+
         private class UserContainer
         {
             public DateTime DateLastPlayed;

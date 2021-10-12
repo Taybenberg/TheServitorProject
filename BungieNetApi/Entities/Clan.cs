@@ -16,8 +16,6 @@ namespace BungieNetApi.Entities
 
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            ConcurrentBag<User> users = new();
-
             var rawClanMembers = await _apiClient.getRawUsersAsync(ID.ToString());
 
             return rawClanMembers.Select(x => new User(_apiClient)
@@ -25,7 +23,8 @@ namespace BungieNetApi.Entities
                 MembershipID = long.Parse(x.destinyUserInfo.membershipId),
                 MembershipType = (MembershipType)x.destinyUserInfo.membershipType,
                 BungieName = $"{x.destinyUserInfo.bungieGlobalDisplayName}#{x.destinyUserInfo.bungieGlobalDisplayNameCode}",
-                ClanJoinDate = x.joinDate
+                ClanJoinDate = x.joinDate,
+                ClanID = ID
             });
         }
 

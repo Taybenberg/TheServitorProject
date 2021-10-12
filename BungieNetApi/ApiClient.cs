@@ -13,13 +13,9 @@ namespace BungieNetApi
 
         private readonly BungieNetApiClient _bungieNetApiClient;
 
-        private readonly long _clanId;
-
         public ApiClient(IConfiguration configuration)
         {
             _configuration = configuration;
-
-            _clanId = configuration.GetSection("Destiny2:ClanID").Get<long>();
 
             _bungieNetApiClient = new(configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>());
         }
@@ -32,13 +28,7 @@ namespace BungieNetApi
             }
         }
 
-        public Clan Clan
-        {
-            get
-            {
-                return new Clan(_bungieNetApiClient, _clanId);
-            }
-        }
+        public Clan GetClan(long clanID) => new Clan(_bungieNetApiClient, clanID);
 
         public async Task<Nightfall> GetNightfallAsync(long activityHash)
         {

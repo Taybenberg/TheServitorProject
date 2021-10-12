@@ -70,19 +70,19 @@ namespace BungieNetApi.Entities
             _container = new(() => new ActivityContainer(apiClient, InstanceID));
         }
 
-        public ConcurrentBag<ActivityUserStats> _userStats;
+        public ConcurrentBag<ActivityUserStats> RawUserStats;
         public IEnumerable<ActivityUserStats> UserStats
         {
             get
             {
-                return _userStats?.ToArray() ?? _container.Value.UserStats;
+                return RawUserStats?.ToArray() ?? _container.Value.UserStats;
             }
         }
 
         public void MergeUserStats(IEnumerable<ActivityUserStats> stats)
         {
             foreach (var stat in stats)
-                _userStats.Add(stat);
+                RawUserStats.Add(stat);
         }
     }
 }

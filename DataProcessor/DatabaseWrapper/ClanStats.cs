@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using Database;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System.Collections.Generic;
@@ -21,16 +22,30 @@ namespace DataProcessor.DatabaseWrapper
 
         public string Emoji { get; private set; }
 
+        public bool IsUserRegistered { get; private set; }
+
         public IEnumerable<Stat> Stats { get; private set; }
 
         private readonly string _mode;
 
+        private readonly ulong _userID;
+
         private readonly IApiClient _apiClient;
 
-        internal ClanStats(IApiClient apiClient, string mode) => (_apiClient, _mode) = (apiClient, mode);
+        private readonly IClanDB _clanDB;
+
+        internal ClanStats(IClanDB clanDB, IApiClient apiClient, string mode, ulong discordUserID) =>
+            (_clanDB, _apiClient, _mode, _userID) = (clanDB, apiClient, mode, discordUserID);
 
         public async Task InitAsync()
         {
+            var currUser = await _clanDB.GetUserByDiscordIdAsync(_userID);
+
+            IsUserRegistered = currUser is not null;
+
+            if (!IsUserRegistered)
+                return;
+
             var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == _mode));
 
             if (!(IsSuccessful = pair.Value is not null))
@@ -40,7 +55,7 @@ namespace DataProcessor.DatabaseWrapper
 
             Emoji = EmojiContainer.GetActivityEmoji(pair.Key);
 
-            var clanStats = await _apiClient.Clan.GetClanStatsAsync(pair.Key);
+            var clanStats = await _apiClient.GetClan(currUser.ClanID).GetClanStatsAsync(pair.Key);
 
             Stats = clanStats.Select(x => new Stat
             {

@@ -31,13 +31,15 @@ namespace DataProcessor
             return activities;
         }
 
-        public async Task<ClanStats> GetClanStatsAsync(string mode)
+        public async Task<ClanStats> GetClanStatsAsync(string mode, ulong discordUserID)
         {
             using var scope = _scopeFactory.CreateScope();
 
+            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+
             IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
-            var stats = new ClanStats(apiClient, mode);
+            var stats = new ClanStats(clanDB, apiClient, mode, discordUserID);
 
             await stats.InitAsync();
 

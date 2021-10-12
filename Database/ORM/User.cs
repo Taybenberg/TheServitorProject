@@ -11,6 +11,8 @@ namespace Database.ORM
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long UserID { get; set; }
 
+        public long ClanID { get; set; }
+
         public string UserName { get; set; }
 
         public DateTime DateLastPlayed { get; set; }

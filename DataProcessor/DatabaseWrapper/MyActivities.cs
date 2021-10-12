@@ -43,7 +43,8 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly DateTime? _period;
 
-        internal MyActivities(IClanDB clanDB, ulong discordUserID, DateTime? period) => (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
+        internal MyActivities(IClanDB clanDB, ulong discordUserID, DateTime? period) => 
+            (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
 
         public async Task InitAsync()
         {
@@ -58,7 +59,7 @@ namespace DataProcessor.DatabaseWrapper
             {
                 Emoji = EmojiContainer.GetClassEmoji(c.Class),
                 Class = TranslationDictionaries.ClassNames[c.Class],
-                Count = _period is null ? c.ActivityUserStats.Count : 
+                Count = _period is null ? c.ActivityUserStats.Count :
                 c.ActivityUserStats.Where(y => y.Activity.Period > _period).Count()
             }).OrderByDescending(x => x.Count);
 

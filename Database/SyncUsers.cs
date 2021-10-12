@@ -1,6 +1,7 @@
 ﻿using BungieNetApi;
 using Database.ORM;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,7 +22,14 @@ namespace Database
 
             var apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
-            var clanUsers = (await apiClient.Clan.GetUsersAsync()).ToDictionary(x => x.MembershipID, x => x);
+            ConcurrentBag<IEnumerable<BungieNetApi.Entities.User>> clanUsersCollection = new();
+
+            Parallel.ForEach(_configuration.GetSection("Destiny2:ClanIDs").Get<HashSet<long>>(), (clanID) =>
+            {
+                clanUsersCollection.Add(apiClient.GetClan(clanID).GetUsersAsync().Result);
+            });
+
+            var clanUsers = clanUsersCollection.SelectMany(x => x).ToDictionary(x => x.MembershipID, x => x);
 
             var dbUsers = await _context.Users.Include(c => c.Characters).ToDictionaryAsync(x => x.UserID, x => x);
 
@@ -43,6 +51,7 @@ namespace Database
                     newUsers.Add(new User
                     {
                         UserID = usr.Value.MembershipID,
+                        ClanID = usr.Value.ClanID,
                         UserName = usr.Value.BungieName,
                         DateLastPlayed = usr.Value.DateLastPlayed,
                         ClanJoinDate = usr.Value.ClanJoinDate,
@@ -61,9 +70,9 @@ namespace Database
                 }
                 else if (dbUsr.DateLastPlayed < usr.Value.DateLastPlayed)
                 {
+                    dbUsr.ClanID = usr.Value.ClanID;
                     dbUsr.UserName = usr.Value.BungieName;
                     dbUsr.DateLastPlayed = usr.Value.DateLastPlayed;
-                    dbUsr.ClanJoinDate = usr.Value.ClanJoinDate;
                     dbUsr.MembershipType = usr.Value.MembershipType;
 
                     updUsers.Add(dbUsr);
