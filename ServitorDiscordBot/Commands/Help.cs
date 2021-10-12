@@ -14,7 +14,6 @@ namespace ServitorDiscordBot
 
             var g = (message.Channel as IGuildChannel).Guild;
 
-            builder.Author.Url = _clanUrl;
             builder.Author.IconUrl = g.IconUrl;
             builder.Author.Name = $"На варті спільноти {g.Name} з 10.02.2021";
 

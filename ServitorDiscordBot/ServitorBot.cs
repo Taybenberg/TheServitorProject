@@ -23,7 +23,7 @@ namespace ServitorDiscordBot
 
         private readonly RaidManager _raidManager;
 
-        private readonly string _clanUrl, _seasonName;
+        private readonly string _seasonName;
 
         private readonly DateTime _seasonStart, _seasonEnd;
 
@@ -45,13 +45,11 @@ namespace ServitorDiscordBot
 
             _client.Log += LogAsync;
 
-            _client.MessageReceived += OnMessageReceivedAsync;
-            _client.ReactionAdded += OnMessageReactionAddedAsync;
-            _client.MessageDeleted += OnMessageDeletedAsync;
+            _client.MessageReceived += OnMessageReceived;
+            _client.MessageDeleted += OnMessageDeleted;
+            _client.ReactionAdded += OnReactionAdded;
 
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
-
-            _clanUrl = configuration["Destiny2:ClanURL"];
 
             _seasonName = configuration["Destiny2:SeasonName"];
             _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
@@ -90,6 +88,27 @@ namespace ServitorDiscordBot
 
         public async Task StopAsync(CancellationToken cancellationToken) =>
             await _client.StopAsync();
+
+        private Task OnMessageReceived(IMessage message)
+        {
+            Task.Run(async () => await OnMessageReceivedAsync(message));
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnMessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
+        {
+            Task.Run(async () => await OnMessageDeletedAsync(arg1, arg2));
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+        {
+            Task.Run(async () => await OnMessageReactionAddedAsync(arg1, arg2, arg3));
+
+            return Task.CompletedTask;
+        }
 
         private async Task LogAsync(LogMessage log) =>
             _logger.Log(log.Severity switch
