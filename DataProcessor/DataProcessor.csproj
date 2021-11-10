@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="F23.StringSimilarity" Version="4.1.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.37" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.38" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
   </ItemGroup>
 
