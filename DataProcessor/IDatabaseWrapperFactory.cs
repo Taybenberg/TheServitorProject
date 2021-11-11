@@ -19,7 +19,7 @@ namespace DataProcessor
 
         Task<MyPartners> GetMyPartnersAsync(ulong discordUserID, DateTime? period);
 
-        Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly);
+        Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly, bool withProfileLinks);
 
         Task<WeeklyMilestone> GetWeeklyMilestoneAsync();
 

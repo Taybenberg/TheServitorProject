@@ -94,7 +94,7 @@ namespace DataProcessor
             return activities;
         }
 
-        public async Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly)
+        public async Task<SuspiciousActivities> GetSuspiciousActivitiesAsync(bool isNightfallsOnly, bool withProfileLinks)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -102,7 +102,7 @@ namespace DataProcessor
 
             IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
-            var activities = new SuspiciousActivities(clanDB, apiClient, isNightfallsOnly);
+            var activities = new SuspiciousActivities(clanDB, apiClient, isNightfallsOnly, withProfileLinks);
 
             await activities.InitAsync();
 
