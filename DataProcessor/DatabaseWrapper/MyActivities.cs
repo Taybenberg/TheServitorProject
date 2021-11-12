@@ -43,7 +43,7 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly DateTime? _period;
 
-        internal MyActivities(IClanDB clanDB, ulong discordUserID, DateTime? period) => 
+        internal MyActivities(IClanDB clanDB, ulong discordUserID, DateTime? period) =>
             (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
 
         public async Task InitAsync()

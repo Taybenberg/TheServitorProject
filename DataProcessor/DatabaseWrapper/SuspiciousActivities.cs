@@ -73,7 +73,7 @@ namespace DataProcessor.DatabaseWrapper
                         users.Add(new User
                         {
                             IsClanMember = false,
-                            UserName = _withProfileLinks ? 
+                            UserName = _withProfileLinks ?
                             $"[{user.Item3}](https://bungie.net/7/en/User/Profile/{(int)user.Item2}/{user.Item1})" : user.Item3,
                             ClanSign = clan?.ClanSign,
                             ClanName = clan?.ClanName
