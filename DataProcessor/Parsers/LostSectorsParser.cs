@@ -1,9 +1,6 @@
 ﻿using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Processing;
+using NetVips;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -55,45 +52,51 @@ namespace DataProcessor.Parsers
 
             var loader = new ImageLoader();
 
-            using Image image = Image.Load(ExtensionsRes.LostSectorsBackground);
+            Image image = Image.NewFromBuffer(ExtensionsRes.LostSectorsBackground);
 
-            Font dateFont = new Font(SystemFonts.Find("Arial"), 32, FontStyle.Bold);
-            Font lightFont = new Font(SystemFonts.Find("Arial"), 32);
-            Font sectorFont = new Font(SystemFonts.Find("Arial"), 28);
-
-            image.Mutate(m => m
-                .DrawText($"{inventory.ResetBegin.ToString("dd.MM HH:mm")} – {inventory.ResetEnd.ToString("dd.MM HH:mm")}",
-                dateFont, Color.White, new Point(142, 61)));
+            using var dateText = ImageLoader
+                .RenderText
+                ($"<b>{inventory.ResetBegin.ToString("dd.MM HH:mm")} – {inventory.ResetEnd.ToString("dd.MM HH:mm")}</b>",
+                "Arial 32", new int[] { 255, 255, 255 });
+            image = image.Composite(dateText, Enums.BlendMode.Over, 144, 67);
 
             int i = 0;
 
             foreach (var sector in inventory.LostSectors)
             {
-                using Image icon = await loader.GetImageAsync(sector.SectorIconURL);
-
-                icon.Mutate(m => m.Resize(346, 194));
-
-                image.Mutate(m =>
-                {
-                    m.DrawText(sector.LightLevel.ToString(), lightFont, Color.Black, new Point(306 + i, 129));
-
-                    m.DrawImage(icon, new Point(35 + i, 178), 1);
-
-                    m.DrawText(sector.SectorName, sectorFont, Color.Black, new Point(33 + i, 419));
-
-                    m.DrawText(Localization.TranslationDictionaries.ItemNames[sector.SectorReward], sectorFont, Color.Black, new Point(33 + i, 491));
-                });
-
+                image = await DrawSectorAsync(loader, image, sector, i);
                 i += 386;
             }
 
             var ms = new MemoryStream();
 
-            await image.SaveAsPngAsync(ms);
+            image.PngsaveStream(ms);
 
             ms.Position = 0;
 
             return ms;
+        }
+
+        internal async Task<Image> DrawSectorAsync(ImageLoader loader, Image image, LostSector sector, int offset)
+        {
+            using var sectorIcon = await loader.GetImageAsync(sector.SectorIconURL);
+            image = image.Composite
+                (sectorIcon.ThumbnailImage(346, 194, Enums.Size.Force), Enums.BlendMode.Over, 35 + offset, 178);
+
+            using var lightLevel = ImageLoader
+                .RenderText(sector.LightLevel.ToString(), "Arial 32", new int[] { 0, 0, 0 });
+            image = image.Composite(lightLevel, Enums.BlendMode.Over, 308 + offset, 135);
+
+            using var sectorName = ImageLoader
+                .RenderText(sector.SectorName.ToString(), "Arial 28", new int[] { 0, 0, 0 });
+            image = image.Composite(sectorName, Enums.BlendMode.Over, 35 + offset, 425);
+
+            using var sectorReward = ImageLoader
+                .RenderText(Localization.TranslationDictionaries.ItemNames[sector.SectorReward],
+                "Arial 28", new int[] { 0, 0, 0 });
+            image = image.Composite(sectorReward, Enums.BlendMode.Over, 35 + offset, 497);
+
+            return image;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Flurl.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using NetVips;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
@@ -41,11 +40,23 @@ namespace DataProcessor
                 }
                 catch
                 {
-                    return new Image<Rgba32>(1, 1);
+                    return Image.Black(1, 1);
                 }
             }
 
-            return await Image.LoadAsync(filename);
+            return Image.NewFromFile(filename);
+        }
+
+        public static Image RenderText(string text, string font, int[] textColor, Enums.Align? align = null)
+        {
+            using var textMask = Image.Text(text, font, align: align);
+
+            var textImage = textMask
+                .NewFromImage(textColor)
+                .Copy(interpretation: Enums.Interpretation.Srgb)
+                .Bandjoin(textMask);
+
+            return textImage;
         }
     }
 }

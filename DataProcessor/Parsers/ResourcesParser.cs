@@ -1,9 +1,6 @@
 ﻿using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Processing;
+using NetVips;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -97,21 +94,17 @@ namespace DataProcessor.Parsers
 
             var loader = new ImageLoader();
 
-            using Image image = Image.Load(ExtensionsRes.ResourcesBackground);
+            Image image = Image.NewFromBuffer(ExtensionsRes.ResourcesBackground);
 
-            Font dateFont = new Font(SystemFonts.Find("Arial"), 24, FontStyle.Bold);
-
-            image.Mutate(m => m
-                .DrawText($"{inventory.ResetBegin.ToString("dd.MM HH:mm")} – {inventory.ResetEnd.ToString("dd.MM HH:mm")}",
-                dateFont, Color.White, new Point(21, 81)));
-
-            Font font = new Font(SystemFonts.Find("Arial"), 23, FontStyle.Regular);
+            using var resetRange = ImageLoader
+                .RenderText($"<b>{inventory.ResetBegin.ToString("dd.MM HH:mm")} – {inventory.ResetEnd.ToString("dd.MM HH:mm")}</b>", "Arial 24", new int[] { 255, 255, 255 });
+            image = image.Composite(resetRange, Enums.BlendMode.Over, 23, 87);
 
             int x = 22, y = 225;
 
             foreach (var item in inventory.SpiderResources)
             {
-                await DrawItemAsync(item, loader, image, font, x, y);
+                image = await DrawItemAsync(loader, image, item, x, y);
 
                 y += 135;
             }
@@ -124,7 +117,7 @@ namespace DataProcessor.Parsers
 
                 foreach (var item in itemList)
                 {
-                    await DrawItemAsync(item, loader, image, font, x, y);
+                    image = await DrawItemAsync(loader, image, item, x, y);
 
                     x += 433;
                 }
@@ -134,31 +127,32 @@ namespace DataProcessor.Parsers
 
             var ms = new MemoryStream();
 
-            await image.SaveAsPngAsync(ms);
+            image.PngsaveStream(ms);
 
             ms.Position = 0;
 
             return ms;
         }
 
-        internal static async Task DrawItemAsync(ResourceItem item, ImageLoader loader, Image image, Font font, int x, int y)
+        internal static async Task<Image> DrawItemAsync(ImageLoader loader, Image image, ResourceItem item, int x, int y)
         {
-            using Image currencyIcon = await loader.GetImageAsync(item.ResourceCurrencyIconURL);
+            using var resIcon = await loader.GetImageAsync(item.ResourceIconURL);
+            image = image.Composite
+                (resIcon, Enums.BlendMode.Over, x, y);
 
-            currencyIcon.Mutate(m => m.Resize(40, 40));
+            using var currencyIcon = await loader.GetImageAsync(item.ResourceCurrencyIconURL);
+            image = image.Composite
+                (currencyIcon.ThumbnailImage(40, 40, Enums.Size.Force), Enums.BlendMode.Over, 107 + x, 50 + y);
 
-            using Image resIcon = await loader.GetImageAsync(item.ResourceIconURL);
+            using var resourceName = ImageLoader
+                .RenderText(item.ResourceName, "Arial 23", new int[] { 0, 0, 0 });
+            image = image.Composite(resourceName, Enums.BlendMode.Over, 109 + x, 13 + y);
 
-            image.Mutate(m =>
-            {
-                m.DrawImage(resIcon, new Point(x, y), 1);
+            using var resourceCurrency = ImageLoader
+                .RenderText(item.ResourceCurrencyQuantity, "Arial 23", new int[] { 0, 0, 0 });
+            image = image.Composite(resourceCurrency, Enums.BlendMode.Over, 158 + x, 64 + y);
 
-                m.DrawText(item.ResourceName, font, Color.Black, new Point(107 + x, 7 + y));
-
-                m.DrawImage(currencyIcon, new Point(107 + x, 50 + y), 1);
-
-                m.DrawText(item.ResourceCurrencyQuantity, font, Color.Black, new Point(156 + x, 58 + y));
-            });
+            return image;
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using DataProcessor.Parsers.Inventory;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Processing;
+using NetVips;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,48 +30,44 @@ namespace DataProcessor.Parsers
 
             var loader = new ImageLoader();
 
-            using Image image = Image.Load(ExtensionsRes.DailyResetBackground);
+            Image image = Image.NewFromBuffer(ExtensionsRes.DailyResetBackground);
 
-            Font titleFont = new Font(SystemFonts.Find("Arial"), 52);
+            using var resetBegin = ImageLoader
+                .RenderText
+                ($"{sectors.ResetBegin.ToString("dd.MM HH:mm")} – {sectors.ResetEnd.ToString("dd.MM HH:mm")}",
+                "Arial 52", new int[] { 255, 255, 255 });
+            image = image.Composite(resetBegin, Enums.BlendMode.Over, 402, 38);
 
-            image.Mutate(m =>
+            using var week = ImageLoader
+                .RenderText($"Тиждень {_weekNumber}. Сезон \"{_seasonName}\"", "Arial 52", new int[] { 255, 255, 255 });
+            image = image.Composite(week, Enums.BlendMode.Over, 40, 110);
+
             {
-                m.DrawText($"{sectors.ResetBegin.ToString("dd.MM HH:mm")} – {sectors.ResetEnd.ToString("dd.MM HH:mm")}",
-                titleFont, Color.White, new Point(400, 28));
-
-                m.DrawText($"Тиждень {_weekNumber}. Сезон \"{_seasonName}\"",
-                titleFont, Color.White, new Point(38, 104));
-            });
-
-            {
-                Font lightFont = new Font(SystemFonts.Find("Arial"), 44);
-                Font sectorFont = new Font(SystemFonts.Find("Arial"), 28);
-
                 int j = 0;
 
                 foreach (var sector in sectors.LostSectors)
                 {
-                    using Image icon = await loader.GetImageAsync(sector.SectorIconURL);
+                    using var sectorIcon = await loader.GetImageAsync(sector.SectorIconURL);
+                    image = image.Composite
+                        (sectorIcon.ThumbnailImage(346, 194, Enums.Size.Force), Enums.BlendMode.Over, 51, 414 + j);
 
-                    icon.Mutate(m => m.Resize(346, 194));
+                    using var lightLevel = ImageLoader
+                        .RenderText(sector.LightLevel.ToString(), "Arial 44", new int[] { 255, 255, 255 });
+                    image = image.Composite(lightLevel, Enums.BlendMode.Over, 300, 366 + j);
 
-                    image.Mutate(m =>
-                    {
-                        m.DrawText(sector.LightLevel.ToString(), lightFont, Color.White, new Point(296, 358 + j));
+                    using var sectorName = ImageLoader
+                        .RenderText(sector.SectorName.ToString(), "Arial 28", new int[] { 255, 255, 255 });
+                    image = image.Composite(sectorName, Enums.BlendMode.Over, 416, 462 + j);
 
-                        m.DrawImage(icon, new Point(51, 414 + j), 1);
-
-                        m.DrawText(sector.SectorName, sectorFont, Color.White, new Point(414, 456 + j));
-
-                        m.DrawText(Localization.TranslationDictionaries.ItemNames[sector.SectorReward], sectorFont, Color.White, new Point(414, 554 + j));
-                    });
+                    using var sectorReward = ImageLoader
+                        .RenderText(Localization.TranslationDictionaries.ItemNames[sector.SectorReward],
+                        "Arial 28", new int[] { 255, 255, 255 });
+                    image = image.Composite(sectorReward, Enums.BlendMode.Over, 416, 560 + j);
 
                     j += 295;
                 }
             }
             {
-                Font font = new Font(SystemFonts.Find("Arial"), 23, FontStyle.Regular);
-
                 int y = 246;
 
                 foreach (var itemList in new List<List<ResourceItem>> { resources.Ada1Resources, resources.Banshee44Resources })
@@ -83,7 +76,7 @@ namespace DataProcessor.Parsers
 
                     foreach (var item in itemList)
                     {
-                        await ResourcesParser.DrawItemAsync(item, loader, image, font, x, y);
+                        image = await ResourcesParser.DrawItemAsync(loader, image, item, x, y);
 
                         x += 433;
                     }
@@ -100,7 +93,7 @@ namespace DataProcessor.Parsers
 
                     foreach (var item in list.Reverse())
                     {
-                        await ResourcesParser.DrawItemAsync(item, loader, image, font, x, y);
+                        image = await ResourcesParser.DrawItemAsync(loader, image, item, x, y);
 
                         x -= 433;
                     }
@@ -111,7 +104,7 @@ namespace DataProcessor.Parsers
 
             var ms = new MemoryStream();
 
-            await image.SaveAsPngAsync(ms);
+            image.PngsaveStream(ms);
 
             ms.Position = 0;
 

@@ -1,10 +1,7 @@
 ﻿using BungieNetApi;
 using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Processing;
+using NetVips;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,15 +37,19 @@ namespace DataProcessor.Parsers
 
             inventory.Location = location;
 
-            foreach (var item in items.Reverse())
+            try
             {
-                inventory.XurItems.Add(new XurItem
+                foreach (var item in items.Reverse())
                 {
-                    ItemName = item.ItemName,
-                    ItemClass = Localization.TranslationDictionaries.ItemNames[item.ItemTypeAndTier],
-                    ItemIconURL = item.ItemIconUrl
-                });
+                    inventory.XurItems.Add(new XurItem
+                    {
+                        ItemName = item.ItemName,
+                        ItemClass = Localization.TranslationDictionaries.ItemNames[item.ItemTypeAndTier],
+                        ItemIconURL = item.ItemIconUrl
+                    });
+                }
             }
+            catch { }
 
             return inventory;
         }
@@ -59,29 +60,27 @@ namespace DataProcessor.Parsers
 
             var loader = new ImageLoader();
 
-            using Image image = Image.Load(ExtensionsRes.XurItemsBackground);
+            Image image = Image.NewFromBuffer(ExtensionsRes.XurItemsBackground);
 
-            Font locationFont = new Font(SystemFonts.Find("Arial"), 28, FontStyle.Bold);
+            using var lightLevel = ImageLoader
+                .RenderText($"<b>{inventory.Location}</b>", "Arial 28", new int[] { 0, 0, 0 });
+            image = image.Composite(lightLevel, Enums.BlendMode.Over, 259, 580);
 
-            image.Mutate(m => m.DrawText(inventory.Location, locationFont, Color.Black, new Point(257, 574)));
-
-            Font itemName = new Font(SystemFonts.Find("Arial"), 34);
-            Font itemType = new Font(SystemFonts.Find("Arial"), 23);
-
-            int Yi = 30, Yt1 = 43, Yt2 = 89;
+            int Yi = 30, Yt1 = 49, Yt2 = 95;
             int interval = 136;
 
             foreach (var item in inventory.XurItems)
             {
-                using Image icon = await loader.GetImageAsync(item.ItemIconURL);
+                using var icon = await loader.GetImageAsync(item.ItemIconURL);
+                image = image.Composite(icon, Enums.BlendMode.Over, 30, Yi);
 
-                image.Mutate(m =>
-                {
-                    m.DrawImage(icon, new Point(30, Yi), 1);
+                using var itemName = ImageLoader
+                .RenderText(item.ItemName, "Arial 34", new int[] { 0, 0, 0 });
+                image = image.Composite(itemName, Enums.BlendMode.Over, 148, Yt1);
 
-                    m.DrawText(item.ItemName, itemName, Color.Black, new Point(146, Yt1));
-                    m.DrawText(item.ItemClass, itemType, Color.Black, new Point(153, Yt2));
-                });
+                using var itemClass = ImageLoader
+                .RenderText(item.ItemClass, "Arial 23", new int[] { 0, 0, 0 });
+                image = image.Composite(itemClass, Enums.BlendMode.Over, 155, Yt2);
 
                 Yi += interval;
                 Yt1 += interval;
@@ -90,7 +89,7 @@ namespace DataProcessor.Parsers
 
             var ms = new MemoryStream();
 
-            await image.SaveAsPngAsync(ms);
+            image.PngsaveStream(ms);
 
             ms.Position = 0;
 

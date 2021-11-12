@@ -7,7 +7,8 @@
   <ItemGroup>
     <PackageReference Include="F23.StringSimilarity" Version="4.1.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.38" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
+    <PackageReference Include="NetVips" Version="2.0.1" />
+    <PackageReference Include="NetVips.Native" Version="8.11.4" />
   </ItemGroup>
 
   <ItemGroup>

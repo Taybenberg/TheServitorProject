@@ -1,13 +1,10 @@
 ﻿using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using NetVips;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataProcessor.Parsers
@@ -94,28 +91,38 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetImageAsync(int? weekNumber)
         {
+            var image = await DrawImageAsync(weekNumber);
+
+            var ms = new MemoryStream();
+
+            image.PngsaveStream(ms);
+
+            ms.Position = 0;
+
+            return ms;
+        }
+
+        internal async Task<Image> DrawImageAsync(int? weekNumber)
+        {
             var inventory = await GetInventoryAsync(weekNumber);
 
             var loader = new ImageLoader();
 
-            using Image image = Image.Load(ExtensionsRes.EververseItemsBackground);
+            Image image = Image.NewFromBuffer(ExtensionsRes.EververseItemsBackground);
 
-            Font font = new Font(SystemFonts.Find("Arial"), 30, FontStyle.Bold);
+            using var week = ImageLoader
+                .RenderText($"<b>{inventory.Week}</b>", "Arial 30", new int[] { 255, 255, 255 });
+            image = image.Composite(week, Enums.BlendMode.Over, 213, 17);
 
-            using Image icon = await loader.GetImageAsync(inventory.SeasonIconURL);
+            using var weekBegin = ImageLoader
+                .RenderText
+                ($"<b>{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}</b>",
+                "Arial 30", new int[] { 255, 255, 255 });
+            image = image.Composite(weekBegin, Enums.BlendMode.Over, 213, 78);
 
-            icon.Mutate(m => m.Resize(192, 192));
-
-            image.Mutate(m =>
-            {
-                m.DrawText(inventory.Week, font, Color.White, new Point(212, 12));
-
-                m.DrawText
-                    ($"{inventory.WeekBegin.ToString("dd.MM HH:mm")} – {inventory.WeekEnd.ToString("dd.MM HH:mm")}",
-                    font, Color.White, new Point(212, 73));
-
-                m.DrawImage(icon, new Point(0, 0), 1);
-            });
+            using var icon = await loader.GetImageAsync(inventory.SeasonIconURL);
+            image = image.Composite
+                (icon.ThumbnailImage(192, 192, Enums.Size.Force), Enums.BlendMode.Over, 0, 0);
 
             int[] Y = { 178, 361, 467, 650 };
 
@@ -127,53 +134,42 @@ namespace DataProcessor.Parsers
 
                 foreach (var item in itemList)
                 {
-                    await DrawItemAsync(item, loader, image, x, y);
+                    image = await DrawItemAsync(loader, image, item, x, y);
 
                     x += 106;
                 }
             }
 
-            var ms = new MemoryStream();
-
-            await image.SaveAsPngAsync(ms);
-
-            ms.Position = 0;
-
-            return ms;
+            return image;
         }
 
-        internal static async Task DrawItemAsync(EververseItem item, ImageLoader loader, Image image, int x, int y)
+        internal static async Task<Image> DrawItemAsync(ImageLoader loader, Image image, EververseItem item, int x, int y)
         {
             if (item.Icon1URL is not null)
             {
-                using Image icon1 = await loader.GetImageAsync(item.Icon1URL);
-
-                image.Mutate(m => m.DrawImage(icon1, new Point(x, y), 1));
+                using var icon1 = await loader.GetImageAsync(item.Icon1URL);
+                image = image.Composite(icon1, Enums.BlendMode.Over, x, y);
             }
 
             if (item.Icon2URL is not null)
             {
-                using Image icon2 = await loader.GetImageAsync(item.Icon2URL);
-
-                image.Mutate(m => m.DrawImage(icon2, new Point(x, y), 1));
+                using var icon2 = await loader.GetImageAsync(item.Icon2URL);
+                image = image.Composite(icon2, Enums.BlendMode.Over, x, y);
             }
+
+            return image;
         }
 
         public async Task<Stream> GetFullInventoryAsync(DateTime seasonEnd)
         {
             int weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7 + 1;
 
+            var tasks = Enumerable.Range(1, weeksTotal).Select(i => Task.Run(async () => await DrawImageAsync(i))).ToArray();
+
             int rows = (int)Math.Sqrt(weeksTotal);
             int columns = (int)Math.Ceiling((double)weeksTotal / rows);
 
-            Stream[] streams = new Stream[weeksTotal];
-
-            Parallel.For(0, weeksTotal, (i) =>
-            {
-                streams[i] = GetImageAsync(i + 1).Result;
-            });
-
-            using var image = new Image<Rgba32>(columns * 802, rows * 902);
+            var image = Image.Black(columns * 802, rows * 902);
 
             int week = 0;
 
@@ -183,11 +179,8 @@ namespace DataProcessor.Parsers
                 {
                     if (week < weeksTotal)
                     {
-                        using var str = streams[week];
-
-                        using var img = Image.Load(str);
-
-                        image.Mutate(m => m.DrawImage(img, new Point(j * 802, i * 902), 1));
+                        using var img = await tasks[week];
+                        image = image.Insert(img, j * 802, i * 902);
                     }
 
                     week++;
@@ -196,7 +189,7 @@ namespace DataProcessor.Parsers
 
             var ms = new MemoryStream();
 
-            await image.SaveAsPngAsync(ms);
+            image.PngsaveStream(ms);
 
             ms.Position = 0;
 
