@@ -19,11 +19,16 @@ namespace ServitorDiscordBot
                 _ => (null, " за весь час")
             };
 
-        private bool CheckModerationRole(IUser user) =>
-            ((SocketGuildUser)user).Roles.Any(x =>
+        private bool CheckModerationRole(IUser user)
+        {
+            var sUser = user as SocketGuildUser;
+
+            return sUser.Roles.Any(x =>
             x.Name.ToLower() is "administrator" ||
             x.Name.ToLower() is "moderator" ||
-            x.Name.ToLower() is "raid lead");
+            x.Name.ToLower() is "raid lead") ||
+            sUser.Guild.OwnerId == user.Id;
+        }
 
         private string GetActivityCountImpression(int count, string username) =>
             new Random().Next(10) switch
