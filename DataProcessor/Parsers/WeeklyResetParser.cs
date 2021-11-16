@@ -1,6 +1,9 @@
 ﻿using DataProcessor.DatabaseWrapper;
 using DataProcessor.Parsers.Inventory;
-using NetVips;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -31,17 +34,17 @@ namespace DataProcessor.Parsers
 
             var loader = new ImageLoader();
 
-            Image image = Image.NewFromBuffer(ExtensionsRes.WeeklyResetBackground);
+            using Image image = Image.Load(ExtensionsRes.WeeklyResetBackground);
 
-            using var weekBegin = ImageLoader
-                .RenderText
-                ($"{eververse.WeekBegin.ToString("dd.MM HH:mm")} – {eververse.WeekEnd.ToString("dd.MM HH:mm")}",
-                "Arial 52", new int[] { 255, 255, 255 });
-            image = image.Composite(weekBegin, Enums.BlendMode.Over, 482, 40);
+            Font titleFont = new Font(SystemFonts.Find("Arial"), 52);
 
-            using var week = ImageLoader
-                .RenderText(eververse.Week, "Arial 52", new int[] { 255, 255, 255 });
-            image = image.Composite(week, Enums.BlendMode.Over, 40, 111);
+            image.Mutate(m =>
+            {
+                m.DrawText($"{eververse.WeekBegin.ToString("dd.MM HH:mm")} – {eververse.WeekEnd.ToString("dd.MM HH:mm")}",
+                titleFont, Color.White, new Point(480, 29));
+
+                m.DrawText(eververse.Week, titleFont, Color.White, new Point(38, 105));
+            });
 
             {
                 int[] Y = { 375, 580, 692, 897 };
@@ -54,47 +57,53 @@ namespace DataProcessor.Parsers
 
                     foreach (var item in itemList)
                     {
-                        image = await EververseParser.DrawItemAsync(loader, image, item, x, y);
+                        await EververseParser.DrawItemAsync(item, loader, image, x, y);
 
                         x += 112;
                     }
                 }
             }
             {
-                using var icon = await loader.GetImageAsync(milestone.NightfallImageURL);
-                image = image.Composite
-                    (icon.ThumbnailImage(560, 315, Enums.Size.Force), Enums.BlendMode.Over, 971, 366);
+                using Image icon = await loader.GetImageAsync(milestone.NightfallImageURL);
+                icon.Mutate(m => m.Resize(560, 315));
 
-                if (milestone.IsIronBannerAvailable)
+                image.Mutate(m =>
                 {
-                    using var bannerText = ImageLoader
-                        .RenderText
-                        ($"Доступний\n{milestone.IronBannerName}!",
-                        "Arial 36", new int[] { 255, 255, 255 }, Enums.Align.Centre);
-                    image = image.Composite(bannerText, Enums.BlendMode.Over, 1240, 90);
-                }
-                else
-                {
-                    using var bannerText = ImageLoader
-                        .RenderText("Н/Д", "Arial 52", new int[] { 255, 255, 255 });
-                    image = image.Composite(bannerText, Enums.BlendMode.Over, 1316, 104);
-                }
+                    Font font = new Font(SystemFonts.Find("Arial"), 36);
 
-                int y = 305;
+                    if (milestone.IsIronBannerAvailable)
+                    {
+                        m.DrawText(new DrawingOptions
+                        {
+                            TextOptions = new TextOptions
+                            {
+                                HorizontalAlignment = HorizontalAlignment.Center
+                            }
+                        }, $"Доступний\n{milestone.IronBannerName}!", font, Color.White, new Point(1355, 84));
+                    }
+                    else
+                    {
+                        Font bannerFont = new Font(SystemFonts.Find("Arial"), 52);
 
-                foreach (var field in milestone.Fields)
-                {
-                    using var value = ImageLoader
-                        .RenderText(field.Value, "Arial 36", new int[] { 255, 255, 255 });
-                    image = image.Composite(value, Enums.BlendMode.Over, 1053, y);
+                        m.DrawText("Н/Д", bannerFont, Color.White, new Point(1314, 95));
+                    }
 
-                    y += 499;
-                }
+                    m.DrawImage(icon, new Point(966, 366), 1);
+
+                    int y = 299;
+
+                    foreach (var field in milestone.Fields)
+                    {
+                        m.DrawText(field.Value, font, Color.White, new Point(1051, y));
+
+                        y += 499;
+                    }
+                });
             }
 
             var ms = new MemoryStream();
 
-            image.PngsaveStream(ms);
+            await image.SaveAsPngAsync(ms);
 
             ms.Position = 0;
 
