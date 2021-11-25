@@ -329,6 +329,18 @@ namespace ServitorDiscordBot
                     }
                     return;
 
+                case "рандом" or "random":
+                    {
+                        builder.Title = "Рандом";
+
+                        builder.Description = "Наявні 2 типи команд:\n" +
+                            "**!random** ***N*** – генерує випадкове ціле число X в діапазоні 0 <= X < N.\n" +
+                            "**!random** ***@Role*** – обирає випадкового користувача зі вказаною роллю.";
+
+                        await message.Channel.SendMessageAsync(embed: builder.Build());
+                    }
+                    return;
+
                 case "адмін" or "admin":
                     {
                         builder.Title = "Видалення повідомлень";

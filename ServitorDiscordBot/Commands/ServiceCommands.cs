@@ -1,4 +1,5 @@
 ﻿using Discord;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,7 +36,32 @@ namespace ServitorDiscordBot
                 case string c when c.StartsWith("!echo"):
                     try
                     {
-                        await message.Channel.SendMessageAsync(c.Replace("!echo ", string.Empty));
+                        await SendTemporaryMessageAsync(message, c.Replace("!echo ", string.Empty));
+                    }
+                    catch { }
+
+                    return true;
+
+                case string c when c.StartsWith("!random"):
+                    try
+                    {
+                        if (message.MentionedRoleIds.Count == 1)
+                        {
+                            var members = _client.GetGuild((message.Channel as IGuildChannel).GuildId).GetRole(message.MentionedRoleIds.First()).Members.ToArray();
+
+                            var count = members.Length;
+
+                            await message.Channel.SendMessageAsync($"Серед {count} користувачів моє око побачило <@{members[new Random().Next(count)].Id}> <:Illuminati:891705606631727114>");
+                        }
+                        else
+                        {
+                            var strs = c.Split(' ');
+
+                            if (strs.Length == 2 && uint.TryParse(strs[1], out var next))
+                                await message.Channel.SendMessageAsync($"Віщую вам число **{new Random().Next((int)next)}** <:Illuminati:891705606631727114>");
+                            else
+                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога рандом**.");                         
+                        }
                     }
                     catch { }
 
@@ -147,7 +173,7 @@ namespace ServitorDiscordBot
             {
                 if (strs.Length < 2)
                 {
-                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
+                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога адмін**.");
                     return;
                 }
 
@@ -161,7 +187,7 @@ namespace ServitorDiscordBot
                     await DeleteMessagesAsync(message, msg.Channel, msg, limit, dir, isFast);
                 }
                 else
-                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
+                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога адмін**.");
             }
             else
             {
@@ -169,7 +195,7 @@ namespace ServitorDiscordBot
 
                 if (strs.Length < 3)
                 {
-                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат.");
+                    await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога адмін**.");
                     return;
                 }
 
