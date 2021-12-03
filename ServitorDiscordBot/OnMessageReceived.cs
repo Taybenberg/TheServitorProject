@@ -18,10 +18,14 @@ namespace ServitorDiscordBot
             if (message.Author.IsBot)
                 return;
 
-            var command = message.Content.ToLower();
-
-            if (await ServiceMessagesAsync(message, command))
+            if (await ServiceMessagesAsync(message))
                 return;
+
+            if (message.Channel.Id == _musicChannelId)
+            {
+                await InitPlaybackAsync(message);
+                return;
+            }
 
             if (message.Channel.Id == _raidChannelId)
             {
@@ -30,7 +34,7 @@ namespace ServitorDiscordBot
             }
 
             if (_channelId.Any(x => x == message.Channel.Id))
-                switch (command)
+                switch (message.Content.ToLower())
                 {
                     case string c
                     when messageCommands[MessagesEnum.Bip]

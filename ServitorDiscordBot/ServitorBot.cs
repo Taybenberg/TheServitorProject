@@ -23,6 +23,8 @@ namespace ServitorDiscordBot
 
         private readonly RaidManager _raidManager;
 
+        private readonly MusicPlayer _player;
+
         private readonly string _seasonName;
 
         private readonly DateTime _seasonStart, _seasonEnd;
@@ -31,6 +33,7 @@ namespace ServitorDiscordBot
 
         private readonly ulong[] _channelId;
         private readonly ulong _raidChannelId;
+        private readonly ulong _musicChannelId;
         private readonly ulong _bumpChannelId;
 
         private readonly string[] _bumpPingUsers;
@@ -59,6 +62,7 @@ namespace ServitorDiscordBot
 
             _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
             _raidChannelId = configuration.GetSection("Discord:RaidChannelID").Get<ulong>();
+            _musicChannelId = configuration.GetSection("Discord:MusicChannelID").Get<ulong>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
             _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
 
@@ -72,6 +76,8 @@ namespace ServitorDiscordBot
             _raidManager.Update += Event_Update;
             _raidManager.Delete += Event_Delete;
             _raidManager.Load();
+
+            _player = new(logger);
         }
 
         public void Dispose()

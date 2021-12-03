@@ -7,9 +7,9 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        public async Task<bool> ServiceMessagesAsync(IMessage message, string command)
+        public async Task<bool> ServiceMessagesAsync(IMessage message)
         {
-            switch (command)
+            switch (message.Content.ToLower())
             {
                 case "!donate":
                     await SendDonateMessageAsync(message.Channel);
@@ -60,7 +60,7 @@ namespace ServitorDiscordBot
                             if (strs.Length == 2 && uint.TryParse(strs[1], out var next))
                                 await message.Channel.SendMessageAsync($"Віщую вам число **{new Random().Next((int)next)}** <:Illuminati:891705606631727114>");
                             else
-                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога рандом**.");                         
+                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога рандом**.");
                         }
                     }
                     catch { }
