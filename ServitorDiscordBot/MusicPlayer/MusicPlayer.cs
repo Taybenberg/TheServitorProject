@@ -4,6 +4,7 @@ using ManagedBass;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Common;
@@ -20,6 +21,17 @@ namespace ServitorDiscordBot
             _logger = logger;
 
             Bass.Init();
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Bass.PluginLoad("bassopus.dll");
+                Bass.PluginLoad("basswebm.dll");
+            }
+            else
+            {
+                Bass.PluginLoad("libbassopus.so");
+                Bass.PluginLoad("libbasswebm.so");
+            }
         }
 
         public void Dispose() => Bass.Free();
@@ -117,12 +129,18 @@ namespace ServitorDiscordBot
 
         private async Task PlayTrack(IStreamInfo streamInfo, AudioOutStream stream)
         {
+            _logger.LogInformation($"{DateTime.Now} Preparing audiostream with container:{streamInfo.Container}, url:{streamInfo.Url}");
+        
             var handle = Bass.CreateStream(streamInfo.Url, 0, BassFlags.Decode, null);
 
             if (handle == 0)
-                return;
+            {
+                _logger.LogInformation($"{DateTime.Now} BASS Error: {Bass.LastError}");
 
-            _logger.LogInformation($"{DateTime.Now} Playing audiostream hID:{handle}, container:{streamInfo.Container}, url:{streamInfo.Url}");
+                return;
+            }
+
+            _logger.LogInformation($"{DateTime.Now} Playing audiostream hID:{handle}");
 
             try
             {
