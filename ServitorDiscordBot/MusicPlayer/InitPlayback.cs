@@ -25,6 +25,11 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
+                when c is "queue":
+                    await _player.GetQueueAsync(message.Channel);
+                    break;
+
+                case string c
                 when c is "stop":
                     {
                         await message.Channel.SendMessageAsync("Зупиняю відтворення…");

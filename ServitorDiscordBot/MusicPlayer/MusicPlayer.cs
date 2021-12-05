@@ -93,6 +93,35 @@ namespace ServitorDiscordBot
             musicContainer?.Shuffle();
         }
 
+        public async Task GetQueueAsync(IMessageChannel channel)
+        {
+            lock (locker)
+            {
+                if (!isReserved)
+                    return;
+            }
+
+            var curr = musicContainer?.CurrIndex;
+            var videos = musicContainer?.AllVideos;
+
+            if (curr is not null && videos is not null)
+            {
+                int count = videos.Length;
+
+                string str = $"У черзі {count} відео:";
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (i == curr)
+                        str += $"\n**{i + 1})** [{videos[i].Duration}] ***{videos[i].Title}***";
+                    else
+                        str += $"\n{i + 1}) [{videos[i].Duration}] *{videos[i].Title}*";
+                }
+
+                await channel.SendMessageAsync(str);
+            }
+        }
+
         public async Task AddAsync(string URL)
         {
             lock (locker)
@@ -130,7 +159,7 @@ namespace ServitorDiscordBot
                                 break;
                         }
 
-                        await channel.SendMessageAsync($"Зараз відтворюється: **{video.Video.Title}**");
+                        await channel.SendMessageAsync($"Зараз відтворюється **{musicContainer.CurrIndex + 1}/{musicContainer.Count}**: [{video.Video.Duration}] ***{video.Video.Title}***");
 
                         var streamInfo = await video.StreamInfo;
 

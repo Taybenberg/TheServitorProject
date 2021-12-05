@@ -37,6 +37,28 @@ namespace ServitorDiscordBot
             }
         }
 
+        public int CurrIndex
+        {
+            get
+            {
+                lock (locker)
+                {
+                    return videos.ToList().IndexOf(currNode.Value);
+                }
+            }
+        }
+
+        public IVideo[] AllVideos
+        {
+            get
+            {
+                lock (locker)
+                {
+                    return videos.Select(x => x.Video).ToArray();
+                }
+            }
+        }
+
         public YoutubeVideo CurrentYoutubeVideo
         {
             get
