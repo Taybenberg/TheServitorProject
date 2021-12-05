@@ -36,8 +36,11 @@ namespace ServitorDiscordBot
 
         public void Dispose() => Bass.Free();
 
-        private static readonly object locker = new();
+        private readonly object locker = new();
         private bool isReserved = false;
+
+        private readonly object skipper = new();
+        private bool skip = false;
 
         public bool TryReserve()
         {
@@ -46,6 +49,7 @@ namespace ServitorDiscordBot
                 if (!isReserved)
                 {
                     isReserved = true;
+                    skip = false;
 
                     return true;
                 }
@@ -62,10 +66,26 @@ namespace ServitorDiscordBot
             }
         }
 
-        public async Task Play(string URL, IVoiceChannel voiceChannel)
+        public void Next()
         {
+            lock (skipper)
+            {
+                skip = true;
+            }
+        }
+
+        public async Task Play(string URL, IVoiceChannel voiceChannel, IMessageChannel channel)
+        {
+            if (URL.Contains("list="))
+            {
+                await Playlist(URL, voiceChannel, channel);
+                return;
+            }
+
             try
             {
+                await channel.SendMessageAsync("Буферизую відео, відтворення незабаром розпочнеться…");
+
                 var youtube = new YoutubeClient();
 
                 var streamManifest = await youtube.Videos.Streams.GetManifestAsync(URL);
@@ -88,10 +108,12 @@ namespace ServitorDiscordBot
             }
         }
 
-        public async Task Playlist(string URL, IVoiceChannel voiceChannel)
+        public async Task Playlist(string URL, IVoiceChannel voiceChannel, IMessageChannel channel)
         {
             try
             {
+                await channel.SendMessageAsync("Буферизую плейлист, відтворення незабаром розпочнеться…");
+
                 var youtube = new YoutubeClient();
 
                 var videos = await youtube.Playlists.GetVideosAsync(URL);
@@ -135,7 +157,7 @@ namespace ServitorDiscordBot
 
             if (handle == 0)
             {
-                _logger.LogInformation($"{DateTime.Now} BASS Error: {Bass.LastError}");
+                _logger.LogInformation($"{DateTime.Now} Handle init BASS Error: {Bass.LastError}");
 
                 return;
             }
@@ -148,6 +170,15 @@ namespace ServitorDiscordBot
 
                 do
                 {
+                    lock (skipper)
+                    {
+                        if (skip)
+                        {
+                            skip = false;
+                            break;
+                        }
+                    }
+
                     lock (locker)
                     {
                         if (!isReserved)
@@ -160,10 +191,12 @@ namespace ServitorDiscordBot
 
                     if (count > 0)
                         await stream.WriteAsync(buffer, 0, count);
-                } while (count > 0);
+                } while (count >= 0);
             }
             finally
             {
+                _logger.LogInformation($"{DateTime.Now} Handle exit BASS Error: {Bass.LastError}");
+
                 Bass.StreamFree(handle);
             }
         }

@@ -12,12 +12,12 @@ namespace ServitorDiscordBot
             switch (command)
             {
                 case string c
-                    when c is "допомога":
+                when c is "допомога":
                     await GetHelpOnCommandAsync(message, "музика");
                     break;
 
                 case string c
-                    when c is "stop":
+                when c is "stop":
                     {
                         await message.Channel.SendMessageAsync("Зупиняю відтворення…");
 
@@ -26,20 +26,11 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("playlist"):
+                when c is "next":
                     {
-                        var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
+                        await message.Channel.SendMessageAsync("Перемикаю відео…");
 
-                        if (voiceChannel is null)
-                            await message.Channel.SendMessageAsync("Спершу приєднайтеся до голосового каналу.");
-                        else if (_player.TryReserve())
-                        {
-                            await message.Channel.SendMessageAsync("Буферизую плейлист, відтворення незабаром розпочнеться…");
-
-                            await _player.Playlist(message.Content[9..], voiceChannel);
-                        }
-                        else
-                            await message.Channel.SendMessageAsync("Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
+                        _player.Next();
                     }
                     break;
 
@@ -51,11 +42,7 @@ namespace ServitorDiscordBot
                         if (voiceChannel is null)
                             await message.Channel.SendMessageAsync("Спершу приєднайтеся до голосового каналу.");
                         else if (_player.TryReserve())
-                        {
-                            await message.Channel.SendMessageAsync("Буферизую відео, відтворення незабаром розпочнеться…");
-
-                            await _player.Play(message.Content[5..], voiceChannel);
-                        }
+                            await _player.Play(message.Content[5..], voiceChannel, message.Channel);
                         else
                             await message.Channel.SendMessageAsync("Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
                     }
