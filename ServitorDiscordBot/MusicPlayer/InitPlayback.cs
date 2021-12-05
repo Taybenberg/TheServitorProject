@@ -30,6 +30,24 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
+                when c is "pause":
+                    {
+                        await message.Channel.SendMessageAsync("Призупиняю відтворення…");
+
+                        _player.Pause();
+                    }
+                    break;
+
+                case string c
+                when c is "continue":
+                    {
+                        await message.Channel.SendMessageAsync("Продовжую відтворення…");
+
+                        _player.Continue();
+                    }
+                    break;
+
+                case string c
                 when c is "stop":
                     {
                         await message.Channel.SendMessageAsync("Зупиняю відтворення…");

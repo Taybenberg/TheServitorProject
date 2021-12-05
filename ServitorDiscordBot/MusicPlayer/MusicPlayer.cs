@@ -59,6 +59,7 @@ namespace ServitorDiscordBot
             lock (locker)
             {
                 isReserved = false;
+                isPlaying = true;
             }
         }
 
@@ -68,6 +69,8 @@ namespace ServitorDiscordBot
             {
                 if (isReserved)
                     skip = true;
+
+                isPlaying = true;
             }
         }
 
@@ -79,6 +82,8 @@ namespace ServitorDiscordBot
             {
                 if (isReserved)
                     skip = true;
+
+                isPlaying = true;
             }
         }
 
@@ -179,6 +184,11 @@ namespace ServitorDiscordBot
             }
         }
 
+        public void Pause() => isPlaying = false;
+
+        public void Continue() => isPlaying = true;
+
+        private bool isPlaying;
         private async Task PlayVideoAsync(IStreamInfo streamInfo, AudioOutStream stream)
         {
             var handle = Bass.CreateStream(streamInfo.Url, 0, BassFlags.Decode, null);
@@ -194,10 +204,15 @@ namespace ServitorDiscordBot
 
             try
             {
+                isPlaying = true;
+
                 int count;
 
                 do
                 {
+                    while (!isPlaying)
+                        await Task.Delay(250);
+
                     lock (locker)
                     {
                         if (skip)
