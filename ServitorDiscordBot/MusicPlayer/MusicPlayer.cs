@@ -117,10 +117,16 @@ namespace ServitorDiscordBot
 
                 for (int i = 0; i < count; i++)
                 {
+                    string tmp;
+
                     if (i == curr)
-                        str += $"\n**{i + 1})** [{videos[i].Duration}] ***{videos[i].Title}***";
+                        tmp = $"\n**{i + 1})** [{videos[i].Duration}] ***{videos[i].Title}***";
                     else
-                        str += $"\n{i + 1}) [{videos[i].Duration}] *{videos[i].Title}*";
+                        tmp = $"\n{i + 1}) [{videos[i].Duration}] *{videos[i].Title}*";
+
+                    if ((str + tmp).Length < 2000)
+                        str += tmp;
+                    else break;
                 }
 
                 await channel.SendMessageAsync(str);

@@ -19,8 +19,8 @@ namespace ServitorDiscordBot
 
         YoutubeClient youtube = new();
 
-        LinkedList<YoutubeVideo> videos = new();
-        LinkedListNode<YoutubeVideo> currNode = null;
+        LinkedList<IVideo> videos = new();
+        LinkedListNode<IVideo> currNode = null;
 
         private readonly object locker = new();
 
@@ -54,7 +54,7 @@ namespace ServitorDiscordBot
             {
                 lock (locker)
                 {
-                    return videos.Select(x => x.Video).ToArray();
+                    return videos.ToArray();
                 }
             }
         }
@@ -65,7 +65,20 @@ namespace ServitorDiscordBot
             {
                 lock (locker)
                 {
-                    return currNode?.Value;
+                    var video = currNode?.Value;
+
+                    if (video is null)
+                        return null;
+
+                    return new YoutubeVideo
+                    {
+                        Video = video,
+                        StreamInfo = Task.Run(async () =>
+                        {
+                            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Url);
+                            return streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+                        })
+                    };
                 }
             }
         }
@@ -87,7 +100,7 @@ namespace ServitorDiscordBot
                         currNode = currNode.Next;
                     }
 
-                    return currNode?.Value;
+                    return CurrentYoutubeVideo;
                 }
             }
         }
@@ -96,15 +109,7 @@ namespace ServitorDiscordBot
         {
             lock (locker)
             {
-                videos.AddLast(new YoutubeVideo
-                {
-                    Video = video,
-                    StreamInfo = Task.Run(async () =>
-                    {
-                        var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Url);
-                        return streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-                    })
-                });
+                videos.AddLast(video);
             }
         }
 
@@ -132,7 +137,7 @@ namespace ServitorDiscordBot
 
             lock (locker)
             {
-                var curr = new YoutubeVideo[] { currNode.Value };
+                var curr = new IVideo[] { currNode.Value };
 
                 var shuffled = videos.Except(curr).OrderBy(x => r.Next());
 
