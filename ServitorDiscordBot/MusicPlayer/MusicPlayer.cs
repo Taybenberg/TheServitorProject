@@ -36,6 +36,7 @@ namespace ServitorDiscordBot
 
         private readonly object locker = new();
         private bool isReserved = false;
+        private bool isLimitedMode = false;
         private bool skip = false;
 
         public bool TryReserve()
@@ -59,6 +60,7 @@ namespace ServitorDiscordBot
             lock (locker)
             {
                 isReserved = false;
+                isLimitedMode = false;
                 isPlaying = true;
             }
         }
@@ -67,6 +69,9 @@ namespace ServitorDiscordBot
         {
             lock (locker)
             {
+                if (isLimitedMode)
+                    return;
+
                 if (isReserved)
                     skip = true;
 
@@ -80,6 +85,9 @@ namespace ServitorDiscordBot
 
             lock (locker)
             {
+                if (isLimitedMode)
+                    return;
+
                 if (isReserved)
                     skip = true;
 
@@ -91,7 +99,7 @@ namespace ServitorDiscordBot
         {
             lock (locker)
             {
-                if (!isReserved)
+                if (!isReserved || isLimitedMode)
                     return;
             }
 
@@ -102,7 +110,7 @@ namespace ServitorDiscordBot
         {
             lock (locker)
             {
-                if (!isReserved)
+                if (!isReserved || isLimitedMode)
                     return;
             }
 
@@ -137,7 +145,7 @@ namespace ServitorDiscordBot
         {
             lock (locker)
             {
-                if (!isReserved)
+                if (!isReserved || isLimitedMode)
                     return;
             }
 
@@ -176,10 +184,39 @@ namespace ServitorDiscordBot
 
                         _logger.LogInformation($"{DateTime.Now} Preparing video:{video.Video.Title}, container:{streamInfo.Container}");
 
-                        await PlayVideoAsync(streamInfo, voiceStream);
+                        await PlayStreamAsync(streamInfo.Url, voiceStream);
 
                         video = musicContainer.NextYoutubeVideo;
                     }
+                }
+            }
+            finally
+            {
+                await voiceChannel.DisconnectAsync();
+
+                Stop();
+            }
+        }
+
+        public async Task PlayDirectAsync(string URL, IVoiceChannel voiceChannel, IMessageChannel channel)
+        {
+            try
+            {
+                lock (locker)
+                {
+                    isLimitedMode = true;
+                }
+
+                musicContainer = null;
+
+                await channel.SendMessageAsync("Підготовка сесії, відтворення незабаром розпочнеться…");
+
+                _logger.LogInformation($"{DateTime.Now} Preparing direct stream {URL}");
+
+                using (var audioClient = await voiceChannel.ConnectAsync())
+                using (var voiceStream = audioClient.CreatePCMStream(AudioApplication.Music))
+                {
+                    await PlayStreamAsync(URL, voiceStream);
                 }
             }
             finally
@@ -195,9 +232,9 @@ namespace ServitorDiscordBot
         public void Continue() => isPlaying = true;
 
         private bool isPlaying;
-        private async Task PlayVideoAsync(IStreamInfo streamInfo, AudioOutStream stream)
+        private async Task PlayStreamAsync(string URL, AudioOutStream stream)
         {
-            var handle = Bass.CreateStream(streamInfo.Url, 0, BassFlags.Decode, null);
+            var handle = Bass.CreateStream(URL, 0, BassFlags.Decode, null);
 
             if (handle == 0)
             {

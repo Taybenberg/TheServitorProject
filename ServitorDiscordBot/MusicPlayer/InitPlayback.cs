@@ -66,7 +66,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("add"):
+                when c.StartsWith("add "):
                     {
                         await message.Channel.SendMessageAsync("Доповнюю список…");
 
@@ -75,7 +75,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("play"):
+                when c.StartsWith("play "):
                     {
                         var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
 
@@ -83,6 +83,20 @@ namespace ServitorDiscordBot
                             await message.Channel.SendMessageAsync("Спершу приєднайтеся до голосового каналу.");
                         else if (_player.TryReserve())
                             await _player.PlayAsync(message.Content[5..], voiceChannel, message.Channel);
+                        else
+                            await message.Channel.SendMessageAsync("Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("playdirect "):
+                    {
+                        var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
+
+                        if (voiceChannel is null)
+                            await message.Channel.SendMessageAsync("Спершу приєднайтеся до голосового каналу.");
+                        else if (_player.TryReserve())
+                            await _player.PlayDirectAsync(message.Content[11..], voiceChannel, message.Channel);
                         else
                             await message.Channel.SendMessageAsync("Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
                     }
