@@ -7,13 +7,21 @@ namespace ServitorDiscordBot
     {
         private async Task InitPlaybackAsync(IMessage message)
         {
-            var command = message.Content.ToLower();
-
-            switch (command)
+            switch (message.Content.ToLower())
             {
                 case string c
                 when c is "допомога":
                     await GetHelpOnCommandAsync(message, "музика");
+                    break;
+
+                case string c
+                when c is "next":
+                    _player.Next();
+                    break;
+
+                case string c
+                when c is "prev":
+                    _player.Prev();
                     break;
 
                 case string c
@@ -26,11 +34,20 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c is "next":
+                when c is "shuffle":
                     {
-                        await message.Channel.SendMessageAsync("Перемикаю відео…");
+                        await message.Channel.SendMessageAsync("Перемішую відео…");
 
-                        _player.Next();
+                        _player.Shuffle();
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("add"):
+                    {
+                        await message.Channel.SendMessageAsync("Доповнюю список…");
+
+                        await _player.AddAsync(message.Content[4..]);
                     }
                     break;
 
@@ -42,7 +59,7 @@ namespace ServitorDiscordBot
                         if (voiceChannel is null)
                             await message.Channel.SendMessageAsync("Спершу приєднайтеся до голосового каналу.");
                         else if (_player.TryReserve())
-                            await _player.Play(message.Content[5..], voiceChannel, message.Channel);
+                            await _player.PlayAsync(message.Content[5..], voiceChannel, message.Channel);
                         else
                             await message.Channel.SendMessageAsync("Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
                     }

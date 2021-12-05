@@ -3,10 +3,8 @@ using Discord.Audio;
 using ManagedBass;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Videos.Streams;
 
@@ -38,8 +36,6 @@ namespace ServitorDiscordBot
 
         private readonly object locker = new();
         private bool isReserved = false;
-
-        private readonly object skipper = new();
         private bool skip = false;
 
         public bool TryReserve()
@@ -68,68 +64,65 @@ namespace ServitorDiscordBot
 
         public void Next()
         {
-            lock (skipper)
+            lock (locker)
             {
-                skip = true;
+                if (isReserved)
+                    skip = true;
             }
         }
 
-        public async Task Play(string URL, IVoiceChannel voiceChannel, IMessageChannel channel)
+        public void Prev()
         {
-            if (URL.Contains("list="))
+            musicContainer?.GetPreviousNext();
+
+            lock (locker)
             {
-                await Playlist(URL, voiceChannel, channel);
-                return;
+                if (isReserved)
+                    skip = true;
+            }
+        }
+
+        public void Shuffle()
+        {
+            lock (locker)
+            {
+                if (!isReserved)
+                    return;
             }
 
+            musicContainer?.Shuffle();
+        }
+
+        public async Task AddAsync(string URL)
+        {
+            lock (locker)
+            {
+                if (!isReserved)
+                    return;
+            }
+
+            await musicContainer?.AddAsync(URL);
+        }
+
+        private MusicContainer musicContainer = null;
+        public async Task PlayAsync(string URL, IVoiceChannel voiceChannel, IMessageChannel channel)
+        {
             try
             {
-                await channel.SendMessageAsync("Буферизую відео, відтворення незабаром розпочнеться…");
+                await channel.SendMessageAsync("Підготовка сесії, відтворення незабаром розпочнеться…");
 
-                var youtube = new YoutubeClient();
+                musicContainer = new();
 
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(URL);
+                await musicContainer.AddAsync(URL);
 
-                _logger.LogInformation($"{DateTime.Now} Fetched 1 video, url:{URL}");
-
-                var streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+                _logger.LogInformation($"{DateTime.Now} Fetched {musicContainer.Count} videos");
 
                 using (var audioClient = await voiceChannel.ConnectAsync())
                 using (var voiceStream = audioClient.CreatePCMStream(AudioApplication.Music))
                 {
-                    await PlayTrack(streamInfo, voiceStream);
-                }
-            }
-            finally
-            {
-                await voiceChannel.DisconnectAsync();
+                    var video = musicContainer.CurrentYoutubeVideo;
 
-                Stop();
-            }
-        }
-
-        public async Task Playlist(string URL, IVoiceChannel voiceChannel, IMessageChannel channel)
-        {
-            try
-            {
-                await channel.SendMessageAsync("Буферизую плейлист, відтворення незабаром розпочнеться…");
-
-                var youtube = new YoutubeClient();
-
-                var videos = await youtube.Playlists.GetVideosAsync(URL);
-
-                _logger.LogInformation($"{DateTime.Now} Fetched playlist size:{videos.Count}, url:{URL}");
-
-                var streamInfos = videos.Select(async x =>
-                {
-                    var streamManifest = await youtube.Videos.Streams.GetManifestAsync(x.Url);
-                    return streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-                });
-
-                using (var audioClient = await voiceChannel.ConnectAsync())
-                using (var voiceStream = audioClient.CreatePCMStream(AudioApplication.Music))
-                {
-                    foreach (var streamInfo in streamInfos)
+                    while (video is not null)
                     {
                         lock (locker)
                         {
@@ -137,7 +130,15 @@ namespace ServitorDiscordBot
                                 break;
                         }
 
-                        await PlayTrack(await streamInfo, voiceStream);
+                        await channel.SendMessageAsync($"Зараз відтворюється: **{video.Video.Title}**");
+
+                        var streamInfo = await video.StreamInfo;
+
+                        _logger.LogInformation($"{DateTime.Now} Preparing video:{video.Video.Title}, container:{streamInfo.Container}");
+
+                        await PlayVideoAsync(streamInfo, voiceStream);
+
+                        video = musicContainer.NextYoutubeVideo;
                     }
                 }
             }
@@ -149,10 +150,8 @@ namespace ServitorDiscordBot
             }
         }
 
-        private async Task PlayTrack(IStreamInfo streamInfo, AudioOutStream stream)
+        private async Task PlayVideoAsync(IStreamInfo streamInfo, AudioOutStream stream)
         {
-            _logger.LogInformation($"{DateTime.Now} Preparing audiostream with container:{streamInfo.Container}, url:{streamInfo.Url}");
-        
             var handle = Bass.CreateStream(streamInfo.Url, 0, BassFlags.Decode, null);
 
             if (handle == 0)
@@ -170,17 +169,14 @@ namespace ServitorDiscordBot
 
                 do
                 {
-                    lock (skipper)
+                    lock (locker)
                     {
                         if (skip)
                         {
                             skip = false;
                             break;
                         }
-                    }
 
-                    lock (locker)
-                    {
                         if (!isReserved)
                             break;
                     }
