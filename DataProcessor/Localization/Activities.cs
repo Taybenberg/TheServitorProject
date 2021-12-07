@@ -43,7 +43,8 @@ namespace DataProcessor.Localization
                 Momentum or
                 Dungeon or
                 Sundial or
-                TrialsOfOsiris
+                TrialsOfOsiris or
+                Dares
                 ).ToDictionary(x => x.Key, x => x.Value);
             }
         }
@@ -126,7 +127,8 @@ namespace DataProcessor.Localization
             [Momentum] = new[] { "Управління інерцією", "Momentum Control" },
             [Dungeon] = new[] { "Підземелля", "Dungeon" },
             [Sundial] = new[] { "Сонячний годинник", "Sundial" },
-            [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" }
+            [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" },
+            [Dares] = new[] { "Виклик вічності", "Dares Of Eternity"}
         };
     }
 }

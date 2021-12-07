@@ -42,6 +42,7 @@ namespace DataProcessor.DiscordEmoji
                 Countdown => "<:Countdown:866018142445371402>",
                 Supremacy => "<:Supremacy:866020056437489724>",
                 Lockdown => "<:Lockdown:866023853486899220>",
+                Dares => "<:Dares:917834589878231080>",
                 _ => NoData
             };
     }
