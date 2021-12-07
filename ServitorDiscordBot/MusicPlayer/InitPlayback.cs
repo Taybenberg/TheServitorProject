@@ -39,7 +39,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c is "continue":
+                when c is "continue" or "resume":
                     {
                         await message.Channel.SendMessageAsync("Продовжую відтворення…");
 
