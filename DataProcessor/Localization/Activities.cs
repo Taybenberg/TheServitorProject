@@ -128,7 +128,7 @@ namespace DataProcessor.Localization
             [Dungeon] = new[] { "Підземелля", "Dungeon" },
             [Sundial] = new[] { "Сонячний годинник", "Sundial" },
             [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" },
-            [Dares] = new[] { "Виклик вічності", "Dares Of Eternity"}
+            [Dares] = new[] { "Виклик вічності", "Dares Of Eternity" }
         };
     }
 }

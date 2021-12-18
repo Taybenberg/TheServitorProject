@@ -34,7 +34,7 @@ namespace DataProcessor.Parsers
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/vendors");
 
             int[][] vendorsInt = { new int[] { 3, 1, 1 }, new int[] { 7, 2, 2 } };
-            string[] vendors = { "//*[@id=\"vendors_863940356_content\"]/div[5]/div", "//*[@id=\"vendors_672118013_content\"]/div[4]/div", "//*[@id=\"vendors_350061650_content\"]/div[4]/div" };
+            string[] vendors = { "//*[@id=\"vendors_863940356_content\"]/div[3]/div", "//*[@id=\"vendors_672118013_content\"]/div[4]/div", "//*[@id=\"vendors_350061650_content\"]/div[4]/div" };
 
             int i = 0;
 

@@ -5,8 +5,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using YoutubeExplode.Common;
-using YoutubeExplode.Videos.Streams;
 
 namespace ServitorDiscordBot
 {
@@ -115,7 +113,7 @@ namespace ServitorDiscordBot
             }
 
             var curr = musicContainer?.CurrIndex;
-            var videos = musicContainer?.AllVideos;
+            var videos = musicContainer?.AllAudios;
 
             if (curr is not null && videos is not null)
             {
@@ -168,9 +166,9 @@ namespace ServitorDiscordBot
                 using (var audioClient = await voiceChannel.ConnectAsync())
                 using (var voiceStream = audioClient.CreatePCMStream(AudioApplication.Music))
                 {
-                    var video = musicContainer.CurrentYoutubeVideo;
+                    var audio = musicContainer.CurrentAudio;
 
-                    while (video is not null)
+                    while (audio is not null)
                     {
                         lock (locker)
                         {
@@ -178,15 +176,13 @@ namespace ServitorDiscordBot
                                 break;
                         }
 
-                        await channel.SendMessageAsync($"Зараз відтворюється **{musicContainer.CurrIndex + 1}/{musicContainer.Count}**: [{video.Video.Duration}] ***{video.Video.Title}***");
+                        await channel.SendMessageAsync($"Зараз відтворюється **{musicContainer.CurrIndex + 1}/{musicContainer.Count}**: [{audio.Duration}] ***{audio.Title}***");
 
-                        var streamInfo = await video.StreamInfo;
+                        _logger.LogInformation($"{DateTime.Now} Preparing audio:{audio.Title}");
 
-                        _logger.LogInformation($"{DateTime.Now} Preparing video:{video.Video.Title}, container:{streamInfo.Container}");
+                        await PlayStreamAsync(await audio.URL, voiceStream);
 
-                        await PlayStreamAsync(streamInfo.Url, voiceStream);
-
-                        video = musicContainer.NextYoutubeVideo;
+                        audio = musicContainer.NextAudio;
                     }
                 }
             }

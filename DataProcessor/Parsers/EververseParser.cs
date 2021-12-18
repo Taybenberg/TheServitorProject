@@ -47,7 +47,7 @@ namespace DataProcessor.Parsers
 
             inventory.Week = $"Тиждень {week}. Сезон \"{_seasonName}\"";
 
-            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div[1]/div[{week}]");
+            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div[1]/div[{week - 15}]");
 
             if (eververseWeekly is not null)
             {
@@ -161,7 +161,7 @@ namespace DataProcessor.Parsers
 
         public async Task<Stream> GetFullInventoryAsync(DateTime seasonEnd)
         {
-            int weeksTotal = (int)(seasonEnd - _seasonStart).TotalDays / 7 + 1;
+            int weeksTotal = 11;
 
             int rows = (int)Math.Sqrt(weeksTotal);
             int columns = (int)Math.Ceiling((double)weeksTotal / rows);
@@ -170,7 +170,7 @@ namespace DataProcessor.Parsers
 
             Parallel.For(0, weeksTotal, (i) =>
             {
-                streams[i] = GetImageAsync(i + 1).Result;
+                streams[i] = GetImageAsync(i + 16).Result;
             });
 
             using var image = new Image<Rgba32>(columns * 802, rows * 902);

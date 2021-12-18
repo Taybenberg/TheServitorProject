@@ -1,26 +1,20 @@
-﻿using System;
+﻿using Flurl.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Common;
-using YoutubeExplode.Videos;
-using YoutubeExplode.Videos.Streams;
 
 namespace ServitorDiscordBot
 {
     class MusicContainer
     {
-        public class YoutubeVideo
-        {
-            public IVideo Video { get; init; }
-            public Task<IStreamInfo> StreamInfo { get; init; }
-        }
-
         YoutubeClient youtube = new();
 
-        LinkedList<IVideo> videos = new();
-        LinkedListNode<IVideo> currNode = null;
+        LinkedList<IAudio> audios = new();
+        LinkedListNode<IAudio> currNode = null;
 
         private readonly object locker = new();
 
@@ -32,7 +26,7 @@ namespace ServitorDiscordBot
             {
                 lock (locker)
                 {
-                    return videos.Count;
+                    return audios.Count;
                 }
             }
         }
@@ -43,47 +37,39 @@ namespace ServitorDiscordBot
             {
                 lock (locker)
                 {
-                    return videos.ToList().IndexOf(currNode.Value);
+                    return audios.ToList().IndexOf(currNode.Value);
                 }
             }
         }
 
-        public IVideo[] AllVideos
+        public IAudio[] AllAudios
         {
             get
             {
                 lock (locker)
                 {
-                    return videos.ToArray();
+                    return audios.ToArray();
                 }
             }
         }
 
-        public YoutubeVideo CurrentYoutubeVideo
+        public IAudio CurrentAudio
         {
             get
             {
                 lock (locker)
                 {
-                    var video = currNode?.Value;
+                    var audio = currNode?.Value;
 
-                    if (video is null)
+                    if (audio is null)
                         return null;
 
-                    return new YoutubeVideo
-                    {
-                        Video = video,
-                        StreamInfo = Task.Run(async () =>
-                        {
-                            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Url);
-                            return streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-                        })
-                    };
+                    return audio;
                 }
             }
         }
 
-        public YoutubeVideo NextYoutubeVideo
+        public IAudio NextAudio
         {
             get
             {
@@ -100,34 +86,60 @@ namespace ServitorDiscordBot
                         currNode = currNode.Next;
                     }
 
-                    return CurrentYoutubeVideo;
+                    return CurrentAudio;
                 }
             }
         }
 
-        private void AddVideo(IVideo video)
+        private void AddAudio(IAudio audio)
         {
             lock (locker)
             {
-                videos.AddLast(video);
+                audios.AddLast(audio);
             }
         }
 
         public async Task AddAsync(string URL)
         {
-            if (URL.Contains("list="))
+            if (URL.Contains("youtube.com") || URL.Contains("youtu.be"))
             {
-                foreach (var video in await youtube.Playlists.GetVideosAsync(URL))
-                    AddVideo(video);
+                if (URL.Contains("?list="))
+                {
+                    var playlist = await youtube.Playlists.GetVideosAsync(URL);
+
+                    foreach (var video in playlist)
+                        AddAudio(new YouTubeVideo(video, youtube));
+                }
+                else
+                {
+                    var video = await youtube.Videos.GetAsync(URL);
+
+                    AddAudio(new YouTubeVideo(video, youtube));
+                }
             }
-            else
+            else if (URL.Contains("soundcloud.com"))
             {
-                AddVideo(await youtube.Videos.GetAsync(URL));
+                var clientID = "xxDgkKDfvcceijWS9J5ZVxf7NZV6epqK";
+                var widget = $"https://api-widget.soundcloud.com/resolve?url={URL}&format=json&client_id={clientID}";
+
+                if (URL.Contains("/sets/"))
+                {
+                    var playlist = await JsonSerializer.DeserializeAsync<SoundCloud.Playlist>(await widget.GetStreamAsync());
+
+                    foreach (var track in playlist.tracks)
+                        AddAudio(new SoundCloudAudio(track, clientID));
+                }
+                else
+                {
+                    var track = await JsonSerializer.DeserializeAsync<SoundCloud.Track>(await widget.GetStreamAsync());
+
+                    AddAudio(new SoundCloudAudio(track, clientID));
+                }
             }
 
             lock (locker)
             {
-                currNode ??= videos.First;
+                currNode ??= audios.First;
             }
         }
 
@@ -137,13 +149,13 @@ namespace ServitorDiscordBot
 
             lock (locker)
             {
-                var curr = new IVideo[] { currNode.Value };
+                var curr = new IAudio[] { currNode.Value };
 
-                var shuffled = videos.Except(curr).OrderBy(x => r.Next());
+                var shuffled = audios.Except(curr).OrderBy(x => r.Next());
 
-                videos = new(curr.Concat(shuffled));
+                audios = new(curr.Concat(shuffled));
 
-                currNode = videos.First;
+                currNode = audios.First;
             }
         }
 
