@@ -11,20 +11,24 @@ namespace ServitorDiscordBot
     class MusicPlayer : IDisposable
     {
         private readonly ILogger<ServitorBot> _logger;
+        private readonly string _clientID;
 
-        public MusicPlayer(ILogger<ServitorBot> logger)
+        public MusicPlayer(ILogger<ServitorBot> logger, string clientID)
         {
             _logger = logger;
+            _clientID = clientID;
 
-            Bass.Init();
+            Bass.Init(0);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                Bass.PluginLoad("basshls.dll");
                 Bass.PluginLoad("bassopus.dll");
                 Bass.PluginLoad("basswebm.dll");
             }
             else
             {
+                Bass.PluginLoad("libbasshls.so");
                 Bass.PluginLoad("libbassopus.so");
                 Bass.PluginLoad("libbasswebm.so");
             }
@@ -157,7 +161,7 @@ namespace ServitorDiscordBot
             {
                 await channel.SendMessageAsync("Підготовка сесії, відтворення незабаром розпочнеться…");
 
-                musicContainer = new();
+                musicContainer = new(_clientID);
 
                 await musicContainer.AddAsync(URL);
 

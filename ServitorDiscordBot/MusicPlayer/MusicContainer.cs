@@ -16,6 +16,10 @@ namespace ServitorDiscordBot
         LinkedList<IAudio> audios = new();
         LinkedListNode<IAudio> currNode = null;
 
+        private readonly string clientID;
+
+        public MusicContainer(string ScClientID) => clientID = ScClientID;
+
         private readonly object locker = new();
 
         private bool getPrev = false;
@@ -119,7 +123,6 @@ namespace ServitorDiscordBot
             }
             else if (URL.Contains("soundcloud.com"))
             {
-                var clientID = "xxDgkKDfvcceijWS9J5ZVxf7NZV6epqK";
                 var widget = $"https://api-widget.soundcloud.com/resolve?url={URL}&format=json&client_id={clientID}";
 
                 if (URL.Contains("/sets/"))

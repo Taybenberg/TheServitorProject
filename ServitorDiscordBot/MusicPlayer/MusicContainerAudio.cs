@@ -11,7 +11,7 @@ namespace ServitorDiscordBot
     interface IAudio
     {
         public string Title { get; }
-        public TimeSpan Duration { get; }
+        public string Duration { get; }
         public Task<string> URL { get; }
     }
 
@@ -28,7 +28,18 @@ namespace ServitorDiscordBot
 
         public string Title => _video.Title;
 
-        public TimeSpan Duration => (TimeSpan)_video.Duration;
+        public string Duration
+        { 
+            get 
+            {
+                var span = (TimeSpan)_video.Duration;
+
+                if (span.Hours > 0)
+                    return span.ToString(@"hh\:mm\:ss");
+
+                return span.ToString(@"mm\:ss");
+            } 
+        }
 
         public Task<string> URL =>
         Task.Run(async () =>
@@ -52,12 +63,23 @@ namespace ServitorDiscordBot
         public string Title => _track.publisher_metadata?.artist is not null ?
             $"{_track.publisher_metadata?.artist} - {_track.title}" : _track.title;
 
-        public TimeSpan Duration => TimeSpan.FromMilliseconds(_track.duration);
+        public string Duration
+        {
+            get
+            {
+                var span = TimeSpan.FromMilliseconds(_track.duration);
+
+                if (span.Hours > 0)
+                    return span.ToString(@"hh\:mm\:ss");
+
+                return span.ToString(@"mm\:ss");
+            }
+        }
 
         public Task<string> URL =>
         Task.Run(async () =>
         {
-            var link = $"{_track.media.transcodings[1].url}?client_id={_clientID}&track_authorization={_track.track_authorization}";
+            var link = $"{_track.media.transcodings[^1].url}?client_id={_clientID}&track_authorization={_track.track_authorization}";
 
             var songUrl = await JsonSerializer.DeserializeAsync<SoundCloud.SongUrl>(await link.GetStreamAsync());
 

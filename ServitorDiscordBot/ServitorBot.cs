@@ -77,7 +77,7 @@ namespace ServitorDiscordBot
             _raidManager.Delete += Event_Delete;
             _raidManager.Load();
 
-            _player = new(logger);
+            _player = new(logger, configuration["Discord:SoundCloudClientID"]);
         }
 
         public void Dispose()
