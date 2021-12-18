@@ -29,8 +29,8 @@ namespace ServitorDiscordBot
         public string Title => _video.Title;
 
         public string Duration
-        { 
-            get 
+        {
+            get
             {
                 var span = (TimeSpan)_video.Duration;
 
@@ -38,7 +38,7 @@ namespace ServitorDiscordBot
                     return span.ToString(@"hh\:mm\:ss");
 
                 return span.ToString(@"mm\:ss");
-            } 
+            }
         }
 
         public Task<string> URL =>
