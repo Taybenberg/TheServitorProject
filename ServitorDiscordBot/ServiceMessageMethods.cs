@@ -88,7 +88,7 @@ namespace ServitorDiscordBot
 
                 var msg = await channel.GetMessageAsync(message.Id);
 
-                if (message.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
+                if (msg.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
                     return;
 
                 await msg.DeleteAsync();
