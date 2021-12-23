@@ -82,15 +82,15 @@ namespace ServitorDiscordBot
         {
             await Task.Delay(1000);
 
-            var channel = await _client.Rest.GetChannelAsync(message.Channel.Id) as Discord.Rest.IRestMessageChannel;
-
-            var msg = await channel.GetMessageAsync(message.Id);
-
-            if (message.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
-                return;
-
             try
             {
+                var channel = await _client.Rest.GetChannelAsync(message.Channel.Id) as Discord.Rest.IRestMessageChannel;
+
+                var msg = await channel.GetMessageAsync(message.Id);
+
+                if (message.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
+                    return;
+
                 await msg.DeleteAsync();
             }
             catch { }
