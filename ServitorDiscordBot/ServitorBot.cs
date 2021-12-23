@@ -34,7 +34,8 @@ namespace ServitorDiscordBot
         private readonly ulong[] _channelId;
         private readonly ulong _raidChannelId;
         private readonly ulong _musicChannelId;
-        private readonly ulong _bumpChannelId;
+        private readonly ulong _lulzChannelId;
+        private readonly ulong _bumpChannelId;  
 
         private readonly string[] _bumpPingUsers;
 
@@ -63,6 +64,7 @@ namespace ServitorDiscordBot
             _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
             _raidChannelId = configuration.GetSection("Discord:RaidChannelID").Get<ulong>();
             _musicChannelId = configuration.GetSection("Discord:MusicChannelID").Get<ulong>();
+            _lulzChannelId = configuration.GetSection("Discord:LulzChannelID").Get<ulong>();
             _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
             _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
 

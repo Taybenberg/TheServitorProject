@@ -21,6 +21,12 @@ namespace ServitorDiscordBot
             if (await ServiceMessagesAsync(message))
                 return;
 
+            if (message.Channel.Id == _lulzChannelId)
+            {
+                await LulzChannelManagerAsync(message);
+                return;
+            }
+
             if (message.Channel.Id == _musicChannelId)
             {
                 await InitPlaybackAsync(message);

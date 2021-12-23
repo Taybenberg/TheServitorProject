@@ -78,6 +78,24 @@ namespace ServitorDiscordBot
             return await message.Channel.SendMessageAsync(embed: builder.Build());
         }
 
+        private async Task LulzChannelManagerAsync(IMessage message)
+        {
+            await Task.Delay(1000);
+
+            var channel = await _client.Rest.GetChannelAsync(message.Channel.Id) as Discord.Rest.IRestMessageChannel;
+
+            var msg = await channel.GetMessageAsync(message.Id);
+
+            if (message.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
+                return;
+
+            try
+            {
+                await msg.DeleteAsync();
+            }
+            catch { }
+        }
+
         private async Task ExecuteWaitMessageAsync(IMessage message, Func<IMessage, Task> method, bool deleteSenderMessage = false)
         {
             var wait = await GetWaitMessageAsync(message);
