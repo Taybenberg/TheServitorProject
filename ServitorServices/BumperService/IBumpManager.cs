@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BumperService
 {
-    public interface IBumper
+    public interface IBumpManager
     {
     }
 }

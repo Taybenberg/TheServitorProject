@@ -1,6 +1,6 @@
 ﻿namespace RaidService
 {
-    public class Class1
+    public interface IRaidManager
     {
 
     }
