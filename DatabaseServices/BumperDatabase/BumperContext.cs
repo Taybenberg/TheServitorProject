@@ -12,5 +12,10 @@ namespace BumperDatabase
         {
             Database.EnsureCreated();
         }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<DateTime>().HaveConversion<long>();
+        }
     }
 }

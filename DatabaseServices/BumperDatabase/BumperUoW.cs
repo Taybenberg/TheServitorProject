@@ -9,7 +9,7 @@ namespace BumperDatabase
 
         public BumperUoW(BumperContext context) => _context = context;
 
-        public Bump LastBump => _context.Bumps.LastOrDefault();
+        public Bump LastBump => _context.Bumps.OrderByDescending(x => x.BumpTime).FirstOrDefault();
 
         public IEnumerable<ulong> PingableUserIDs => _context.Users.Where(x => x.IsPingable).Select(x => x.UserID);
 

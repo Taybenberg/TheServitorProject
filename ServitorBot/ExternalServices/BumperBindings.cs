@@ -1,9 +1,8 @@
-﻿using Discord;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using BumperService;
+using Discord;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace ServitorDiscordBot
 {
@@ -17,8 +16,6 @@ namespace ServitorDiscordBot
             {
                 if (embed.Description?.Contains("Server bumped by") ?? false)
                 {
-                    _logger.LogInformation($"{DateTime.Now} Server bumped");
-
                     var mention = Regex.Match(embed.Description, "(?<=\\<@)\\D?(\\d+)(?=\\>)").Groups[1].Value;
 
                     var nextBump = await _bumper.RegisterBumpAsync(ulong.Parse(mention));
@@ -30,6 +27,22 @@ namespace ServitorDiscordBot
                     await message.Channel.SendMessageAsync(embed: builder.Build());
                 }
             }
+        }
+
+        private async Task Bumper_Notify(BumpNotificationContainer container)
+        {
+            IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
+
+            var builder = GetBuilder(MessagesEnum.BumpNotification, null, false);
+
+            builder.Description = "Саме час **!bump**-нути :fire:";
+
+            if (container.UserCooldowns.Count > 0)
+                builder.Description += "\nКулдаун до:\n" + string.Join('\n', 
+                    container.UserCooldowns.OrderBy(x => x.Value)
+                    .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH: mm")}*"));
+
+            await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")), embed: builder.Build());
         }
     }
 }

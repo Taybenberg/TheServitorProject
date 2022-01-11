@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BumperService;
 
 namespace ServitorDiscordBot
 {
@@ -19,8 +18,6 @@ namespace ServitorDiscordBot
         private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly DiscordSocketClient _client;
-
-        private readonly IBumpManager _bumper;
 
         private readonly RaidManager _raidManager;
 
@@ -68,11 +65,6 @@ namespace ServitorDiscordBot
 
             _client.SetGameAsync("Destiny 2").Wait();
 
-            using var scope = _scopeFactory.CreateScope();
-
-            var _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
-            _bumper.Notify += Bumper_Notify;
-
             _raidManager = new(logger);
             _raidManager.Notify += Event_Notify;
             _raidManager.Update += Event_Update;
@@ -80,6 +72,8 @@ namespace ServitorDiscordBot
             _raidManager.Load();
 
             _player = new(logger, configuration["ApiKeys:SoundCloudClientID"]);
+
+            RegisterExternalServices();
         }
 
         public void Dispose()

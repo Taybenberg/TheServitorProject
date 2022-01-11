@@ -56,18 +56,23 @@ namespace BumperService
         {
             get
             {
+                var currTime = DateTime.UtcNow;
+
                 using var scope = _scopeFactory.CreateScope();
 
                 var bumperDB = scope.ServiceProvider.GetRequiredService<IBumperDB>();
 
-                var lastBumpTime = bumperDB.LastBump.BumpTime;
+                var lastBumpTime = bumperDB.LastBump?.BumpTime;
 
-                var currTime = DateTime.UtcNow;
+                if (lastBumpTime is not null)
+                {
+                    var predictedBump = lastBumpTime.Value.AddHours(bumpCooldownHours);
 
-                if (currTime > lastBumpTime.AddHours(bumpCooldownHours))
-                    return currTime.AddHours(bumpCooldownHours).ToLocalTime();
+                    if (currTime < predictedBump)
+                        return predictedBump;
+                }
 
-                return lastBumpTime.ToLocalTime();
+                return currTime.AddHours(bumpCooldownHours).ToLocalTime();
             }
         }
 
