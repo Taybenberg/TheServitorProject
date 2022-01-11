@@ -1,12 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-ServitorLauncher-7C409110-EA76-4F18-98C3-66D1CDFC428D</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Coravel" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
   </ItemGroup>
@@ -15,13 +16,6 @@
     <ProjectReference Include="..\BungieNetApi\BungieNetApi.csproj" />
     <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
-    <ProjectReference Include="..\ServitorDiscordBot\ServitorDiscordBot.csproj" />
+    <ProjectReference Include="..\ServitorBot\ServitorBot.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

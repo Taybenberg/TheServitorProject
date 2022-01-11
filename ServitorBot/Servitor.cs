@@ -50,8 +50,8 @@ namespace ServitorDiscordBot
             _client.Log += LogAsync;
 
             _client.MessageReceived += OnMessageReceived;
-            _client.MessageDeleted += OnMessageDeleted;
-            _client.ReactionAdded += OnReactionAdded;
+            //_client.MessageDeleted += OnMessageDeleted;
+            //_client.ReactionAdded += OnReactionAdded;
 
             _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
 
