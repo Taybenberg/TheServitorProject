@@ -46,6 +46,7 @@ namespace ServitorDiscordBot
             _client.Log += LogAsync;
 
             _client.MessageReceived += OnMessageReceived;
+            _client.ButtonExecuted += OnButtonExecuted;
             //_client.MessageDeleted += OnMessageDeleted;
             //_client.ReactionAdded += OnReactionAdded;
 
@@ -88,6 +89,13 @@ namespace ServitorDiscordBot
 
         public async Task StopAsync(CancellationToken cancellationToken) =>
             await _client.StopAsync();
+
+        private Task OnButtonExecuted(SocketMessageComponent arg)
+        {
+            Task.Run(async () => await OnButtonExecutedAsync(arg));
+
+            return Task.CompletedTask;
+        }
 
         private Task OnMessageReceived(IMessage message)
         {

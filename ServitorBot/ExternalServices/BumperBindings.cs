@@ -1,5 +1,6 @@
 ﻿using BumperService;
 using Discord;
+using Discord.WebSocket;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -8,6 +9,34 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private async Task BumperButtonExecuted(SocketMessageComponent component)
+        {
+            switch (component.Data.CustomId)
+            {
+                case "BumpNotificationsSubscribe":
+                    {
+                        var builder = new EmbedBuilder()
+                            .WithColor(new Color(0x48BA59))
+                            .WithDescription($"{component.User.Mention} тепер отримуватиме сповіщення про **bump**");
+
+                        await component.RespondAsync(embed: builder.Build());
+                    }
+                    break;
+
+                case "BumpNotificationsUnsubscribe":
+                    {
+                        var builder = new EmbedBuilder()
+                            .WithColor(new Color(0xEE1B24))
+                            .WithDescription($"{component.User.Mention} більше не отримуватиме сповіщення про **bump**");
+
+                        await component.RespondAsync(embed: builder.Build());
+                    }
+                    break;
+
+                default: break;
+            } 
+        }
+
         private async Task InitBumpAsync(IMessage message)
         {
             var embed = message.Embeds.FirstOrDefault();
@@ -20,29 +49,38 @@ namespace ServitorDiscordBot
 
                     var nextBump = await _bumper.RegisterBumpAsync(ulong.Parse(mention));
 
-                    var builder = GetBuilder(MessagesEnum.Bumped, message, false);
+                    var builder = new EmbedBuilder()
+                        .WithColor(0x5BDB5B)
+                        .WithDescription($"{DataProcessor.DiscordEmoji.EmojiContainer.BumpTimer} {nextBump.ToString("HH:mm")}");
 
-                    builder.Description = $"<:bump_timer:867070921452552213> {nextBump.ToString("HH:mm")}";
+                    var component = new ComponentBuilder()
+                        .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary, 
+                        Emote.Parse(DataProcessor.DiscordEmoji.EmojiContainer.Check));
 
-                    await message.Channel.SendMessageAsync(embed: builder.Build());
+                    await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
                 }
             }
         }
 
-        private async Task Bumper_Notify(BumpNotificationContainer container)
+        private async Task BumperNotify(BumpNotificationContainer container)
         {
             IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
 
-            var builder = GetBuilder(MessagesEnum.BumpNotification, null, false);
-
-            builder.Description = "Саме час **!bump**-нути :fire:";
+            var builder = new EmbedBuilder()
+                .WithColor(0xFF6E00)
+                .WithDescription("Саме час **!bump**-нути :fire:");
 
             if (container.UserCooldowns.Count > 0)
                 builder.Description += "\nКулдаун до:\n" + string.Join('\n',
                     container.UserCooldowns.OrderBy(x => x.Value)
                     .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH: mm")}*"));
 
-            await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")), embed: builder.Build());
+            var component = new ComponentBuilder()
+                .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary,
+                Emote.Parse(DataProcessor.DiscordEmoji.EmojiContainer.UnCheck));
+
+            await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")), 
+                embed: builder.Build(), components: component.Build());
         }
     }
 }

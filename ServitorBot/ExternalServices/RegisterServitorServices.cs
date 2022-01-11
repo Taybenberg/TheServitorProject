@@ -12,7 +12,7 @@ namespace ServitorDiscordBot
             using var scope = _scopeFactory.CreateScope();
 
             var _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
-            _bumper.Notify += Bumper_Notify;
+            _bumper.Notify += BumperNotify;
         }
     }
 }
