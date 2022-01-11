@@ -69,7 +69,7 @@ namespace BumperService
                     var predictedBump = lastBumpTime.Value.AddHours(bumpCooldownHours);
 
                     if (currTime < predictedBump)
-                        return predictedBump;
+                        return predictedBump.ToLocalTime();
                 }
 
                 return currTime.AddHours(bumpCooldownHours).ToLocalTime();
@@ -95,7 +95,7 @@ namespace BumperService
 
             _logger.LogInformation($"{DateTime.Now} Bump scheduled on {nextBump.ToLocalTime()}");
 
-            return nextBump;
+            return nextBump.ToLocalTime();
         }
 
         public async Task SubscribeUserAsync(ulong userID)
