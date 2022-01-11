@@ -10,9 +10,9 @@ namespace RaidDatabase
     public class RaidUoW : IRaidDB
     {
         private readonly ILogger _logger;
-        private readonly IRaidDB _raidDB;
+        private readonly RaidContext _context;
 
-        public RaidUoW(ILogger<RaidUoW> logger, IRaidDB raidDB) =>
-            (_logger, _raidDB) = (logger, raidDB);
+        public RaidUoW(ILogger<RaidUoW> logger, RaidContext context) =>
+            (_logger, _context) = (logger, context);
     }
 }
