@@ -21,11 +21,11 @@ namespace ServitorDiscordBot
 
                     var mention = Regex.Match(embed.Description, "(?<=\\<@)\\D?(\\d+)(?=\\>)").Groups[1].Value;
 
-                    _bumper.AddUser(mention);
+                    var nextBump = await _bumper.RegisterBumpAsync(ulong.Parse(mention));
 
                     var builder = GetBuilder(MessagesEnum.Bumped, message, false);
 
-                    builder.Description = $"<:bump_timer:867070921452552213> {_bumper.NextBump.ToString("HH:mm:ss")}";
+                    builder.Description = $"<:bump_timer:867070921452552213> {nextBump.ToString("HH:mm")}";
 
                     await message.Channel.SendMessageAsync(embed: builder.Build());
                 }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BumperService;
 
 namespace ServitorDiscordBot
 {
@@ -19,7 +20,7 @@ namespace ServitorDiscordBot
 
         private readonly DiscordSocketClient _client;
 
-        private readonly Bumper _bumper;
+        private readonly IBumpManager _bumper;
 
         private readonly RaidManager _raidManager;
 
@@ -36,8 +37,6 @@ namespace ServitorDiscordBot
         private readonly ulong _musicChannelId;
         private readonly ulong _lulzChannelId;
         private readonly ulong _bumpChannelId;
-
-        private readonly string[] _bumpPingUsers = new string[0];
 
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
@@ -69,7 +68,9 @@ namespace ServitorDiscordBot
 
             _client.SetGameAsync("Destiny 2").Wait();
 
-            _bumper = new(logger);
+            using var scope = _scopeFactory.CreateScope();
+
+            var _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
             _bumper.Notify += Bumper_Notify;
 
             _raidManager = new(logger);
@@ -84,8 +85,6 @@ namespace ServitorDiscordBot
         public void Dispose()
         {
             _raidManager.Dispose();
-
-            _bumper.Dispose();
 
             _client.Dispose();
         }
