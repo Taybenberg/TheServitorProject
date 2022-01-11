@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using BumperDatabase.ORM;
+﻿using BumperDatabase.ORM;
+using Microsoft.EntityFrameworkCore;
 
 namespace BumperDatabase
 {

@@ -1,8 +1,8 @@
 ﻿using BumperService;
 using Discord;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {
@@ -38,7 +38,7 @@ namespace ServitorDiscordBot
             builder.Description = "Саме час **!bump**-нути :fire:";
 
             if (container.UserCooldowns.Count > 0)
-                builder.Description += "\nКулдаун до:\n" + string.Join('\n', 
+                builder.Description += "\nКулдаун до:\n" + string.Join('\n',
                     container.UserCooldowns.OrderBy(x => x.Value)
                     .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH: mm")}*"));
 

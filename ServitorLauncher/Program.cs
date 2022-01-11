@@ -1,12 +1,12 @@
-using BungieNetApi;
 using BumperDatabase;
 using BumperService;
+using BungieNetApi;
 using Database;
 using DataProcessor;
 using Microsoft.EntityFrameworkCore;
-using ServitorDiscordBot;
 using RaidDatabase;
 using RaidService;
+using ServitorDiscordBot;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
