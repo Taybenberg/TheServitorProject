@@ -16,7 +16,7 @@ namespace BumperService
         {
             (_logger, _scopeFactory) = (logger, scopeFactory);
 
-            var nextBump = NextBump;
+            var nextBump = _NextBump;
 
             _timer.AutoReset = false;
             _timer.Interval = (nextBump - DateTime.UtcNow).TotalMilliseconds;
@@ -45,14 +45,14 @@ namespace BumperService
 
             _timer.Start();
 
-            _logger.LogInformation($"{DateTime.Now} Bump scheduled on {nextBump}");
+            _logger.LogInformation($"{DateTime.Now} Bump scheduled on {nextBump.ToLocalTime()}");
         }
 
         System.Timers.Timer _timer = new();
 
         public event Func<BumpNotificationContainer, Task> Notify;
 
-        public DateTime NextBump
+        private DateTime _NextBump
         {
             get
             {
@@ -69,12 +69,14 @@ namespace BumperService
                     var predictedBump = lastBumpTime.Value.AddHours(bumpCooldownHours);
 
                     if (currTime < predictedBump)
-                        return predictedBump.ToLocalTime();
+                        return predictedBump;
                 }
 
-                return currTime.AddHours(bumpCooldownHours).ToLocalTime();
+                return currTime.AddHours(bumpCooldownHours);
             }
         }
+
+        public DateTime NextBump => _NextBump.ToLocalTime();
 
         public async Task<DateTime> RegisterBumpAsync(ulong userID)
         {

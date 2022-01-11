@@ -15,6 +15,8 @@ namespace ServitorDiscordBot
             {
                 case "BumpNotificationsSubscribe":
                     {
+                        await _bumper.SubscribeUserAsync(component.User.Id);
+
                         var builder = new EmbedBuilder()
                             .WithColor(new Color(0x48BA59))
                             .WithDescription($"{component.User.Mention} тепер отримуватиме сповіщення про **bump**");
@@ -25,6 +27,8 @@ namespace ServitorDiscordBot
 
                 case "BumpNotificationsUnsubscribe":
                     {
+                        await _bumper.UnSubscribeUserAsync(component.User.Id);
+
                         var builder = new EmbedBuilder()
                             .WithColor(new Color(0xEE1B24))
                             .WithDescription($"{component.User.Mention} більше не отримуватиме сповіщення про **bump**");
@@ -34,7 +38,7 @@ namespace ServitorDiscordBot
                     break;
 
                 default: break;
-            } 
+            }
         }
 
         private async Task InitBumpAsync(IMessage message)
@@ -50,7 +54,7 @@ namespace ServitorDiscordBot
                     var nextBump = await _bumper.RegisterBumpAsync(ulong.Parse(mention));
 
                     var builder = new EmbedBuilder()
-                        .WithColor(0x5BDB5B)
+                        .WithColor(0xFF6E00)
                         .WithDescription($"{DataProcessor.DiscordEmoji.EmojiContainer.BumpTimer} {nextBump.ToString("HH:mm")}");
 
                     var component = new ComponentBuilder()
@@ -73,7 +77,7 @@ namespace ServitorDiscordBot
             if (container.UserCooldowns.Count > 0)
                 builder.Description += "\nКулдаун до:\n" + string.Join('\n',
                     container.UserCooldowns.OrderBy(x => x.Value)
-                    .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH: mm")}*"));
+                    .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"));
 
             var component = new ComponentBuilder()
                 .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary,
