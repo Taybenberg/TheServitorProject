@@ -2,7 +2,7 @@
 {
     public record ApiKey
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "X-API-Key";
         public object Value { get; set; }
     }
 }

@@ -35,9 +35,9 @@ namespace ServitorDiscordBot
         private readonly ulong _raidChannelId;
         private readonly ulong _musicChannelId;
         private readonly ulong _lulzChannelId;
-        private readonly ulong _bumpChannelId;  
+        private readonly ulong _bumpChannelId;
 
-        private readonly string[] _bumpPingUsers;
+        private readonly string[] _bumpPingUsers = new string[0];
 
         public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
         {
@@ -53,20 +53,19 @@ namespace ServitorDiscordBot
             //_client.MessageDeleted += OnMessageDeleted;
             //_client.ReactionAdded += OnReactionAdded;
 
-            _client.LoginAsync(TokenType.Bot, configuration["Discord:BotToken"]).Wait();
+            _client.LoginAsync(TokenType.Bot, configuration["ApiKeys:DiscordToken"]).Wait();
 
             _seasonName = configuration["Destiny2:SeasonName"];
             _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
             _seasonEnd = configuration.GetSection("Destiny2:SeasonEnd").Get<DateTime>();
 
-            _destinyRoleId = configuration.GetSection("Discord:DestinyRoleID").Get<ulong>();
+            _destinyRoleId = configuration.GetSection("DiscordConfig:DestinyRoleID").Get<ulong>();
 
-            _channelId = configuration.GetSection("Discord:MainChannelID").Get<ulong[]>();
-            _raidChannelId = configuration.GetSection("Discord:RaidChannelID").Get<ulong>();
-            _musicChannelId = configuration.GetSection("Discord:MusicChannelID").Get<ulong>();
-            _lulzChannelId = configuration.GetSection("Discord:LulzChannelID").Get<ulong>();
-            _bumpChannelId = configuration.GetSection("Discord:BumpChannelID").Get<ulong>();
-            _bumpPingUsers = configuration.GetSection("Discord:BumpPingUsers").Get<string[]>();
+            _channelId = configuration.GetSection("DiscordConfig:MainChannelID").Get<ulong[]>();
+            _raidChannelId = configuration.GetSection("DiscordConfig:RaidChannelID").Get<ulong>();
+            _musicChannelId = configuration.GetSection("DiscordConfig:MusicChannelID").Get<ulong>();
+            _lulzChannelId = configuration.GetSection("DiscordConfig:LulzChannelID").Get<ulong>();
+            _bumpChannelId = configuration.GetSection("DiscordConfig:BumpChannelID").Get<ulong>();
 
             _client.SetGameAsync("Destiny 2").Wait();
 
@@ -79,7 +78,7 @@ namespace ServitorDiscordBot
             _raidManager.Delete += Event_Delete;
             _raidManager.Load();
 
-            _player = new(logger, configuration["Discord:SoundCloudClientID"]);
+            _player = new(logger, configuration["ApiKeys:SoundCloudClientID"]);
         }
 
         public void Dispose()

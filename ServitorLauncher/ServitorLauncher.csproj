@@ -14,8 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BungieNetApi\BungieNetApi.csproj" />
+    <ProjectReference Include="..\DatabaseServices\BumperDatabase\BumperDatabase.csproj" />
     <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
     <ProjectReference Include="..\ServitorBot\ServitorBot.csproj" />
+    <ProjectReference Include="..\ServitorServices\BumperService\BumperService.csproj" />
   </ItemGroup>
 </Project>

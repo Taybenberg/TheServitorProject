@@ -17,7 +17,7 @@ namespace BungieNetApi
         {
             _configuration = configuration;
 
-            _bungieNetApiClient = new(configuration.GetSection("Destiny2:BungieApiKey").Get<ApiKey>());
+            _bungieNetApiClient = new(configuration["ApiKeys:BungieApiKey"]);
         }
 
         public IEntityFactory EntityFactory

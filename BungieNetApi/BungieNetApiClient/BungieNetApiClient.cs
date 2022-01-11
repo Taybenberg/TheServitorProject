@@ -9,6 +9,9 @@
 
         private readonly ApiKey _xApiKey;
 
-        public BungieNetApiClient(ApiKey xApiKey) => _xApiKey = xApiKey;
+        public BungieNetApiClient(string apiKey) => _xApiKey = new ApiKey
+        {
+            Value = apiKey
+        };
     }
 }
