@@ -21,7 +21,7 @@ namespace ServitorDiscordBot
                             .WithColor(new Color(0x48BA59))
                             .WithDescription($"{component.User.Mention} тепер отримуватиме сповіщення про **bump**");
 
-                        await component.RespondAsync(embed: builder.Build());
+                        await component.RespondAsync(embed: builder.Build(), ephemeral: true);
                     }
                     break;
 
@@ -33,7 +33,7 @@ namespace ServitorDiscordBot
                             .WithColor(new Color(0xEE1B24))
                             .WithDescription($"{component.User.Mention} більше не отримуватиме сповіщення про **bump**");
 
-                        await component.RespondAsync(embed: builder.Build());
+                        await component.RespondAsync(embed: builder.Build(), ephemeral: true);
                     }
                     break;
 
