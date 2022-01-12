@@ -57,11 +57,7 @@ namespace ServitorDiscordBot
                         .WithColor(0xFF6E00)
                         .WithDescription($"{DataProcessor.DiscordEmoji.EmojiContainer.BumpTimer} {nextBump.ToString("HH:mm")}");
 
-                    var component = new ComponentBuilder()
-                        .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary, 
-                        Emote.Parse(DataProcessor.DiscordEmoji.EmojiContainer.Check));
-
-                    await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
+                    await message.Channel.SendMessageAsync(embed: builder.Build());
                 }
             }
         }
@@ -80,6 +76,8 @@ namespace ServitorDiscordBot
                     .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"));
 
             var component = new ComponentBuilder()
+                .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary,
+                Emote.Parse(DataProcessor.DiscordEmoji.EmojiContainer.Check))
                 .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary,
                 Emote.Parse(DataProcessor.DiscordEmoji.EmojiContainer.UnCheck));
 
