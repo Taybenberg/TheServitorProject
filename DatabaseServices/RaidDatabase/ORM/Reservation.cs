@@ -12,6 +12,6 @@ namespace RaidDatabase.ORM
 
         public int Position { get; set; }
 
-        public ulong UserID { get; set; } 
+        public ulong UserID { get; set; }
     }
 }
