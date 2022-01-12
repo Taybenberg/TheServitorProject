@@ -45,7 +45,6 @@ namespace ServitorDiscordBot
             _client.ButtonExecuted += OnButtonExecuted;
             _client.SelectMenuExecuted += OnSelectMenuExecuted;
             //_client.MessageDeleted += OnMessageDeleted;
-            //_client.ReactionAdded += OnReactionAdded;
 
             _client.LoginAsync(TokenType.Bot, configuration["ApiKeys:DiscordToken"]).Wait();
 
@@ -103,13 +102,6 @@ namespace ServitorDiscordBot
         private Task OnMessageDeleted(Cacheable<IMessage, ulong> arg1, ISocketMessageChannel arg2)
         {
             Task.Run(async () => await OnMessageDeletedAsync(arg1, arg2));
-
-            return Task.CompletedTask;
-        }
-
-        private Task OnReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
-        {
-            Task.Run(async () => await OnMessageReactionAddedAsync(arg1, arg2, arg3));
 
             return Task.CompletedTask;
         }
