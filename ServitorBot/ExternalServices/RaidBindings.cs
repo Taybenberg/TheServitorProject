@@ -44,7 +44,7 @@ namespace ServitorDiscordBot
                         var componentBuilder = new ComponentBuilder()
                             .WithSelectMenu(menuBuilder);
 
-                        await component.RespondAsync(embed: builder.Build(), components: componentBuilder.Build());
+                        await component.RespondAsync(embed: builder.Build(), components: componentBuilder.Build(), ephemeral: true);
                     }
                     break;
 
