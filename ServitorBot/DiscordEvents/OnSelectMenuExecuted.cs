@@ -5,10 +5,10 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task OnButtonExecutedAsync(SocketMessageComponent component)
+        private async Task OnSelectMenuExecutedAsync(SocketMessageComponent component)
         {
             if (component.Channel.Id == _bumpChannelId)
-                await BumperButtonExecuted(component);
+                await BumperButtonExecutedAsync(component);
         }
     }
 }

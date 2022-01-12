@@ -9,7 +9,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task BumperButtonExecuted(SocketMessageComponent component)
+        private async Task BumperButtonExecutedAsync(SocketMessageComponent component)
         {
             switch (component.Data.CustomId)
             {
@@ -62,7 +62,7 @@ namespace ServitorDiscordBot
             }
         }
 
-        private async Task BumperNotify(BumpNotificationContainer container)
+        private async Task BumperNotifyAsync(BumpNotificationContainer container)
         {
             IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
 

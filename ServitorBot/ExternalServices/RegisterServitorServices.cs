@@ -1,5 +1,7 @@
 ﻿using BumperService;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ServitorDiscordBot
 {
@@ -7,12 +9,24 @@ namespace ServitorDiscordBot
     {
         private IBumpManager _bumper;
 
-        private void RegisterExternalServices()
+        private RaidManager _raidManager;
+
+        private MusicPlayer _player;
+
+        private void RegisterExternalServices(IConfiguration configuration, ILogger<ServitorBot> logger)
         {
+            _raidManager = new(logger);
+            _raidManager.Notify += Event_Notify;
+            _raidManager.Update += Event_Update;
+            _raidManager.Delete += Event_Delete;
+            _raidManager.Load();
+
+            _player = new(logger, configuration["ApiKeys:SoundCloudClientID"]);
+
             using var scope = _scopeFactory.CreateScope();
 
             _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
-            _bumper.Notify += BumperNotify;
+            _bumper.Notify += BumperNotifyAsync;
         }
     }
 }

@@ -19,10 +19,6 @@ namespace ServitorDiscordBot
 
         private readonly DiscordSocketClient _client;
 
-        private readonly RaidManager _raidManager;
-
-        private readonly MusicPlayer _player;
-
         private readonly string _seasonName;
 
         private readonly DateTime _seasonStart, _seasonEnd;
@@ -47,6 +43,7 @@ namespace ServitorDiscordBot
 
             _client.MessageReceived += OnMessageReceived;
             _client.ButtonExecuted += OnButtonExecuted;
+            _client.SelectMenuExecuted += OnSelectMenuExecuted;
             //_client.MessageDeleted += OnMessageDeleted;
             //_client.ReactionAdded += OnReactionAdded;
 
@@ -66,15 +63,7 @@ namespace ServitorDiscordBot
 
             _client.SetGameAsync("Destiny 2").Wait();
 
-            _raidManager = new(logger);
-            _raidManager.Notify += Event_Notify;
-            _raidManager.Update += Event_Update;
-            _raidManager.Delete += Event_Delete;
-            _raidManager.Load();
-
-            _player = new(logger, configuration["ApiKeys:SoundCloudClientID"]);
-
-            RegisterExternalServices();
+            RegisterExternalServices(configuration, logger);
         }
 
         public void Dispose()
@@ -89,6 +78,13 @@ namespace ServitorDiscordBot
 
         public async Task StopAsync(CancellationToken cancellationToken) =>
             await _client.StopAsync();
+
+        private Task OnSelectMenuExecuted(SocketMessageComponent arg)
+        {
+            Task.Run(async () => await OnSelectMenuExecutedAsync(arg));
+
+            return Task.CompletedTask;
+        }
 
         private Task OnButtonExecuted(SocketMessageComponent arg)
         {
