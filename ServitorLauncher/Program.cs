@@ -4,10 +4,10 @@ using BungieNetApi;
 using ClanActivitiesDatabase;
 using DataProcessor;
 using Microsoft.EntityFrameworkCore;
+using MusicService;
 using RaidDatabase;
 using RaidService;
 using ServitorDiscordBot;
-using MusicService;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>

@@ -81,7 +81,7 @@ namespace ServitorDiscordBot
                 .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary,
                 Emote.Parse(DataProcessor.DiscordEmoji.EmojiContainer.UnCheck));
 
-            await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")), 
+            await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")),
                 embed: builder.Build(), components: component.Build());
         }
     }

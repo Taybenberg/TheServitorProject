@@ -1,15 +1,14 @@
 ﻿using DataProcessor.DiscordEmoji;
+using DataProcessor.Localization;
 using DataProcessor.RaidManager;
 using Discord;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DataProcessor.DiscordEmoji;
-using DataProcessor.Localization;
-using Discord.WebSocket;
 
 namespace ServitorDiscordBot
 {
@@ -40,7 +39,7 @@ namespace ServitorDiscordBot
                             menuBuilder = menuBuilder.AddOption(tmpDate.ToString("dd.MM HH:mm"), tmpDate.ToString("dd.MM_HH:mm"));
                             tmpDate = tmpDate.AddMinutes(30);
                         }
-                     
+
                         var componentBuilder = new ComponentBuilder()
                             .WithSelectMenu(menuBuilder);
 
