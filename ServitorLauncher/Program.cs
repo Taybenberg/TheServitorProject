@@ -1,20 +1,22 @@
 using BumperDatabase;
 using BumperService;
 using BungieNetApi;
-using Database;
+using ClanActivitiesDatabase;
 using DataProcessor;
 using Microsoft.EntityFrameworkCore;
 using RaidDatabase;
 using RaidService;
 using ServitorDiscordBot;
+using MusicService;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
         services.AddScoped<IApiClient, ApiClient>(); //will be replaced
 
-        services.AddDbContext<ClanContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ClanActivitiesDatabase")));
-        services.AddScoped<IClanDB, ClanUoW>();
+        services.AddDbContext<ClanActivitiesContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ClanActivitiesDatabase")));
+        services.AddScoped<IClanActivitiesDB, ClanActivitiesUoW>();
+        services.AddScoped<IDatabaseWrapperFactory, DatabaseWrapperFactory>();
 
         services.AddDbContext<BumperContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("BumperDatabase")));
         services.AddScoped<IBumperDB, BumperUoW>();
@@ -24,9 +26,10 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IRaidDB, RaidUoW>();
         services.AddSingleton<IRaidManager, RaidManager>();
 
+        services.AddSingleton<IMusicPlayer, MusicPlayer>();
+
         services.AddScoped<IParserFactory, ParserFactory>(); //will be removed
         services.AddScoped<IImageFactory, ImageFactory>(); //will be removed
-        services.AddScoped<IDatabaseWrapperFactory, DatabaseWrapperFactory>(); //will be removed
 
         services.AddSingleton<ServitorBot>();
         services.AddHostedService(p => p.GetRequiredService<ServitorBot>());

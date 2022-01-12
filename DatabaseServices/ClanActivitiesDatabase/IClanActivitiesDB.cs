@@ -1,11 +1,11 @@
-﻿using Database.ORM;
+﻿using ClanActivitiesDatabase.ORM;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Database
+namespace ClanActivitiesDatabase
 {
-    public interface IClanDB
+    public interface IClanActivitiesDB
     {
         Task SyncActivitiesAsync();
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Database.ORM
+namespace ClanActivitiesDatabase.ORM
 {
     public record ActivityUserStats
     {

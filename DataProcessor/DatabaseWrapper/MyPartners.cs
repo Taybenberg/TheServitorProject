@@ -1,6 +1,6 @@
 ﻿using BungieNetApi.Enums;
-using Database;
-using Database.ORM;
+using ClanActivitiesDatabase;
+using ClanActivitiesDatabase.ORM;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -32,11 +32,11 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly ulong _userID;
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
         private readonly DateTime? _period;
 
-        internal MyPartners(IClanDB clanDB, ulong discordUserID, DateTime? period) => (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
+        internal MyPartners(IClanActivitiesDB clanDB, ulong discordUserID, DateTime? period) => (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
 
         public async Task InitAsync()
         {

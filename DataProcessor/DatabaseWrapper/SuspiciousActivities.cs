@@ -1,6 +1,6 @@
 ﻿using BungieNetApi;
 using BungieNetApi.Enums;
-using Database;
+using ClanActivitiesDatabase;
 using DataProcessor.Localization;
 using System;
 using System.Collections.Concurrent;
@@ -36,9 +36,9 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly IApiClient _apiClient;
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
-        internal SuspiciousActivities(IClanDB clanDB, IApiClient apiClient, bool isNightfallsOnly, bool withProfileLinks) =>
+        internal SuspiciousActivities(IClanActivitiesDB clanDB, IApiClient apiClient, bool isNightfallsOnly, bool withProfileLinks) =>
             (_clanDB, _apiClient, _isNightfallsOnly, _withProfileLinks) = (clanDB, apiClient, isNightfallsOnly, withProfileLinks);
 
         public async Task InitAsync()

@@ -1,5 +1,5 @@
 ﻿using BungieNetApi;
-using Database.ORM;
+using ClanActivitiesDatabase.ORM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Database
+namespace ClanActivitiesDatabase
 {
-    public partial class ClanUoW
+    public partial class ClanActivitiesUoW
     {
         public async Task SyncUsersAsync()
         {

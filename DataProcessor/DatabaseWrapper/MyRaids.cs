@@ -1,4 +1,4 @@
-﻿using Database;
+﻿using ClanActivitiesDatabase;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using DataProcessor.RaidManager;
@@ -36,9 +36,9 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly ulong _userID;
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
-        internal MyRaids(IClanDB clanDB, ulong discordUserID, DateTime seasonStart, int weekNumber) =>
+        internal MyRaids(IClanActivitiesDB clanDB, ulong discordUserID, DateTime seasonStart, int weekNumber) =>
             (_clanDB, _userID, _seasonStart, _weekNumber) = (clanDB, discordUserID, seasonStart.ToUniversalTime(), weekNumber);
 
         public async Task InitAsync()

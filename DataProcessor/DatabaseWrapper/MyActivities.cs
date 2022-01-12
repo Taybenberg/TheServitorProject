@@ -1,5 +1,5 @@
 ﻿using BungieNetApi.Enums;
-using Database;
+using ClanActivitiesDatabase;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System;
@@ -39,11 +39,11 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly ulong _userID;
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
         private readonly DateTime? _period;
 
-        internal MyActivities(IClanDB clanDB, ulong discordUserID, DateTime? period) =>
+        internal MyActivities(IClanActivitiesDB clanDB, ulong discordUserID, DateTime? period) =>
             (_clanDB, _userID, _period) = (clanDB, discordUserID, period);
 
         public async Task InitAsync()

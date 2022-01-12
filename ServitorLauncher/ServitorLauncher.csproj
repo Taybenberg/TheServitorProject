@@ -15,11 +15,12 @@
   <ItemGroup>
     <ProjectReference Include="..\BungieNetApi\BungieNetApi.csproj" />
     <ProjectReference Include="..\DatabaseServices\BumperDatabase\BumperDatabase.csproj" />
+    <ProjectReference Include="..\DatabaseServices\ClanActivitiesDatabase\ClanActivitiesDatabase.csproj" />
     <ProjectReference Include="..\DatabaseServices\RaidDatabase\RaidDatabase.csproj" />
-    <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
     <ProjectReference Include="..\ServitorBot\ServitorBot.csproj" />
     <ProjectReference Include="..\ServitorServices\BumperService\BumperService.csproj" />
+    <ProjectReference Include="..\ServitorServices\MusicService\MusicService.csproj" />
     <ProjectReference Include="..\ServitorServices\RaidService\RaidService.csproj" />
   </ItemGroup>
 </Project>

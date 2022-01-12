@@ -1,4 +1,4 @@
-﻿using Database;
+﻿using ClanActivitiesDatabase;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -21,11 +21,11 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly ulong _userID;
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
         private readonly IDictionary<string, string> _GMs;
 
-        internal MyGrandmasters(IClanDB clanDB, ulong discordUserID, DateTime seasonStart, IConfiguration configuration) =>
+        internal MyGrandmasters(IClanActivitiesDB clanDB, ulong discordUserID, DateTime seasonStart, IConfiguration configuration) =>
             (_clanDB, _userID, _seasonStart, _GMs) = (clanDB, discordUserID, seasonStart.ToUniversalTime(), configuration.GetSection("Destiny2:Grandmasters").Get<IDictionary<string, string>>());
 
         public async Task InitAsync()

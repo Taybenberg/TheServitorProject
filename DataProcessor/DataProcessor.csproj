@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BungieNetApi\BungieNetApi.csproj" />
-    <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\DatabaseServices\ClanActivitiesDatabase\ClanActivitiesDatabase.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿using BungieNetApi.Enums;
-using Database;
+using ClanActivitiesDatabase;
 using F23.StringSimilarity;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +21,13 @@ namespace DataProcessor.DatabaseWrapper
 
         public IEnumerable<UserSimilarity> UserSimilarities { get; private set; }
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
         private readonly string _discordUserName;
 
         private readonly ulong _discordUserID;
 
-        internal FindUserByName(IClanDB clanDB, ulong discordUserID, string discordUserName) => (_clanDB, _discordUserID, _discordUserName) = (clanDB, discordUserID, discordUserName);
+        internal FindUserByName(IClanActivitiesDB clanDB, ulong discordUserID, string discordUserName) => (_clanDB, _discordUserID, _discordUserName) = (clanDB, discordUserID, discordUserName);
 
         public async Task InitAsync()
         {

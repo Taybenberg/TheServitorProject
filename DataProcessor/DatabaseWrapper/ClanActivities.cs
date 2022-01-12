@@ -1,5 +1,5 @@
 ﻿using BungieNetApi.Enums;
-using Database;
+using ClanActivitiesDatabase;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System;
@@ -24,11 +24,11 @@ namespace DataProcessor.DatabaseWrapper
 
         public IEnumerable<ModeCounter> Modes { get; private set; }
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
         private readonly DateTime? _period;
 
-        internal ClanActivities(IClanDB clanDB, DateTime? period) => (_clanDB, _period) = (clanDB, period);
+        internal ClanActivities(IClanActivitiesDB clanDB, DateTime? period) => (_clanDB, _period) = (clanDB, period);
 
         public async Task InitAsync()
         {

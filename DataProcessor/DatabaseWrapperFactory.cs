@@ -1,5 +1,5 @@
 ﻿using BungieNetApi;
-using Database;
+using ClanActivitiesDatabase;
 using DataProcessor.DatabaseWrapper;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
@@ -22,7 +22,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             var activities = new ClanActivities(clanDB, period);
 
@@ -35,7 +35,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
@@ -57,7 +57,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
@@ -72,7 +72,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             var activities = new MyActivities(clanDB, discordUserID, period);
 
@@ -85,7 +85,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             var activities = new MyPartners(clanDB, discordUserID, period);
 
@@ -98,7 +98,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             IApiClient apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
 
@@ -126,7 +126,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             var user = new FindUserByName(clanDB, discordUserID, discordUserName);
 
@@ -139,7 +139,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             return await clanDB.RegisterUserAsync(userID, discordUserID);
         }
@@ -148,7 +148,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             var raids = new MyRaids(clanDB, discordUserID, seasonStart, weekNumber);
 
@@ -161,7 +161,7 @@ namespace DataProcessor
         {
             using var scope = _scopeFactory.CreateScope();
 
-            IClanDB clanDB = scope.ServiceProvider.GetRequiredService<IClanDB>();
+            IClanActivitiesDB clanDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
             IConfiguration configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 

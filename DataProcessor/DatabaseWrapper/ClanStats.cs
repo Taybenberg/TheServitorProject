@@ -1,5 +1,5 @@
 ﻿using BungieNetApi;
-using Database;
+using ClanActivitiesDatabase;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
 using System.Collections.Generic;
@@ -32,9 +32,9 @@ namespace DataProcessor.DatabaseWrapper
 
         private readonly IApiClient _apiClient;
 
-        private readonly IClanDB _clanDB;
+        private readonly IClanActivitiesDB _clanDB;
 
-        internal ClanStats(IClanDB clanDB, IApiClient apiClient, string mode, ulong discordUserID) =>
+        internal ClanStats(IClanActivitiesDB clanDB, IApiClient apiClient, string mode, ulong discordUserID) =>
             (_clanDB, _apiClient, _mode, _userID) = (clanDB, apiClient, mode, discordUserID);
 
         public async Task InitAsync()

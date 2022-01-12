@@ -1,9 +1,9 @@
-﻿using Database.ORM;
+﻿using ClanActivitiesDatabase.ORM;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database
+namespace ClanActivitiesDatabase
 {
-    public class ClanContext : DbContext
+    public class ClanActivitiesContext : DbContext
     {
         public DbSet<User> Users { get; set; }
 
@@ -13,7 +13,7 @@ namespace Database
 
         public DbSet<ActivityUserStats> ActivityUserStats { get; set; }
 
-        public ClanContext(DbContextOptions<ClanContext> options) : base(options)
+        public ClanActivitiesContext(DbContextOptions<ClanActivitiesContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
