@@ -7,8 +7,8 @@ namespace ServitorDiscordBot
     {
         private async Task OnSelectMenuExecutedAsync(SocketMessageComponent component)
         {
-            if (component.Channel.Id == _bumpChannelId)
-                await BumperButtonExecutedAsync(component);
+            if (component.Channel.Id == _raidChannelId)
+                await RaidSelectMenuExecutedAsync(component);
         }
     }
 }

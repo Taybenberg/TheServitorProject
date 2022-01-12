@@ -9,40 +9,106 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DataProcessor.DiscordEmoji;
 using DataProcessor.Localization;
+using Discord.WebSocket;
 
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        private async Task RaidSelectMenuExecutedAsync(SocketMessageComponent component)
+        {
+            switch (component.Data.CustomId)
+            {
+                case "QuickRaidSelector":
+                    {
+                        var builder = new EmbedBuilder()
+                            .WithColor(new Color(0xE8A427))
+                            .WithDescription("Оберіть зручний час");
+
+                        var menuBuilder = new SelectMenuBuilder()
+                            .WithPlaceholder("Оберіть час")
+                            .WithCustomId(string.Join(',', component.Data.Values))
+                            .WithMinValues(1).WithMaxValues(1);
+
+                        var startDate = DateTime.Now;
+                        var endDate = startDate.AddHours(12);
+                        var tmpDate = startDate.AddMinutes(30);
+
+                        while (tmpDate < endDate)
+                        {
+                            Console.WriteLine(tmpDate);
+                            menuBuilder = menuBuilder.AddOption(tmpDate.ToString("dd.MM HH:mm"), tmpDate.ToString("dd.MM_HH:mm"));
+                            tmpDate = tmpDate.AddMinutes(30);
+                        }
+                     
+                        var componentBuilder = new ComponentBuilder()
+                            .WithSelectMenu(menuBuilder);
+
+                        await component.RespondAsync(embed: builder.Build(), components: componentBuilder.Build());
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("QuickRaid_"):
+                    {
+                        var raid = new RaidContainer();
+
+                        raid.RaidType = GetRaidType(c.Split('_')[1]);
+
+                        raid.PlannedDate = DateTime.ParseExact(string.Join(',', component.Data.Values), "dd.MM_HH:mm", CultureInfo.CurrentCulture);
+
+                        raid.AddUser(component.User.Id);
+
+                        await component.DeferAsync();
+
+                        var builder = GetBuilder(MessagesEnum.Raid, null, false);
+
+                        raid.DecorateBuilder(builder);
+
+                        var msg = await component.Channel.SendMessageAsync($"<@&{_destinyRoleId}>", embed: builder.Build());
+
+                        await _raidManager.AddRaidAsync(msg.Id, raid);
+
+                        await msg.AddReactionsAsync(new string[]
+                            { EmojiContainer.Check, EmojiContainer.UnCheck }
+                            .Select(x => Emote.Parse(x)).ToArray());
+                    }
+                    break;
+
+                default: break;
+            }
+        }
+
         private async Task OnRaidChannelMessageAsync(IMessage message)
         {
             var command = message.Content.ToLower();
 
             switch (command)
             {
-                case string c
-                    when c is "допомога":
+                case "допомога":
                     await GetHelpOnCommandAsync(message, "рейд");
                     break;
 
-                case string c
-                    when c is "конструктор":
+                case "конструктор рейду":
                     {
+                        var builder = new EmbedBuilder()
+                            .WithColor(new Color(0xE8A427))
+                            .WithDescription("Швидко зберіть рейд на найближчий час");
+
                         var menuBuilder = new SelectMenuBuilder()
                             .WithPlaceholder("Оберіть рейд")
-                            .WithCustomId("QuickRaidBuilder")
-                            .WithMinValues(1)
-                            .WithMaxValues(1)
+                            .WithCustomId("QuickRaidSelector")
+                            .WithMinValues(1).WithMaxValues(1)
                             .AddOption(TranslationDictionaries.RaidTypes[RaidType.LW], "QuickRaid_LW", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.LW)))
                             .AddOption(TranslationDictionaries.RaidTypes[RaidType.GOS], "QuickRaid_GOS", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.GOS)))
                             .AddOption(TranslationDictionaries.RaidTypes[RaidType.DSC], "QuickRaid_DSC", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.DSC)))
                             .AddOption(TranslationDictionaries.RaidTypes[RaidType.VOG_L], "QuickRaid_VOGL", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.VOG_L)))
                             .AddOption(TranslationDictionaries.RaidTypes[RaidType.VOG_M], "QuickRaid_VOGM", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.VOG_M)));
 
-                        var builder = new ComponentBuilder()
+                        var component = new ComponentBuilder()
                             .WithSelectMenu(menuBuilder);
 
-                        await message.Channel.SendMessageAsync("Швидко зберіть рейд на найближчий час", components: builder.Build());
+                        await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
                     }
                     break;
 
@@ -204,6 +270,17 @@ namespace ServitorDiscordBot
             catch { }
         }
 
+        private RaidType GetRaidType(string raidType) =>
+            raidType.ToLower() switch
+            {
+                "lw" or "лв" or "об" => RaidType.LW,
+                "gos" or "сп" or "сс" => RaidType.GOS,
+                "dsc" or "сгк" => RaidType.DSC,
+                "vog" or "вог" or "кс" => RaidType.VOG_L,
+                "vogm" or "вогм" or "ксм" => RaidType.VOG_M,
+                _ => throw new Exception()
+            };
+
         private async Task InitRaidAsync(IMessage message)
         {
             var builder = GetBuilder(MessagesEnum.Raid, null, false);
@@ -216,15 +293,7 @@ namespace ServitorDiscordBot
 
                 var raidType = command.Substring(0, command.IndexOf(' '));
 
-                raid.RaidType = raidType.ToLower() switch
-                {
-                    "lw" or "лв" or "об" => RaidType.LW,
-                    "gos" or "сп" or "сс" => RaidType.GOS,
-                    "dsc" or "сгк" => RaidType.DSC,
-                    "vog" or "вог" or "кс" => RaidType.VOG_L,
-                    "vogm" or "вогм" or "ксм" => RaidType.VOG_M,
-                    _ => throw new Exception()
-                };
+                raid.RaidType = GetRaidType(raidType);
 
                 command = command.Remove(0, command.IndexOf(' ') + 1);
 
