@@ -13,13 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServitorLauncher", "Servito
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BumperService", "ServitorServices\BumperService\BumperService.csproj", "{D0CA462F-3BDD-4EDA-BE58-CCCB942A4591}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaidService", "ServitorServices\RaidService\RaidService.csproj", "{3A974C62-9B4E-4954-888C-D5FDC65C5902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivityService", "ServitorServices\ActivityService\ActivityService.csproj", "{3A974C62-9B4E-4954-888C-D5FDC65C5902}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicService", "ServitorServices\MusicService\MusicService.csproj", "{B387D3C1-ACB8-4E30-B08A-0FB2430C90B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BumperDatabase", "DatabaseServices\BumperDatabase\BumperDatabase.csproj", "{9EB7F0F0-CA2D-4EDB-95E0-6DFDEF1A71CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaidDatabase", "DatabaseServices\RaidDatabase\RaidDatabase.csproj", "{DE874B9F-A0BB-4325-A5F5-B89BEDC1602A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivityDatabase", "DatabaseServices\ActivityDatabase\ActivityDatabase.csproj", "{DE874B9F-A0BB-4325-A5F5-B89BEDC1602A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClanActivitiesDatabase", "DatabaseServices\ClanActivitiesDatabase\ClanActivitiesDatabase.csproj", "{20D7A427-7366-459E-8025-294C0ADE082F}"
 EndProject

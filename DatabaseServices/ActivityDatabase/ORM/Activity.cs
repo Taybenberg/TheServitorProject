@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RaidDatabase.ORM
+namespace ActivityDatabase.ORM
 {
-    public record Raid
+    public record Activity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public ulong RaidID { get; set; }
+        public ulong ActivityID { get; set; }
 
         public DateTime PlannedDate { get; set; }
 
-        public int RaidType { get; set; }
+        public string ActivityType { get; set; }
 
         public string? Description { get; set; }
 

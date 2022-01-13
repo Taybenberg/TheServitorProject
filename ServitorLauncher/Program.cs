@@ -1,3 +1,5 @@
+using ActivityDatabase;
+using ActivityService;
 using BumperDatabase;
 using BumperService;
 using BungieNetApi;
@@ -6,8 +8,6 @@ using Coravel;
 using DataProcessor;
 using Microsoft.EntityFrameworkCore;
 using MusicService;
-using RaidDatabase;
-using RaidService;
 using ServitorDiscordBot;
 
 IHost host = Host.CreateDefaultBuilder(args)
@@ -25,9 +25,9 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IBumperDB, BumperUoW>();
         services.AddSingleton<IBumpManager, BumpManager>();
 
-        services.AddDbContext<RaidContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("RaidDatabase")));
-        services.AddScoped<IRaidDB, RaidUoW>();
-        services.AddSingleton<IRaidManager, RaidManager>();
+        services.AddDbContext<ActivityContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("RaidDatabase")));
+        services.AddScoped<IActivityDB, ActivityUoW>();
+        services.AddSingleton<IActivityManager, ActivityManager>();
 
         services.AddSingleton<IMusicPlayer, MusicPlayer>();
 

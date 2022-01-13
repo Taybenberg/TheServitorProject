@@ -14,7 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
     <ProjectReference Include="..\ServitorServices\BumperService\BumperService.csproj" />
-    <ProjectReference Include="..\ServitorServices\RaidService\RaidService.csproj" />
+    <ProjectReference Include="..\ServitorServices\ActivityService\ActivityService.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RaidDatabase.ORM;
+﻿using ActivityDatabase.ORM;
+using Microsoft.EntityFrameworkCore;
 
-namespace RaidDatabase
+namespace ActivityDatabase
 {
-    public class RaidContext : DbContext
+    public class ActivityContext : DbContext
     {
-        public DbSet<Raid> Raids { get; set; }
+        public DbSet<Activity> Activities { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
 
-        public RaidContext(DbContextOptions<RaidContext> options) : base(options)
+        public ActivityContext(DbContextOptions<ActivityContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

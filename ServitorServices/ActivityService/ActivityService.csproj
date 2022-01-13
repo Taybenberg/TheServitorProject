@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DatabaseServices\RaidDatabase\RaidDatabase.csproj" />
+    <ProjectReference Include="..\..\DatabaseServices\ActivityDatabase\ActivityDatabase.csproj" />
   </ItemGroup>
 
 </Project>

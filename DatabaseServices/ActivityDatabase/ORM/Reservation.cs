@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RaidDatabase.ORM
+namespace ActivityDatabase.ORM
 {
     public record Reservation
     {
         [Key]
         public long ReservationID { get; set; }
 
-        public ulong RaidID { get; set; }
-        public Raid Raid { get; set; }
+        public ulong ActivityID { get; set; }
+        public Activity Activity { get; set; }
 
         public int Position { get; set; }
 
