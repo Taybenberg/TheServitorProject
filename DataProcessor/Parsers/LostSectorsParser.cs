@@ -1,4 +1,5 @@
-﻿using DataProcessor.Parsers.Inventory;
+﻿using CommonData.Localization;
+using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -7,7 +8,6 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using CommonData.Localization;
 
 namespace DataProcessor.Parsers
 {

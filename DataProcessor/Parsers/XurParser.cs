@@ -1,4 +1,5 @@
 ﻿using BungieNetApi;
+using CommonData.Localization;
 using DataProcessor.Parsers.Inventory;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
@@ -9,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using CommonData.Localization;
 
 namespace DataProcessor.Parsers
 {

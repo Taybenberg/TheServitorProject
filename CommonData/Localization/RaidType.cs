@@ -1,5 +1,4 @@
 ﻿using CommonData.RaidManager;
-using System.Collections.Generic;
 using static CommonData.RaidManager.RaidType;
 
 namespace CommonData.Localization

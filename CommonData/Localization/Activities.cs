@@ -1,6 +1,4 @@
 ﻿using BungieNetApi.Enums;
-using System.Collections.Generic;
-using System.Linq;
 using static BungieNetApi.Enums.ActivityType;
 
 namespace CommonData.Localization

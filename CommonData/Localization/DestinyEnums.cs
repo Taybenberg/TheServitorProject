@@ -1,5 +1,4 @@
 ﻿using BungieNetApi.Enums;
-using System.Collections.Generic;
 using static BungieNetApi.Enums.DestinyClass;
 using static BungieNetApi.Enums.DestinyGender;
 using static BungieNetApi.Enums.DestinyRace;
