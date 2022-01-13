@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataProcessor.Localization
+namespace CommonData.Localization
 {
     public static partial class TranslationDictionaries
     {

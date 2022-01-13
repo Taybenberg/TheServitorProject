@@ -1,7 +1,7 @@
 ﻿using BungieNetApi.Enums;
 using ClanActivitiesDatabase;
-using DataProcessor.DiscordEmoji;
-using DataProcessor.Localization;
+using CommonData.DiscordEmoji;
+using CommonData.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;

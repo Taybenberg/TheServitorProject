@@ -1,6 +1,6 @@
-﻿using DataProcessor.DiscordEmoji;
-using DataProcessor.Localization;
-using DataProcessor.RaidManager;
+﻿using CommonData.DiscordEmoji;
+using CommonData.Localization;
+using CommonData.RaidManager;
 using Discord;
 using Discord.WebSocket;
 using System;

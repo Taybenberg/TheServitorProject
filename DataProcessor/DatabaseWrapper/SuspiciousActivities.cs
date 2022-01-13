@@ -1,7 +1,7 @@
 ﻿using BungieNetApi;
 using BungieNetApi.Enums;
 using ClanActivitiesDatabase;
-using DataProcessor.Localization;
+using CommonData.Localization;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

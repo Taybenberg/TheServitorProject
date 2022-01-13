@@ -1,8 +1,8 @@
 ﻿using BungieNetApi;
 using ClanActivitiesDatabase;
 using DataProcessor.DatabaseWrapper;
-using DataProcessor.DiscordEmoji;
-using DataProcessor.Localization;
+using CommonData.DiscordEmoji;
+using CommonData.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

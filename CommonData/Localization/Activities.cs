@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static BungieNetApi.Enums.ActivityType;
 
-namespace DataProcessor.Localization
+namespace CommonData.Localization
 {
     public static partial class TranslationDictionaries
     {

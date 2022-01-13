@@ -1,4 +1,4 @@
-﻿using DataProcessor.DiscordEmoji;
+﻿using CommonData.DiscordEmoji;
 using Discord;
 using static ServitorDiscordBot.MessagesEnum;
 

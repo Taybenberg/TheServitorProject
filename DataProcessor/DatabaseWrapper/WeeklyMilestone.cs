@@ -1,6 +1,6 @@
 ﻿using BungieNetApi;
 using BungieNetApi.Enums;
-using DataProcessor.Localization;
+using CommonData.Localization;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Linq;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CommonData.Localization;
 
 namespace DataProcessor.Parsers
 {
@@ -66,7 +67,7 @@ namespace DataProcessor.Parsers
 
                         m.DrawText(sector.SectorName, sectorFont, Color.White, new Point(414, 456 + j));
 
-                        m.DrawText(Localization.TranslationDictionaries.ItemNames[sector.SectorReward], sectorFont, Color.White, new Point(414, 554 + j));
+                        m.DrawText(TranslationDictionaries.ItemNames[sector.SectorReward], sectorFont, Color.White, new Point(414, 554 + j));
                     });
 
                     j += 295;

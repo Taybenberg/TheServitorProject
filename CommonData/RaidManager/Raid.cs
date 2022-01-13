@@ -1,8 +1,8 @@
-﻿using static DataProcessor.RaidManager.RaidType;
+﻿using static CommonData.RaidManager.RaidType;
 
-namespace DataProcessor.RaidManager
+namespace CommonData.RaidManager
 {
-    class Raid
+    public class Raid
     {
         public static RaidType GetRaidType(long hash) =>
             hash switch

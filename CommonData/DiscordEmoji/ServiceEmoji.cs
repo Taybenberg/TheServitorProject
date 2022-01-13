@@ -1,4 +1,4 @@
-﻿namespace DataProcessor.DiscordEmoji
+﻿namespace CommonData.DiscordEmoji
 {
     public static partial class EmojiContainer
     {

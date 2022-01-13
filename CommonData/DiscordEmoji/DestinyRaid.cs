@@ -1,7 +1,7 @@
-﻿using DataProcessor.RaidManager;
-using static DataProcessor.RaidManager.RaidType;
+﻿using CommonData.RaidManager;
+using static CommonData.RaidManager.RaidType;
 
-namespace DataProcessor.DiscordEmoji
+namespace CommonData.DiscordEmoji
 {
     public static partial class EmojiContainer
     {

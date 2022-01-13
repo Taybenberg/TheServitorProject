@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using CommonData.Localization;
 
 namespace DataProcessor.Parsers
 {
@@ -47,7 +48,7 @@ namespace DataProcessor.Parsers
                     inventory.XurItems.Add(new XurItem
                     {
                         ItemName = item.ItemName,
-                        ItemClass = Localization.TranslationDictionaries.ItemNames[item.ItemTypeAndTier],
+                        ItemClass = TranslationDictionaries.ItemNames[item.ItemTypeAndTier],
                         ItemIconURL = item.ItemIconUrl
                     });
                 }

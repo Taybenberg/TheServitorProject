@@ -1,8 +1,8 @@
-﻿using DataProcessor.RaidManager;
+﻿using CommonData.RaidManager;
 using System.Collections.Generic;
-using static DataProcessor.RaidManager.RaidType;
+using static CommonData.RaidManager.RaidType;
 
-namespace DataProcessor.Localization
+namespace CommonData.Localization
 {
     public static partial class TranslationDictionaries
     {

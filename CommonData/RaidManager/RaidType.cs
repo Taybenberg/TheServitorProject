@@ -1,4 +1,4 @@
-﻿namespace DataProcessor.RaidManager
+﻿namespace CommonData.RaidManager
 {
     public enum RaidType
     {

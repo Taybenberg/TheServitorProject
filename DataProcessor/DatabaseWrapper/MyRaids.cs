@@ -1,7 +1,7 @@
 ﻿using ClanActivitiesDatabase;
-using DataProcessor.DiscordEmoji;
-using DataProcessor.Localization;
-using DataProcessor.RaidManager;
+using CommonData.DiscordEmoji;
+using CommonData.Localization;
+using CommonData.RaidManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
