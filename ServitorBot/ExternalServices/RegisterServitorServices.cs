@@ -1,4 +1,5 @@
 ﻿using BumperService;
+using RaidService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ namespace ServitorDiscordBot
     public partial class ServitorBot
     {
         private IBumpManager _bumper;
+        private IRaidManager _raider;
 
         private RaidManager _raidManager;
 
@@ -27,6 +29,9 @@ namespace ServitorDiscordBot
 
             _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
             _bumper.Notify += BumperNotifyAsync;
+
+            _raider = scope.ServiceProvider.GetRequiredService<IRaidManager>();
+            //raider
         }
     }
 }
