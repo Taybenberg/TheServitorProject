@@ -21,6 +21,7 @@
     <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
     <ProjectReference Include="..\ServitorBot\ServitorBot.csproj" />
     <ProjectReference Include="..\ServitorServices\BumperService\BumperService.csproj" />
+    <ProjectReference Include="..\ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj" />
     <ProjectReference Include="..\ServitorServices\MusicService\MusicService.csproj" />
     <ProjectReference Include="..\ServitorServices\ActivityService\ActivityService.csproj" />
   </ItemGroup>
