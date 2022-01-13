@@ -1,4 +1,5 @@
 ﻿using BumperService;
+using CommonData.DiscordEmoji;
 using Discord;
 using Discord.WebSocket;
 using System.Linq;
@@ -55,7 +56,7 @@ namespace ServitorDiscordBot
 
                     var builder = new EmbedBuilder()
                         .WithColor(0xFF6E00)
-                        .WithDescription($"{CommonData.DiscordEmoji.EmojiContainer.BumpTimer} {nextBump.ToString("HH:mm")}");
+                        .WithDescription($"{EmojiContainer.BumpTimer} {nextBump.ToString("HH:mm")}");
 
                     await message.Channel.SendMessageAsync(embed: builder.Build());
                 }
@@ -76,10 +77,8 @@ namespace ServitorDiscordBot
                     .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"));
 
             var component = new ComponentBuilder()
-                .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary,
-                Emote.Parse(CommonData.DiscordEmoji.EmojiContainer.Check))
-                .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary,
-                Emote.Parse(CommonData.DiscordEmoji.EmojiContainer.UnCheck));
+                .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary, Emote.Parse(EmojiContainer.Check))
+                .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary, Emote.Parse(EmojiContainer.UnCheck));
 
             await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")),
                 embed: builder.Build(), components: component.Build());
