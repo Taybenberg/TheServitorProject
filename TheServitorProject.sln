@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonData", "CommonData\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClanActivitiesService", "ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj", "{A339BF23-782A-4792-9F00-992FB7C6A86F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DestinyNotificationsService", "ServitorServices\DestinyNotificationsService\DestinyNotificationsService.csproj", "{7A3C232B-7770-4BD0-82A9-6C2814556B96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DestinyNotificationsDatabase", "DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj", "{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{A339BF23-782A-4792-9F00-992FB7C6A86F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A339BF23-782A-4792-9F00-992FB7C6A86F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A339BF23-782A-4792-9F00-992FB7C6A86F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A3C232B-7770-4BD0-82A9-6C2814556B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A3C232B-7770-4BD0-82A9-6C2814556B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A3C232B-7770-4BD0-82A9-6C2814556B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A3C232B-7770-4BD0-82A9-6C2814556B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
