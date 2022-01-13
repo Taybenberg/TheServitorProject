@@ -2,6 +2,7 @@ using BumperDatabase;
 using BumperService;
 using BungieNetApi;
 using ClanActivitiesDatabase;
+using Coravel;
 using DataProcessor;
 using Microsoft.EntityFrameworkCore;
 using MusicService;
@@ -12,6 +13,8 @@ using ServitorDiscordBot;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
+        services.AddScheduler();
+
         services.AddScoped<IApiClient, ApiClient>(); //will be replaced
 
         services.AddDbContext<ClanActivitiesContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ClanActivitiesDatabase")));
@@ -35,5 +38,10 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHostedService(p => p.GetRequiredService<ServitorBot>());
     })
     .Build();
+
+host.Services.UseScheduler(scheduler =>
+{
+
+});
 
 await host.RunAsync();
