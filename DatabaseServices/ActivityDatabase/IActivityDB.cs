@@ -14,6 +14,8 @@ namespace ActivityDatabase
 
         Task UpdateActivityAsync(Activity activity);
 
+        Task DisableActivityAsync(Activity activity);
+
         Task DisableActivityAsync(ulong activityID);
 
         Task<bool> TransferPlaceAsync(ulong activityID, ulong user1ID, ulong user2ID);

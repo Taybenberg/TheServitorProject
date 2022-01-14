@@ -210,6 +210,7 @@ namespace ServitorDiscordBot
 
         private async Task Event_Update(RaidContainer container)
         {
+            /*
             IMessageChannel channel = _client.GetChannel(_raidChannelId) as IMessageChannel;
 
             var builder = GetBuilder(MessagesEnum.Raid, null, false);
@@ -220,11 +221,12 @@ namespace ServitorDiscordBot
             {
                 await channel.ModifyMessageAsync(container.ID, msg => msg.Embed = builder.Build());
             }
-            catch { }
+            catch { }*/
         }
 
         private async Task Event_Notify(RaidContainer container)
         {
+            /*
             IMessageChannel channel = _client.GetChannel(_raidChannelId) as IMessageChannel;
 
             var builder = GetBuilder(MessagesEnum.Raid, null, false);
@@ -255,18 +257,19 @@ namespace ServitorDiscordBot
                     await u.SendMessageAsync(embed: builded);
                 }
                 catch { }
-            }
+            }*/
         }
 
         private async Task Event_Delete(ulong messageID)
         {
+            /*
             IMessageChannel channel = await _client.Rest.GetChannelAsync(_raidChannelId) as IMessageChannel;
 
             try
             {
                 await channel.DeleteMessageAsync(messageID);
             }
-            catch { }
+            catch { }*/
         }
 
         private RaidType GetRaidType(string raidType) =>

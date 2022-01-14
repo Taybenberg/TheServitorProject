@@ -8,6 +8,8 @@ namespace ActivityDatabase.ORM
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong ActivityID { get; set; }
 
+        public ulong ChannelID { get; set; }
+
         public DateTime PlannedDate { get; set; }
 
         public string ActivityType { get; set; }

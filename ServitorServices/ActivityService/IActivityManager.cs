@@ -1,13 +1,15 @@
-﻿using ActivityDatabase.ORM;
-
-namespace ActivityService
+﻿namespace ActivityService
 {
     public interface IActivityManager
     {
-        public event Func<Activity, Task> ActivityNotification;
-        public event Func<Activity, Task> ActivityUpdated;
-        public event Func<ulong, Task> ActivityDeleted;
+        public event Func<ActivityContainer, Task> ActivityNotification;
+        public event Func<ActivityContainer, Task> ActivityUpdated;
+        public event Func<ulong, Task> ActivityDisabled;
 
         public Task Init();
+
+        Task AddActivityAsync(ActivityContainer activity);
+
+        Task<ActivityContainer> GetActivityAsync(ulong activityID);
     }
 }
