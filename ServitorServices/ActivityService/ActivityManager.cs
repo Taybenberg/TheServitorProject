@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using ActivityDatabase.ORM;
+using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,9 +22,13 @@ namespace ActivityService
             _server = new();
         }
 
-        public void Init()
-        {
+        public event Func<Activity, Task> ActivityNotification;
+        public event Func<Activity, Task> ActivityUpdated;
+        public event Func<ulong, Task> ActivityDeleted;
 
+        public async Task Init()
+        {
+            
         }
     }
 }

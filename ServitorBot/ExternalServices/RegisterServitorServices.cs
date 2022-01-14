@@ -31,7 +31,12 @@ namespace ServitorDiscordBot
             _bumper.Notify += BumperNotifyAsync;
 
             _raider = scope.ServiceProvider.GetRequiredService<IActivityManager>();
-            //raider
+            /*
+            _raider.ActivityNotification += _;
+            _raider.ActivityUpdated += _;
+            _raider.ActivityDeleted += _;
+            _raider.Init();
+            */
         }
     }
 }

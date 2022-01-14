@@ -1,7 +1,13 @@
-﻿namespace ActivityService
+﻿using ActivityDatabase.ORM;
+
+namespace ActivityService
 {
     public interface IActivityManager
     {
-        void Init();
+        public event Func<Activity, Task> ActivityNotification;
+        public event Func<Activity, Task> ActivityUpdated;
+        public event Func<ulong, Task> ActivityDeleted;
+
+        public Task Init();
     }
 }
