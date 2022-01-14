@@ -33,9 +33,9 @@ namespace ServitorDiscordBot
                 return;
             }
 
-            if (message.Channel.Id == _raidChannelId)
+            if (_activityChannelId.Any(x => x == message.Channel.Id))
             {
-                await OnRaidChannelMessageAsync(message);
+                await OnActivityChannelMessageAsync(message);
                 return;
             }
 

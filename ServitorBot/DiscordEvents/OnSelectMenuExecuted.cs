@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -7,8 +8,8 @@ namespace ServitorDiscordBot
     {
         private async Task OnSelectMenuExecutedAsync(SocketMessageComponent component)
         {
-            if (component.Channel.Id == _raidChannelId)
-                await RaidSelectMenuExecutedAsync(component);
+            if (_activityChannelId.Any(x => x == component.Channel.Id))
+                await ActivitySelectMenuExecutedAsync(component);
         }
     }
 }

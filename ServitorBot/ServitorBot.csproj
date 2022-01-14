@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ServitorServices\MusicService\MusicService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExternalServices\MusicPlayer\" />
+  </ItemGroup>
+
 </Project>
