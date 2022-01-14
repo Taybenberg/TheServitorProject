@@ -4,10 +4,12 @@ using Microsoft.Extensions.Logging;
 
 namespace BumperService
 {
-    public class BumpManager : IBumpManager
+    public class BumpManager : IDisposable, IBumpManager
     {
         const int userBumpCooldownHours = 24;
         const int bumpCooldownHours = 4;
+
+        private readonly System.Timers.Timer _timer = new();
 
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
@@ -47,8 +49,6 @@ namespace BumperService
 
             _logger.LogInformation($"{DateTime.Now} Bump scheduled on {nextBump.ToLocalTime()}");
         }
-
-        System.Timers.Timer _timer = new();
 
         public event Func<BumpNotificationContainer, Task> Notify;
 
@@ -120,6 +120,12 @@ namespace BumperService
             await bumperDB.AddOrUpdateUserAsync(userID, false);
 
             _logger.LogInformation($"{DateTime.Now} User {userID} unsubscribed");
+        }
+
+        public void Dispose()
+        {
+            _timer.Stop();
+            _timer.Dispose();
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ActivityService
 {
-    public class ActivityManager : IActivityManager
+    public class ActivityManager : IDisposable, IActivityManager
     {
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
@@ -28,7 +28,9 @@ namespace ActivityService
 
         public async Task Init()
         {
-            
+
         }
+
+        public void Dispose() => _server.Dispose();
     }
 }
