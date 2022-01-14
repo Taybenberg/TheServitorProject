@@ -16,7 +16,7 @@ namespace ServitorDiscordBot
         private MusicPlayer _player;
         private RaidManager _raidManager;
 
-        private void RegisterExternalServices(IConfiguration configuration, ILogger<ServitorBot> logger)
+        private void RegisterExternalServices()
         {
             using var scope = _scopeFactory.CreateScope();
 

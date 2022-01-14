@@ -62,7 +62,7 @@ namespace ServitorDiscordBot
 
             _client.SetGameAsync("Destiny 2").Wait();
 
-            RegisterExternalServices(configuration, logger);
+            RegisterExternalServices();
         }
 
         public void Dispose()
