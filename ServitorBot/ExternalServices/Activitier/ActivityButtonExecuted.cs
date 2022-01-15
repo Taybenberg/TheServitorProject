@@ -11,12 +11,16 @@ namespace ServitorDiscordBot
             {
                 case "ActivitierSubscribe":
                     {
+                        await _activityManager.UsersSubscribedAsync(component.Message.Id, new ulong[] { component.User.Id });
+
                         await component.DeferAsync();
                     }
                     break;
 
                 case "ActivitierUnsubscribe":
                     {
+                        await _activityManager.UsersUnSubscribedAsync(component.Message.Id, new ulong[] { component.User.Id });
+
                         await component.DeferAsync();
                     }
                     break;

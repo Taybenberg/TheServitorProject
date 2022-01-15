@@ -1,14 +1,15 @@
 ﻿using ActivityService;
 using BumperService;
 using Microsoft.Extensions.DependencyInjection;
+using MusicService;
 
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
         private IBumpManager _bumper;
-        private IActivityManager _raider;
-        //private IMusicPlayer _player;
+        private IActivityManager _activityManager;
+        private IMusicPlayer _musicPlayer;
 
         private MusicPlayer _player;
         private RaidManager _raidManager;
@@ -20,15 +21,15 @@ namespace ServitorDiscordBot
             _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
             _bumper.Notify += BumperNotifyAsync;
 
-            _raider = scope.ServiceProvider.GetRequiredService<IActivityManager>();
+            _activityManager = scope.ServiceProvider.GetRequiredService<IActivityManager>();
             /*
-            _raider.ActivityNotification += _;
-            _raider.ActivityUpdated += _;
-            _raider.ActivityDeleted += _;
-            _raider.Init();
+            _activityManager.ActivityNotification +=
+            _activityManager.ActivityUpdated +=
+            _activityManager.ActivityDisabled +=
             */
+            _activityManager.Init();
 
-            //_player = scope.ServiceProvider.GetRequiredService<IMusicPlayer>();
+            _musicPlayer = scope.ServiceProvider.GetRequiredService<IMusicPlayer>();
         }
     }
 }

@@ -11,6 +11,8 @@ namespace ServitorDiscordBot
     {
         private async Task InitActivityAsync(ActivityContainer container)
         {
+            container.PlannedDate = container.PlannedDate.ToUniversalTime();
+
             (var icon, var activityName) = Activity
                 .GetActivityInfo(container.ActivityType, container.ActivityName);
 
@@ -46,7 +48,7 @@ namespace ServitorDiscordBot
             var builder = new EmbedBuilder()
                 .WithColor(new Color(0xFFFFFF))
                 .WithThumbnailUrl(Emote.Parse(icon).Url)
-                .WithTitle($"{activityName} @ {container.PlannedDate.ToString("dd.MM.yyyy HH:mm")}")
+                .WithTitle($"{activityName} @ {container.PlannedDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")}")
                 .WithDescription(container.Description)
                 .WithFields(users);
 

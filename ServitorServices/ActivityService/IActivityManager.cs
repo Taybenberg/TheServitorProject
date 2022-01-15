@@ -4,12 +4,20 @@
     {
         public event Func<ActivityContainer, Task> ActivityNotification;
         public event Func<ActivityContainer, Task> ActivityUpdated;
-        public event Func<ulong, Task> ActivityDisabled;
+        public event Func<ActivityContainer, Task> ActivityDisabled;
 
-        public Task Init();
+        Task Init();
+
+        Task<ActivityContainer> GetActivityAsync(ulong activityID);
 
         Task AddActivityAsync(ActivityContainer activity);
 
-        Task<ActivityContainer> GetActivityAsync(ulong activityID);
+        Task UpdateActivityAsync(ActivityContainer activity);
+
+        Task DisableActivityAsync(ulong activityID);
+
+        Task UsersSubscribedAsync(ulong activityID, IEnumerable<ulong> users);
+
+        Task UsersUnSubscribedAsync(ulong activityID, IEnumerable<ulong> users);
     }
 }
