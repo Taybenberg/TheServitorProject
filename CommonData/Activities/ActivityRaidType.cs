@@ -1,6 +1,6 @@
-﻿namespace CommonData.RaidManager
+﻿namespace CommonData.Activities
 {
-    public enum RaidType
+    public enum ActivityRaidType
     {
         Undefined,
         LW,

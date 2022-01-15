@@ -1,7 +1,7 @@
 ﻿using ActivityService;
 using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using Discord;
 using Discord.WebSocket;
 using System;
@@ -29,11 +29,11 @@ namespace ServitorDiscordBot
                             .WithPlaceholder("Оберіть рейд")
                             .WithCustomId("QuickRaidSelector")
                             .WithMinValues(1).WithMaxValues(1)
-                            .AddOption(Translation.RaidTypes[RaidType.LW], "QuickRaid_LW", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.LW)))
-                            .AddOption(Translation.RaidTypes[RaidType.GOS], "QuickRaid_GOS", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.GOS)))
-                            .AddOption(Translation.RaidTypes[RaidType.DSC], "QuickRaid_DSC", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.DSC)))
-                            .AddOption(Translation.RaidTypes[RaidType.VOG_L], "QuickRaid_VOGL", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_L)))
-                            .AddOption(Translation.RaidTypes[RaidType.VOG_M], "QuickRaid_VOGM", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_M)));
+                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.LW], "QuickRaid_LW", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.LW)))
+                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.GOS], "QuickRaid_GOS", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.GOS)))
+                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.DSC], "QuickRaid_DSC", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.DSC)))
+                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.VOG_L], "QuickRaid_VOGL", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.VOG_L)))
+                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.VOG_M], "QuickRaid_VOGM", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.VOG_M)));
 
                         var component = new ComponentBuilder()
                             .WithSelectMenu(menuBuilder);

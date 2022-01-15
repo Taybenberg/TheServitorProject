@@ -1,7 +1,7 @@
 ﻿using ClanActivitiesDatabase;
 using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +56,7 @@ namespace DataProcessor.DatabaseWrapper
             {
                 var charRaids = raids.Where(x => x.ActivityUserStats.Any(y => y.Completed && y.CharacterID == c.CharacterID));
 
-                var types = charRaids.OrderBy(x => x.Period).Select(x => Raid.GetRaidType(x.ReferenceHash)).Distinct();
+                var types = charRaids.OrderBy(x => x.Period).Select(x => Activity.GetRaidType(x.ReferenceHash)).Distinct();
 
                 return new ClassContainer
                 {
@@ -64,8 +64,8 @@ namespace DataProcessor.DatabaseWrapper
                     Class = Translation.ClassNames[c.Class],
                     Raids = types.Select(t => new RaidContainer
                     {
-                        Emoji = Emoji.GetRaidEmoji(t),
-                        Name = Translation.RaidTypes[t]
+                        Emoji = Emoji.GetActivityRaidEmoji(t),
+                        Name = Translation.ActivityRaidTypes[t]
                     })
                 };
             }).OrderByDescending(x => x.Raids.Count());

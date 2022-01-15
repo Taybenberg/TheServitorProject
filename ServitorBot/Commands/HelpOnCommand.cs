@@ -1,6 +1,6 @@
 ﻿using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using Discord;
 using System.Linq;
 using System.Threading.Tasks;
@@ -428,11 +428,11 @@ namespace ServitorDiscordBot
                                 $"**рейд** ***%тип% %дата% %список гравців%*** – створює рейд заданого типу на визначену дату та резервує місце за вказаними гравцями.\n" +
                                 $"**рейд** ***%тип% %дата% %опис% %список гравців%*** – створює рейд заданого типу на визначену дату, містить опис та резервує місце за вказаними гравцями.\n" +
                                 $"\nПідтримується організація збору в рейди наступних типів (використовуйте один з аліасів для параметру ***тип***):\n" +
-                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.LW)} **{Translation.RaidTypes[RaidType.LW]}** – **LW**, **ЛВ**, **ОБ**\n" +
-                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.GOS)} **{Translation.RaidTypes[RaidType.GOS]}** – **GOS**, **СП**, **СС**\n" +
-                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.DSC)} **{Translation.RaidTypes[RaidType.DSC]}** – **DSC**, **СГК**\n" +
-                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_L)} **{Translation.RaidTypes[RaidType.VOG_L]}** – **VOG**, **ВОГ**, **КС**\n" +
-                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_M)} **{Translation.RaidTypes[RaidType.VOG_M]}** – **VOGM**, **ВОГМ**, **КСМ**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.LW)} **{Translation.ActivityRaidTypes[ActivityRaidType.LW]}** – **LW**, **ЛВ**, **ОБ**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.GOS)} **{Translation.ActivityRaidTypes[ActivityRaidType.GOS]}** – **GOS**, **СП**, **СС**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.DSC)} **{Translation.ActivityRaidTypes[ActivityRaidType.DSC]}** – **DSC**, **СГК**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.VOG_L)} **{Translation.ActivityRaidTypes[ActivityRaidType.VOG_L]}** – **VOG**, **ВОГ**, **КС**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.VOG_M)} **{Translation.ActivityRaidTypes[ActivityRaidType.VOG_M]}** – **VOGM**, **ВОГМ**, **КСМ**\n" +
                                 $"\nЗверніть увагу, що з технічних міркувань можливу дату збору обмежено.\n" +
                                 $"Різниця між датою збору й поточною датою не може перевищувати 30 днів.";
 

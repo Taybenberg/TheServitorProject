@@ -1,11 +1,11 @@
-﻿using CommonData.RaidManager;
-using static CommonData.RaidManager.RaidType;
+﻿using CommonData.Activities;
+using static CommonData.Activities.ActivityRaidType;
 
 namespace CommonData.DiscordEmoji
 {
     public static partial class Emoji
     {
-        public static string GetRaidEmoji(RaidType raidType) =>
+        public static string GetActivityRaidEmoji(ActivityRaidType raidType) =>
             raidType switch
             {
                 LW => "<:LW:867048825821593622>",

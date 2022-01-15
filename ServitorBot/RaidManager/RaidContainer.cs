@@ -1,6 +1,6 @@
 ﻿using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using Discord;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace ServitorDiscordBot
 
         public DateTime PlannedDate { get; set; }
 
-        public RaidType RaidType { get; set; }
+        public ActivityRaidType RaidType { get; set; }
 
         public string Description { get; set; } = string.Empty;
 
@@ -49,13 +49,13 @@ namespace ServitorDiscordBot
         [JsonIgnore]
         public string RaidIcon
         {
-            get => Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType)).Url;
+            get => Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(RaidType)).Url;
         }
 
         [JsonIgnore]
         public string RaidName
         {
-            get => Translation.RaidTypes[RaidType];
+            get => Translation.ActivityRaidTypes[RaidType];
         }
 
         [JsonIgnore]

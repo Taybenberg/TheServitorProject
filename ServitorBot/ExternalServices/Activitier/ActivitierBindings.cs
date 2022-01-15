@@ -1,6 +1,6 @@
 ﻿using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using Discord;
 using Discord.WebSocket;
 using System;
@@ -192,55 +192,7 @@ namespace ServitorDiscordBot
 
         private async Task InitRaidAsync(IMessage message)
         {
-            var builder = GetBuilder(MessagesEnum.Raid, null, false);
-
-            try
-            {
-                var raid = new RaidContainer();
-
-                var command = message.Content.Substring(5).TrimStart();
-
-                var raidType = command.Substring(0, command.IndexOf(' '));
-
-                raid.RaidType = GetRaidType(raidType);
-
-                command = command.Remove(0, command.IndexOf(' ') + 1);
-
-                int index = command.IndexOf(' ');
-
-                var date = DateTime.ParseExact((index > 0 ? command.Substring(0, index) : command), "d.M-H:m", CultureInfo.CurrentCulture);
-
-                if (date < DateTime.Now)
-                    date = date.AddYears(1);
-
-                if (DateTime.Now.AddMonths(1) < date)
-                    throw new Exception();
-
-                raid.PlannedDate = date;
-
-                raid.AddUser(message.Author.Id);
-
-                raid.AddUsers(message.Author.Id, message.MentionedUserIds);
-
-                command = Regex.Replace(command, "<@\\D?\\d+>", string.Empty);
-
-                if (index > 0)
-                    raid.Description = command.Remove(0, index + 1);
-
-                raid.DecorateBuilder(builder);
-
-                var msg = await message.Channel.SendMessageAsync($"<@&{_destinyRoleId}>", embed: builder.Build());
-
-                await _raidManager.AddRaidAsync(msg.Id, raid);
-            }
-            catch
-            {
-                builder.Color = GetColor(MessagesEnum.Error);
-
-                builder.Description = $"Сталася помилка під час створення рейду. Перевірте, чи формат команди коректний.\nЩоби переглянути довідку, скористайтеся командою **допомога**.";
-
-                await SendTemporaryMessageAsync(message, builder);
-            }
+            
         }
     }
 }

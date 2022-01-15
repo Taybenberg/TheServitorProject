@@ -1,6 +1,6 @@
 ﻿using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using ActivityService;
 using Discord;
 using Discord.WebSocket;
@@ -22,10 +22,10 @@ namespace ServitorDiscordBot
 
             if (activityType is BungieNetApi.Enums.ActivityType.Raid && container.ActivityName is not null)
             {
-                var raid = GetRaidType(container.ActivityName);
+                var raid = Activity.GetRaidType(container.ActivityName);
 
-                icon = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(raid)).Url;
-                activityName = Translation.RaidTypes[raid];
+                icon = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(raid)).Url;
+                activityName = Translation.ActivityRaidTypes[raid];
 
                 if (activityName is null)
                     activityName = container.ActivityName;

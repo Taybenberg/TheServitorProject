@@ -1,11 +1,11 @@
-﻿using CommonData.RaidManager;
-using static CommonData.RaidManager.RaidType;
+﻿using CommonData.Activities;
+using static CommonData.Activities.ActivityRaidType;
 
 namespace CommonData.Localization
 {
     public static partial class Translation
     {
-        public readonly static Dictionary<RaidType, string> RaidTypes = new()
+        public readonly static Dictionary<ActivityRaidType, string> ActivityRaidTypes = new()
         {
             [Undefined] = null,
             [LW] = "Last Wish",

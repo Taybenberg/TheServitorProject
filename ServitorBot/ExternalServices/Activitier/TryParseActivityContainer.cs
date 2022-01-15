@@ -1,7 +1,7 @@
 ﻿using ActivityService;
 using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.RaidManager;
+using CommonData.Activities;
 using Discord;
 using Discord.WebSocket;
 using System;
