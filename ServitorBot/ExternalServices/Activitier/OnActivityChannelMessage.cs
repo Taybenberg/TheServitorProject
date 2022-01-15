@@ -22,7 +22,7 @@ namespace ServitorDiscordBot
                 case "!швидкий рейд":
                     {
                         var builder = new EmbedBuilder()
-                            .WithColor(new Color(0xE8A427))
+                            .WithColor(new Color(0xFFFFFF))
                             .WithDescription("Швидко зберіть рейд на найближчий час");
 
                         var menuBuilder = new SelectMenuBuilder()

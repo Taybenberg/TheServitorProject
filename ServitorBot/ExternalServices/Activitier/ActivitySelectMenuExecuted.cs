@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
                 case "QuickRaidSelector":
                     {
                         var builder = new EmbedBuilder()
-                            .WithColor(new Color(0xE8A427))
+                            .WithColor(new Color(0xFFFFFF))
                             .WithDescription("Оберіть зручний час");
 
                         var menuBuilder = new SelectMenuBuilder()
