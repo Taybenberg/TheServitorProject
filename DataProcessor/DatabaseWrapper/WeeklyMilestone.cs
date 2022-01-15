@@ -23,7 +23,7 @@ namespace DataProcessor.DatabaseWrapper
         public bool IsIronBannerAvailable { get; private set; }
 
         public readonly string IronBannerImageURL = "https://bungie.net/common/destiny2_content/icons/0ee91b79ba1366243832cf810afc3b75.jpg";
-        public readonly string IronBannerName = TranslationDictionaries.StatsActivityNames[ActivityType.IronBannerControl][0];
+        public readonly string IronBannerName = Translation.StatsActivityNames[ActivityType.IronBannerControl][0];
 
         private readonly IApiClient _apiClient;
 
@@ -41,13 +41,13 @@ namespace DataProcessor.DatabaseWrapper
 
             NightfallImageURL = milestone.NightfallTheOrdealImage;
 
-            var mode = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
+            var mode = Translation.StatsActivityNames.FirstOrDefault(x => x.Value[1].ToLower() == milestone.CrucibleRotationModeName.ToLower()).Value;
 
             Fields = new List<Field>
             {
                 new Field
                 {
-                    Name = TranslationDictionaries.StatsActivityNames[ActivityType.ScoredNightfall][0],
+                    Name = Translation.StatsActivityNames[ActivityType.ScoredNightfall][0],
                     Value = milestone.NightfallTheOrdealName,
                 },
                 new Field

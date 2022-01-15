@@ -8,7 +8,7 @@ namespace ServitorDiscordBot
     {
         private string GetTitle(MessagesEnum messagesEnum, IMessage message, string userName) => messagesEnum switch
         {
-            Wait => EmojiContainer.Loading,
+            Wait => CommonData.DiscordEmoji.Emoji.Loading,
             Leaderboard => $"БЕТА | Дошка лідерів",
             ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
             MyGrandmasters => $"Грандмайстри {userName}",

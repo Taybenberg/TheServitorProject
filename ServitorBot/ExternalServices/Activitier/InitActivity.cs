@@ -24,18 +24,18 @@ namespace ServitorDiscordBot
             {
                 var raid = GetRaidType(container.ActivityName);
 
-                icon = Emote.Parse(EmojiContainer.GetRaidEmoji(raid)).Url;
-                activityName = TranslationDictionaries.RaidTypes[raid];
+                icon = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(raid)).Url;
+                activityName = Translation.RaidTypes[raid];
 
                 if (activityName is null)
                     activityName = container.ActivityName;
             }
             else
             {
-                icon = Emote.Parse(EmojiContainer.GetActivityEmoji(activityType)).Url;
+                icon = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityEmoji(activityType)).Url;
 
                 if (container.ActivityName is null)
-                    activityName = TranslationDictionaries.ActivityNames[activityType][0];
+                    activityName = Translation.ActivityNames[activityType][0];
                 else
                     activityName = container.ActivityName;
             }
@@ -78,8 +78,8 @@ namespace ServitorDiscordBot
             IMessageChannel channel = _client.GetChannel(container.ChannelID) as IMessageChannel;
 
             var componentBuilder = new ComponentBuilder()
-                .WithButton("Підписатися", "ActivitierSubscribe", ButtonStyle.Secondary, Emote.Parse(EmojiContainer.Check))
-                .WithButton("Відписатися", "ActivitierUnsubscribe", ButtonStyle.Secondary, Emote.Parse(EmojiContainer.UnCheck));
+                .WithButton("Підписатися", "ActivitierSubscribe", ButtonStyle.Secondary, Emote.Parse(CommonData.DiscordEmoji.Emoji.Check))
+                .WithButton("Відписатися", "ActivitierUnsubscribe", ButtonStyle.Secondary, Emote.Parse(CommonData.DiscordEmoji.Emoji.UnCheck));
 
             await channel.SendMessageAsync($"<@&{_destinyRoleId}>", embed: builder.Build(), components: componentBuilder.Build());
         }

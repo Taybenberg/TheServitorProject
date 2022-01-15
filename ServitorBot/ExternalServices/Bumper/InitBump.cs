@@ -24,7 +24,7 @@ namespace ServitorDiscordBot
 
                     var builder = new EmbedBuilder()
                         .WithColor(0xFF6E00)
-                        .WithDescription($"{EmojiContainer.BumpTimer} {nextBump.ToString("HH:mm")}");
+                        .WithDescription($"{CommonData.DiscordEmoji.Emoji.BumpTimer} {nextBump.ToString("HH:mm")}");
 
                     await message.Channel.SendMessageAsync(embed: builder.Build());
                 }

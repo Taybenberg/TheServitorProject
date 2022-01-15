@@ -59,16 +59,16 @@ namespace DataProcessor.DatabaseWrapper
             if (!IsUserRegistered)
                 return;
 
-            var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == _mode));
+            var pair = Translation.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == _mode));
 
             if (!(IsSuccessful = pair.Value is not null))
                 return;
 
             Mode = pair.Value[0];
 
-            Emoji = EmojiContainer.GetActivityEmoji(pair.Key);
+            Emoji = CommonData.DiscordEmoji.Emoji.GetActivityEmoji(pair.Key);
 
-            var leaderboard = await _apiClient.GetClan(currUser.ClanID).GetClanLeaderboardAsync(pair.Key, TranslationDictionaries.StatNames.Keys.ToArray());
+            var leaderboard = await _apiClient.GetClan(currUser.ClanID).GetClanLeaderboardAsync(pair.Key, Translation.StatNames.Keys.ToArray());
 
             if (!leaderboard.Any())
             {
@@ -104,7 +104,7 @@ namespace DataProcessor.DatabaseWrapper
                             IsCurrUser = u.UserID == currUser?.UserID,
                             Rank = user.Rank,
                             UserName = u.UserName,
-                            Class = TranslationDictionaries.ClassNames[user.Class],
+                            Class = Translation.ClassNames[user.Class],
                             Value = user.Value
                         });
                     }
@@ -119,14 +119,14 @@ namespace DataProcessor.DatabaseWrapper
                                 IsCurrUser = true,
                                 Rank = u.Rank,
                                 UserName = currUser.UserName,
-                                Class = TranslationDictionaries.ClassNames[u.Class],
+                                Class = Translation.ClassNames[u.Class],
                                 Value = u.Value
                             });
                     }
 
                     stats.Add(new Stat
                     {
-                        Name = TranslationDictionaries.StatNames[entry.Stat],
+                        Name = Translation.StatNames[entry.Stat],
                         Entries = entries
                     });
                 }

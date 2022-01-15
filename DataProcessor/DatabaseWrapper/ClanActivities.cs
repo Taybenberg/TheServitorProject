@@ -59,8 +59,8 @@ namespace DataProcessor.DatabaseWrapper
 
                     modeCounter.Add(new ModeCounter
                     {
-                        Emoji = EmojiContainer.GetActivityEmoji(pair.Key),
-                        Modes = TranslationDictionaries.ActivityNames[pair.Key],
+                        Emoji = Emoji.GetActivityEmoji(pair.Key),
+                        Modes = Translation.ActivityNames[pair.Key],
                         Count = pair.Value
                     });
                 }

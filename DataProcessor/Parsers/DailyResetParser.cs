@@ -67,7 +67,7 @@ namespace DataProcessor.Parsers
 
                         m.DrawText(sector.SectorName, sectorFont, Color.White, new Point(414, 456 + j));
 
-                        m.DrawText(TranslationDictionaries.ItemNames[sector.SectorReward], sectorFont, Color.White, new Point(414, 554 + j));
+                        m.DrawText(Translation.ItemNames[sector.SectorReward], sectorFont, Color.White, new Point(414, 554 + j));
                     });
 
                     j += 295;

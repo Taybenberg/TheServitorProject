@@ -46,20 +46,20 @@ namespace DataProcessor.DatabaseWrapper
             if (!IsUserRegistered)
                 return;
 
-            var pair = TranslationDictionaries.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == _mode));
+            var pair = Translation.StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == _mode));
 
             if (!(IsSuccessful = pair.Value is not null))
                 return;
 
             Mode = pair.Value[0];
 
-            Emoji = EmojiContainer.GetActivityEmoji(pair.Key);
+            Emoji = CommonData.DiscordEmoji.Emoji.GetActivityEmoji(pair.Key);
 
             var clanStats = await _apiClient.GetClan(currUser.ClanID).GetClanStatsAsync(pair.Key);
 
             Stats = clanStats.Select(x => new Stat
             {
-                Name = TranslationDictionaries.StatNames[x.Stat],
+                Name = Translation.StatNames[x.Stat],
                 Value = x.Value
             }).OrderBy(x => x.Name);
         }

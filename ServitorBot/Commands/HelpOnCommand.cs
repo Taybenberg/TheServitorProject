@@ -428,11 +428,11 @@ namespace ServitorDiscordBot
                                 $"**рейд** ***%тип% %дата% %список гравців%*** – створює рейд заданого типу на визначену дату та резервує місце за вказаними гравцями.\n" +
                                 $"**рейд** ***%тип% %дата% %опис% %список гравців%*** – створює рейд заданого типу на визначену дату, містить опис та резервує місце за вказаними гравцями.\n" +
                                 $"\nПідтримується організація збору в рейди наступних типів (використовуйте один з аліасів для параметру ***тип***):\n" +
-                                $"{EmojiContainer.GetRaidEmoji(RaidType.LW)} **{TranslationDictionaries.RaidTypes[RaidType.LW]}** – **LW**, **ЛВ**, **ОБ**\n" +
-                                $"{EmojiContainer.GetRaidEmoji(RaidType.GOS)} **{TranslationDictionaries.RaidTypes[RaidType.GOS]}** – **GOS**, **СП**, **СС**\n" +
-                                $"{EmojiContainer.GetRaidEmoji(RaidType.DSC)} **{TranslationDictionaries.RaidTypes[RaidType.DSC]}** – **DSC**, **СГК**\n" +
-                                $"{EmojiContainer.GetRaidEmoji(RaidType.VOG_L)} **{TranslationDictionaries.RaidTypes[RaidType.VOG_L]}** – **VOG**, **ВОГ**, **КС**\n" +
-                                $"{EmojiContainer.GetRaidEmoji(RaidType.VOG_M)} **{TranslationDictionaries.RaidTypes[RaidType.VOG_M]}** – **VOGM**, **ВОГМ**, **КСМ**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.LW)} **{Translation.RaidTypes[RaidType.LW]}** – **LW**, **ЛВ**, **ОБ**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.GOS)} **{Translation.RaidTypes[RaidType.GOS]}** – **GOS**, **СП**, **СС**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.DSC)} **{Translation.RaidTypes[RaidType.DSC]}** – **DSC**, **СГК**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_L)} **{Translation.RaidTypes[RaidType.VOG_L]}** – **VOG**, **ВОГ**, **КС**\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_M)} **{Translation.RaidTypes[RaidType.VOG_M]}** – **VOGM**, **ВОГМ**, **КСМ**\n" +
                                 $"\nЗверніть увагу, що з технічних міркувань можливу дату збору обмежено.\n" +
                                 $"Різниця між датою збору й поточною датою не може перевищувати 30 днів.";
 
@@ -484,10 +484,10 @@ namespace ServitorDiscordBot
                                 $"шляхом додавання списку гравців до команди (резервується місце для гравців зі списку).\n" +
                                 $"– Резервування організатором збору шляхом надсилання відповіді на оголошення бота про збір у рейд, " +
                                 $"яка містить команду **зарезервувати** ***%список гравців%*** (резервується місце для гравців зі списку).\n" +
-                                $"– Шляхом додавання гравцем з роллю <@&{_destinyRoleId}> реакції {EmojiContainer.Check} до оголошення бота про збір у рейд " +
+                                $"– Шляхом додавання гравцем з роллю <@&{_destinyRoleId}> реакції {CommonData.DiscordEmoji.Emoji.Check} до оголошення бота про збір у рейд " +
                                 $"(резервується місце для гравця, що додав реакцію).\n" +
                                 $"\nЗверніть увагу, що будь-який гравець з черги може звільнити своє місце у черзі шляхом додавання реакції " +
-                                $"{EmojiContainer.UnCheck} до оголошення бота про збір у рейд.\n" +
+                                $"{CommonData.DiscordEmoji.Emoji.UnCheck} до оголошення бота про збір у рейд.\n" +
                                 $"Якщо у черзі не залишиться жодного гравця, збір у рейд буде скасовано.";
 
                             await message.Channel.SendMessageAsync(embed: builder.Build());
@@ -501,7 +501,7 @@ namespace ServitorDiscordBot
                                 $"Якщо місце передає організатор збору, то таким чином він втратить повноваження огранізатора, " +
                                 $"а організатором збору стане інший гравець у черзі.\n" +
                                 $"\nПередати місце у черзі можна кількома способами:\n" +
-                                $"– Шляхом додавання гравцем реакції {EmojiContainer.UnCheck} до оголошення бота про збір у рейд " +
+                                $"– Шляхом додавання гравцем реакції {CommonData.DiscordEmoji.Emoji.UnCheck} до оголошення бота про збір у рейд " +
                                 $"(місце гравця отримає наступний гравець у черзі).\n" +
                                 $"– Шляхом надсилання відповіді на оголошення бота про збір у рейд," +
                                 $"яка місить команду **передати** ***%@гравець%*** (якщо згаданий гравець не перебуває у черзі, то гравець, " +

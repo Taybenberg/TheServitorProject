@@ -1,6 +1,6 @@
 ﻿namespace CommonData.DiscordEmoji
 {
-    public static partial class EmojiContainer
+    public static partial class Emoji
     {
         public static readonly string Loading = "<a:ServitorLoading:865609025197834240>";
 

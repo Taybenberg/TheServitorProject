@@ -48,7 +48,7 @@ namespace DataProcessor.Parsers
                     inventory.XurItems.Add(new XurItem
                     {
                         ItemName = item.ItemName,
-                        ItemClass = TranslationDictionaries.ItemNames[item.ItemTypeAndTier],
+                        ItemClass = Translation.ItemNames[item.ItemTypeAndTier],
                         ItemIconURL = item.ItemIconUrl
                     });
                 }

@@ -48,9 +48,9 @@ namespace DataProcessor
 
         public async Task<IEnumerable<(string, string[])>> GetModesAsync()
         {
-            return TranslationDictionaries.StatsActivityNames
+            return Translation.StatsActivityNames
                 .OrderBy(x => x.Value[0])
-                .Select(y => (EmojiContainer.GetActivityEmoji(y.Key), y.Value));
+                .Select(y => (Emoji.GetActivityEmoji(y.Key), y.Value));
         }
 
         public async Task<Leaderboard> GetLeaderboardAsync(string mode, ulong discordUserID)

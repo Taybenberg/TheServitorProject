@@ -29,11 +29,11 @@ namespace ServitorDiscordBot
                             .WithPlaceholder("Оберіть рейд")
                             .WithCustomId("QuickRaidSelector")
                             .WithMinValues(1).WithMaxValues(1)
-                            .AddOption(TranslationDictionaries.RaidTypes[RaidType.LW], "QuickRaid_LW", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.LW)))
-                            .AddOption(TranslationDictionaries.RaidTypes[RaidType.GOS], "QuickRaid_GOS", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.GOS)))
-                            .AddOption(TranslationDictionaries.RaidTypes[RaidType.DSC], "QuickRaid_DSC", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.DSC)))
-                            .AddOption(TranslationDictionaries.RaidTypes[RaidType.VOG_L], "QuickRaid_VOGL", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.VOG_L)))
-                            .AddOption(TranslationDictionaries.RaidTypes[RaidType.VOG_M], "QuickRaid_VOGM", emote: Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType.VOG_M)));
+                            .AddOption(Translation.RaidTypes[RaidType.LW], "QuickRaid_LW", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.LW)))
+                            .AddOption(Translation.RaidTypes[RaidType.GOS], "QuickRaid_GOS", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.GOS)))
+                            .AddOption(Translation.RaidTypes[RaidType.DSC], "QuickRaid_DSC", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.DSC)))
+                            .AddOption(Translation.RaidTypes[RaidType.VOG_L], "QuickRaid_VOGL", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_L)))
+                            .AddOption(Translation.RaidTypes[RaidType.VOG_M], "QuickRaid_VOGM", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType.VOG_M)));
 
                         var component = new ComponentBuilder()
                             .WithSelectMenu(menuBuilder);

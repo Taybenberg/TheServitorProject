@@ -28,7 +28,7 @@ namespace ServitorDiscordBot
                     .Concat(message.MentionedUserIds);
 
                 var index = command.IndexOf(' ');
-                var activityType = TranslationDictionaries.GetActivityType(command
+                var activityType = Translation.GetActivityType(command
                     .Substring(1, index - 1).Replace('_', ' ').ToLower());
                 command = command.Remove(0, index).TrimStart();
 

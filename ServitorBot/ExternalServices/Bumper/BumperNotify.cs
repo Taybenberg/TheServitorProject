@@ -24,8 +24,8 @@ namespace ServitorDiscordBot
                     .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"));
 
             var component = new ComponentBuilder()
-                .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary, Emote.Parse(EmojiContainer.Check))
-                .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary, Emote.Parse(EmojiContainer.UnCheck));
+                .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Secondary, Emote.Parse(CommonData.DiscordEmoji.Emoji.Check))
+                .WithButton("Відписатися від сповіщень", "BumpNotificationsUnsubscribe", ButtonStyle.Secondary, Emote.Parse(CommonData.DiscordEmoji.Emoji.UnCheck));
 
             await channel.SendMessageAsync(string.Join(' ', container.PingableUserIDs.Select(y => $"<@{y}>")),
                 embed: builder.Build(), components: component.Build());

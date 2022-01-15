@@ -3,7 +3,7 @@ using static CommonData.RaidManager.RaidType;
 
 namespace CommonData.Localization
 {
-    public static partial class TranslationDictionaries
+    public static partial class Translation
     {
         public readonly static Dictionary<RaidType, string> RaidTypes = new()
         {

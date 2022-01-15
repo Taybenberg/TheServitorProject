@@ -57,8 +57,8 @@ namespace DataProcessor.DatabaseWrapper
 
             Classes = user.Characters.Select(c => new ClassCounter
             {
-                Emoji = EmojiContainer.GetClassEmoji(c.Class),
-                Class = TranslationDictionaries.ClassNames[c.Class],
+                Emoji = Emoji.GetClassEmoji(c.Class),
+                Class = Translation.ClassNames[c.Class],
                 Count = _period is null ? c.ActivityUserStats.Count :
                 c.ActivityUserStats.Where(y => y.Activity.Period > _period).Count()
             }).OrderByDescending(x => x.Count);
@@ -90,8 +90,8 @@ namespace DataProcessor.DatabaseWrapper
 
                     modeCounter.Add(new ModeCounter
                     {
-                        Emoji = EmojiContainer.GetActivityEmoji(pair.Key),
-                        Modes = TranslationDictionaries.ActivityNames[pair.Key],
+                        Emoji = Emoji.GetActivityEmoji(pair.Key),
+                        Modes = Translation.ActivityNames[pair.Key],
                         Count = pair.Value
                     });
                 }

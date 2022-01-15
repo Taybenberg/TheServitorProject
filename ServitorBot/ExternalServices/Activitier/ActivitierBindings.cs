@@ -232,10 +232,6 @@ namespace ServitorDiscordBot
                 var msg = await message.Channel.SendMessageAsync($"<@&{_destinyRoleId}>", embed: builder.Build());
 
                 await _raidManager.AddRaidAsync(msg.Id, raid);
-
-                await msg.AddReactionsAsync(new string[]
-                    { EmojiContainer.Check, EmojiContainer.UnCheck }
-                    .Select(x => Emote.Parse(x)).ToArray());
             }
             catch
             {

@@ -3,7 +3,7 @@ using static BungieNetApi.Enums.DestinyClass;
 
 namespace CommonData.DiscordEmoji
 {
-    public static partial class EmojiContainer
+    public static partial class Emoji
     {
         public static string GetClassEmoji(DestinyClass destinyClass) =>
             destinyClass switch

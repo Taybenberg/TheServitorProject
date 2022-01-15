@@ -60,12 +60,12 @@ namespace DataProcessor.DatabaseWrapper
 
                 return new ClassContainer
                 {
-                    Emoji = EmojiContainer.GetClassEmoji(c.Class),
-                    Class = TranslationDictionaries.ClassNames[c.Class],
+                    Emoji = Emoji.GetClassEmoji(c.Class),
+                    Class = Translation.ClassNames[c.Class],
                     Raids = types.Select(t => new RaidContainer
                     {
-                        Emoji = EmojiContainer.GetRaidEmoji(t),
-                        Name = TranslationDictionaries.RaidTypes[t]
+                        Emoji = Emoji.GetRaidEmoji(t),
+                        Name = Translation.RaidTypes[t]
                     })
                 };
             }).OrderByDescending(x => x.Raids.Count());

@@ -49,13 +49,13 @@ namespace ServitorDiscordBot
         [JsonIgnore]
         public string RaidIcon
         {
-            get => Emote.Parse(EmojiContainer.GetRaidEmoji(RaidType)).Url;
+            get => Emote.Parse(CommonData.DiscordEmoji.Emoji.GetRaidEmoji(RaidType)).Url;
         }
 
         [JsonIgnore]
         public string RaidName
         {
-            get => TranslationDictionaries.RaidTypes[RaidType];
+            get => Translation.RaidTypes[RaidType];
         }
 
         [JsonIgnore]

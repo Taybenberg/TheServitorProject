@@ -3,7 +3,7 @@ using static CommonData.RaidManager.RaidType;
 
 namespace CommonData.DiscordEmoji
 {
-    public static partial class EmojiContainer
+    public static partial class Emoji
     {
         public static string GetRaidEmoji(RaidType raidType) =>
             raidType switch

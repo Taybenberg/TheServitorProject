@@ -3,7 +3,7 @@ using static BungieNetApi.Enums.ActivityType;
 
 namespace CommonData.DiscordEmoji
 {
-    public static partial class EmojiContainer
+    public static partial class Emoji
     {
         public static string GetActivityEmoji(ActivityType activityType) =>
             activityType switch
