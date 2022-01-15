@@ -56,7 +56,7 @@ namespace ServitorDiscordBot
             }
             catch { }
 
-            if (activity.PlannedDate < DateTime.UtcNow)
+            if (activity.PlannedDate > DateTime.UtcNow)
             {
                 var builder = ParseActivityContainer(activity);
 

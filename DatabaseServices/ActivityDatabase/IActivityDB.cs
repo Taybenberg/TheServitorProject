@@ -8,6 +8,8 @@ namespace ActivityDatabase
 
         ulong? GetOwnerID(ulong activityID);
 
+        Task<int> GetSubscribersCountAsync(ulong ActivityID);
+
         Task<Activity> GetActivityAsync(ulong activityID);
 
         Task<Activity> GetActivityWithReservationsAsync(ulong activityID);

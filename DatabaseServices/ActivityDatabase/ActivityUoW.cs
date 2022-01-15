@@ -9,10 +9,14 @@ namespace ActivityDatabase
 
         public ActivityUoW(ActivityContext context) => _context = context;
 
-        public IEnumerable<Activity> Activities => _context.Activities.Where(x => x.IsActive);
+        public IEnumerable<Activity> Activities => 
+            _context.Activities.Where(x => x.IsActive);
 
         public ulong? GetOwnerID(ulong activityID) =>
             _context.Reservations.FirstOrDefault(x => x.ActivityID == activityID && x.Position == 0)?.UserID;
+
+        public async Task<int> GetSubscribersCountAsync(ulong ActivityID) =>
+            await _context.Reservations.CountAsync(x => x.ActivityID == ActivityID);
 
         public async Task<Activity> GetActivityAsync(ulong activityID) =>
             await _context.Activities.FindAsync(activityID);
