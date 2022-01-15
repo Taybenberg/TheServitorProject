@@ -1,6 +1,5 @@
-﻿using CommonData.DiscordEmoji;
+﻿using CommonData.Activities;
 using CommonData.Localization;
-using CommonData.Activities;
 using Discord;
 using System;
 using System.Collections.Generic;
@@ -34,7 +33,7 @@ namespace ServitorDiscordBot
 
         public DateTime PlannedDate { get; set; }
 
-        public ActivityRaidType RaidType { get; set; }
+        public Activity.ActivityRaidType RaidType { get; set; }
 
         public string Description { get; set; } = string.Empty;
 

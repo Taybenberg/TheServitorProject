@@ -1,7 +1,7 @@
 ﻿using ClanActivitiesDatabase;
+using CommonData.Activities;
 using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using CommonData.Activities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

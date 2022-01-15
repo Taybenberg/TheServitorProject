@@ -14,7 +14,7 @@ namespace ServitorDiscordBot
         {
             switch (component.Data.CustomId)
             {
-                case "QuickRaidSelector":
+                case "QuickActivitySelector":
                     {
                         var builder = new EmbedBuilder()
                             .WithColor(new Color(0xFFFFFF))
@@ -43,14 +43,33 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
+                when c.StartsWith("QuickActivity_"):
+                    {
+                        var raid = new ActivityContainer()
+                        {
+                            ChannelID = component.Channel.Id,
+                            ActivityType = Enum.Parse<BungieNetApi.Enums.ActivityType>(c.Split('_')[1]),
+                            PlannedDate = DateTime.ParseExact(string.Join(',', component.Data.Values), "dd.MM_HH:mm", CultureInfo.CurrentCulture),
+                            ActivityName = null,
+                            Description = null,
+                            Users = new ulong[] { component.User.Id }
+                        };
+
+                        await component.DeferAsync();
+
+                        await InitActivityAsync(raid);
+                    }
+                    break;
+
+                case string c
                 when c.StartsWith("QuickRaid_"):
                     {
                         var raid = new ActivityContainer()
                         {
                             ChannelID = component.Channel.Id,
                             ActivityType = BungieNetApi.Enums.ActivityType.Raid,
-                            ActivityName = c.Split('_')[1],
                             PlannedDate = DateTime.ParseExact(string.Join(',', component.Data.Values), "dd.MM_HH:mm", CultureInfo.CurrentCulture),
+                            ActivityName = c.Split('_')[1],
                             Description = null,
                             Users = new ulong[] { component.User.Id }
                         };

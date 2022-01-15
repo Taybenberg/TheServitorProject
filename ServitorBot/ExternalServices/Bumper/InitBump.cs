@@ -1,7 +1,4 @@
-﻿using BumperService;
-using CommonData.DiscordEmoji;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;

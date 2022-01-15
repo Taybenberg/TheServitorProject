@@ -1,15 +1,9 @@
-﻿using CommonData.DiscordEmoji;
-using CommonData.Localization;
+﻿using ActivityService;
 using CommonData.Activities;
-using ActivityService;
 using Discord;
-using Discord.WebSocket;
-using System;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {
@@ -17,29 +11,10 @@ namespace ServitorDiscordBot
     {
         private async Task InitActivityAsync(ActivityContainer container)
         {
-            string icon, activityName;
-            var activityType = container.ActivityType;
+            (var icon, var activityName) = Activity
+                .GetActivityInfo(container.ActivityType, container.ActivityName);
 
-            if (activityType is BungieNetApi.Enums.ActivityType.Raid && container.ActivityName is not null)
-            {
-                var raid = Activity.GetRaidType(container.ActivityName);
-
-                icon = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(raid)).Url;
-                activityName = Translation.ActivityRaidTypes[raid];
-
-                if (activityName is null)
-                    activityName = container.ActivityName;
-            }
-            else
-            {
-                icon = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityEmoji(activityType)).Url;
-
-                if (container.ActivityName is null)
-                    activityName = Translation.ActivityNames[activityType][0];
-                else
-                    activityName = container.ActivityName;
-            }
-
+            var ftSize = Activity.GetFireteamSize(container.ActivityType);
             var users = new List<EmbedFieldBuilder>()
             {
                 new EmbedFieldBuilder
@@ -50,7 +25,7 @@ namespace ServitorDiscordBot
                 }
             };
 
-            var fireteam = container.Users.Skip(1).Take(5);
+            var fireteam = container.Users.Skip(1).Take(ftSize - 1);
             if (fireteam.Count() > 0)
                 users.Add(new EmbedFieldBuilder
                 {
@@ -59,7 +34,7 @@ namespace ServitorDiscordBot
                     Value = string.Join("\n", fireteam.Select(x => $"<@{x}>"))
                 });
 
-            var reserve = container.Users.Skip(6);
+            var reserve = container.Users.Skip(ftSize);
             if (reserve.Count() > 0)
                 users.Add(new EmbedFieldBuilder
                 {
@@ -70,7 +45,7 @@ namespace ServitorDiscordBot
 
             var builder = new EmbedBuilder()
                 .WithColor(new Color(0xFFFFFF))
-                .WithThumbnailUrl(icon)
+                .WithThumbnailUrl(Emote.Parse(icon).Url)
                 .WithTitle($"{activityName} @ {container.PlannedDate.ToString("dd.MM.yyyy HH:mm")}")
                 .WithDescription(container.Description)
                 .WithFields(users);

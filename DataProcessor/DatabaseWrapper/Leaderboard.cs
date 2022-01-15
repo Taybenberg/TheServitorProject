@@ -1,6 +1,5 @@
 ﻿using BungieNetApi;
 using ClanActivitiesDatabase;
-using CommonData.DiscordEmoji;
 using CommonData.Localization;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

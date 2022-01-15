@@ -1,12 +1,7 @@
-﻿using CommonData.DiscordEmoji;
-using CommonData.Localization;
-using CommonData.Activities;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -25,7 +20,7 @@ namespace ServitorDiscordBot
 
                 case "конструктор рейду":
                     {
-                        
+
                     }
                     break;
 
@@ -192,7 +187,7 @@ namespace ServitorDiscordBot
 
         private async Task InitRaidAsync(IMessage message)
         {
-            
+
         }
     }
 }

@@ -1,29 +1,78 @@
-﻿using static CommonData.Activities.ActivityRaidType;
+﻿using BungieNetApi.Enums;
+using CommonData.DiscordEmoji;
+using CommonData.Localization;
+using static BungieNetApi.Enums.ActivityType;
 
 namespace CommonData.Activities
 {
-    public class Activity
+    public partial class Activity
     {
-        public static ActivityRaidType GetRaidType(string raidType) =>
-            raidType.ToLower() switch
+        public static (string emoji, string activityTitle) GetActivityInfo(ActivityType activityType, string activityName)
+        {
+            string emoji, activityTitle;
+
+            switch (activityType)
             {
-                "lw" or "лв" or "об" => ActivityRaidType.LW,
-                "gos" or "сп" or "сс" => ActivityRaidType.GOS,
-                "dsc" or "сгк" => ActivityRaidType.DSC,
-                "vog" or "вог" or "кс" => ActivityRaidType.VOG_L,
-                "vogm" or "вогм" or "ксм" => ActivityRaidType.VOG_M,
-                _ => ActivityRaidType.Undefined
+                case Raid:
+                    {
+                        var raid = GetRaidType(activityName ?? string.Empty);
+                        emoji = Emoji.GetActivityRaidEmoji(raid);
+                        activityTitle = Translation.ActivityRaidTypes[raid] ?? activityName ?? Translation.ActivityNames[activityType][0];
+                    }
+                    break;
+
+                default:
+                    {
+                        emoji = Emoji.GetActivityEmoji(activityType);
+                        activityTitle = activityName ?? Translation.ActivityNames[activityType][0];
+                    }
+                    break;
+            }
+
+            return (emoji, activityTitle);
+        }
+
+        public static int GetFireteamSize(ActivityType activityType) =>
+            activityType switch
+            {
+                Raid or
+                Menagerie or
+                AllPvP or
+                AllMayhem or
+                Supremacy or
+                IronBannerControl or
+                ScorchedTeam or
+                ControlQuickplay or
+                VexOffensive or
+                Momentum or
+                Sundial or
+                Dares => 6,
+
+                TrialsOfTheNine or
+                Lockdown or
+                Countdown or
+                Breakthrough or
+                ClashQuickplay or
+                Reckoning or
+                Gambit or
+                GambitPrime => 4,
+
+                Rumble => 1,
+
+                _ => 3
             };
 
-        public static ActivityRaidType GetRaidType(long hash) =>
-            hash switch
+        public static ActivityType[] ActivityTypes =>
+            new ActivityType[]
             {
-                1661734046 or 2122313384 or 2214608156 or 2214608157 => LW,
-                3458480158 or 2497200493 or 2659723068 or 3845997235 => GOS,
-                910380154 or 3976949817 => DSC,
-                3881495763 => VOG_L,
-                1681562271 => VOG_M,
-                _ => Undefined
+                Dungeon,
+                Gambit,
+                TrialsOfOsiris,
+                IronBannerControl,
+                Survival,
+                AllPvP,
+                ScoredNightfall,
+                AllPvE
             };
     }
 }

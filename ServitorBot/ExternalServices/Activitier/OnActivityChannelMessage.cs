@@ -1,14 +1,7 @@
-﻿using ActivityService;
-using CommonData.DiscordEmoji;
+﻿using CommonData.Activities;
 using CommonData.Localization;
-using CommonData.Activities;
 using Discord;
-using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -19,6 +12,31 @@ namespace ServitorDiscordBot
         {
             switch (message.Content)
             {
+                case "!швидка активність":
+                    {
+                        var builder = new EmbedBuilder()
+                            .WithColor(new Color(0xFFFFFF))
+                            .WithDescription("Швидко зберіться у активність на найближчий час");
+
+                        var menuBuilder = new SelectMenuBuilder()
+                            .WithPlaceholder("Оберіть активність")
+                            .WithCustomId("QuickActivitySelector")
+                            .WithMinValues(1).WithMaxValues(1)
+                            .WithOptions(Activity.ActivityTypes.Select(x =>
+                                new SelectMenuOptionBuilder
+                                {
+                                    Label = Translation.StatsActivityNames[x][0],
+                                    Value = $"QuickActivity_{x}",
+                                    Emote = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityEmoji(x))
+                                }).ToList());
+
+                        var component = new ComponentBuilder()
+                            .WithSelectMenu(menuBuilder);
+
+                        await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
+                    }
+                    break;
+
                 case "!швидкий рейд":
                     {
                         var builder = new EmbedBuilder()
@@ -27,13 +45,15 @@ namespace ServitorDiscordBot
 
                         var menuBuilder = new SelectMenuBuilder()
                             .WithPlaceholder("Оберіть рейд")
-                            .WithCustomId("QuickRaidSelector")
+                            .WithCustomId("QuickActivitySelector")
                             .WithMinValues(1).WithMaxValues(1)
-                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.LW], "QuickRaid_LW", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.LW)))
-                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.GOS], "QuickRaid_GOS", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.GOS)))
-                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.DSC], "QuickRaid_DSC", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.DSC)))
-                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.VOG_L], "QuickRaid_VOGL", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.VOG_L)))
-                            .AddOption(Translation.ActivityRaidTypes[ActivityRaidType.VOG_M], "QuickRaid_VOGM", emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(ActivityRaidType.VOG_M)));
+                            .WithOptions(Activity.ActivityRaidTypes.Select(x =>
+                                new SelectMenuOptionBuilder
+                                {
+                                    Label = Translation.ActivityRaidTypes[x],
+                                    Value = $"QuickRaid_{x}",
+                                    Emote = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityRaidEmoji(x))
+                                }).ToList());
 
                         var component = new ComponentBuilder()
                             .WithSelectMenu(menuBuilder);

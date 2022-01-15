@@ -1,9 +1,4 @@
-﻿using BumperService;
-using CommonData.DiscordEmoji;
-using Discord;
-using Discord.WebSocket;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot

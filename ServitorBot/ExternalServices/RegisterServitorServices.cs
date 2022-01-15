@@ -1,9 +1,6 @@
 ﻿using ActivityService;
 using BumperService;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using MusicService;
 
 namespace ServitorDiscordBot
 {

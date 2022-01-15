@@ -1,5 +1,4 @@
-﻿using CommonData.DiscordEmoji;
-using Discord;
+﻿using Discord;
 using static ServitorDiscordBot.MessagesEnum;
 
 namespace ServitorDiscordBot
