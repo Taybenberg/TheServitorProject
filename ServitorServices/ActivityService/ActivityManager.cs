@@ -123,7 +123,7 @@ namespace ActivityService
             */
         }
 
-        public async Task UpdateActivityAsync(ActivityContainer activity)
+        public async Task UpdateActivityAsync(ActivityContainer activity, ulong callerID)
         {
             _logger.LogInformation($"{DateTime.Now} Update activity {activity.ActivityID}");
 
@@ -145,7 +145,12 @@ namespace ActivityService
             _logger.LogInformation($"{DateTime.Now} Disable activity {activityID}");
         }
 
-        public async Task RescheduleActivityAsync(ulong activityID, DateTime plannedDate)
+        public async Task DisableActivityAsync(ulong activityID, ulong callerID)
+        {
+            _logger.LogInformation($"{DateTime.Now} Disable activity {activityID}");
+        }
+
+        public async Task RescheduleActivityAsync(ulong activityID, ulong callerID, DateTime plannedDate)
         {
             _logger.LogInformation($"{DateTime.Now} Reschedule activity {activityID}");
         }
@@ -155,12 +160,12 @@ namespace ActivityService
             _logger.LogInformation($"{DateTime.Now} User transfer {activityID}");
         }
 
-        public async Task UsersSubscribedAsync(ulong activityID, IEnumerable<ulong> users)
+        public async Task UsersSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users)
         {
             _logger.LogInformation($"{DateTime.Now} User subscribed {activityID}");
         }
 
-        public async Task UsersUnSubscribedAsync(ulong activityID, IEnumerable<ulong> users)
+        public async Task UsersUnSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users)
         {
             _logger.LogInformation($"{DateTime.Now} Users unsubscribed {activityID}");
         }

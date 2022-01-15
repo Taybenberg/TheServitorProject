@@ -12,16 +12,18 @@
 
         Task AddActivityAsync(ActivityContainer activity);
 
-        Task UpdateActivityAsync(ActivityContainer activity);
+        Task UpdateActivityAsync(ActivityContainer activity, ulong callerID);
 
         Task DisableActivityAsync(ulong activityID);
 
-        Task RescheduleActivityAsync(ulong activityID, DateTime plannedDate);
+        Task DisableActivityAsync(ulong activityID, ulong callerID);
+
+        Task RescheduleActivityAsync(ulong activityID, ulong callerID, DateTime plannedDate);
 
         Task UserTransferPlaceAsync(ulong activityID, ulong userSenderID, ulong userReceiverID);
 
-        Task UsersSubscribedAsync(ulong activityID, IEnumerable<ulong> users);
+        Task UsersSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users);
 
-        Task UsersUnSubscribedAsync(ulong activityID, IEnumerable<ulong> users);
+        Task UsersUnSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users);
     }
 }

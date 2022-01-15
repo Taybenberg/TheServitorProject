@@ -20,7 +20,7 @@ namespace ServitorDiscordBot
                     {
                         await component.DeferAsync();
 
-                        await _activityManager.UsersSubscribedAsync(component.Message.Id, new ulong[] { component.User.Id });
+                        await _activityManager.UsersSubscribeAsync(component.Message.Id, component.User.Id, new ulong[] { component.User.Id });
                     }
                     break;
 
@@ -28,7 +28,7 @@ namespace ServitorDiscordBot
                     {
                         await component.DeferAsync();
 
-                        await _activityManager.UsersUnSubscribedAsync(component.Message.Id, new ulong[] { component.User.Id });
+                        await _activityManager.UsersUnSubscribeAsync(component.Message.Id, component.User.Id, new ulong[] { component.User.Id });
                     }
                     break;
 

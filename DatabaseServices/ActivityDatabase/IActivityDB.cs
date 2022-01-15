@@ -6,6 +6,8 @@ namespace ActivityDatabase
     {
         IEnumerable<Activity> Activities { get; }
 
+        ulong? GetOwnerID(ulong activityID);
+
         Task<Activity> GetActivityAsync(ulong activityID);
 
         Task<Activity> GetActivityWithReservationsAsync(ulong activityID);

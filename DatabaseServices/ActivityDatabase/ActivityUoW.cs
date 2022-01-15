@@ -11,6 +11,9 @@ namespace ActivityDatabase
 
         public IEnumerable<Activity> Activities => _context.Activities.Where(x => x.IsActive);
 
+        public ulong? GetOwnerID(ulong activityID) => 
+            _context.Reservations.FirstOrDefault(x => x.ActivityID == activityID && x.Position == 0)?.UserID;
+
         public async Task<Activity> GetActivityAsync(ulong activityID) =>
             await _context.Activities.FindAsync(activityID);
 

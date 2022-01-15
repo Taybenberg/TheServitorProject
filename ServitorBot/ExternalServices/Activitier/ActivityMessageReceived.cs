@@ -1,6 +1,8 @@
 ﻿using CommonData.Activities;
 using CommonData.Localization;
 using Discord;
+using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +12,9 @@ namespace ServitorDiscordBot
     {
         private async Task ActivityMessageReceivedAsync(IMessage message)
         {
-            switch (message.Content)
+            var command = message.Content.ToLower();
+
+            switch (command)
             {
                 case "!швидка активність":
                     {
@@ -59,6 +63,122 @@ namespace ServitorDiscordBot
                             .WithSelectMenu(menuBuilder);
 
                         await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
+                    }
+                    break;
+
+                case "допомога":
+                    await GetHelpOnCommandAsync(message, "рейд");
+                    break;
+
+                case "скасувати":
+                    {
+                        var msgId = message?.Reference?.MessageId.Value;
+                        if (msgId is not null)
+                            await _activityManager.DisableActivityAsync(msgId.Value, message.Author.Id);
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("передати"):
+                    {
+                        var msgId = message?.Reference?.MessageId.Value;
+                        if (msgId is not null && message.MentionedUserIds.Count == 2)
+                        {
+                            var receiverID = message.MentionedUserIds.Last();
+                            await _activityManager.UserTransferPlaceAsync(msgId.Value, message.Author.Id, receiverID);
+                        }
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("перенести"):
+                    {
+                        var msgId = message?.Reference?.MessageId.Value;
+                        if (msgId is not null)
+                        {
+                            try
+                            {
+                                var date = DateTime.ParseExact(command.Replace("перенести ", string.Empty), "d.M-H:m", CultureInfo.CurrentCulture);
+                                if (date < DateTime.Now)
+                                    date = date.AddYears(1);
+
+                                await _activityManager.RescheduleActivityAsync(msgId.Value, message.Author.Id, date.ToUniversalTime());
+                            }
+                            catch { }
+                        }
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("зарезервувати"):
+                    {
+                        var msgId = message?.Reference?.MessageId.Value;
+                        if (msgId is not null)
+                            await _activityManager.UsersSubscribeAsync(msgId.Value, message.Author.Id, message.MentionedUserIds.Skip(1));
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("виключити"):
+                    {
+                        var msgId = message?.Reference?.MessageId.Value;
+                        if (msgId is not null)
+                            await _activityManager.UsersUnSubscribeAsync(msgId.Value, message.Author.Id, message.MentionedUserIds.Skip(1));
+                    }
+                    break;
+
+                case string c
+                when c.StartsWith("змінити "):
+                    {
+                        var msgId = message?.Reference?.MessageId.Value;
+                        if (msgId is null)
+                            return;
+
+                        try
+                        {
+                            var action = message.Content.Remove(0, 8);
+                            switch (action.ToLower())
+                            {
+                                case string s
+                                when s.StartsWith("опис "):
+                                    {
+                                        var activity = await _activityManager.GetActivityAsync(msgId.Value);
+                                        if (activity is not null)
+                                        {
+                                            activity.Description = action.Remove(0, 5);
+                                            await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
+                                        }
+                                    }
+                                    break;
+
+                                case string s
+                                when s.StartsWith("заголовок "):
+                                    {
+                                        var activity = await _activityManager.GetActivityAsync(msgId.Value);
+                                        if (activity is not null)
+                                        {
+                                            activity.ActivityName = action.Remove(0, 10);
+                                            await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
+                                        }
+                                    }
+                                    break;
+
+                                case string s
+                                when s.StartsWith("активність "):
+                                    {
+                                        var activity = await _activityManager.GetActivityAsync(msgId.Value);
+                                        if (activity is not null)
+                                        {
+                                            activity.ActivityType = Translation.GetActivityType(action.Remove(0, 11).ToLower());
+                                            await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
+                                        }
+                                    }
+                                    break;
+
+                                default: break;
+                            }
+                        }
+                        catch { }
                     }
                     break;
 
