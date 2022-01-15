@@ -1,18 +1,14 @@
-﻿using Discord;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task OnMessageDeletedAsync(Cacheable<IMessage, ulong> message, IMessageChannel channel)
+        private async Task OnMessageDeletedAsync(ulong messageID, ulong channelID)
         {
-            /*
-            if (channel.Id != _raidChannelId)
-                return;
-
-            await _raidManager.TryRemoveRaid(message.Id);
-            */
+            if (_activityChannelId.Any(x => x == channelID))
+               await ActivityMessageDeletedAsync(messageID);
         }
     }
 }

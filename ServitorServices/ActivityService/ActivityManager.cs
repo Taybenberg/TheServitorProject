@@ -32,93 +32,6 @@ namespace ActivityService
         public event Func<ActivityContainer, Task> OnUpdated;
         public event Func<ActivityContainer, Task> OnDisabled;
 
-        public async Task Init()
-        {
-            /*
-            using var scope = _scopeFactory.CreateScope();
-
-            var currDate = DateTime.UtcNow;
-
-            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
-
-            foreach (var activity in activityDB.Activities)
-            {
-                if (activity.PlannedDate < currDate)
-                {
-                    var tmpAct = await activityDB.DisableActivityAsync(activity);
-
-                    ActivityDisabled?.Invoke(GetActivityContainer(tmpAct));
-                }
-                else
-                    ScheduleActivity(GetActivityContainer(activity));
-            }
-            */
-        }
-
-        public async Task<ActivityContainer> GetActivityAsync(ulong activityID)
-        {
-            /*
-            using var scope = _scopeFactory.CreateScope();
-
-            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
-
-            var activity = await activityDB.GetActivityWithReservationsAsync(activityID);
-
-            if (activity is null)
-                return null;
-
-            return GetActivityContainer(activity);
-            */
-            return null;
-        }
-
-        public async Task AddActivityAsync(ActivityContainer activity)
-        {
-            /*
-            using var scope = _scopeFactory.CreateScope();
-
-            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
-
-            await activityDB.AddActivityAsync(GetActivity(activity));
-
-            ScheduleActivity(activity);
-
-            ActivityUpdated?.Invoke(activity);
-            */
-        }
-
-        public async Task UpdateActivityAsync(ActivityContainer activity)
-        {
-            /*
-            using var scope = _scopeFactory.CreateScope();
-
-            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
-
-            await activityDB.AddActivityAsync(GetActivity(activity));
-
-            ScheduleActivity(activity);
-
-            ActivityUpdated?.Invoke(activity);
-            */
-        }
-
-        public async Task DisableActivityAsync(ulong activityID)
-        {
-            
-        }
-
-        public async Task UsersSubscribedAsync(ulong activityID, IEnumerable<ulong> users)
-        {
-
-        }
-
-        public async Task UsersUnSubscribedAsync(ulong activityID, IEnumerable<ulong> users)
-        {
-
-        }
-
-        public void Dispose() => _server.Dispose();
-
         private ActivityContainer GetActivityContainer(Activity activity) =>
             new ActivityContainer
             {
@@ -147,6 +60,112 @@ namespace ActivityService
                     UserID = u
                 }).ToList()
             };
+
+        public async Task Init()
+        {
+            _logger.LogInformation($"{DateTime.Now} Init");
+            /*
+            using var scope = _scopeFactory.CreateScope();
+
+            var currDate = DateTime.UtcNow;
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            foreach (var activity in activityDB.Activities)
+            {
+                if (activity.PlannedDate < currDate)
+                {
+                    var tmpAct = await activityDB.DisableActivityAsync(activity);
+
+                    ActivityDisabled?.Invoke(GetActivityContainer(tmpAct));
+                }
+                else
+                    ScheduleActivity(GetActivityContainer(activity));
+            }
+            */
+        }
+
+        public async Task<ActivityContainer> GetActivityAsync(ulong activityID)
+        {
+            _logger.LogInformation($"{DateTime.Now} Get activity {activityID}");
+
+            /*
+            using var scope = _scopeFactory.CreateScope();
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            var activity = await activityDB.GetActivityWithReservationsAsync(activityID);
+
+            if (activity is null)
+                return null;
+
+            return GetActivityContainer(activity);
+            */
+            return null;
+        }
+
+        public async Task AddActivityAsync(ActivityContainer activity)
+        {
+            _logger.LogInformation($"{DateTime.Now} Add activity {activity.ActivityID}");
+
+            OnUpdated?.Invoke(activity);
+
+            /*
+            using var scope = _scopeFactory.CreateScope();
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            await activityDB.AddActivityAsync(GetActivity(activity));
+
+            ScheduleActivity(activity);
+
+            ActivityUpdated?.Invoke(activity);
+            */
+        }
+
+        public async Task UpdateActivityAsync(ActivityContainer activity)
+        {
+            _logger.LogInformation($"{DateTime.Now} Update activity {activity.ActivityID}");
+
+            /*
+            using var scope = _scopeFactory.CreateScope();
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            await activityDB.AddActivityAsync(GetActivity(activity));
+
+            ScheduleActivity(activity);
+
+            ActivityUpdated?.Invoke(activity);
+            */
+        }
+
+        public async Task DisableActivityAsync(ulong activityID)
+        {
+            _logger.LogInformation($"{DateTime.Now} Disable activity {activityID}");
+        }
+
+        public async Task RescheduleActivityAsync(ulong activityID, DateTime plannedDate)
+        {
+            _logger.LogInformation($"{DateTime.Now} Reschedule activity {activityID}");
+        }
+
+        public async Task UserTransferPlaceAsync(ulong activityID, ulong userSenderID, ulong userReceiverID)
+        {
+            _logger.LogInformation($"{DateTime.Now} User transfer {activityID}");
+        }
+
+        public async Task UsersSubscribedAsync(ulong activityID, IEnumerable<ulong> users)
+        {
+            _logger.LogInformation($"{DateTime.Now} User subscribed {activityID}");
+        }
+
+        public async Task UsersUnSubscribedAsync(ulong activityID, IEnumerable<ulong> users)
+        {
+            _logger.LogInformation($"{DateTime.Now} Users unsubscribed {activityID}");
+        }
+
+        public void Dispose() => _server.Dispose();
 
         private ConcurrentDictionary<ulong, string> _activityJobs = new();
         private void ScheduleActivity(ActivityContainer activity)

@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
@@ -9,6 +10,8 @@ namespace ServitorDiscordBot
         {
             if (component.Channel.Id == _bumpChannelId)
                 await BumperButtonExecutedAsync(component);
+            else if (_activityChannelId.Any(x => x == component.Channel.Id))
+                await ActivityButtonExecutedAsync(component);
         }
     }
 }

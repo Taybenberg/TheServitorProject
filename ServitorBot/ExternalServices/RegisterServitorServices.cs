@@ -12,7 +12,6 @@ namespace ServitorDiscordBot
         private IMusicPlayer _musicPlayer;
 
         private MusicPlayer _player;
-        private RaidManager _raidManager;
 
         private void RegisterExternalServices()
         {
@@ -22,11 +21,9 @@ namespace ServitorDiscordBot
             _bumper.OnNotify += OnBumperNotifyAsync;
 
             _activityManager = scope.ServiceProvider.GetRequiredService<IActivityManager>();
-            /*
-            _activityManager.ActivityNotification +=
-            _activityManager.ActivityUpdated +=
-            _activityManager.ActivityDisabled +=
-            */
+            _activityManager.OnNotification += OnActivityNotificationAsync;
+            _activityManager.OnUpdated += OnActivityUpdatedAsync;
+            _activityManager.OnDisabled += OnActivityDisabledAsync;
             _activityManager.Init();
 
             _musicPlayer = scope.ServiceProvider.GetRequiredService<IMusicPlayer>();

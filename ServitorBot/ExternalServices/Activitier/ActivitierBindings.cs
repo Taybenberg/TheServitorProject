@@ -36,6 +36,7 @@ namespace ServitorDiscordBot
                 case string c
                 when c is "скасувати":
                     {
+                        /*
                         var msgId = message?.Reference?.MessageId.Value;
 
                         if (msgId is not null)
@@ -48,13 +49,14 @@ namespace ServitorDiscordBot
 
                                 await DeleteMessageAsync(message);
                             }
-                        }
+                        }*/
                     }
                     break;
 
                 case string c
                 when c.StartsWith("передати"):
                     {
+                        /*
                         var msgId = message?.Reference?.MessageId.Value;
 
                         if (msgId is not null && message.MentionedUserIds.Count == 2)
@@ -68,12 +70,14 @@ namespace ServitorDiscordBot
                         }
 
                         await DeleteMessageAsync(message);
+                        */
                     }
                     break;
 
                 case string c
                 when c.StartsWith("перенести"):
                     {
+                        /*
                         var msgId = message?.Reference?.MessageId.Value;
 
                         if (msgId is not null)
@@ -99,12 +103,14 @@ namespace ServitorDiscordBot
                         }
 
                         await DeleteMessageAsync(message);
+                        */
                     }
                     break;
 
                 case string c
                 when c.StartsWith("зарезервувати"):
                     {
+                        /*
                         var msgId = message?.Reference?.MessageId.Value;
 
                         if (msgId is not null)
@@ -116,6 +122,7 @@ namespace ServitorDiscordBot
                         }
 
                         await DeleteMessageAsync(message);
+                        */
                     }
                     break;
             }
