@@ -1,9 +1,6 @@
 ﻿using ActivityService;
 using CommonData.Activities;
 using Discord;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

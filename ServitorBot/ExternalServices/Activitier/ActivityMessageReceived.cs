@@ -1,10 +1,7 @@
 ﻿using CommonData.Activities;
 using CommonData.Localization;
 using Discord;
-using System;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

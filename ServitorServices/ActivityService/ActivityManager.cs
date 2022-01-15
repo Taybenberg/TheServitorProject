@@ -1,5 +1,4 @@
-﻿using ActivityDatabase;
-using ActivityDatabase.ORM;
+﻿using ActivityDatabase.ORM;
 using BungieNetApi.Enums;
 using Hangfire;
 using Hangfire.MemoryStorage;

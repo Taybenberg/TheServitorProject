@@ -2,9 +2,7 @@
 using Discord.Audio;
 using ManagedBass;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

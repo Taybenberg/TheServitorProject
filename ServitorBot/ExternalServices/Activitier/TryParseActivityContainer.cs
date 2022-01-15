@@ -1,9 +1,7 @@
 ﻿using ActivityService;
 using CommonData.Localization;
 using Discord;
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ServitorDiscordBot

@@ -5,9 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {
@@ -45,7 +42,7 @@ namespace ServitorDiscordBot
             _client.MessageDeleted += OnMessageDeleted;
             _client.ButtonExecuted += OnButtonExecuted;
             _client.SelectMenuExecuted += OnSelectMenuExecuted;
-            
+
             _client.LoginAsync(TokenType.Bot, configuration["ApiKeys:DiscordToken"]).Wait();
 
             _seasonName = configuration["Destiny2:SeasonName"];

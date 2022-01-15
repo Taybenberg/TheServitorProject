@@ -1,5 +1,4 @@
 ﻿using Discord;
-using System.Threading.Tasks;
 using static ServitorDiscordBot.MessagesEnum;
 
 namespace ServitorDiscordBot

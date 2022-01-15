@@ -1,6 +1,5 @@
 ﻿using ActivityService;
 using Discord;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

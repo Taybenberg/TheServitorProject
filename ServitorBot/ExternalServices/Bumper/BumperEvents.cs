@@ -1,7 +1,5 @@
 ﻿using BumperService;
 using Discord;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace ServitorDiscordBot
+﻿namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {

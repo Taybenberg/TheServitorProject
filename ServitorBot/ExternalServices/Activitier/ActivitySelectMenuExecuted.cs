@@ -1,9 +1,7 @@
 ﻿using ActivityService;
 using Discord;
 using Discord.WebSocket;
-using System;
 using System.Globalization;
-using System.Threading.Tasks;
 
 
 namespace ServitorDiscordBot

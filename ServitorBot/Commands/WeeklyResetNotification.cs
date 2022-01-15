@@ -1,7 +1,5 @@
 ﻿using Discord;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 
 namespace ServitorDiscordBot
 {

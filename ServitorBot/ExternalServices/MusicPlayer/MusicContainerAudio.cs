@@ -1,7 +1,5 @@
 ﻿using Flurl.Http;
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Videos.Streams;

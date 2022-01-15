@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using static ServitorDiscordBot.MessagesEnum;
+﻿using static ServitorDiscordBot.MessagesEnum;
 
 namespace ServitorDiscordBot
 {
