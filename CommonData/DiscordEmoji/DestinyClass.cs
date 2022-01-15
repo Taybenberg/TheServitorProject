@@ -11,7 +11,7 @@ namespace CommonData.DiscordEmoji
                 Titan => "<:TitanLogo:865673798408863764>",
                 Hunter => "<:HunterLogo:865673798014730271>",
                 Warlock => "<:WarlockLogo:865674599919648810>",
-                _ => NoData
+                _ => DefaultD2
             };
     }
 }

@@ -1,17 +1,21 @@
-﻿namespace ActivityService
+﻿using BungieNetApi.Enums;
+
+namespace ActivityService
 {
     public record ActivityContainer
     {
-        public ulong ActivityID { get; init; }
+        public ulong ActivityID { get; set; }
 
         public ulong ChannelID { get; set; }
 
-        public DateTime PlannedDate { get; init; }
+        public DateTime PlannedDate { get; set; }
 
-        public string ActivityType { get; init; }
+        public ActivityType ActivityType { get; set; }
 
-        public string? Description { get; init; }
+        public string? ActivityName { get; set; }
 
-        public IEnumerable<ulong> Users { get; init; }
+        public string? Description { get; set; }
+
+        public IEnumerable<ulong> Users { get; set; }
     }
 }

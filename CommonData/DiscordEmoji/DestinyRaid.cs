@@ -13,7 +13,7 @@ namespace CommonData.DiscordEmoji
                 DSC => "<:DSC:867048825818447902>",
                 VOG_L => "<:VOG_L:867050674927697950>",
                 VOG_M => "<:VOG_M:867050675041337344>",
-                _ => NoData
+                _ => GetActivityEmoji(BungieNetApi.Enums.ActivityType.Raid)
             };
     }
 }

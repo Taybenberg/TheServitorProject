@@ -4,7 +4,7 @@
     {
         public static readonly string Loading = "<a:ServitorLoading:865609025197834240>";
 
-        public static readonly string NoData = "<:NoData:865624964044292096>";
+        public static readonly string DefaultD2 = "<:D2:931697039438401616>";
 
         public static readonly string Check = "<:Check:874023090546442251>";
 

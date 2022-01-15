@@ -55,7 +55,7 @@ namespace ServitorDiscordBot
             _destinyRoleId = configuration.GetSection("DiscordConfig:DestinyRoleID").Get<ulong>();
 
             _channelId = configuration.GetSection("DiscordConfig:MainChannelID").Get<ulong[]>();
-            _activityChannelId = configuration.GetSection("DiscordConfig:RaidChannelID").Get<ulong[]>();
+            _activityChannelId = configuration.GetSection("DiscordConfig:ActivityChannelID").Get<ulong[]>();
             _musicChannelId = configuration.GetSection("DiscordConfig:MusicChannelID").Get<ulong>();
             _lulzChannelId = configuration.GetSection("DiscordConfig:LulzChannelID").Get<ulong>();
             _bumpChannelId = configuration.GetSection("DiscordConfig:BumpChannelID").Get<ulong>();

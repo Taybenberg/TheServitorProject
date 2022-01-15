@@ -5,6 +5,16 @@ namespace CommonData.Localization
 {
     public static partial class TranslationDictionaries
     {
+        public static ActivityType GetActivityType(string mode)
+        {
+            var pair = StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
+
+            if (pair.Value is null)
+                return ActivityType.None;
+
+            return pair.Key;
+        }
+
         public static Dictionary<ActivityType, string[]> StatsActivityNames
         {
             get
@@ -49,7 +59,7 @@ namespace CommonData.Localization
 
         public readonly static Dictionary<ActivityType, string[]> ActivityNames = new()
         {
-            [None] = new[] { "Невідомо", "None" },
+            [None] = new[] { "Невизначено", "None" },
             [Story] = new[] { "Сюжет", "Story" },
             [Strike] = new[] { "Наліт", "Strike" },
             [Raid] = new[] { "Рейд", "Raid" },

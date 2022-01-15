@@ -12,7 +12,9 @@ namespace ActivityDatabase.ORM
 
         public DateTime PlannedDate { get; set; }
 
-        public string ActivityType { get; set; }
+        public int ActivityType { get; set; }
+
+        public string? ActivityName { get; set; }
 
         public string? Description { get; set; }
 

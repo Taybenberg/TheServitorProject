@@ -1,5 +1,6 @@
 ﻿using ActivityDatabase;
 using ActivityDatabase.ORM;
+using BungieNetApi.Enums;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +61,8 @@ namespace ActivityService
             {
                 ActivityID = activity.ActivityID,
                 ChannelID = activity.ChannelID,
-                ActivityType = activity.ActivityType,
+                ActivityType = (int)activity.ActivityType,
+                ActivityName = activity.ActivityName,
                 PlannedDate = activity.PlannedDate,
                 Description = activity.Description,
                 Reservations = activity.Users.Select((u, i) => new Reservation
@@ -91,7 +93,8 @@ namespace ActivityService
             {
                 ActivityID = activity.ActivityID,
                 ChannelID = activity.ChannelID,
-                ActivityType = activity.ActivityType,
+                ActivityType = (ActivityType)activity.ActivityType,
+                ActivityName = activity.ActivityName,
                 PlannedDate = activity.PlannedDate,
                 Description = activity.Description,
                 Users = activity.Reservations.OrderBy(x => x.Position).Select(x => x.UserID)

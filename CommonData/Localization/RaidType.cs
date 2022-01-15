@@ -7,7 +7,7 @@ namespace CommonData.Localization
     {
         public readonly static Dictionary<RaidType, string> RaidTypes = new()
         {
-            [Undefined] = "Undefined",
+            [Undefined] = null,
             [LW] = "Last Wish",
             [GOS] = "Garden of Salvation",
             [DSC] = "Deep Stone Crypt",
