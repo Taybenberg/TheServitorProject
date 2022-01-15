@@ -19,7 +19,7 @@ namespace ServitorDiscordBot
             using var scope = _scopeFactory.CreateScope();
 
             _bumper = scope.ServiceProvider.GetRequiredService<IBumpManager>();
-            _bumper.Notify += BumperNotifyAsync;
+            _bumper.OnNotify += OnBumperNotifyAsync;
 
             _activityManager = scope.ServiceProvider.GetRequiredService<IActivityManager>();
             /*

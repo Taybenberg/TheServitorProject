@@ -35,7 +35,7 @@ namespace ServitorDiscordBot
 
             if (_activityChannelId.Any(x => x == message.Channel.Id))
             {
-                await OnActivityChannelMessageAsync(message);
+                await ActivityChannelMessageReceivedAsync(message);
                 return;
             }
 

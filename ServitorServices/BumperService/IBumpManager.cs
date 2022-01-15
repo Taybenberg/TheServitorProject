@@ -2,7 +2,7 @@
 {
     public interface IBumpManager
     {
-        event Func<BumpNotificationContainer, Task> Notify;
+        event Func<BumpNotificationContainer, Task> OnNotify;
 
         DateTime NextBump { get; }
 

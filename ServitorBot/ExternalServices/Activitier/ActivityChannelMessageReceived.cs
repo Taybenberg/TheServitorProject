@@ -8,7 +8,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task OnActivityChannelMessageAsync(IMessage message)
+        private async Task ActivityChannelMessageReceivedAsync(IMessage message)
         {
             switch (message.Content)
             {

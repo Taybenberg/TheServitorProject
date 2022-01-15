@@ -2,9 +2,9 @@
 {
     public interface IActivityManager
     {
-        public event Func<ActivityContainer, Task> ActivityNotification;
-        public event Func<ActivityContainer, Task> ActivityUpdated;
-        public event Func<ActivityContainer, Task> ActivityDisabled;
+        public event Func<ActivityContainer, Task> OnNotification;
+        public event Func<ActivityContainer, Task> OnUpdated;
+        public event Func<ActivityContainer, Task> OnDisabled;
 
         Task Init();
 

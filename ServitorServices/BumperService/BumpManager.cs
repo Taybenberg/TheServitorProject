@@ -36,7 +36,7 @@ namespace BumperService
 
                 var pingUsers = bumperDB.PingableUserIDs.Where(x => !bumpCooldowns.ContainsKey(x));
 
-                Notify?.Invoke(new BumpNotificationContainer
+                OnNotify?.Invoke(new BumpNotificationContainer
                 {
                     UserCooldowns = bumpCooldowns,
                     PingableUserIDs = pingUsers
@@ -50,7 +50,7 @@ namespace BumperService
             _logger.LogInformation($"{DateTime.Now} Bump scheduled on {nextBump.ToLocalTime()}");
         }
 
-        public event Func<BumpNotificationContainer, Task> Notify;
+        public event Func<BumpNotificationContainer, Task> OnNotify;
 
         private DateTime _NextBump
         {

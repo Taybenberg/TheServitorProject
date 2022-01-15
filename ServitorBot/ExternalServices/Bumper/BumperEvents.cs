@@ -7,7 +7,7 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task BumperNotifyAsync(BumpNotificationContainer container)
+        private async Task OnBumperNotifyAsync(BumpNotificationContainer container)
         {
             IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
 
