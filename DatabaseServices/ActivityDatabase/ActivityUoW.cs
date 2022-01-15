@@ -42,12 +42,14 @@ namespace ActivityDatabase
             await _context.SaveChangesAsync();
         }
 
-        public async Task DisableActivityAsync(ulong activityID)
+        public async Task<Activity> DisableActivityAsync(ulong activityID)
         {
             var dbActivity = await GetActivityAsync(activityID);
 
             if (dbActivity is not null)
                 await DisableActivityAsync(dbActivity);
+
+            return dbActivity;
         }
 
         public async Task<bool> TransferPlaceAsync(ulong activityID, ulong senderID, ulong receiverID)
