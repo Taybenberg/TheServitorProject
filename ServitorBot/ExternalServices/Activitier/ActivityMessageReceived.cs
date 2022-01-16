@@ -182,7 +182,7 @@ namespace ServitorDiscordBot
                 case string c
                 when c.StartsWith('!'):
                     {
-                        var container = TryParseActivityContainer(c, message);
+                        var container = TryParseActivityContainer(message);
 
                         if (container is not null)
                             await InitActivityAsync(container);

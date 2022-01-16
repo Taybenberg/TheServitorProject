@@ -8,14 +8,14 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private ActivityContainer TryParseActivityContainer(string text, IMessage message)
+        private ActivityContainer TryParseActivityContainer(IMessage message)
         {
             try
             {
                 string activityName = null, description = null;
                 DateTime plannedDate;
 
-                var command = text;
+                var command = message.Content;
 
                 var users = new ulong[] { message.Author.Id }
                     .Concat(message.MentionedUserIds);
