@@ -25,14 +25,11 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IBumperDB, BumperUoW>();
         services.AddSingleton<IBumpManager, BumpManager>();
 
-        services.AddDbContext<ActivityContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("RaidDatabase")));
+        services.AddDbContext<ActivityContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ActivityDatabase")));
         services.AddScoped<IActivityDB, ActivityUoW>();
         services.AddSingleton<IActivityManager, ActivityManager>();
 
         services.AddSingleton<IMusicPlayer, MusicPlayer>();
-
-        services.AddScoped<IParserFactory, ParserFactory>(); //will be removed
-        services.AddScoped<IImageFactory, ImageFactory>(); //will be removed
 
         services.AddSingleton<ServitorBot>();
         services.AddHostedService(p => p.GetRequiredService<ServitorBot>());

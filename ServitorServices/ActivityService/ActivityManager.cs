@@ -31,6 +31,8 @@ namespace ActivityService
         public event Func<ActivityContainer, Task> OnNotification;
         public event Func<ActivityContainer, Task> OnUpdated;
         public event Func<ActivityContainer, Task> OnDisabled;
+        public event Func<ActivityContainer, Task> OnCreated;
+        public event Func<ActivityContainer, Task> OnRescheduled;
 
         private ActivityContainer GetActivityContainer(Activity activity) =>
             new ActivityContainer
@@ -106,6 +108,7 @@ namespace ActivityService
             _logger.LogInformation($"{DateTime.Now} Added activity {activity.ActivityID}");
 
             OnUpdated?.Invoke(activity);
+            OnCreated?.Invoke(activity);
 
             HangfireScheduleActivity(activity);
         }
@@ -181,6 +184,7 @@ namespace ActivityService
             var act = GetActivityContainer(await activityDB.GetActivityWithReservationsAsync(activity.ActivityID));
 
             OnUpdated?.Invoke(act);
+            OnRescheduled?.Invoke(act);
 
             HangfireReScheduleActivity(act);
         }

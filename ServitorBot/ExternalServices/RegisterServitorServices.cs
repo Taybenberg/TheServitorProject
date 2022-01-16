@@ -24,6 +24,8 @@ namespace ServitorDiscordBot
             _activityManager.OnNotification += OnActivityNotificationAsync;
             _activityManager.OnUpdated += OnActivityUpdatedAsync;
             _activityManager.OnDisabled += OnActivityDisabledAsync;
+            _activityManager.OnCreated += OnActivityCreatedAsync;
+            _activityManager.OnRescheduled += OnActivityRescheduledAsync;
             _activityManager.Init();
 
             _musicPlayer = scope.ServiceProvider.GetRequiredService<IMusicPlayer>();

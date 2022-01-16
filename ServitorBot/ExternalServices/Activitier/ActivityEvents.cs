@@ -59,7 +59,7 @@ namespace ServitorDiscordBot
             {
                 var builder = ParseActivityContainer(activity);
 
-                foreach (var userID in activity.Users.Take(Activity.GetFireteamSize(activity.ActivityType)))
+                foreach (var userID in activity.Users.Take(Activity.GetFireteamSize(activity.ActivityType)).Skip(1))
                 {
                     try
                     {
@@ -69,6 +69,38 @@ namespace ServitorDiscordBot
                     }
                     catch { }
                 }
+            }
+        }
+
+        private async Task OnActivityCreatedAsync(ActivityContainer activity)
+        {
+            var builder = ParseActivityContainer(activity);
+
+            foreach (var userID in activity.Users.Take(Activity.GetFireteamSize(activity.ActivityType)).Skip(1))
+            {
+                try
+                {
+                    var user = await _client.Rest.GetUserAsync(userID);
+
+                    await user.SendMessageAsync($"Ґардіане, вас записали у активність.", embed: builder.Build());
+                }
+                catch { }
+            }
+        }
+
+        private async Task OnActivityRescheduledAsync(ActivityContainer activity)
+        {
+            var builder = ParseActivityContainer(activity);
+
+            foreach (var userID in activity.Users.Take(Activity.GetFireteamSize(activity.ActivityType)).Skip(1))
+            {
+                try
+                {
+                    var user = await _client.Rest.GetUserAsync(userID);
+
+                    await user.SendMessageAsync($"Ґардіане, вашу активність було перенесено.", embed: builder.Build());
+                }
+                catch { }
             }
         }
     }
