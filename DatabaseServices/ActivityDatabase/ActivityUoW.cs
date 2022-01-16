@@ -112,7 +112,7 @@ namespace ActivityDatabase
             return false;
         }
 
-        public async Task<bool> SubscribeUserAsync(ulong activityID, ulong userID)
+        public async Task<bool?> SubscribeOrUnsubscribeUserAsync(ulong activityID, ulong userID, bool subscribe, bool unsubscribe)
         {
             var dbActivity = await GetActivityWithReservationsAsync(activityID);
 
@@ -120,7 +120,7 @@ namespace ActivityDatabase
             {
                 var reservation = dbActivity.Reservations.FirstOrDefault(x => x.ActivityID == activityID && x.UserID == userID);
 
-                if (reservation is null)
+                if (reservation is null && subscribe)
                 {
                     var position = dbActivity.Reservations.Any() ?
                     dbActivity.Reservations.Max(x => x.Position) + 1 : 0;
@@ -137,20 +137,7 @@ namespace ActivityDatabase
 
                     return true;
                 }
-            }
-
-            return false;
-        }
-
-        public async Task<bool> UnSubscribeUserAsync(ulong activityID, ulong userID)
-        {
-            var dbActivity = await GetActivityWithReservationsAsync(activityID);
-
-            if (dbActivity is not null)
-            {
-                var reservation = dbActivity.Reservations.FirstOrDefault(x => x.ActivityID == activityID && x.UserID == userID);
-
-                if (reservation is not null)
+                else if (reservation is not null && unsubscribe)
                 {
                     var otherReservations = dbActivity.Reservations.Where(x => x.Position > reservation.Position);
 
@@ -163,11 +150,11 @@ namespace ActivityDatabase
 
                     await _context.SaveChangesAsync();
 
-                    return true;
+                    return false;
                 }
             }
 
-            return false;
+            return null;
         }
     }
 }

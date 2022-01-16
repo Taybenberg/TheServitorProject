@@ -22,6 +22,8 @@
 
         Task UserTransferPlaceAsync(ulong activityID, ulong userSenderID, ulong userReceiverID);
 
+        Task UserSubscribeOrUnsubscribeAsync(ulong activityID, ulong callerID);
+
         Task UsersSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users);
 
         Task UsersUnSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users);

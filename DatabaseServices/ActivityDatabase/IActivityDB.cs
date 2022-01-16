@@ -24,8 +24,6 @@ namespace ActivityDatabase
 
         Task<bool> TransferPlaceAsync(ulong activityID, ulong user1ID, ulong user2ID);
 
-        Task<bool> SubscribeUserAsync(ulong activityID, ulong userID);
-
-        Task<bool> UnSubscribeUserAsync(ulong activityID, ulong userId);
+        Task<bool?> SubscribeOrUnsubscribeUserAsync(ulong activityID, ulong userID, bool subscribe, bool unsubscribe);
     }
 }

@@ -201,19 +201,47 @@ namespace ActivityService
             }            
         }
 
+        public async Task UserSubscribeOrUnsubscribeAsync(ulong activityID, ulong callerID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            var result = await activityDB.SubscribeOrUnsubscribeUserAsync(activityID, callerID, true, true);
+
+            if (result is null)
+                return;
+
+            var activity = await activityDB.GetActivityWithReservationsAsync(activityID);
+
+            if (result.Value)
+            {
+                _logger.LogInformation($"{DateTime.Now} Activity {activityID} subscribed user {callerID}");
+
+                OnUpdated?.Invoke(GetActivityContainer(activity));
+            }
+            else
+            {
+                _logger.LogInformation($"{DateTime.Now} Activity {activityID} unsubscribed user {callerID}");
+
+                if (activity.Reservations.Count > 0)
+                    OnUpdated?.Invoke(GetActivityContainer(activity));
+                else
+                    await DisableActivityAsync(activityID);
+            }
+        }
+
         public async Task UsersSubscribeAsync(ulong activityID, ulong callerID, IEnumerable<ulong> users)
         {
             using var scope = _scopeFactory.CreateScope();
 
             var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
 
-            if (users.Count() == 1 && callerID == users.FirstOrDefault())
-                await activityDB.SubscribeUserAsync(activityID, callerID);
-            else if (callerID != activityDB.GetOwnerID(activityID))
+            if (callerID != activityDB.GetOwnerID(activityID))
                 return;
             else
                 foreach (var user in users)
-                    await activityDB.SubscribeUserAsync(activityID, user);
+                    await activityDB.SubscribeOrUnsubscribeUserAsync(activityID, user, true, false);
 
             _logger.LogInformation($"{DateTime.Now} Activity {activityID} subscribed users {string.Join(',', users)}");
 
@@ -226,13 +254,11 @@ namespace ActivityService
 
             var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
 
-            if (users.Count() == 1 && callerID == users.FirstOrDefault())
-                await activityDB.UnSubscribeUserAsync(activityID, callerID);
-            else if (callerID != activityDB.GetOwnerID(activityID))
+            if (callerID != activityDB.GetOwnerID(activityID))
                 return;
             else
                 foreach (var user in users)
-                    await activityDB.UnSubscribeUserAsync(activityID, user);
+                    await activityDB.SubscribeOrUnsubscribeUserAsync(activityID, user, false, true);
 
             _logger.LogInformation($"{DateTime.Now} Activity {activityID} unsubscribed users {string.Join(',', users)}");
 

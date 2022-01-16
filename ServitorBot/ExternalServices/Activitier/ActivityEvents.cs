@@ -13,8 +13,7 @@ namespace ServitorDiscordBot
             var builder = ParseActivityContainer(activity);
 
             var componentBuilder = new ComponentBuilder()
-                .WithButton("Підписатися", "ActivitierSubscribe", ButtonStyle.Success)
-                .WithButton("Відписатися", "ActivitierUnsubscribe", ButtonStyle.Danger);
+                .WithButton(customId: "ActivitierSubscribe", style: ButtonStyle.Primary, emote: new Emoji("\U00002795"));
 
             await channel.ModifyMessageAsync(activity.ActivityID, msg =>
             {
