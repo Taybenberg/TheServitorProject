@@ -35,6 +35,8 @@ namespace ServitorDiscordBot
                             .WithSelectMenu(menuBuilder);
 
                         await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
+
+                        await DeleteMessageAsync(message);
                     }
                     break;
 
@@ -60,6 +62,8 @@ namespace ServitorDiscordBot
                             .WithSelectMenu(menuBuilder);
 
                         await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
+
+                        await DeleteMessageAsync(message);
                     }
                     break;
 
@@ -71,7 +75,10 @@ namespace ServitorDiscordBot
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
+                        {
                             await _activityManager.DisableActivityAsync(msgId.Value, message.Author.Id);
+                            await DeleteMessageAsync(message);
+                        }
                     }
                     break;
 
@@ -83,6 +90,7 @@ namespace ServitorDiscordBot
                         {
                             var receiverID = message.MentionedUserIds.Last();
                             await _activityManager.UserTransferPlaceAsync(msgId.Value, message.Author.Id, receiverID);
+                            await DeleteMessageAsync(message);
                         }
                     }
                     break;
@@ -100,6 +108,7 @@ namespace ServitorDiscordBot
                                     date = date.AddYears(1);
 
                                 await _activityManager.RescheduleActivityAsync(msgId.Value, message.Author.Id, date.ToUniversalTime());
+                                await DeleteMessageAsync(message);
                             }
                             catch { }
                         }
@@ -111,7 +120,10 @@ namespace ServitorDiscordBot
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
+                        {
                             await _activityManager.UsersSubscribeAsync(msgId.Value, message.Author.Id, message.MentionedUserIds.Skip(1));
+                            await DeleteMessageAsync(message);
+                        }
                     }
                     break;
 
@@ -120,7 +132,10 @@ namespace ServitorDiscordBot
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
+                        {
                             await _activityManager.UsersUnSubscribeAsync(msgId.Value, message.Author.Id, message.MentionedUserIds.Skip(1));
+                            await DeleteMessageAsync(message);
+                        }
                     }
                     break;
 
@@ -174,6 +189,7 @@ namespace ServitorDiscordBot
 
                                 default: break;
                             }
+                            await DeleteMessageAsync(message);
                         }
                         catch { }
                     }
@@ -185,7 +201,10 @@ namespace ServitorDiscordBot
                         var container = TryParseActivityContainer(message);
 
                         if (container is not null)
+                        {
                             await InitActivityAsync(container);
+                            await DeleteMessageAsync(message);
+                        }
                         else
                         {
                             var builder = new EmbedBuilder()
