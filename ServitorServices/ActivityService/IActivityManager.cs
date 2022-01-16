@@ -16,6 +16,8 @@
 
         Task UpdateActivityAsync(ActivityContainer activity, ulong callerID);
 
+        Task NotifyActivityAsync(ulong activityID);
+
         Task DisableActivityAsync(ulong activityID);
 
         Task DisableActivityAsync(ulong activityID, ulong callerID);

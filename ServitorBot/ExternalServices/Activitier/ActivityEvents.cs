@@ -30,7 +30,7 @@ namespace ServitorDiscordBot
             var ftSize = Activity.GetFireteamSize(activity.ActivityType);
 
             string notes = "!";
-            if (ftSize < activity.Users.Count())
+            if (ftSize > activity.Users.Count())
                 notes = ", але необхідна кількість ґардіанів не назбиралася!";
 
             foreach (var userID in activity.Users.Take(ftSize))

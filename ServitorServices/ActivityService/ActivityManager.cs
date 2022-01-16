@@ -17,7 +17,7 @@ namespace ActivityService
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
-        private static BackgroundJobServer _server;
+        private static readonly BackgroundJobServer _server;
         static ActivityManager()
         {
             GlobalConfiguration.Configuration.UseMemoryStorage();
@@ -65,6 +65,8 @@ namespace ActivityService
         public async Task Init()
         {
             _logger.LogInformation($"{DateTime.Now} ActivityManager initialization…");
+
+            _hangfireScopeFactory = _scopeFactory;
 
             var currDate = DateTime.UtcNow;
 
@@ -126,6 +128,26 @@ namespace ActivityService
             _logger.LogInformation($"{DateTime.Now} Updated activity {activity.ActivityID}");
 
             OnUpdated?.Invoke(GetActivityContainer(await activityDB.GetActivityWithReservationsAsync(activity.ActivityID)));
+        }
+
+        public async Task NotifyActivityAsync(ulong activityID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            var activity = await activityDB.GetActivityWithReservationsAsync(activityID);
+
+            if (activity is null || !activity.IsActive)
+                return;
+
+            var act = GetActivityContainer(activity);
+
+            _logger.LogInformation($"{DateTime.Now} Activity notification {activityID}");
+
+            OnNotification?.Invoke(act);
+
+            HangfireScheduleCancellation(act);
         }
 
         public async Task DisableActivityAsync(ulong activityID)
@@ -279,12 +301,10 @@ namespace ActivityService
         {
             if (_activityJobs.Remove(activity.ActivityID, out var id))
                 BackgroundJob.Delete(id);
-
             var date = activity.PlannedDate.AddMinutes(NotifyIntervalMinutes);
-
             date = DateTime.UtcNow < date ? date : activity.PlannedDate;
 
-            var jobID = BackgroundJob.Schedule(() => SendNotification(activity.ActivityID), date);
+            var jobID = BackgroundJob.Schedule(() => NotifyActivity(activity.ActivityID), date);
 
             _activityJobs.TryAdd(activity.ActivityID, jobID);
 
@@ -297,31 +317,12 @@ namespace ActivityService
                 BackgroundJob.Delete(id);
         }
 
-        public async Task SendNotification(ulong activityID)
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
-
-            var activity = await activityDB.GetActivityWithReservationsAsync(activityID);
-
-            if (activity is null || !activity.IsActive)
-                return;
-
-            var act = GetActivityContainer(activity);
-
-            _logger.LogInformation($"{DateTime.Now} Hangfire notification {activityID}");
-
-            OnNotification?.Invoke(act);
-
-            HangfireScheduleCancellation(act);
-        }
-
         private void HangfireScheduleCancellation(ActivityContainer activity)
         {
+            var activityID = activity.ActivityID;
             var date = activity.PlannedDate.AddMinutes(DeleteIntervalMinutes);
 
-            var jobID = BackgroundJob.Schedule(() => ProceedCancellation(activity.ActivityID), date);
+            var jobID = BackgroundJob.Schedule(() => DisableActivity(activityID), date);
 
             if (_activityJobs.ContainsKey(activity.ActivityID))
                 _activityJobs[activity.ActivityID] = jobID;
@@ -331,20 +332,24 @@ namespace ActivityService
             _logger.LogInformation($"{DateTime.Now} Hangfire activity {activity.ActivityID} cancellation scheduled on {date}");
         }
 
-        public async Task ProceedCancellation(ulong activityID)
+        private static IServiceScopeFactory _hangfireScopeFactory;
+
+        public static void NotifyActivity(ulong activityID)
         {
-            using var scope = _scopeFactory.CreateScope();
+            using var scope = _hangfireScopeFactory.CreateScope();
 
-            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+            var manager = scope.ServiceProvider.GetRequiredService<IActivityManager>();
 
-            var activity = await activityDB.DisableActivityAsync(activityID);
+            manager.NotifyActivityAsync(activityID);
+        }
 
-            if (activity is null)
-                return;
+        public static void DisableActivity(ulong activityID)
+        {
+            using var scope = _hangfireScopeFactory.CreateScope();
 
-            _logger.LogInformation($"{DateTime.Now} Hangfire cancellation {activityID}");
+            var manager = scope.ServiceProvider.GetRequiredService<IActivityManager>();
 
-            OnDisabled?.Invoke(GetActivityContainer(activity));
+            manager.DisableActivityAsync(activityID);
         }
     }
 }
