@@ -12,33 +12,36 @@ namespace ServitorDiscordBot
                 .GetActivityInfo(container.ActivityType, container.ActivityName);
 
             var ftSize = Activity.GetFireteamSize(container.ActivityType);
-            var users = new List<EmbedFieldBuilder>()
+
+            var users = new List<EmbedFieldBuilder>();
+            if (container.Users.Count() > 0)
             {
-                new EmbedFieldBuilder
+                var leader = container.Users.FirstOrDefault();
+                users.Add(new EmbedFieldBuilder
                 {
                     IsInline = false,
                     Name = "Організатор збору",
-                    Value = $"<@{container.Users.FirstOrDefault()}>"
-                }
-            };
-
-            var fireteam = container.Users.Skip(1).Take(ftSize - 1);
-            if (fireteam.Count() > 0)
-                users.Add(new EmbedFieldBuilder
-                {
-                    IsInline = false,
-                    Name = "Бойова група",
-                    Value = string.Join("\n", fireteam.Select(x => $"<@{x}>"))
+                    Value = $"<@{leader}>"
                 });
 
-            var reserve = container.Users.Skip(ftSize);
-            if (reserve.Count() > 0)
-                users.Add(new EmbedFieldBuilder
-                {
-                    IsInline = false,
-                    Name = "Лава запасних",
-                    Value = string.Join("\n", reserve.Select(x => $"<@{x}>"))
-                });
+                var fireteam = container.Users.Skip(1).Take(ftSize - 1);
+                if (fireteam.Count() > 0)
+                    users.Add(new EmbedFieldBuilder
+                    {
+                        IsInline = false,
+                        Name = "Бойова група",
+                        Value = string.Join("\n", fireteam.Select(x => $"<@{x}>"))
+                    });
+
+                var reserve = container.Users.Skip(ftSize);
+                if (reserve.Count() > 0)
+                    users.Add(new EmbedFieldBuilder
+                    {
+                        IsInline = false,
+                        Name = "Лава запасних",
+                        Value = string.Join("\n", reserve.Select(x => $"<@{x}>"))
+                    });
+            }
 
             return new EmbedBuilder()
                 .WithColor(new Color(0xFFFFFF))

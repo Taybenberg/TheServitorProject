@@ -35,13 +35,23 @@ namespace ActivityDatabase
 
         public async Task UpdateActivityAsync(Activity activity)
         {
-            _context.Activities.Update(activity);
+            var dbActivity = await GetActivityAsync(activity.ActivityID);
 
-            await _context.SaveChangesAsync();
+            if (dbActivity is not null)
+            {
+                dbActivity.PlannedDate = activity.PlannedDate;
+                dbActivity.Description = activity.Description;
+                dbActivity.ActivityName = activity.ActivityName;
+                dbActivity.ActivityType = activity.ActivityType;
+
+                _context.Activities.Update(dbActivity);
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DisableActivityAsync(Activity activity)
-        {
+        {   
             activity.IsActive = false;
 
             _context.Activities.Update(activity);
@@ -54,8 +64,13 @@ namespace ActivityDatabase
             var dbActivity = await GetActivityAsync(activityID);
 
             if (dbActivity is not null)
-                await DisableActivityAsync(dbActivity);
+            {
+                if (!dbActivity.IsActive)
+                    return null;
 
+                await DisableActivityAsync(dbActivity);
+            }
+                
             return dbActivity;
         }
 
@@ -142,9 +157,9 @@ namespace ActivityDatabase
                     foreach (var r in otherReservations)
                         r.Position--;
 
-                    _context.Remove(reservation);
+                    _context.Reservations.Remove(reservation);
 
-                    _context.UpdateRange(otherReservations);
+                    _context.Reservations.UpdateRange(otherReservations);
 
                     await _context.SaveChangesAsync();
 

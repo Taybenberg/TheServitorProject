@@ -48,10 +48,10 @@ namespace ServitorDiscordBot
 
         private async Task OnActivityDisabledAsync(ActivityContainer activity)
         {
-            IMessageChannel channel = await _client.GetChannelAsync(activity.ChannelID) as IMessageChannel;
-
             try
             {
+                IMessageChannel channel = await _client.GetChannelAsync(activity.ChannelID) as IMessageChannel;
+
                 await channel.DeleteMessageAsync(activity.ActivityID);
             }
             catch { }
