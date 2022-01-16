@@ -9,24 +9,23 @@ using System.Collections.Concurrent;
 
 namespace ActivityService
 {
-    public class ActivityManager : IDisposable, IActivityManager
+    public class ActivityManager : IActivityManager
     {
-        const int NotifyIntervalMinutes = -10;
-        const int DeleteIntervalMinutes = 60;
+        const int NotifyIntervalMinutes = -1;
+        const int DeleteIntervalMinutes = 1;
 
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
-        private readonly BackgroundJobServer _server;
-
-        public ActivityManager(ILogger<ActivityManager> logger, IServiceScopeFactory scopeFactory)
+        private static BackgroundJobServer _server;
+        static ActivityManager()
         {
-            (_logger, _scopeFactory) = (logger, scopeFactory);
-
             GlobalConfiguration.Configuration.UseMemoryStorage();
-
-            _server = new();
+            _server = new BackgroundJobServer();
         }
+
+        public ActivityManager(ILogger<ActivityManager> logger, IServiceScopeFactory scopeFactory) =>
+            (_logger, _scopeFactory) = (logger, scopeFactory);
 
         public event Func<ActivityContainer, Task> OnNotification;
         public event Func<ActivityContainer, Task> OnUpdated;
@@ -186,7 +185,7 @@ namespace ActivityService
             OnUpdated?.Invoke(act);
             OnRescheduled?.Invoke(act);
 
-            HangfireReScheduleActivity(act);
+            HangfireScheduleActivity(act);
         }
 
         public async Task UserTransferPlaceAsync(ulong activityID, ulong userSenderID, ulong userReceiverID)
@@ -196,13 +195,13 @@ namespace ActivityService
             var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
 
             var result = await activityDB.TransferPlaceAsync(activityID, userSenderID, userReceiverID);
-            
+
             if (result)
             {
                 _logger.LogInformation($"{DateTime.Now} Transfered activity {activityID} from user {userSenderID} to {userReceiverID}");
 
                 OnUpdated?.Invoke(GetActivityContainer(await activityDB.GetActivityWithReservationsAsync(activityID)));
-            }            
+            }
         }
 
         public async Task UserSubscribeOrUnsubscribeAsync(ulong activityID, ulong callerID)
@@ -274,23 +273,78 @@ namespace ActivityService
                 await DisableActivityAsync(activityID);
         }
 
-        public void Dispose() => _server.Dispose();
-
         private ConcurrentDictionary<ulong, string> _activityJobs = new();
 
         private void HangfireScheduleActivity(ActivityContainer activity)
         {
-            
+            if (_activityJobs.Remove(activity.ActivityID, out var id))
+                BackgroundJob.Delete(id);
+
+            var date = activity.PlannedDate.AddMinutes(NotifyIntervalMinutes);
+
+            date = DateTime.UtcNow < date ? date : activity.PlannedDate;
+
+            var jobID = BackgroundJob.Schedule(() => SendNotification(activity.ActivityID), date);
+
+            _activityJobs.TryAdd(activity.ActivityID, jobID);
+
+            _logger.LogInformation($"{DateTime.Now} Hangfire activity {activity.ActivityID} notification scheduled on {date}");
         }
 
         private void HangfireUnScheduleActivity(ActivityContainer activity)
         {
-
+            if (_activityJobs.Remove(activity.ActivityID, out var id))
+                BackgroundJob.Delete(id);
         }
 
-        private void HangfireReScheduleActivity(ActivityContainer activity)
+        public async Task SendNotification(ulong activityID)
         {
+            using var scope = _scopeFactory.CreateScope();
 
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            var activity = await activityDB.GetActivityWithReservationsAsync(activityID);
+
+            if (activity is null || !activity.IsActive)
+                return;
+
+            var act = GetActivityContainer(activity);
+
+            _logger.LogInformation($"{DateTime.Now} Hangfire notification {activityID}");
+
+            OnNotification?.Invoke(act);
+
+            HangfireScheduleCancellation(act);
+        }
+
+        private void HangfireScheduleCancellation(ActivityContainer activity)
+        {
+            var date = activity.PlannedDate.AddMinutes(DeleteIntervalMinutes);
+
+            var jobID = BackgroundJob.Schedule(() => ProceedCancellation(activity.ActivityID), date);
+
+            if (_activityJobs.ContainsKey(activity.ActivityID))
+                _activityJobs[activity.ActivityID] = jobID;
+            else
+                _activityJobs.TryAdd(activity.ActivityID, jobID);
+
+            _logger.LogInformation($"{DateTime.Now} Hangfire activity {activity.ActivityID} cancellation scheduled on {date}");
+        }
+
+        public async Task ProceedCancellation(ulong activityID)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var activityDB = scope.ServiceProvider.GetRequiredService<IActivityDB>();
+
+            var activity = await activityDB.DisableActivityAsync(activityID);
+
+            if (activity is null)
+                return;
+
+            _logger.LogInformation($"{DateTime.Now} Hangfire cancellation {activityID}");
+
+            OnDisabled?.Invoke(GetActivityContainer(activity));
         }
     }
 }
