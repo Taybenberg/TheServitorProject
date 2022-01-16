@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ServitorDiscordBot.SoundCloud
+namespace MusicService.SoundCloud
 {
     public class SongUrl
     {
@@ -80,8 +80,8 @@ namespace ServitorDiscordBot.SoundCloud
 
     public class Track
     {
-        [JsonIgnore]
         public string artwork_url { get; set; }
+
         [JsonIgnore]
         public object caption { get; set; }
         [JsonIgnore]
@@ -304,5 +304,4 @@ namespace ServitorDiscordBot.SoundCloud
     {
         public string id { get; set; }
     }
-
 }
