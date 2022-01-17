@@ -28,22 +28,11 @@ namespace ServitorDiscordBot
         private readonly ulong _lulzChannelId;
         private readonly ulong _bumpChannelId;
 
-        public ServitorBot(IConfiguration configuration, ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory)
+        public ServitorBot(ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
-            _logger = logger;
+            (_logger, _scopeFactory) = (logger, scopeFactory);
 
-            _scopeFactory = scopeFactory;
-
-            _client = new();
-
-            _client.Log += LogAsync;
-
-            _client.MessageReceived += OnMessageReceived;
-            _client.MessageDeleted += OnMessageDeleted;
-            _client.ButtonExecuted += OnButtonExecuted;
-            _client.SelectMenuExecuted += OnSelectMenuExecuted;
-
-            _client.LoginAsync(TokenType.Bot, configuration["ApiKeys:DiscordToken"]).Wait();
+            RegisterExternalServices();
 
             _seasonName = configuration["Destiny2:SeasonName"];
             _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
@@ -57,9 +46,18 @@ namespace ServitorDiscordBot
             _lulzChannelId = configuration.GetSection("DiscordConfig:LulzChannelID").Get<ulong>();
             _bumpChannelId = configuration.GetSection("DiscordConfig:BumpChannelID").Get<ulong>();
 
-            _client.SetGameAsync("Destiny 2").Wait();
+            _client = new();
 
-            RegisterExternalServices();
+            _client.Log += LogAsync;
+
+            _client.MessageReceived += OnMessageReceived;
+            _client.MessageDeleted += OnMessageDeleted;
+            _client.ButtonExecuted += OnButtonExecuted;
+            _client.SelectMenuExecuted += OnSelectMenuExecuted;
+
+            _client.LoginAsync(TokenType.Bot, configuration["ApiKeys:DiscordToken"]).Wait();
+
+            _client.SetGameAsync("Destiny 2").Wait();
         }
 
         public void Dispose() => _client.Dispose();
