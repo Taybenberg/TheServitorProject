@@ -30,14 +30,6 @@ namespace MusicService
             }
         }
 
-        /*
-            if (url.Contains("youtube.com") || url.Contains("youtu.be"))
-                return await YouTube.YouTubeAudio.GetAsync(url);
-            else if (url.Contains("soundcloud.com"))
-                return await SoundCloud.SoundCloudAudio.GetAsync(url, _soundcloudClientID);
-            return new IAudio[0];
-        */
-
         public void Dispose() => Bass.Free();
 
         public void Continue()
