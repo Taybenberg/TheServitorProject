@@ -13,7 +13,7 @@ namespace MusicService
         public MusicPlayer(ILogger<MusicPlayer> logger, IConfiguration configuration)
         {
             (_logger, _soundcloudClientID) = (logger, configuration["ApiKeys:SoundCloudClientID"]);
-            
+
             Bass.Init(0);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

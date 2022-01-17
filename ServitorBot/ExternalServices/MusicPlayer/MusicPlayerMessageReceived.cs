@@ -1,6 +1,6 @@
-﻿using MusicService;
-using Discord;
+﻿using Discord;
 using Discord.Audio;
+using MusicService;
 
 namespace ServitorDiscordBot
 {

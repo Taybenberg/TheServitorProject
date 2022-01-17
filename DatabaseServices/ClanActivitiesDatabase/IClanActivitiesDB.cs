@@ -4,10 +4,6 @@ namespace ClanActivitiesDatabase
 {
     public interface IClanActivitiesDB
     {
-        Task SyncActivitiesAsync();
-
-        Task SyncUsersAsync();
-
         bool IsDiscordUserRegistered(ulong discordID);
 
         Task<bool> RegisterUserAsync(long userID, ulong discordID);

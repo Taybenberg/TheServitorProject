@@ -9,7 +9,7 @@ namespace ActivityDatabase
 
         public ActivityUoW(ActivityContext context) => _context = context;
 
-        public IEnumerable<Activity> Activities => 
+        public IEnumerable<Activity> Activities =>
             _context.Activities.Where(x => x.IsActive);
 
         public ulong? GetOwnerID(ulong activityID) =>
@@ -51,7 +51,7 @@ namespace ActivityDatabase
         }
 
         public async Task DisableActivityAsync(Activity activity)
-        {   
+        {
             activity.IsActive = false;
 
             _context.Activities.Update(activity);
@@ -70,7 +70,7 @@ namespace ActivityDatabase
 
                 await DisableActivityAsync(dbActivity);
             }
-                
+
             return dbActivity;
         }
 

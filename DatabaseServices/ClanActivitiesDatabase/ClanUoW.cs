@@ -9,16 +9,9 @@ namespace ClanActivitiesDatabase
 {
     public partial class ClanActivitiesUoW : IClanActivitiesDB
     {
-        private readonly ILogger _logger;
-
-        private readonly IConfiguration _configuration;
-
-        private readonly IServiceScopeFactory _scopeFactory;
-
         private readonly ClanActivitiesContext _context;
 
-        public ClanActivitiesUoW(IConfiguration configuration, ILogger<ClanActivitiesUoW> logger, IServiceScopeFactory scopeFactory, ClanActivitiesContext context) =>
-            (_configuration, _logger, _scopeFactory, _context) = (configuration, logger, scopeFactory, context);
+        public ClanActivitiesUoW(ClanActivitiesContext context) => _context = context;
 
         public bool IsDiscordUserRegistered(ulong discordID) =>
             _context.Users

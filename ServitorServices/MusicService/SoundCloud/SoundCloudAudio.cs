@@ -11,7 +11,7 @@ namespace MusicService.SoundCloud
         public SoundCloudAudio(Track track, string clientID) =>
             (_track, _clientID) = (track, clientID);
 
-        public string Title => 
+        public string Title =>
             _track.publisher_metadata?.artist is not null ?
             $"{_track.publisher_metadata?.artist} - {_track.title}" : _track.title;
 

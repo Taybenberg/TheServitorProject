@@ -7,7 +7,7 @@
 
         private readonly string _soundcloudClientID;
 
-        public MusicContainer(string soundcloudClientID) => 
+        public MusicContainer(string soundcloudClientID) =>
             (_soundcloudClientID) = (soundcloudClientID);
 
         private readonly object locker = new();

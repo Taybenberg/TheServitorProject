@@ -40,9 +40,9 @@ namespace ServitorDiscordBot
                     Value = $"{string.Join('\n', next.Select(x => $"[{x.Duration.GetAudioDuration()}] *{x.Title}*"))}"
                 });
             }
-            
-            (var custId, var emoji) = _musicPlayer.IsPlaying ? 
-                ("MusicPlayerPause", Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicPause)) : 
+
+            (var custId, var emoji) = _musicPlayer.IsPlaying ?
+                ("MusicPlayerPause", Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicPause)) :
                 ("MusicPlayerContinue", Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicContinue));
 
             var builder = new EmbedBuilder()
