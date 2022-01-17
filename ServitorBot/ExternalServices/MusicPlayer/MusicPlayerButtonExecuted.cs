@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 
 namespace ServitorDiscordBot
 {
@@ -6,6 +7,14 @@ namespace ServitorDiscordBot
     {
         private async Task MusicPlayerButtonExecutedAsync(SocketMessageComponent component)
         {
+            var userVoiceChannel = (component.User as IGuildUser).VoiceChannel;
+            if (userVoiceChannel is null)
+                return;
+
+            var botUser = await userVoiceChannel.GetUserAsync(_client.CurrentUser.Id);
+            if (botUser is null)
+                return;
+
             switch (component.Data.CustomId)
             {
                 case "MusicPlayerShuffle":

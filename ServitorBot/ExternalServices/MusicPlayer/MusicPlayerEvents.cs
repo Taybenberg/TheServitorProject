@@ -1,5 +1,5 @@
-﻿using MusicService;
-using Discord;
+﻿using Discord;
+using MusicService;
 
 namespace ServitorDiscordBot
 {
@@ -26,7 +26,7 @@ namespace ServitorDiscordBot
                 {
                     IsInline = false,
                     Name = "Зараз відтворюється",
-                    Value = $"[{first.Duration.GetAudioDuration()}] - *{first.Title}*",
+                    Value = $"[{first.Duration.GetAudioDuration()}] *{first.Title}*",
                 }
             };
 
@@ -37,12 +37,13 @@ namespace ServitorDiscordBot
                 {
                     IsInline = false,
                     Name = "Далі у черзі",
-                    Value = $"{string.Join('\n', next.Select(x => $"[{x.Duration.GetAudioDuration()}] - *{x.Title}*"))}"
+                    Value = $"{string.Join('\n', next.Select(x => $"[{x.Duration.GetAudioDuration()}] *{x.Title}*"))}"
                 });
             }
-
+            
             (var custId, var emoji) = _musicPlayer.IsPlaying ? 
-                ("MusicPlayerPause", new Emoji("\U000023F8")) : ("MusicPlayerContinue", new Emoji("\U000025B6"));
+                ("MusicPlayerPause", Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicPause)) : 
+                ("MusicPlayerContinue", Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicContinue));
 
             var builder = new EmbedBuilder()
                 .WithColor(0x3BA55D)
@@ -50,11 +51,11 @@ namespace ServitorDiscordBot
                 .WithFields(fields);
 
             var component = new ComponentBuilder()
-                .WithButton(customId: "MusicPlayerShuffle", style: ButtonStyle.Success, emote: new Emoji("\U0001F500"))
-                .WithButton(customId: "MusicPlayerPrevious", style: ButtonStyle.Success, emote: new Emoji("\U000023EE"))
+                .WithButton(customId: "MusicPlayerShuffle", style: ButtonStyle.Success, emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicShuffle))
+                .WithButton(customId: "MusicPlayerPrevious", style: ButtonStyle.Success, emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicPrevious))
                 .WithButton(customId: custId, style: ButtonStyle.Success, emote: emoji)
-                .WithButton(customId: "MusicPlayerNext", style: ButtonStyle.Success, emote: new Emoji("\U000023ED"))
-                .WithButton(customId: "MusicPlayerStop", style: ButtonStyle.Success, emote: new Emoji("\U000023F9"));
+                .WithButton(customId: "MusicPlayerNext", style: ButtonStyle.Success, emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicNext))
+                .WithButton(customId: "MusicPlayerStop", style: ButtonStyle.Success, emote: Emote.Parse(CommonData.DiscordEmoji.Emoji.MusicStop));
 
             try
             {
