@@ -10,6 +10,8 @@ namespace ServitorDiscordBot
                 await BumperButtonExecutedAsync(component);
             else if (_activityChannelId.Any(x => x == component.Channel.Id))
                 await ActivityButtonExecutedAsync(component);
+            else if (component.Channel.Id == _musicChannelId)
+                await MusicPlayerButtonExecutedAsync(component);
         }
     }
 }

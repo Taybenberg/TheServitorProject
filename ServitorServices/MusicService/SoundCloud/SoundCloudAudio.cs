@@ -9,7 +9,7 @@ namespace MusicService.SoundCloud
         private readonly string _clientID;
 
         public SoundCloudAudio(Track track, string clientID) =>
-            (_track, _clientID) = (_track, _clientID);
+            (_track, _clientID) = (track, clientID);
 
         public string Title => 
             _track.publisher_metadata?.artist is not null ?
@@ -22,7 +22,7 @@ namespace MusicService.SoundCloud
         public Task<string> URL =>
         Task.Run(async () =>
         {
-            var link = $"{_track.media.transcodings[^1].url}?client_id={_clientID}&track_authorization={_track.track_authorization}";
+            var link = $"{_track.media?.transcodings[^1].url}?client_id={_clientID}&track_authorization={_track.track_authorization}";
 
             var songUrl = await JsonSerializer.DeserializeAsync<SongUrl>(await link.GetStreamAsync());
 

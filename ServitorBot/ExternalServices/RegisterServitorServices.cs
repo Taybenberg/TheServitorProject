@@ -11,8 +11,6 @@ namespace ServitorDiscordBot
         private IActivityManager _activityManager;
         private IMusicPlayer _musicPlayer;
 
-        private MusicPlayer _player;
-
         private void RegisterExternalServices()
         {
             using var scope = _scopeFactory.CreateScope();
@@ -29,6 +27,7 @@ namespace ServitorDiscordBot
             _activityManager.Init();
 
             _musicPlayer = scope.ServiceProvider.GetRequiredService<IMusicPlayer>();
+            _musicPlayer.OnUpdate += OnMusicPlayerUpdateAsync;
         }
     }
 }

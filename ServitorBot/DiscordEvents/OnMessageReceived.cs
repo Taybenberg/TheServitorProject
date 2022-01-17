@@ -26,7 +26,7 @@ namespace ServitorDiscordBot
 
             if (message.Channel.Id == _musicChannelId)
             {
-                await InitPlaybackAsync(message);
+                await MusicPlayerMessageReceivedAsync(message);
                 return;
             }
 
