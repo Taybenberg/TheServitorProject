@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj" />
+  </ItemGroup>
+
 </Project>

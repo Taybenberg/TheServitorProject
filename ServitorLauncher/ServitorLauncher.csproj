@@ -19,7 +19,6 @@
     <ProjectReference Include="..\DatabaseServices\ClanActivitiesDatabase\ClanActivitiesDatabase.csproj" />
     <ProjectReference Include="..\DatabaseServices\ActivityDatabase\ActivityDatabase.csproj" />
     <ProjectReference Include="..\DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj" />
-    <ProjectReference Include="..\DataProcessor\DataProcessor.csproj" />
     <ProjectReference Include="..\ServitorBot\ServitorBot.csproj" />
     <ProjectReference Include="..\ServitorServices\BumperService\BumperService.csproj" />
     <ProjectReference Include="..\ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj" />

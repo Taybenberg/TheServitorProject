@@ -1,7 +1,6 @@
 ﻿namespace DestinyNotificationsService
 {
-    public class Class1
+    public interface IDestinyNotifications
     {
-
     }
 }

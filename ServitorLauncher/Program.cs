@@ -4,8 +4,10 @@ using BumperDatabase;
 using BumperService;
 using BungieNetApi;
 using ClanActivitiesDatabase;
+using ClanActivitiesService;
 using Coravel;
-using DataProcessor;
+using DestinyNotificationsDatabase;
+using DestinyNotificationsService;
 using Microsoft.EntityFrameworkCore;
 using MusicService;
 using ServitorDiscordBot;
@@ -19,7 +21,11 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddDbContext<ClanActivitiesContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ClanActivitiesDatabase")));
         services.AddScoped<IClanActivitiesDB, ClanActivitiesUoW>();
-        services.AddScoped<IDatabaseWrapperFactory, DatabaseWrapperFactory>();
+        services.AddScoped<IClanActivities, ClanActivitiesManager>();
+
+        services.AddDbContext<NotificationsContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("NotificationsDatabase")));
+        services.AddScoped<INotificationsDB, NotificationsUoW>();
+        services.AddScoped<IDestinyNotifications, DestinyNotificationsManager>();
 
         services.AddDbContext<BumperContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("BumperDatabase")));
         services.AddScoped<IBumperDB, BumperUoW>();
