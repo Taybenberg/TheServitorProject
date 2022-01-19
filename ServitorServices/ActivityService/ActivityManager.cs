@@ -11,8 +11,8 @@ namespace ActivityService
 {
     public class ActivityManager : IActivityManager
     {
-        const int NotifyIntervalMinutes = -1;
-        const int DeleteIntervalMinutes = 1;
+        const int NotifyIntervalMinutes = -10;
+        const int DeleteIntervalMinutes = 60;
 
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;

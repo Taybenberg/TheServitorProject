@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Audio;
 using MusicService;
+using System.Text;
 
 namespace ServitorDiscordBot
 {
@@ -44,22 +45,21 @@ namespace ServitorDiscordBot
                         {
                             if (x.isCurrent)
                                 return $"\n**{i + 1})** [{x.audio.Duration.GetAudioDuration()}] ***{x.audio.Title}***";
-
                             return $"\n{i + 1}) [{x.audio.Duration.GetAudioDuration()}] *{x.audio.Title}*";
                         });
 
-                        string strqueue = string.Empty;
-                        foreach (var q in queue)
-                        {
-                            var tmp = strqueue + q;
-                            if (tmp.Length > 2000)
-                                break;
-                            strqueue = tmp;
-                        }
+                        var sb = new StringBuilder(1950);
+                        if (queue is not null)
+                            foreach (var q in queue)
+                            {
+                                if (sb.Length + q.Length > 1950)
+                                    break;
+                                sb.Append(q);
+                            }
 
                         var builder = new EmbedBuilder()
                             .WithColor(new Color(0x3BA55D))
-                            .WithDescription($"У черзі {queue?.Count() ?? 0} аудіо:{strqueue}");
+                            .WithDescription($"У черзі {queue?.Count() ?? 0} аудіо:{sb.ToString()}");
 
                         await message.Channel.SendMessageAsync(embed: builder.Build());
                     }

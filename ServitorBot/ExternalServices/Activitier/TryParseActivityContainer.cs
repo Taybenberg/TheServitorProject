@@ -21,18 +21,17 @@ namespace ServitorDiscordBot
                     .Concat(message.MentionedUserIds);
 
                 var index = command.IndexOf(' ');
-                var activityType = Translation.GetActivityType(command
-                    .Substring(1, index - 1).Replace('_', ' ').ToLower());
-                command = command.Remove(0, index).TrimStart();
+                var activityType = Translation.GetActivityType(command[1..index].Replace('_', ' ').ToLower());
+                command = command[index..].TrimStart();
 
                 index = command.IndexOf(' ');
                 if (index < 0)
                     plannedDate = DateTime.ParseExact(command, "d.M-H:m", CultureInfo.CurrentCulture);
                 else
                 {
-                    plannedDate = DateTime.ParseExact(command.Substring(0, index), "d.M-H:m", CultureInfo.CurrentCulture);
+                    plannedDate = DateTime.ParseExact(command[..index], "d.M-H:m", CultureInfo.CurrentCulture);
 
-                    command = command.Remove(0, index).TrimStart();
+                    command = command[index..].TrimStart();
                     command = Regex.Replace(command, "<@\\D?\\d+>", string.Empty).TrimStart();
 
                     index = command.IndexOf(' ');
@@ -41,8 +40,8 @@ namespace ServitorDiscordBot
                         activityName = command.Replace('_', ' ');
                     if (index > 0)
                     {
-                        activityName = command.Substring(0, index).Replace('_', ' ');
-                        description = command.Remove(0, index).TrimStart();
+                        activityName = command[..index].Replace('_', ' ');
+                        description = command[index..].TrimStart();
                     }
                 }
 

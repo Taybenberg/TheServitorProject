@@ -148,7 +148,7 @@ namespace ServitorDiscordBot
 
                         try
                         {
-                            var action = message.Content.Remove(0, 8);
+                            var action = message.Content[8..];
                             switch (action.ToLower())
                             {
                                 case string s
@@ -157,7 +157,7 @@ namespace ServitorDiscordBot
                                         var activity = await _activityManager.GetActivityAsync(msgId.Value);
                                         if (activity is not null)
                                         {
-                                            activity.Description = action.Remove(0, 5);
+                                            activity.Description = action[5..];
                                             await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
                                         }
                                     }
@@ -169,7 +169,7 @@ namespace ServitorDiscordBot
                                         var activity = await _activityManager.GetActivityAsync(msgId.Value);
                                         if (activity is not null)
                                         {
-                                            activity.ActivityName = action.Remove(0, 10);
+                                            activity.ActivityName = action[10..];
                                             await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
                                         }
                                     }
@@ -181,7 +181,7 @@ namespace ServitorDiscordBot
                                         var activity = await _activityManager.GetActivityAsync(msgId.Value);
                                         if (activity is not null)
                                         {
-                                            activity.ActivityType = Translation.GetActivityType(action.Remove(0, 11).ToLower());
+                                            activity.ActivityType = Translation.GetActivityType(action[11..].ToLower());
                                             await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
                                         }
                                     }

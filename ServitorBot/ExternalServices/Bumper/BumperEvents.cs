@@ -13,10 +13,16 @@ namespace ServitorDiscordBot
                 .WithColor(0xFF6E00)
                 .WithDescription("Саме час **!bump**-нути :fire:");
 
-            if (container.UserCooldowns.Count > 0)
-                builder.Description += "\nКулдаун до:\n" + string.Join('\n',
-                    container.UserCooldowns.OrderBy(x => x.Value)
-                    .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"));
+            if (container.UserCooldowns.Count == 0)
+                builder.Fields = new List<EmbedFieldBuilder>
+                {
+                    new EmbedFieldBuilder
+                    {
+                        Name = "Кулдаун мають",
+                        Value = string.Join('\n', container.UserCooldowns.OrderBy(x => x.Value)
+                        .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"))
+                    }
+                };
 
             var component = new ComponentBuilder()
                 .WithButton("Підписатися на сповіщення", "BumpNotificationsSubscribe", ButtonStyle.Success)
