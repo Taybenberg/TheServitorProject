@@ -21,7 +21,12 @@ namespace MusicService.YouTube
         Task.Run(async () =>
         {
             var streamManifest = await new YoutubeClient().Videos.Streams.GetManifestAsync(_video.Url);
-            return streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate().Url;
+
+            var streams = streamManifest.GetAudioOnlyStreams();
+
+            var opusStream = streams.Where(x => x.AudioCodec == "opus").TryGetWithHighestBitrate();
+
+            return opusStream?.Url ?? streams.GetWithHighestBitrate().Url;
         });
 
         public static async Task<IEnumerable<IAudio>> GetAsync(string url)
