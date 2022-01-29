@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetClanActivitiesAsync(IMessage message, string period)
         {
+            /*
             (var date, var title) = GetPeriod(period);
 
             var builder = GetBuilder(MessagesEnum.ClanActivities, message);
@@ -24,6 +25,7 @@ namespace ServitorDiscordBot
             builder.ImageUrl = counter.QuickChartURL;
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

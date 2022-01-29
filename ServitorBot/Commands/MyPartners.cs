@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyPartnersAsync(IMessage message, string period)
         {
+            /*
             (var date, var title) = GetPeriod(period);
 
             var partners = await getWrapperFactory().GetMyPartnersAsync(message.Author.Id, date);
@@ -38,6 +39,7 @@ namespace ServitorDiscordBot
             }
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

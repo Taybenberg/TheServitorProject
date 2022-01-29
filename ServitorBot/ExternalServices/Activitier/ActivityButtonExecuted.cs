@@ -9,7 +9,7 @@ namespace ServitorDiscordBot
         {
             var user = await _client.Rest.GetGuildUserAsync((component.Channel as IGuildChannel).GuildId, component.User.Id);
 
-            if (!user.RoleIds.Any(id => id == _destinyRoleId))
+            if (!user.RoleIds.Any(id => id == _destinyRoleID))
                 return;
 
             switch (component.Data.CustomId)

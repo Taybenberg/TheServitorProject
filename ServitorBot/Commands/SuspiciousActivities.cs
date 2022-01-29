@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetSuspiciousActivitiesAsync(IMessage message, bool nigthfalls)
         {
+            /*
             var builder = GetBuilder(MessagesEnum.Suspicious, message, false);
 
             var acts = await getWrapperFactory().GetSuspiciousActivitiesAsync(nigthfalls, false);
@@ -29,6 +30,7 @@ namespace ServitorDiscordBot
             builder.Description = $"||{sus}||";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

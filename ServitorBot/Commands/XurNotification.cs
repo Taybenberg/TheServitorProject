@@ -9,7 +9,7 @@ namespace ServitorDiscordBot
         {
             _logger.LogInformation($"{DateTime.Now} Xur arrived");
 
-            var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
+            var channel = _client.GetChannel(_mainChannelIDs[0]) as IMessageChannel;
 
             var builder = GetBuilder(MessagesEnum.Xur, null, false);
 

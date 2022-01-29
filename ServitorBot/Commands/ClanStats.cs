@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetClanStatsAsync(IMessage message, string mode)
         {
+            /*
             var builder = GetBuilder(MessagesEnum.ClanStats, message);
 
             var stats = await getWrapperFactory().GetClanStatsAsync(mode, message.Author.Id);
@@ -48,6 +49,7 @@ namespace ServitorDiscordBot
             }
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

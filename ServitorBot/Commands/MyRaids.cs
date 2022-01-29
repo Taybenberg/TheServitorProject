@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyRaidsAsync(IMessage message)
         {
+            /*
             var raids = await getWrapperFactory().GetMyRaidsAsync(message.Author.Id, _seasonStart, GetWeekNumber());
 
             if (!raids.IsUserRegistered)
@@ -29,6 +30,7 @@ namespace ServitorDiscordBot
             }).ToList();
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

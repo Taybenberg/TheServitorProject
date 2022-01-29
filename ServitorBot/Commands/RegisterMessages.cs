@@ -26,6 +26,7 @@ namespace ServitorDiscordBot
 
         private async Task TryRegisterUserAsync(IMessage message, string nickname = null)
         {
+            /*
             var wrapper = getWrapperFactory();
 
             var similarUsers = await wrapper.GetUserWithSimilarUserNameAsync(message.Author.Id, nickname ?? message.Author.Username);
@@ -77,6 +78,7 @@ namespace ServitorDiscordBot
 
                 await message.Channel.SendMessageAsync(embed: builder.Build());
             }
+            */
         }
     }
 }

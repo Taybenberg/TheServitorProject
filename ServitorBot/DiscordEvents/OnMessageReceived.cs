@@ -6,7 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task OnMessageReceivedAsync(IMessage message)
         {
-            if (message.Channel.Id == _bumpChannelId && message.Author.IsBot && message.Embeds.Count > 0)
+            if (_bumpChannelIDs.Any(x => x == message.Channel.Id) && message.Author.IsBot && message.Embeds.Count > 0)
             {
                 await InitBumpAsync(message);
                 return;
@@ -18,25 +18,25 @@ namespace ServitorDiscordBot
             if (await ServiceMessagesAsync(message))
                 return;
 
-            if (message.Channel.Id == _lulzChannelId)
+            if (_lulzChannelIDs.Any(x => x == message.Channel.Id))
             {
                 await LulzChannelManagerAsync(message);
                 return;
             }
 
-            if (message.Channel.Id == _musicChannelId)
+            if (_musicChannelIDs.Any(x => x == message.Channel.Id))
             {
                 await MusicPlayerMessageReceivedAsync(message);
                 return;
             }
 
-            if (_activityChannelId.Any(x => x == message.Channel.Id))
+            if (_activityChannelIDs.Any(x => x == message.Channel.Id))
             {
                 await ActivityMessageReceivedAsync(message);
                 return;
             }
 
-            if (_channelId.Any(x => x == message.Channel.Id))
+            if (_mainChannelIDs.Any(x => x == message.Channel.Id))
                 switch (message.Content.ToLower())
                 {
                     case string c

@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyActivitiesAsync(IMessage message, string period)
         {
+            /*
             (var date, var title) = GetPeriod(period);
 
             var activities = await getWrapperFactory().GetMyActivitiesAsync(message.Author.Id, date);
@@ -30,6 +31,7 @@ namespace ServitorDiscordBot
             builder.ImageUrl = activities.QuickChartURL;
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

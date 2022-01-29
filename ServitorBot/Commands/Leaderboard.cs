@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetLeaderboardAsync(IMessage message, string mode)
         {
+            /*
             var builder = GetBuilder(MessagesEnum.Leaderboard, message);
 
             var leaderboard = await getWrapperFactory().GetLeaderboardAsync(mode, message.Author.Id);
@@ -52,6 +53,7 @@ namespace ServitorDiscordBot
             }
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

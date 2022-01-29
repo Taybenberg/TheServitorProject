@@ -7,6 +7,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetHelpAsync(IMessage message)
         {
+            /*
             var builder = GetBuilder(MessagesEnum.Help, message);
 
             builder.Author = new();
@@ -63,6 +64,7 @@ namespace ServitorDiscordBot
                 $"\n**{messageCommands[Register][0]}** – прив'язати акаунт Destiny 2 до профілю в Discord";
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

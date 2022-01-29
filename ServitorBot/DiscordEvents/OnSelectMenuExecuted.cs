@@ -6,7 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task OnSelectMenuExecutedAsync(SocketMessageComponent component)
         {
-            if (_activityChannelId.Any(x => x == component.Channel.Id))
+            if (_activityChannelIDs.Any(x => x == component.Channel.Id))
                 await ActivitySelectMenuExecutedAsync(component);
         }
     }

@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         public async Task GetWeeklyMilestoneAsync(IMessageChannel channel)
         {
+            /*
             var builder = GetBuilder(MessagesEnum.Reset, null);
 
             var milestone = await getWrapperFactory().GetWeeklyMilestoneAsync();
@@ -27,6 +28,7 @@ namespace ServitorDiscordBot
             }).ToList();
 
             await channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

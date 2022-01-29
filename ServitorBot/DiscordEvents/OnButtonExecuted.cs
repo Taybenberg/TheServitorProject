@@ -6,11 +6,11 @@ namespace ServitorDiscordBot
     {
         private async Task OnButtonExecutedAsync(SocketMessageComponent component)
         {
-            if (component.Channel.Id == _bumpChannelId)
+            if (_bumpChannelIDs.Any(x => x == component.Channel.Id))
                 await BumperButtonExecutedAsync(component);
-            else if (_activityChannelId.Any(x => x == component.Channel.Id))
+            else if (_activityChannelIDs.Any(x => x == component.Channel.Id))
                 await ActivityButtonExecutedAsync(component);
-            else if (component.Channel.Id == _musicChannelId)
+            else if (_musicChannelIDs.Any(x => x == component.Channel.Id))
                 await MusicPlayerButtonExecutedAsync(component);
         }
     }

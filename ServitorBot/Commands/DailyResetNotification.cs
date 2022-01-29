@@ -9,7 +9,7 @@ namespace ServitorDiscordBot
         {
             _logger.LogInformation($"{DateTime.Now} Daily reset");
 
-            var channel = _client.GetChannel(_channelId[0]) as IMessageChannel;
+            var channel = _client.GetChannel(_mainChannelIDs[0]) as IMessageChannel;
 
             await GetDailyResetAsync(channel);
         }

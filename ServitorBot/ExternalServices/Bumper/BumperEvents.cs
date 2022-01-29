@@ -7,7 +7,7 @@ namespace ServitorDiscordBot
     {
         private async Task OnBumperNotifyAsync(BumpNotificationContainer container)
         {
-            IMessageChannel channel = _client.GetChannel(_bumpChannelId) as IMessageChannel;
+            IMessageChannel channel = _client.GetChannel(_bumpChannelIDs[0]) as IMessageChannel;
 
             var builder = new EmbedBuilder()
                 .WithColor(0xFF6E00)

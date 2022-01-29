@@ -10,7 +10,7 @@ namespace ServitorDiscordBot
             if (messageID is null)
                 return;
 
-            IMessageChannel channel = _client.GetChannel(_musicChannelId) as IMessageChannel;
+            IMessageChannel channel = _client.GetChannel(_musicChannelIDs[0]) as IMessageChannel;
 
             var queue = _musicPlayer.Queue.SkipWhile(x => !x.isCurrent).Take(4).Select(x => x.audio);
 

@@ -4,7 +4,7 @@
     {
         private async Task OnMessageDeletedAsync(ulong messageID, ulong channelID)
         {
-            if (_activityChannelId.Any(x => x == channelID))
+            if (_activityChannelIDs.Any(x => x == channelID))
                 await ActivityMessageDeletedAsync(messageID);
         }
     }

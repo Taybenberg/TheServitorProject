@@ -6,6 +6,7 @@ namespace ServitorDiscordBot
     {
         private async Task GetMyGrandmastersAsync(IMessage message)
         {
+            /*
             var grandmasters = await getWrapperFactory().GetMyGrandmastersAsync(message.Author.Id, _seasonStart);
 
             if (!grandmasters.IsUserRegistered)
@@ -36,6 +37,7 @@ namespace ServitorDiscordBot
             };
 
             await message.Channel.SendMessageAsync(embed: builder.Build());
+            */
         }
     }
 }

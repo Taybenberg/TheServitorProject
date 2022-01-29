@@ -6,7 +6,7 @@ namespace ServitorDiscordBot
     public partial class ServitorBot
     {
         private int GetWeekNumber() =>
-            (int)(DateTime.Now - _seasonStart).TotalDays / 7 + 1;
+            1;
 
         private (DateTime?, string) GetPeriod(string period) =>
             period switch
