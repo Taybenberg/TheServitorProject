@@ -11,7 +11,7 @@ namespace ServitorDiscordBot
         private IActivityManager _activityManager;
         private IMusicPlayer _musicPlayer;
 
-        private void RegisterExternalServices()
+        private async Task RegisterExternalServicesAsync()
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -24,7 +24,7 @@ namespace ServitorDiscordBot
             _activityManager.OnDisabled += OnActivityDisabledAsync;
             _activityManager.OnCreated += OnActivityCreatedAsync;
             _activityManager.OnRescheduled += OnActivityRescheduledAsync;
-            _activityManager.Init();
+            await _activityManager.InitAsync();
 
             _musicPlayer = scope.ServiceProvider.GetRequiredService<IMusicPlayer>();
             _musicPlayer.OnUpdate += OnMusicPlayerUpdateAsync;

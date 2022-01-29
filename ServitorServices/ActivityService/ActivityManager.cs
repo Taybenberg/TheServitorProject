@@ -62,7 +62,7 @@ namespace ActivityService
                 }).ToList() ?? new List<Reservation>()
             };
 
-        public async Task Init()
+        public async Task InitAsync()
         {
             _logger.LogInformation($"{DateTime.Now} ActivityManager initialization…");
 

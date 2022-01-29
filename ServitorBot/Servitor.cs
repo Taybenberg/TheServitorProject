@@ -77,7 +77,8 @@ namespace ServitorDiscordBot
             await _client.StartAsync();
             await _client.SetGameAsync("Destiny 2");
 
-            RegisterExternalServices();
+            await RegisterSlashCommandsAsync();
+            await RegisterExternalServicesAsync();
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

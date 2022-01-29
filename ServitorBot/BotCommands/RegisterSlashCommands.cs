@@ -2,7 +2,7 @@
 {
     public partial class ServitorBot
     {
-        private void RegisterSlashCommands()
+        private async Task RegisterSlashCommandsAsync()
         {
 
         }

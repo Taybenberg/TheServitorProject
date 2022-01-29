@@ -8,7 +8,7 @@
         event Func<ActivityContainer, Task> OnCreated;
         event Func<ActivityContainer, Task> OnRescheduled;
 
-        Task Init();
+        Task InitAsync();
 
         Task<ActivityContainer> GetActivityAsync(ulong activityID);
 
