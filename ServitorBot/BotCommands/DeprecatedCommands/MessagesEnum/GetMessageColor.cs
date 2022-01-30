@@ -9,7 +9,6 @@ namespace ServitorDiscordBot
         {
             Error => new Color(0xd50000),
             BumpNotification => new Color(0x7488ff),
-            Modes => new Color(0xe4e65e),
             MyGrandmasters => new Color(0xd81b60),
             MyRaids => new Color(0xa4c9fc),
             MyActivities => new Color(0xfacc3f),

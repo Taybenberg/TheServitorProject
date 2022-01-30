@@ -18,7 +18,6 @@ namespace ServitorDiscordBot
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
             Reset => $"Тиждень {GetWeekNumber()}",
             Xur => $"Зур привіз свіжий крам",
-            Modes => $"Режими",
             Raid => $"Рейд",
             _ => string.Empty
         };

@@ -178,19 +178,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.Modes]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Modes][0]}** " +
-                            $"виводить список наявних типів активностей, " +
-                            $"які можна використовувати у якості параметрів для команд " +
-                            $"**{messageCommands[MessagesEnum.ClanStats][0]}** та **{messageCommands[MessagesEnum.Leaderboard][0]}**.";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.ClanStats]
                 .Any(x => c.StartsWith(x)):
                     {

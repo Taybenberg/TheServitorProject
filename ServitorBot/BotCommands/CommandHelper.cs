@@ -11,6 +11,7 @@ namespace ServitorDiscordBot.BotCommands
             {
                 new HelpCommand(),
                 new BipCommand(),
+                new ModesCommand(),
                 new ClanActivitiesCommand(),
             };
 
