@@ -1,8 +1,7 @@
-﻿using CommonData;
+﻿using ClanActivitiesService;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using ClanActivitiesService;
 using System.Text;
 
 namespace ServitorDiscordBot.BotCommands.SlashCommands

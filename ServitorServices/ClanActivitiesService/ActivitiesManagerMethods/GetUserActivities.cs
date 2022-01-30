@@ -39,7 +39,7 @@ namespace ClanActivitiesService
             }).OrderByDescending(x => x.Count);
 
             await Task.WhenAll(tasks);
-            
+
             var modeCounters = new ModeCountersContainer
             {
                 Counters = activityCounter.Select(x => new ModeCounter

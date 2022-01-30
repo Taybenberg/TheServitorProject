@@ -8,7 +8,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
     {
         public string CommandName => "біп";
 
-        public SlashCommandBuilder SlashCommand => 
+        public SlashCommandBuilder SlashCommand =>
             new SlashCommandBuilder()
                 .WithName(CommandName)
                 .WithDescription("Перевірити працездатність бота");

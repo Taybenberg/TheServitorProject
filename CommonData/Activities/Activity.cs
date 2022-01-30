@@ -1,7 +1,7 @@
 ﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
-using static BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType;
 using CommonData.DiscordEmoji;
 using CommonData.Localization;
+using static BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType;
 
 namespace CommonData.Activities
 {

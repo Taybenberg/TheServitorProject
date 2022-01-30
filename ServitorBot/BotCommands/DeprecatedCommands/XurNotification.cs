@@ -15,7 +15,7 @@ namespace ServitorDiscordBot
 
             await channel.SendMessageAsync(embed: builder.Build());
 
-            await GetXurInventoryAsync(channel, false);
+            //await GetXurInventoryAsync(channel, false);
         }
     }
 }

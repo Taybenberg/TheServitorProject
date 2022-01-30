@@ -14,7 +14,7 @@ namespace ServitorDiscordBot
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
-        private readonly string _discordToken;  
+        private readonly string _discordToken;
         private readonly ulong _destinyRoleID;
         private readonly ulong[] _mainChannelIDs;
         private readonly ulong[] _activityChannelIDs;
@@ -43,8 +43,8 @@ namespace ServitorDiscordBot
 
             _client.Log += OnLogAsync;
 
-            _client.MessageReceived += (arg) => 
-            { 
+            _client.MessageReceived += (arg) =>
+            {
                 Task.Run(async () => await OnMessageReceivedAsync(arg));
                 return Task.CompletedTask;
             };
@@ -57,7 +57,7 @@ namespace ServitorDiscordBot
 
             _client.ButtonExecuted += (arg) =>
             {
-                Task.Run(async () => await OnButtonExecutedAsync(arg)); 
+                Task.Run(async () => await OnButtonExecutedAsync(arg));
                 return Task.CompletedTask;
             };
 

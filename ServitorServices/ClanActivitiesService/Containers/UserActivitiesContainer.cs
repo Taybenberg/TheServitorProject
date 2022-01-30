@@ -4,7 +4,7 @@
     {
         public IEnumerable<ClassCounter> ClassCounters { get; internal set; }
 
-        public ModeCountersContainer ModeCounters { get; internal set;}
+        public ModeCountersContainer ModeCounters { get; internal set; }
 
         public int TotalCount => ModeCounters.TotalCount;
 

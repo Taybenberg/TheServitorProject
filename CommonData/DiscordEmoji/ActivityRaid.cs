@@ -1,5 +1,5 @@
-﻿using CommonData.Activities;
-using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+using CommonData.Activities;
 using static CommonData.Activities.Activity.ActivityRaidType;
 
 namespace CommonData.DiscordEmoji

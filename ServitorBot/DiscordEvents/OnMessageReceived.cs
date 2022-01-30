@@ -16,7 +16,7 @@ namespace ServitorDiscordBot
                 return;
             else if (await ServiceMessagesAsync(message))
                 return;
-            else if(_lulzChannelIDs.Any(x => x == message.Channel.Id))
+            else if (_lulzChannelIDs.Any(x => x == message.Channel.Id))
                 await LulzChannelManagerAsync(message);
             else if (_musicChannelIDs.Any(x => x == message.Channel.Id))
                 await MusicPlayerMessageReceivedAsync(message);

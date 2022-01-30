@@ -11,7 +11,7 @@ namespace ServitorDiscordBot
 
             var channel = _client.GetChannel(_mainChannelIDs[0]) as IMessageChannel;
 
-            await GetWeeklyResetAsync(channel);
+            //await GetWeeklyResetAsync(channel);
         }
     }
 }
