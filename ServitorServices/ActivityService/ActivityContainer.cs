@@ -1,4 +1,4 @@
-﻿using BungieNetApi.Enums;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
 
 namespace ActivityService
 {
@@ -10,7 +10,7 @@ namespace ActivityService
 
         public DateTime PlannedDate { get; set; }
 
-        public ActivityType ActivityType { get; set; }
+        public DestinyActivityModeType ActivityType { get; set; }
 
         public string? ActivityName { get; set; }
 

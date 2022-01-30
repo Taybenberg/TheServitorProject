@@ -1,21 +1,21 @@
-﻿using BungieNetApi.Enums;
-using static BungieNetApi.Enums.ActivityType;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+using static BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType;
 
 namespace CommonData.Localization
 {
     public static partial class Translation
     {
-        public static ActivityType GetActivityType(string mode)
+        public static DestinyActivityModeType GetActivityType(string mode)
         {
             var pair = StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
             if (pair.Value is null)
-                return ActivityType.None;
+                return DestinyActivityModeType.None;
 
             return pair.Key;
         }
 
-        public static Dictionary<ActivityType, string[]> StatsActivityNames
+        public static Dictionary<DestinyActivityModeType, string[]> StatsActivityNames
         {
             get
             {
@@ -57,7 +57,7 @@ namespace CommonData.Localization
             }
         }
 
-        public readonly static Dictionary<ActivityType, string[]> ActivityNames = new()
+        public readonly static Dictionary<DestinyActivityModeType, string[]> ActivityNames = new()
         {
             [None] = new[] { "Невизначено", "None" },
             [Story] = new[] { "Сюжет", "Story" },

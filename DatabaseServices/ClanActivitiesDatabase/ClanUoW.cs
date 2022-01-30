@@ -1,5 +1,4 @@
-﻿using BungieNetApi.Enums;
-using ClanActivitiesDatabase.ORM;
+﻿using ClanActivitiesDatabase.ORM;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClanActivitiesDatabase
@@ -53,15 +52,15 @@ namespace ClanActivitiesDatabase
         public async Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID) =>
             await _context.Activities
             .Include(s => s.ActivityUserStats)
-            .Where(x => x.ActivityType == ActivityType.ScoredNightfall &&
-            x.ActivityUserStats.Any(y => y.Completed && y.CompletionReasonValue == 0 && y.Character.User.DiscordUserID == discordID))
+            //.Where(x => x.ActivityType == ActivityType.ScoredNightfall &&
+            //x.ActivityUserStats.Any(y => y.Completed && y.CompletionReasonValue == 0 && y.Character.User.DiscordUserID == discordID))
             .ToListAsync();
 
         public async Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate) =>
             await _context.Activities
             .Include(s => s.ActivityUserStats)
-            .Where(x => x.Period > afterDate && x.ActivityType == ActivityType.Raid &&
-            x.ActivityUserStats.Any(y => y.Character.User.DiscordUserID == discordID))
+            //.Where(x => x.Period > afterDate && x.ActivityType == ActivityType.Raid &&
+            //x.ActivityUserStats.Any(y => y.Character.User.DiscordUserID == discordID))
             .ToListAsync();
 
         public async Task<IEnumerable<User>> GetUsersAsync() =>
@@ -87,14 +86,14 @@ namespace ClanActivitiesDatabase
 
         public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync() =>
             await _context.Activities
-            .Where(x => x.Period > DateTime.Now.AddDays(-7) && x.SuspicionIndex > 0 && x.ActivityType != ActivityType.ScoredNightfall)
+            //.Where(x => x.Period > DateTime.Now.AddDays(-7) && x.SuspicionIndex > 0 && x.ActivityType != ActivityType.ScoredNightfall)
             .OrderByDescending(x => x.Period)
             .Take(10)
             .ToListAsync();
 
         public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync() =>
             await _context.Activities
-            .Where(x => x.Period > DateTime.Now.AddDays(-7) && x.SuspicionIndex > 0 && x.ActivityType == ActivityType.ScoredNightfall)
+            //.Where(x => x.Period > DateTime.Now.AddDays(-7) && x.SuspicionIndex > 0 && x.ActivityType == ActivityType.ScoredNightfall)
             .OrderByDescending(x => x.Period)
             .Take(10)
             .ToListAsync();

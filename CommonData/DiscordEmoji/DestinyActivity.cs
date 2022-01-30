@@ -1,11 +1,11 @@
-﻿using BungieNetApi.Enums;
-using static BungieNetApi.Enums.ActivityType;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+using static BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType;
 
 namespace CommonData.DiscordEmoji
 {
     public static partial class Emoji
     {
-        public static string GetActivityEmoji(ActivityType activityType) =>
+        public static string GetActivityEmoji(DestinyActivityModeType activityType) =>
             activityType switch
             {
                 Patrol => "<:Patrol:865683931752038450>",

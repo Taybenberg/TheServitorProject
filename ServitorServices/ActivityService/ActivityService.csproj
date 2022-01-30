@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BungieSharper.Entities" Version="0.8.6" />
     <PackageReference Include="Hangfire.Core" Version="1.7.28" />
     <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BungieNetApi\BungieNetApi.csproj" />
     <ProjectReference Include="..\..\DatabaseServices\ActivityDatabase\ActivityDatabase.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,7 @@ using ActivityDatabase;
 using ActivityService;
 using BumperDatabase;
 using BumperService;
-using BungieNetApi;
+using BungieSharper.Client;
 using ClanActivitiesDatabase;
 using ClanActivitiesService;
 using Coravel;
@@ -17,7 +17,10 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddScheduler();
 
-        services.AddScoped<IApiClient, ApiClient>(); //will be replaced
+        services.AddScoped(p => new BungieApiClient(new BungieClientConfig
+        {
+            ApiKey = hostContext.Configuration["ApiKeys:BungieApiKey"]
+        }));
 
         services.AddDbContext<ClanActivitiesContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ClanActivitiesDatabase")));
         services.AddScoped<IClanActivitiesDB, ClanActivitiesUoW>();

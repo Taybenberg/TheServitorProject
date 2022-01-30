@@ -1,5 +1,4 @@
-﻿using BungieNetApi.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClanActivitiesDatabase.ORM
@@ -14,11 +13,11 @@ namespace ClanActivitiesDatabase.ORM
 
         public DateTime DateLastPlayed { get; set; }
 
-        public DestinyClass Class { get; set; }
+        public int Class { get; set; }
 
-        public DestinyRace Race { get; set; }
+        public int Race { get; set; }
 
-        public DestinyGender Gender { get; set; }
+        public int Gender { get; set; }
 
         public ICollection<ActivityUserStats> ActivityUserStats { get; set; }
     }

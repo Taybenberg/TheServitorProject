@@ -1,5 +1,4 @@
-﻿using BungieNetApi.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClanActivitiesDatabase.ORM
@@ -11,7 +10,7 @@ namespace ClanActivitiesDatabase.ORM
 
         public DateTime Period { get; set; }
 
-        public ActivityType ActivityType { get; set; }
+        public int ActivityType { get; set; }
 
         public ICollection<ActivityUserStats> ActivityUserStats { get; set; }
 

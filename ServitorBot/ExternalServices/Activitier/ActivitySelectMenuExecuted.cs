@@ -46,7 +46,7 @@ namespace ServitorDiscordBot
                         var raid = new ActivityContainer()
                         {
                             ChannelID = component.Channel.Id,
-                            ActivityType = Enum.Parse<BungieNetApi.Enums.ActivityType>(c.Split('_')[1]),
+                            ActivityType = Enum.Parse<BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType>(c.Split('_')[1]),
                             PlannedDate = DateTime.ParseExact(string.Join(',', component.Data.Values), "dd.MM_HH:mm", CultureInfo.CurrentCulture),
                             ActivityName = null,
                             Description = null,
@@ -65,7 +65,7 @@ namespace ServitorDiscordBot
                         var raid = new ActivityContainer()
                         {
                             ChannelID = component.Channel.Id,
-                            ActivityType = BungieNetApi.Enums.ActivityType.Raid,
+                            ActivityType = BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType.Raid,
                             PlannedDate = DateTime.ParseExact(string.Join(',', component.Data.Values), "dd.MM_HH:mm", CultureInfo.CurrentCulture),
                             ActivityName = c.Split('_')[1],
                             Description = null,

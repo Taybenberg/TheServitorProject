@@ -1,6 +1,6 @@
 ﻿using ActivityDatabase;
 using ActivityDatabase.ORM;
-using BungieNetApi.Enums;
+using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +38,7 @@ namespace ActivityService
             {
                 ActivityID = activity.ActivityID,
                 ChannelID = activity.ChannelID,
-                ActivityType = (ActivityType)activity.ActivityType,
+                ActivityType = (DestinyActivityModeType)activity.ActivityType,
                 ActivityName = activity.ActivityName,
                 PlannedDate = activity.PlannedDate,
                 Description = activity.Description,

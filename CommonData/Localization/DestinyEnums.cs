@@ -1,7 +1,7 @@
-﻿using BungieNetApi.Enums;
-using static BungieNetApi.Enums.DestinyClass;
-using static BungieNetApi.Enums.DestinyGender;
-using static BungieNetApi.Enums.DestinyRace;
+﻿using BungieSharper.Entities.Destiny;
+using static BungieSharper.Entities.Destiny.DestinyClass;
+using static BungieSharper.Entities.Destiny.DestinyGender;
+using static BungieSharper.Entities.Destiny.DestinyRace;
 
 namespace CommonData.Localization
 {

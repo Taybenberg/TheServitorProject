@@ -1,4 +1,5 @@
 ﻿using CommonData.Activities;
+using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
 using static CommonData.Activities.Activity.ActivityRaidType;
 
 namespace CommonData.DiscordEmoji
@@ -13,7 +14,7 @@ namespace CommonData.DiscordEmoji
                 DSC => "<:DSC:867048825818447902>",
                 VOGL => "<:VOG_L:867050674927697950>",
                 VOGM => "<:VOG_M:867050675041337344>",
-                _ => GetActivityEmoji(BungieNetApi.Enums.ActivityType.Raid)
+                _ => GetActivityEmoji(DestinyActivityModeType.Raid)
             };
     }
 }

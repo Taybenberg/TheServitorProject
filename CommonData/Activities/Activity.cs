@@ -1,13 +1,13 @@
-﻿using BungieNetApi.Enums;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+using static BungieSharper.Entities.Destiny.HistoricalStats.Definitions.DestinyActivityModeType;
 using CommonData.DiscordEmoji;
 using CommonData.Localization;
-using static BungieNetApi.Enums.ActivityType;
 
 namespace CommonData.Activities
 {
     public partial class Activity
     {
-        public static (string emoji, string activityTitle) GetActivityInfo(ActivityType activityType, string activityName)
+        public static (string emoji, string activityTitle) GetActivityInfo(DestinyActivityModeType activityType, string activityName)
         {
             string emoji, activityTitle;
 
@@ -32,7 +32,7 @@ namespace CommonData.Activities
             return (emoji, activityTitle);
         }
 
-        public static int GetFireteamSize(ActivityType activityType) =>
+        public static int GetFireteamSize(DestinyActivityModeType activityType) =>
             activityType switch
             {
                 Raid or
@@ -62,8 +62,8 @@ namespace CommonData.Activities
                 _ => 3
             };
 
-        public static ActivityType[] ActivityTypes =>
-            new ActivityType[]
+        public static DestinyActivityModeType[] ActivityTypes =>
+            new DestinyActivityModeType[]
             {
                 Dungeon,
                 Gambit,

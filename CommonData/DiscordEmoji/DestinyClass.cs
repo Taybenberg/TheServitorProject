@@ -1,5 +1,5 @@
-﻿using BungieNetApi.Enums;
-using static BungieNetApi.Enums.DestinyClass;
+﻿using BungieSharper.Entities.Destiny;
+using static BungieSharper.Entities.Destiny.DestinyClass;
 
 namespace CommonData.DiscordEmoji
 {
