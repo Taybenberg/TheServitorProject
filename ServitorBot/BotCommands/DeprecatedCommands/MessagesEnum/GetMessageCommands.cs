@@ -6,13 +6,10 @@ namespace ServitorDiscordBot
     {
         private readonly static Dictionary<MessagesEnum, string[]> messageCommands = new()
         {
-            [Bip] = new string[] { "біп", "bip" },
-            [Help] = new string[] { "допомога", "help" },
             [Weekly] = new string[] { "тиждень", "weekly" },
             [Sectors] = new string[] { "сектори", "sectors" },
             [Resources] = new string[] { "ресурси", "resources" },
             [Modes] = new string[] { "режими", "modes" },
-            [ClanActivities] = new string[] { "кланові активності", "clan activities" },
             [MyGrandmasters] = new string[] { "мої грандмайстри", "my grandmasters" },
             [MyRaids] = new string[] { "мої рейди", "my raids" },
             [MyActivities] = new string[] { "мої активності", "my activities" },

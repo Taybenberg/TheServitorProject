@@ -24,7 +24,7 @@ namespace ClanActivitiesDatabase
 
         Task<IEnumerable<Character>> GetCharactersAsync();
 
-        Task<IEnumerable<Activity>> GetActivitiesAsync();
+        Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period);
 
         Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync();
 

@@ -7,7 +7,7 @@ namespace ServitorDiscordBot
         private async Task RegisterSlashCommandsAsync()
         {
             await _client.GetGuild(799280582512476210)
-                .BulkOverwriteApplicationCommandAsync(ISlashCommand.SlashCommands
+                .BulkOverwriteApplicationCommandAsync(CommandHelper.SlashCommands
                 .Select(x => x.SlashCommand.Build()).ToArray());
         }
     }

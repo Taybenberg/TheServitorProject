@@ -178,24 +178,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.ClanActivities]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.ClanActivities][0]}** " +
-                            $"обчислює кількість активностей, які закрили учасники клану за вказаний період.\n" +
-                            $"\nМожливі 3 варіанти команди:\n" +
-                            $"**{messageCommands[MessagesEnum.ClanActivities][0]}** без параметрів – виводить звіт за весь час (але не раніше 01.01.2021).\n" +
-                            $"**{messageCommands[MessagesEnum.ClanActivities][0]}** зі статичним параметром ***тиждень*** – виводить звіт за останні 7 днів.\n" +
-                            $"**{messageCommands[MessagesEnum.ClanActivities][0]}** зі статичним параметром ***місяць*** – виводить звіт за останні 30 днів.\n" +
-                            $"\nПідрахунок ведеться загалом та для кожного типу активності окремо.\n" +
-                            $"Додатково виводиться інфографіка, яка показує % активностей " +
-                            $"ПвП (горнило), ПвПвЕ (гамбіт) та ПвЕ (все інше).";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Modes]
                 .Contains(c):
                     {

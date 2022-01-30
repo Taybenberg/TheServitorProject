@@ -22,7 +22,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
                     .WithRequired(true)
                     .WithType(ApplicationCommandOptionType.String);
 
-            builder.Choices = ISlashCommand.SlashCommands
+            builder.Choices = CommandHelper.SlashCommands
                     .Select(x => new ApplicationCommandOptionChoiceProperties
                     {
                         Name = x.CommandName,
@@ -53,7 +53,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
 
             if (option is not null)
             {
-                var slashCommand = ISlashCommand.SlashCommands.FirstOrDefault(x => x.CommandName == (string)option.Value);
+                var slashCommand = CommandHelper.SlashCommands.FirstOrDefault(x => x.CommandName == (string)option.Value);
 
                 if (slashCommand is not null)
                     await slashCommand.ExecuteCommandHelpAsync(command);

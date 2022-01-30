@@ -76,9 +76,13 @@ namespace ClanActivitiesDatabase
             await _context.Characters
             .ToListAsync();
 
-        public async Task<IEnumerable<Activity>> GetActivitiesAsync() =>
+        public async Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period) =>
+            period is null ?
             await _context.Activities
-            .ToListAsync();
+                .ToListAsync() :
+            await _context.Activities
+                .Where(x => x.Period > period)
+                .ToListAsync();
 
         public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() =>
             await _context.ActivityUserStats

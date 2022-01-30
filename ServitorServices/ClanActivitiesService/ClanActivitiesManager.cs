@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClanActivitiesService
 {
-    public class ClanActivitiesManager : IClanActivities
+    public partial class ClanActivitiesManager : IClanActivities
     {
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;

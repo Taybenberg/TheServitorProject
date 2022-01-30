@@ -34,10 +34,6 @@ namespace ServitorDiscordBot
 
                 $"\n**{messageCommands[MyPartners][0]} %тиждень|місяць%** – список побратимів ґардіана за вказаний період\n" +
 
-                $"\n**{messageCommands[ClanActivities][0]}** – кількість активностей клану за весь час\n" +
-
-                $"\n**{messageCommands[ClanActivities][0]} %тиждень|місяць%** – кількість активностей клану за вказаний період\n" +
-
                 $"\n**{messageCommands[Modes][0]}** – список типів активностей\n" +
 
                 $"\n**{messageCommands[ClanStats][0]} %режим%** – агрегована статистика клану в типі активності\n" +

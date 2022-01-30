@@ -7,14 +7,9 @@ namespace ServitorDiscordBot
     {
         private Color GetColor(MessagesEnum messagesEnum) => messagesEnum switch
         {
-            Wait => new Color(0x76766b),
             Error => new Color(0xd50000),
             BumpNotification => new Color(0x7488ff),
-            Bumped => new Color(0x9fa3f7),
-            Bip => new Color(0xae52d4),
-            Help => new Color(0xbe5bef),
             Modes => new Color(0xe4e65e),
-            ClanActivities => new Color(0xffb95a),
             MyGrandmasters => new Color(0xd81b60),
             MyRaids => new Color(0xa4c9fc),
             MyActivities => new Color(0xfacc3f),

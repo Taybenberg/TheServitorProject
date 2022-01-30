@@ -28,7 +28,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
         public async Task ExecuteCommandAsync(SocketSlashCommand command, IServiceScopeFactory scopeFactory)
         {
             var builder = new EmbedBuilder()
-                .WithColor(0XAE52D4)
+                .WithColor(0xAE52D4)
                 .WithTitle("буп…");
 
             await command.RespondAsync(embed: builder.Build());

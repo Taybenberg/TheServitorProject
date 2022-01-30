@@ -14,13 +14,10 @@ namespace ServitorDiscordBot
             MyRaids => $"Рейди {userName}",
             MyActivities => $"Активності {userName}",
             MyPartners => $"Побратими {userName}",
-            ClanActivities => $"Активності клану {(message.Channel as IGuildChannel).Guild.Name}",
             Suspicious => $"Останні активності",
-            Help => $"Допомога",
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
             Reset => $"Тиждень {GetWeekNumber()}",
             Xur => $"Зур привіз свіжий крам",
-            Bip => $"буп…",
             Modes => $"Режими",
             Raid => $"Рейд",
             _ => string.Empty
