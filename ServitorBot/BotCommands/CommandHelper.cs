@@ -13,6 +13,7 @@ namespace ServitorDiscordBot.BotCommands
                 new BipCommand(),
                 new ModesCommand(),
                 new ClanActivitiesCommand(),
+                new MyActivitiesCommand(),
             };
 
         public static async Task SendWaitResponceAsync(SocketSlashCommand command)
@@ -24,6 +25,22 @@ namespace ServitorDiscordBot.BotCommands
 
             await command.RespondAsync(embed: builder.Build());
         }
+
+        public static EmbedBuilder UserIsNotRegisteredBuilder =>
+            new EmbedBuilder()
+                .WithColor(0xF1BA74)
+                .WithTitle("Необхідна реєстрація")
+                .WithDescription("Ґардіане, спершу вас необідно ідентифікувати у базі даних Авангарду.\n" +
+                "Це здійснюється шляхом виконання процедури реєстрації.\nДля цього скористайтеся командою **реєстрація**");
+
+        public static DateTime? GetPeriod(string value) =>
+            value switch
+            {
+                "останній тиждень" => DateTime.UtcNow.AddDays(-7),
+                "останній місяць" => DateTime.UtcNow.AddMonths(-1),
+                "останній рік" => DateTime.UtcNow.AddYears(-1),
+                _ => null
+            };
 
         public static string GetActivityCountImpression(int count, string name) =>
             new Random().Next(10) switch

@@ -50,10 +50,11 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
 
             var modeContainer = option is null ?
                 await clanActivities.GetClanActivitiesAsync() :
-                await clanActivities.GetClanActivitiesAsync(GetPeriod((string)option.Value));
+                await clanActivities.GetClanActivitiesAsync(CommandHelper.GetPeriod((string)option.Value));
 
-            var sb = new StringBuilder();
+            var sb = new StringBuilder($"{CommandHelper.GetActivityCountImpression(modeContainer.TotalCount, "клану")}");
 
+            sb.Append("\n\n***За типом активности:***");
             foreach (var mode in modeContainer.Counters)
             {
                 var emoji = CommonData.DiscordEmoji.Emoji.GetActivityEmoji(mode.ActivityMode);
@@ -67,18 +68,9 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
                 .WithThumbnailUrl((command.Channel as IGuildChannel).Guild.IconUrl)
                 .WithTitle($"Активності клану {(command.Channel as IGuildChannel).Guild.Name}{(option is null ? string.Empty : $" за {option.Value}")}")
                 .WithImageUrl(modeContainer.ChartImageURL)
-                .WithDescription($"{CommandHelper.GetActivityCountImpression(modeContainer.TotalCount, "клану")}\n\n***По типу активності:***{sb.ToString()}");
+                .WithDescription(sb.ToString());
 
             await command.ModifyOriginalResponseAsync(x => x.Embed = builder.Build());
         }
-
-        private DateTime? GetPeriod(string value) =>
-            value switch
-            {
-                "останній тиждень" => DateTime.UtcNow.AddDays(-7),
-                "останній місяць" => DateTime.UtcNow.AddMonths(-1),
-                "останній рік" => DateTime.UtcNow.AddYears(-1),
-                _ => null
-            };
     }
 }

@@ -4,16 +4,6 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private async Task UserIsNotRegisteredAsync(IMessage message)
-        {
-            var builder = GetBuilder(MessagesEnum.NotRegistered, message);
-
-            builder.Description = "Ґардіане, спершу вас необідно ідентифікувати у базі даних Авангарду.\n" +
-                "Це здійснюється шляхом виконання процедури реєстрації.\nДля цього скористайтеся командою **реєстрація**";
-
-            await message.Channel.SendMessageAsync(embed: builder.Build());
-        }
-
         private async Task UserAlreadyRegisteredAsync(IMessage message)
         {
             var builder = GetBuilder(MessagesEnum.AlreadyRegistered, message);

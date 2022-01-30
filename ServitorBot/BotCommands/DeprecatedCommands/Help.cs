@@ -26,10 +26,6 @@ namespace ServitorDiscordBot
 
                 $"\n**{messageCommands[MyRaids][0]}** – переглянути закриті ґардіаном рейди цього тижня\n" +
 
-                $"\n**{messageCommands[MyActivities][0]}** – кількість активностей ґардіана за весь час\n" +
-
-                $"\n**{messageCommands[MyActivities][0]} %тиждень|місяць%** – кількість активностей ґардіана за вказаний період\n" +
-
                 $"\n**{messageCommands[MyPartners][0]}** – список побратимів ґардіана за весь час\n" +
 
                 $"\n**{messageCommands[MyPartners][0]} %тиждень|місяць%** – список побратимів ґардіана за вказаний період\n" +

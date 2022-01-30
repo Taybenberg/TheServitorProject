@@ -9,6 +9,27 @@ namespace ClanActivitiesDatabase
 
         public ClanActivitiesUoW(ClanActivitiesContext context) => _context = context;
 
+        public async Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period) =>
+            period is null ?
+            await _context.Activities
+                .ToListAsync() :
+            await _context.Activities
+                .Where(x => x.Period > period)
+                .ToListAsync();
+
+        public async Task<User> GetUserWithActivitiesAsync(ulong discordID, DateTime? period) =>
+            period is null ?
+            await _context.Users
+                .Include(x => x.Characters)
+                .ThenInclude(y => y.ActivityUserStats)
+                .ThenInclude(a => a.Activity)
+                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID) :
+            await _context.Users
+                .Include(x => x.Characters)
+                .ThenInclude(y => y.ActivityUserStats.Where(s => s.Activity.Period > period))
+                .ThenInclude(a => a.Activity)
+                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
+
         public bool IsDiscordUserRegistered(ulong discordID) =>
             _context.Users
             .Any(x => x.DiscordUserID == discordID);
@@ -33,13 +54,6 @@ namespace ClanActivitiesDatabase
             await _context.Users
             .Include(c => c.Characters)
             .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
-
-        public async Task<User> GetUserWithActivitiesAsync(ulong discordID) =>
-            await _context.Users
-            .Include(x => x.Characters)
-            .ThenInclude(y => y.ActivityUserStats)
-            .ThenInclude(a => a.Activity)
-            .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
         public async Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID) =>
             await _context.Users
@@ -75,14 +89,6 @@ namespace ClanActivitiesDatabase
         public async Task<IEnumerable<Character>> GetCharactersAsync() =>
             await _context.Characters
             .ToListAsync();
-
-        public async Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period) =>
-            period is null ?
-            await _context.Activities
-                .ToListAsync() :
-            await _context.Activities
-                .Where(x => x.Period > period)
-                .ToListAsync();
 
         public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() =>
             await _context.ActivityUserStats

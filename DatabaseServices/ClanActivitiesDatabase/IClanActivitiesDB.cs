@@ -4,13 +4,15 @@ namespace ClanActivitiesDatabase
 {
     public interface IClanActivitiesDB
     {
+        Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period);
+
+        Task<User> GetUserWithActivitiesAsync(ulong discordID, DateTime? period);
+
         bool IsDiscordUserRegistered(ulong discordID);
 
         Task<bool> RegisterUserAsync(long userID, ulong discordID);
 
         Task<User> GetUserByDiscordIdAsync(ulong discordID);
-
-        Task<User> GetUserWithActivitiesAsync(ulong discordID);
 
         Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID);
 
@@ -23,8 +25,6 @@ namespace ClanActivitiesDatabase
         Task<IEnumerable<User>> GetUsersWithCharactersAsync();
 
         Task<IEnumerable<Character>> GetCharactersAsync();
-
-        Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period);
 
         Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync();
 
