@@ -13,44 +13,6 @@ namespace ServitorDiscordBot
             switch (command)
             {
                 case string c
-                when messageCommands[MessagesEnum.Help]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Help][0]}** " +
-                            $"виводить перелік доступних команд у боті.\n" +
-                            $"Деякі команди мають параметри, які виділені симолом **%**, це означає, що параметр динамічний " +
-                            $"та вказується користувачем індивідуально у заданому форматі для команди.\n" +
-                            $"Символ **%** у тексті параметру вказувати не потрібно.\nСкористайтеся командою " +
-                            $"**{messageCommands[MessagesEnum.Help][0]} %команда%**, " +
-                            $"щоби переглянути використання параметру для команди чи інші відомості по команді.\n" +
-                            $"\nБойова група:\n" +
-                            $"<@228896926991515649> – розробник бота **{_client.CurrentUser.Username}**\n" +
-                            $"<@679220982082174977> – дизайн інформаційних карток\n" +
-                            $"<@356816080326361088> – дизайн інформаційних карток\n" +
-                            $"<@326308954000850944> – інформаційний супровід та просування\n" +
-                            $"<@373381055924797441> – тестування\n" +
-                            $"<@225342881953611777> – тестування";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
-                when messageCommands[MessagesEnum.Bip]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Bip][0]}** " +
-                            $"допомагає визначити, чи приймаються в даний момент команди.\n" +
-                            $"Якщо бот функціонує, то у відповідь ви отримаєте повідомлення **біп…**\n" +
-                            $"Використовуйте цю команду, якщо ви не отримали результат іншої команди, або якщо вважаєте, що бот може не працювати.";
-
-                        builder.ImageUrl = "https://i.imgur.com/fWFj2Xz.png";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Weekly]
                 .Contains(c):
                     {

@@ -8,19 +8,6 @@ namespace ServitorDiscordBot
         private async Task GetHelpAsync(IMessage message)
         {
             /*
-            var builder = GetBuilder(MessagesEnum.Help, message);
-
-            builder.Author = new();
-
-            var g = (message.Channel as IGuildChannel).Guild;
-
-            builder.Author.IconUrl = g.IconUrl;
-            builder.Author.Name = $"На варті спільноти {g.Name} з 10.02.2021";
-
-            builder.Description = $"**Перелік доступних команд** (для перегляду детальної довідки по команді введіть **допомога %команда%**):\n" +
-
-                $"\n**{messageCommands[Bip][0]}** – запит на перевірку моєї працездатності\n" +
-
                 $"\n**{messageCommands[Weekly][0]}** – переглянути інформацію про поточний тиждень\n" +
 
                 $"\n**{messageCommands[Sectors][0]}** – переглянути лутпул сьогоднішніх загублених секторів\n" +
@@ -62,8 +49,6 @@ namespace ServitorDiscordBot
                 $"\n**{messageCommands[_100K][0]}** – виявити потенційно небезпечні найтфоли з сумою очок більше 100К\n" +
 
                 $"\n**{messageCommands[Register][0]}** – прив'язати акаунт Destiny 2 до профілю в Discord";
-
-            await message.Channel.SendMessageAsync(embed: builder.Build());
             */
         }
     }
