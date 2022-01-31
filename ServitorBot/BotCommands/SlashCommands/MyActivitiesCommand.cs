@@ -40,7 +40,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
 
         public async Task ExecuteCommandAsync(SocketSlashCommand command, IServiceScopeFactory scopeFactory)
         {
-            await CommandHelper.SendWaitResponceAsync(command);
+            await command.RespondAsync(embed: CommandHelper.WaitResponceBuilder.Build());
 
             var option = command.Data.Options.FirstOrDefault();
 

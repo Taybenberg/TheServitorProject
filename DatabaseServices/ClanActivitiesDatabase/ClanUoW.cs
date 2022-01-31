@@ -9,6 +9,24 @@ namespace ClanActivitiesDatabase
 
         public ClanActivitiesUoW(ClanActivitiesContext context) => _context = context;
 
+        public async Task<IEnumerable<User>> GetUsersAsync() =>
+            await _context.Users
+                .ToListAsync();
+
+        public async Task<IEnumerable<User>> GetUsersWithCharactersAsync() =>
+            await _context.Users
+                .Include(x => x.Characters)
+                .ToListAsync();
+
+        public async Task<IEnumerable<Character>> GetCharactersAsync() =>
+            await _context.Characters
+                .ToListAsync();
+
+        public async Task<IEnumerable<Character>> GetCharactersWithUsersAsync() =>
+            await _context.Characters
+                .Include(x => x.User)
+                .ToListAsync();
+
         public async Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period) =>
             period is null ?
             await _context.Activities
@@ -17,7 +35,7 @@ namespace ClanActivitiesDatabase
                 .Where(x => x.Period > period)
                 .ToListAsync();
 
-        public async Task<User> GetUserWithActivitiesAsync(ulong discordID, DateTime? period) =>
+        public async Task<User?> GetUserWithActivitiesAsync(ulong discordID, DateTime? period) =>
             period is null ?
             await _context.Users
                 .Include(x => x.Characters)
@@ -28,6 +46,21 @@ namespace ClanActivitiesDatabase
                 .Include(x => x.Characters)
                 .ThenInclude(y => y.ActivityUserStats.Where(s => s.Activity.Period > period))
                 .ThenInclude(a => a.Activity)
+                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
+
+        public async Task<User?> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID, DateTime? period) =>
+            period is null ?
+            await _context.Users
+                .Include(x => x.Characters)
+                .ThenInclude(y => y.ActivityUserStats)
+                .ThenInclude(a => a.Activity)
+                .ThenInclude(u => u.ActivityUserStats)
+                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID) :
+            await _context.Users
+                .Include(x => x.Characters)
+                .ThenInclude(y => y.ActivityUserStats.Where(s => s.Activity.Period > period))
+                .ThenInclude(a => a.Activity)
+                .ThenInclude(u => u.ActivityUserStats)
                 .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
         public bool IsDiscordUserRegistered(ulong discordID) =>
@@ -55,14 +88,6 @@ namespace ClanActivitiesDatabase
             .Include(c => c.Characters)
             .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
-        public async Task<User> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID) =>
-            await _context.Users
-            .Include(x => x.Characters)
-            .ThenInclude(y => y.ActivityUserStats)
-            .ThenInclude(a => a.Activity)
-            .ThenInclude(u => u.ActivityUserStats)
-            .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
-
         public async Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID) =>
             await _context.Activities
             .Include(s => s.ActivityUserStats)
@@ -75,19 +100,6 @@ namespace ClanActivitiesDatabase
             .Include(s => s.ActivityUserStats)
             //.Where(x => x.Period > afterDate && x.ActivityType == ActivityType.Raid &&
             //x.ActivityUserStats.Any(y => y.Character.User.DiscordUserID == discordID))
-            .ToListAsync();
-
-        public async Task<IEnumerable<User>> GetUsersAsync() =>
-            await _context.Users
-            .ToListAsync();
-
-        public async Task<IEnumerable<User>> GetUsersWithCharactersAsync() =>
-            await _context.Users
-            .Include(x => x.Characters)
-            .ToListAsync();
-
-        public async Task<IEnumerable<Character>> GetCharactersAsync() =>
-            await _context.Characters
             .ToListAsync();
 
         public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() =>

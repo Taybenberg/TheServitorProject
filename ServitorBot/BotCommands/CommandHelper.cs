@@ -14,17 +14,14 @@ namespace ServitorDiscordBot.BotCommands
                 new ModesCommand(),
                 new ClanActivitiesCommand(),
                 new MyActivitiesCommand(),
+                new MyPartnersCommand()
             };
 
-        public static async Task SendWaitResponceAsync(SocketSlashCommand command)
-        {
-            var builder = new EmbedBuilder()
+        public static EmbedBuilder WaitResponceBuilder =>
+            new EmbedBuilder()
                 .WithColor(0x76766B)
                 .WithTitle(CommonData.DiscordEmoji.Emoji.Loading)
                 .WithDescription(GetCommandExecutionImpression());
-
-            await command.RespondAsync(embed: builder.Build());
-        }
 
         public static EmbedBuilder UserIsNotRegisteredBuilder =>
             new EmbedBuilder()

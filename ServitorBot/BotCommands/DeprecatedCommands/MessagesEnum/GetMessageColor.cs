@@ -11,7 +11,6 @@ namespace ServitorDiscordBot
             BumpNotification => new Color(0x7488ff),
             MyGrandmasters => new Color(0xd81b60),
             MyRaids => new Color(0xa4c9fc),
-            MyPartners => new Color(0xb4a647),
             AlreadyRegistered => new Color(0xffdd71),
             Register => new Color(0xddfab0),
             RegisterSuccessful => new Color(0xa6f167),

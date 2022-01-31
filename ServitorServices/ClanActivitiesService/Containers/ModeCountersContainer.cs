@@ -10,14 +10,23 @@ namespace ClanActivitiesService.Containers
 
         public int TotalCount => Counters.Sum(x => x.Count);
 
-        public string ChartImageURL => GetChart();
+        public int[] TypeCounters => GetTypes();
 
-        private string GetChart()
+        private int[] GetTypes()
         {
             int[] types = new int[3];
 
             foreach (var counter in Counters)
                 types[GetType(counter.ActivityMode)] += counter.Count;
+
+            return types;
+        }
+
+        public string ChartImageURL => GetChart();
+
+        private string GetChart()
+        {
+            var types = TypeCounters;
 
             var quickChartString = "{type:'outlabeledPie',data:{labels:['ПвЕ','ПвП','ПвПвЕ']," +
                     "datasets:[{backgroundColor:['#7986cb','#ff7043','#81c784'],data:[" +
