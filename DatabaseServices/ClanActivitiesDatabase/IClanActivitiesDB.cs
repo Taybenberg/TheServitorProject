@@ -18,6 +18,8 @@ namespace ClanActivitiesDatabase
 
         Task<User?> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID, DateTime? period);
 
+        Task<IEnumerable<Activity>> GetSuspiciousActivitiesAsync(int? activityType, DateTime period);
+
         bool IsDiscordUserRegistered(ulong discordID);
 
         Task<bool> RegisterUserAsync(long userID, ulong discordID);
@@ -29,9 +31,5 @@ namespace ClanActivitiesDatabase
         Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate);
 
         Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync();
-
-        Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync();
-
-        Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync();
     }
 }

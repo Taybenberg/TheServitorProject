@@ -15,7 +15,6 @@ namespace ServitorDiscordBot
             Register => new Color(0xddfab0),
             RegisterSuccessful => new Color(0xa6f167),
             RegisterNeedMoreInfo => new Color(0xff8c67),
-            Suspicious => new Color(0x7fa2b2),
             Xur => new Color(0xe0f7fa),
             Reset => new Color(0xd5e1f6),
             ClanStats => new Color(0x8Be18a),

@@ -63,6 +63,15 @@ namespace ClanActivitiesDatabase
                 .ThenInclude(u => u.ActivityUserStats)
                 .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
 
+        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesAsync(int? activityType, DateTime period) =>
+            activityType is null ?
+            await _context.Activities
+                .Where(x => x.SuspicionIndex > 0 && x.Period > period)
+                .ToListAsync() :
+            await _context.Activities
+                .Where(x => x.SuspicionIndex > 0 && x.Period > period && x.ActivityType == activityType)
+                .ToListAsync();
+
         public bool IsDiscordUserRegistered(ulong discordID) =>
             _context.Users
             .Any(x => x.DiscordUserID == discordID);
@@ -104,20 +113,6 @@ namespace ClanActivitiesDatabase
 
         public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() =>
             await _context.ActivityUserStats
-            .ToListAsync();
-
-        public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesWithoutNightfallsAsync() =>
-            await _context.Activities
-            //.Where(x => x.Period > DateTime.Now.AddDays(-7) && x.SuspicionIndex > 0 && x.ActivityType != ActivityType.ScoredNightfall)
-            .OrderByDescending(x => x.Period)
-            .Take(10)
-            .ToListAsync();
-
-        public async Task<IEnumerable<Activity>> GetSuspiciousNightfallsOnlyAsync() =>
-            await _context.Activities
-            //.Where(x => x.Period > DateTime.Now.AddDays(-7) && x.SuspicionIndex > 0 && x.ActivityType == ActivityType.ScoredNightfall)
-            .OrderByDescending(x => x.Period)
-            .Take(10)
             .ToListAsync();
     }
 }

@@ -14,7 +14,8 @@ namespace ServitorDiscordBot.BotCommands
                 new ModesCommand(),
                 new ClanActivitiesCommand(),
                 new MyActivitiesCommand(),
-                new MyPartnersCommand()
+                new MyPartnersCommand(),
+                new SuspiciousActivitiesCommand()
             };
 
         public static EmbedBuilder WaitResponceBuilder =>

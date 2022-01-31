@@ -173,32 +173,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.Apostates]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Apostates][0]}** " +
-                            $"виводить список останніх рейдів та підземель, " +
-                            $"у яких були учасники клану з користувачами, які не є учасниками клану.\n" +
-                            $"Список активностей містить список користувачів, які були в даній активності та їхні клантеги.";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
-                when messageCommands[MessagesEnum._100K]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum._100K][0]}** " +
-                            $"виводить список останніх найтфолів на складності \"легенда\" і вище, " +
-                            $"у яких були учасники клану з користувачами, які не є учасниками клану.\n" +
-                            $"Список найтфолів містить список користувачів, які були в даному найтфолі та їхні клантеги.";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Register]
                 .Contains(c):
                     {

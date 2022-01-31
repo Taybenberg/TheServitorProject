@@ -12,7 +12,6 @@ namespace ServitorDiscordBot
             ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
             MyGrandmasters => $"Грандмайстри {userName}",
             MyRaids => $"Рейди {userName}",
-            Suspicious => $"Останні активності",
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
             Reset => $"Тиждень {GetWeekNumber()}",
             Xur => $"Зур привіз свіжий крам",
