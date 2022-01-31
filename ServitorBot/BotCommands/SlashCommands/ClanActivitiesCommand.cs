@@ -1,4 +1,5 @@
 ﻿using ClanActivitiesService;
+using CommonData.Localization;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,7 +58,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
             foreach (var mode in modeContainer.Counters)
             {
                 var emoji = CommonData.DiscordEmoji.Emoji.GetActivityEmoji(mode.ActivityMode);
-                var modes = CommonData.Localization.Translation.ActivityNames[mode.ActivityMode];
+                var modes = Translation.ActivityNames[mode.ActivityMode];
 
                 sb.Append($"\n{emoji} **{modes[0]}** | {modes[1]} – **{mode.Count}**");
             }

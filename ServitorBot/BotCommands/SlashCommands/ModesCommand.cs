@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using CommonData.Localization;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,7 +30,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
             var builder = new EmbedBuilder()
                .WithColor(0xE4E65E)
                .WithTitle("Режими")
-               .WithDescription(string.Join('\n', CommonData.Localization.Translation.StatsActivityNames
+               .WithDescription(string.Join('\n', Translation.StatsActivityNames
                .OrderBy(x => x.Value[0]).Select(x =>
                $"{CommonData.DiscordEmoji.Emoji.GetActivityEmoji(x.Key)} **{x.Value[0]}** | {x.Value[1]}")));
 

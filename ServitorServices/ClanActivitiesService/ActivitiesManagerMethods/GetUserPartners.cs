@@ -30,7 +30,7 @@ namespace ClanActivitiesService
             foreach (var partner in coopUsers)
                 activityCounter.TryAdd(partner.UserID, new());
 
-            var chunks = coopActivities.Chunk(coopActivities.Count() / 8);
+            var chunks = coopActivities.Chunk(coopActivities.Count() / 8 + 1);
             
             var tasks = chunks.Select(x => Task.Run(() =>
             {

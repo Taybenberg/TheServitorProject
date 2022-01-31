@@ -24,7 +24,7 @@ namespace ClanActivitiesService
 
             ConcurrentDictionary<int, int> activityCounter = new();
 
-            var chunks = activities.Chunk(activities.Count() / 8);
+            var chunks = activities.Chunk(activities.Count() / 8 + 1);
 
             var tasks = chunks.Select(x => Task.Run(() =>
             {
