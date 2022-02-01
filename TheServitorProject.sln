@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BungieNetApi", "BungieNetAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServitorBot", "ServitorBot\ServitorBot.csproj", "{B7F99E56-AC6A-4409-991F-5591182BC6AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataProcessor", "DataProcessor\DataProcessor.csproj", "{4F426A9F-76B1-482E-BB7F-52A01547E1E8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServitorLauncher", "ServitorLauncher\ServitorLauncher.csproj", "{8F675310-24AE-40D6-906B-BCEF7950388D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BumperService", "ServitorServices\BumperService\BumperService.csproj", "{D0CA462F-3BDD-4EDA-BE58-CCCB942A4591}"
@@ -23,13 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActivityDatabase", "Databas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClanActivitiesDatabase", "DatabaseServices\ClanActivitiesDatabase\ClanActivitiesDatabase.csproj", "{20D7A427-7366-459E-8025-294C0ADE082F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonData", "CommonData\CommonData.csproj", "{64FFD369-8627-4320-BB89-EF0DF75831F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonData", "CommonData\CommonData.csproj", "{64FFD369-8627-4320-BB89-EF0DF75831F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClanActivitiesService", "ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj", "{A339BF23-782A-4792-9F00-992FB7C6A86F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClanActivitiesService", "ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj", "{A339BF23-782A-4792-9F00-992FB7C6A86F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DestinyNotificationsService", "ServitorServices\DestinyNotificationsService\DestinyNotificationsService.csproj", "{7A3C232B-7770-4BD0-82A9-6C2814556B96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DestinyNotificationsService", "ServitorServices\DestinyNotificationsService\DestinyNotificationsService.csproj", "{7A3C232B-7770-4BD0-82A9-6C2814556B96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DestinyNotificationsDatabase", "DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj", "{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DestinyNotificationsDatabase", "DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj", "{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +43,6 @@ Global
 		{B7F99E56-AC6A-4409-991F-5591182BC6AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7F99E56-AC6A-4409-991F-5591182BC6AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7F99E56-AC6A-4409-991F-5591182BC6AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F426A9F-76B1-482E-BB7F-52A01547E1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F426A9F-76B1-482E-BB7F-52A01547E1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F426A9F-76B1-482E-BB7F-52A01547E1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F426A9F-76B1-482E-BB7F-52A01547E1E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F675310-24AE-40D6-906B-BCEF7950388D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F675310-24AE-40D6-906B-BCEF7950388D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F675310-24AE-40D6-906B-BCEF7950388D}.Release|Any CPU.ActiveCfg = Release|Any CPU
