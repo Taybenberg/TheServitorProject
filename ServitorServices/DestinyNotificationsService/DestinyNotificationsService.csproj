@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BungieSharper" Version="0.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj" />
   </ItemGroup>
 
