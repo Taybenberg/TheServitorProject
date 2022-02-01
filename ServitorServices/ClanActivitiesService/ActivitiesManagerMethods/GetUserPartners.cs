@@ -20,7 +20,7 @@ namespace ClanActivitiesService
                 return null;
 
             var allActivities = user.Characters.SelectMany(x => x.ActivityUserStats.Select(y => y.Activity)).Distinct();
-            var coopActivities = allActivities.Where(x  => x.ActivityUserStats.Any(y => !user.Characters.Any(c => c.CharacterID == y.CharacterID)));
+            var coopActivities = allActivities.Where(x => x.ActivityUserStats.Any(y => !user.Characters.Any(c => c.CharacterID == y.CharacterID)));
 
             var allUsers = await activitiesDB.GetUsersWithCharactersAsync();
             var coopUsers = allUsers.Where(x => x.UserID != user.UserID);
@@ -31,7 +31,7 @@ namespace ClanActivitiesService
                 activityCounter.TryAdd(partner.UserID, new());
 
             var chunks = coopActivities.Chunk(coopActivities.Count() / 8 + 1);
-            
+
             var tasks = chunks.Select(x => Task.Run(() =>
             {
                 foreach (var activity in x)
@@ -48,7 +48,7 @@ namespace ClanActivitiesService
             await Task.WhenAll(tasks);
 
             var partners = activityCounter.ToDictionary(
-                x => x.Key, 
+                x => x.Key,
                 x => x.Value.Sum(y => y.Value))
                 .Where(x => x.Value > 0)
                 .OrderByDescending(x => x.Value);

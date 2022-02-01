@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using ServitorDiscordBot.BotCommands.SlashCommands;
 
 namespace ServitorDiscordBot.BotCommands
