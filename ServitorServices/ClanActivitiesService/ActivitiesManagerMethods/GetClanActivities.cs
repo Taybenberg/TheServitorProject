@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 
 namespace ClanActivitiesService
 {
-    public partial class ClanActivitiesManager : IClanActivities
+    public partial class ClanActivitiesManager
     {
         public async Task<ModeCountersContainer> GetClanActivitiesAsync(DateTime? period = null)
         {

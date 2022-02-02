@@ -12,5 +12,7 @@ namespace ClanActivitiesService
         Task<UserPartnersContainer> GetUserPartnersAsync(ulong userID, DateTime? period = null);
 
         Task<IEnumerable<SuspiciousContainer>> GetSuspiciousActivitiesAsync(DestinyActivityModeType? activityType = null);
+
+        Task<IEnumerable<ClanStat>> GetClanStatsAsync(ulong userID, DestinyActivityModeType activityType);
     }
 }
