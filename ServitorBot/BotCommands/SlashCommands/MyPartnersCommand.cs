@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ServitorDiscordBot.BotCommands.SlashCommands
 {
-    public class MyPartnersCommand : ISlashCommand
+    internal class MyPartnersCommand : ISlashCommand
     {
         public string CommandName => "мої_побратими";
 

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ServitorDiscordBot.BotCommands.SlashCommands
 {
-    public class ClanActivitiesCommand : ISlashCommand
+    internal class ClanActivitiesCommand : ISlashCommand
     {
         public string CommandName => "кланові_активності";
 
