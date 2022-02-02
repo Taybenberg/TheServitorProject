@@ -19,10 +19,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
                     .WithName("період")
                     .WithDescription("Кількість активностей клану за вказаний період")
                     .WithRequired(false)
-                    .WithType(ApplicationCommandOptionType.String)
-                    .AddChoice("останній тиждень", "останній тиждень")
-                    .AddChoice("останній місяць", "останній місяць")
-                    .AddChoice("останній рік", "останній рік"));
+                    .AddPeriodChoises());
 
         public async Task ExecuteCommandHelpAsync(SocketSlashCommand command)
         {

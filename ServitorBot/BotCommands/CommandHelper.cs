@@ -1,4 +1,6 @@
-﻿using Discord;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+using CommonData.Localization;
+using Discord;
 using ServitorDiscordBot.BotCommands.SlashCommands;
 
 namespace ServitorDiscordBot.BotCommands
@@ -29,15 +31,6 @@ namespace ServitorDiscordBot.BotCommands
                 .WithTitle("Необхідна реєстрація")
                 .WithDescription("Ґардіане, спершу вас необідно ідентифікувати у базі даних Авангарду.\n" +
                 "Це здійснюється шляхом виконання процедури реєстрації.\nДля цього скористайтеся командою **реєстрація**");
-
-        public static DateTime? GetPeriod(string value) =>
-            value switch
-            {
-                "останній тиждень" => DateTime.UtcNow.AddDays(-7),
-                "останній місяць" => DateTime.UtcNow.AddMonths(-1),
-                "останній рік" => DateTime.UtcNow.AddYears(-1),
-                _ => null
-            };
 
         public static string GetActivityCountImpression(int count, string name) =>
             new Random().Next(10) switch
@@ -78,5 +71,57 @@ namespace ServitorDiscordBot.BotCommands
                 18 => $"Межі між реальностями команд починають стиратися.",
                 _ => $"Команда виконується.\nВи завжди можете підтримати розробку бота [філіжанкою кави](https://www.buymeacoffee.com/servitor)."
             };
+
+        public static DateTime? GetPeriod(string value) =>
+            value switch
+            {
+                "останній тиждень" => DateTime.UtcNow.AddDays(-7),
+                "останній місяць" => DateTime.UtcNow.AddMonths(-1),
+                "останній рік" => DateTime.UtcNow.AddYears(-1),
+                _ => null
+            };
+
+        public static SlashCommandOptionBuilder AddPeriodChoises(this SlashCommandOptionBuilder optionBuilder)
+        {
+            var periods = new string[]
+            {
+                "останній тиждень",
+                "останній місяць",
+                "останній рік"
+            };
+
+            optionBuilder.Choices = periods
+                .Select(x => new ApplicationCommandOptionChoiceProperties
+                {
+                    Name = x,
+                    Value = x
+                }).ToList();
+
+            return optionBuilder
+                .WithType(ApplicationCommandOptionType.String);
+        }
+
+        public static SlashCommandOptionBuilder AddSuspiciousActivitiesChoises(this SlashCommandOptionBuilder optionBuilder)
+        {
+            var activityModes = new DestinyActivityModeType[]
+            {
+                DestinyActivityModeType.Raid,
+                DestinyActivityModeType.Dungeon,
+                DestinyActivityModeType.ScoredNightfall
+            };
+
+            var activityNames = activityModes
+                .Select(x => Translation.StatsActivityNames[x][0].ToLower());
+
+            optionBuilder.Choices = activityNames
+                .Select(x => new ApplicationCommandOptionChoiceProperties
+                {
+                    Name = x,
+                    Value = x
+                }).ToList();
+
+            return optionBuilder
+                .WithType(ApplicationCommandOptionType.String);
+        }
     }
 }

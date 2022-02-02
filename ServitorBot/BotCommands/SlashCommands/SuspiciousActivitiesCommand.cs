@@ -1,4 +1,5 @@
-﻿using ClanActivitiesService;
+﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
+using ClanActivitiesService;
 using CommonData.Localization;
 using Discord;
 using Discord.WebSocket;
@@ -19,10 +20,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
                     .WithName("активність")
                     .WithDescription("Тип активності")
                     .WithRequired(false)
-                    .WithType(ApplicationCommandOptionType.String)
-                    .AddChoice("рейд", "рейд")
-                    .AddChoice("підземелля", "підземелля")
-                    .AddChoice("найтфол", "найтфол"));
+                    .AddSuspiciousActivitiesChoises());
 
         public async Task ExecuteCommandHelpAsync(SocketSlashCommand command)
         {

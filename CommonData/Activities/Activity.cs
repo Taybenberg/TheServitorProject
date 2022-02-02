@@ -62,7 +62,7 @@ namespace CommonData.Activities
                 _ => 3
             };
 
-        public static DestinyActivityModeType[] ActivityTypes =>
+        public static DestinyActivityModeType[] QuickActivityTypes =>
             new DestinyActivityModeType[]
             {
                 Dungeon,

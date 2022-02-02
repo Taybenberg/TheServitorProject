@@ -23,7 +23,7 @@ namespace ServitorDiscordBot
                             .WithPlaceholder("Оберіть активність")
                             .WithCustomId("QuickActivitySelector")
                             .WithMinValues(1).WithMaxValues(1)
-                            .WithOptions(Activity.ActivityTypes.Select(x =>
+                            .WithOptions(Activity.QuickActivityTypes.Select(x =>
                                 new SelectMenuOptionBuilder
                                 {
                                     Label = Translation.StatsActivityNames[x][0],
