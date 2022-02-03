@@ -1,5 +1,4 @@
-﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
-using ClanActivitiesService;
+﻿using ClanActivitiesService;
 using CommonData.Localization;
 using Discord;
 using Discord.WebSocket;

@@ -14,7 +14,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
         public SlashCommandBuilder SlashCommand =>
             new SlashCommandBuilder()
                 .WithName(CommandName)
-                .WithDescription("Агрегована статистика клану у режимі")
+                .WithDescription("Агрегована статистика клану у режимі …")
                 .AddOption(new SlashCommandOptionBuilder()
                     .WithName("режим")
                     .WithDescription("Переглянути список режимів можна за допомогою команди \"режими\"")
@@ -42,12 +42,12 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
 
             var mode = Translation.GetActivityType(((string)option.Value).ToLower());
 
-            if (mode is  DestinyActivityModeType.None)
+            if (mode is DestinyActivityModeType.None)
             {
                 await command.ModifyOriginalResponseAsync(x => x.Embed = CommandHelper.WrongActivityTypeBuilder.Build());
                 return;
             }
-            
+
             using var scope = scopeFactory.CreateScope();
 
             var clanActivities = scope.ServiceProvider.GetRequiredService<IClanActivities>();
