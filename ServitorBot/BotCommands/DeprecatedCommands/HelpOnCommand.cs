@@ -138,23 +138,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.ClanStats]
-                .Any(x => c.StartsWith(x)):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.ClanStats][0]}** " +
-                            $"виводить агреговану статистику учасників вашого клану за різними показниками у вказаній активності.\n" +
-                            $"Команда потребує динамічного параметру ***режим***, який вказує тип активності, для якого виводиться статистика.\n" +
-                            $"Переглянути список можливих параметрів можна за допомогою команди **{messageCommands[MessagesEnum.Modes][0]}**.\n" +
-                            $"Використання цієї команди вимагає реєстрації в боті.\n" +
-                            $"Увага! Команда досі в бета-версії!";
-
-                        builder.ImageUrl = "https://i.imgur.com/P8u73oD.png";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Leaderboard]
                 .Any(x => c.StartsWith(x)):
                     {

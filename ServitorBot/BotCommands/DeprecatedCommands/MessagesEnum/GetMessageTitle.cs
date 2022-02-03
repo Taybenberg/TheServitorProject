@@ -9,7 +9,6 @@ namespace ServitorDiscordBot
         {
             Wait => CommonData.DiscordEmoji.Emoji.Loading,
             Leaderboard => $"БЕТА | Дошка лідерів",
-            ClanStats => $"БЕТА | Статистика клану {(message.Channel as IGuildChannel).Guild.Name}",
             MyGrandmasters => $"Грандмайстри {userName}",
             MyRaids => $"Рейди {userName}",
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",

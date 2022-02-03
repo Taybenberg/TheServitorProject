@@ -21,13 +21,20 @@ namespace ClanActivitiesService
 
             var apiClient = scope.ServiceProvider.GetRequiredService<BungieApiClient>();
 
-            var clanStats = await apiClient.Api.Destiny2_GetClanAggregateStats(user.ClanID, ((int)activityType).ToString());
-
-            return clanStats.Select(x => new ClanStat
+            try
             {
-                StatName = x.StatId,
-                Value = x.Value.Basic.DisplayValue
-            });
+                var clanStats = await apiClient.Api.Destiny2_GetClanAggregateStats(user.ClanID, ((int)activityType).ToString());
+
+                return clanStats.Select(x => new ClanStat
+                {
+                    StatName = x.StatId,
+                    Value = x.Value.Basic.DisplayValue
+                });
+            }
+            catch
+            {
+                return new List<ClanStat>();
+            }
         }
     }
 }

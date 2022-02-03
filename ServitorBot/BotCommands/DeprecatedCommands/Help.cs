@@ -25,8 +25,6 @@
 
 //                $"\n**{messageCommands[MyRaids][0]}** – переглянути закриті ґардіаном рейди цього тижня\n" +
 
-//                $"\n**{messageCommands[ClanStats][0]} %режим%** – агрегована статистика клану в типі активності\n" +
-
 //                $"\n**{messageCommands[Leaderboard][0]} %режим%** – список лідерів у типі активності\n" +
 
 //                $"\n**{messageCommands[Register][0]}** – прив'язати акаунт Destiny 2 до профілю в Discord";

@@ -16,7 +16,8 @@ namespace ServitorDiscordBot.BotCommands
                 new ClanActivitiesCommand(),
                 new MyActivitiesCommand(),
                 new MyPartnersCommand(),
-                new SuspiciousActivitiesCommand()
+                new SuspiciousActivitiesCommand(),
+                new ClanStatsCommand()
             };
 
         public static EmbedBuilder WaitResponceBuilder =>
@@ -24,6 +25,19 @@ namespace ServitorDiscordBot.BotCommands
                 .WithColor(0x76766B)
                 .WithTitle(CommonData.DiscordEmoji.Emoji.Loading)
                 .WithDescription(GetCommandExecutionImpression());
+
+        public static EmbedBuilder WrongActivityTypeBuilder =>
+           new EmbedBuilder()
+               .WithColor(0xD50000)
+               .WithTitle("Хибний режим")
+               .WithDescription("Ґардіане, ви вказали хибний тип активності.\n" +
+               "Щоби переглянути список типів активностей, введіть команду **режими**.");
+
+        public static EmbedBuilder BungieSideErrorBuilder =>
+           new EmbedBuilder()
+               .WithColor(0xD50000)
+               .WithTitle("Помилка на стороні Bungie")
+               .WithDescription("Сталася помилка під час обробки вашого запиту на сервері Bungie.net. Спробуйте пізніше.");
 
         public static EmbedBuilder UserIsNotRegisteredBuilder =>
             new EmbedBuilder()
@@ -111,7 +125,7 @@ namespace ServitorDiscordBot.BotCommands
             };
 
             var activityNames = activityModes
-                .Select(x => Translation.StatsActivityNames[x][0].ToLower());
+                .Select(x => Translation.ActivityNames[x][0].ToLower());
 
             optionBuilder.Choices = activityNames
                 .Select(x => new ApplicationCommandOptionChoiceProperties
