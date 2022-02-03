@@ -138,24 +138,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.Leaderboard]
-                .Any(x => c.StartsWith(x)):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Leaderboard][0]}** " +
-                            $"виводить список лідерів вашого клану за різними показниками у вказаній активності.\n" +
-                            $"Виводиться 3 користувачі з найкращим результатом певного показника, " +
-                            $"якщо вас немає у першій трійці, то додатково вказується ваше місце у рейтингу.\n" +
-                            $"Додатково виводиться інфографіка для ваших показників.\n" +
-                            $"Команда потребує динамічного параметру ***режим***, який вказує тип активності, для якого виводиться статистика.\n" +
-                            $"Переглянути список можливих параметрів можна за допомогою команди **{messageCommands[MessagesEnum.Modes][0]}**.\n" +
-                            $"Використання цієї команди вимагає реєстрації в боті.\n" +
-                            $"Увага! Команда досі в бета-версії!";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Register]
                 .Contains(c):
                     {

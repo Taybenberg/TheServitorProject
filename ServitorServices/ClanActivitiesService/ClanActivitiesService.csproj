@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CommonData\CommonData.csproj" />
     <ProjectReference Include="..\..\DatabaseServices\ClanActivitiesDatabase\ClanActivitiesDatabase.csproj" />
   </ItemGroup>
 

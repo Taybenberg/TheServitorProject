@@ -7,8 +7,6 @@ namespace ServitorDiscordBot
     {
         private string GetTitle(MessagesEnum messagesEnum, IMessage message, string userName) => messagesEnum switch
         {
-            Wait => CommonData.DiscordEmoji.Emoji.Loading,
-            Leaderboard => $"БЕТА | Дошка лідерів",
             MyGrandmasters => $"Грандмайстри {userName}",
             MyRaids => $"Рейди {userName}",
             Register or NotRegistered or AlreadyRegistered => $"Реєстрація",

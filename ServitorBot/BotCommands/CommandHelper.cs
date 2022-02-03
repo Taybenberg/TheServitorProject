@@ -17,7 +17,8 @@ namespace ServitorDiscordBot.BotCommands
                 new MyActivitiesCommand(),
                 new MyPartnersCommand(),
                 new SuspiciousActivitiesCommand(),
-                new ClanStatsCommand()
+                new ClanStatsCommand(),
+                new LeaderboardCommand()
             };
 
         public static EmbedBuilder WaitResponceBuilder =>
@@ -75,7 +76,7 @@ namespace ServitorDiscordBot.BotCommands
                 8 => $"Усім залишатися на своїх місцях!\nВиконується команда!",
                 9 => $"Нас було дев'ять, а потім виконалася ця команда…",
                 10 => $"Ви хочете, щоб я виконав вашу команду, так?\nВи ж дійсно цього хочете, так?",
-                11 => $"Ніхто:\nАбсолютно ніхто:\nВи:",
+                11 => $"Ніхто:\nАбсолютно ніхто:\nВи: а поштурхаю-но я бота",
                 12 => $"Кажете, виконати команду?\nСпершу женіть блиск!",
                 13 => $"А я знаю, що ви хочете, щоб я виконав команду!",
                 14 => $"Подейкують, що користувачів, які мене дуже задовбували більше ніхто не бачив.\nНу ви чекайте результат, чекайте…",

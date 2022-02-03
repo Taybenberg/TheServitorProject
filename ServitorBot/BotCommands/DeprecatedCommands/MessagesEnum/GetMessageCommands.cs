@@ -16,7 +16,6 @@ namespace ServitorDiscordBot
             [Eververse] = new string[] { "еверверс", "eververse" },
             [EververseAll] = new string[] { "еверверс все", "eververse all" },
             [NotRegistered] = new string[] { "зареєструватися", "register" },
-            [Leaderboard] = new string[] { "дошка лідерів", "leaderboard" },
         };
     }
 }

@@ -14,5 +14,7 @@ namespace ClanActivitiesService
         Task<IEnumerable<SuspiciousContainer>> GetSuspiciousActivitiesAsync(DestinyActivityModeType? activityType = null);
 
         Task<IEnumerable<ClanStat>> GetClanStatsAsync(ulong userID, DestinyActivityModeType activityType);
+
+        Task<LeaderboardContainer> GetLeaderboardAsync(ulong userID, DestinyActivityModeType activityType);
     }
 }

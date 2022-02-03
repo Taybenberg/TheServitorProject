@@ -17,7 +17,6 @@ namespace ServitorDiscordBot
             RegisterNeedMoreInfo => new Color(0xff8c67),
             Xur => new Color(0xe0f7fa),
             Reset => new Color(0xd5e1f6),
-            Leaderboard => new Color(0x25c486),
             Raid => new Color(0x7c4dff),
             _ => new Color(0xfafafa)
         };
