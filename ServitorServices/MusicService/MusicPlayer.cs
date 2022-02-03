@@ -247,6 +247,8 @@ namespace MusicService
                     if (count > 0)
                         await stream.WriteAsync(buffer, 0, count);
                 } while (count >= 0);
+
+                await stream.FlushAsync();
             }
             finally
             {
