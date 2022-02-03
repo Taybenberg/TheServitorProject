@@ -22,14 +22,8 @@ namespace ClanActivitiesDatabase
 
         bool IsDiscordUserRegistered(ulong discordID);
 
+        Task<User?> GetUserByDiscordIdAsync(ulong discordID);
+
         Task<bool> RegisterUserAsync(long userID, ulong discordID);
-
-        Task<User> GetUserByDiscordIdAsync(ulong discordID);
-
-        Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID);
-
-        Task<IEnumerable<Activity>> GetUserRaidsAsync(ulong discordID, DateTime afterDate);
-
-        Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync();
     }
 }

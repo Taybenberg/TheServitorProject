@@ -76,6 +76,10 @@ namespace ClanActivitiesDatabase
             _context.Users
             .Any(x => x.DiscordUserID == discordID);
 
+        public async Task<User?> GetUserByDiscordIdAsync(ulong discordID) =>
+            await _context.Users
+                .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
+
         public async Task<bool> RegisterUserAsync(long userID, ulong discordID)
         {
             var user = _context.Users.Find(userID);
@@ -92,11 +96,7 @@ namespace ClanActivitiesDatabase
             return true;
         }
 
-        public async Task<User> GetUserByDiscordIdAsync(ulong discordID) =>
-            await _context.Users
-            .Include(c => c.Characters)
-            .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
-
+        /*
         public async Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID) =>
             await _context.Activities
             .Include(s => s.ActivityUserStats)
@@ -110,9 +110,6 @@ namespace ClanActivitiesDatabase
             //.Where(x => x.Period > afterDate && x.ActivityType == ActivityType.Raid &&
             //x.ActivityUserStats.Any(y => y.Character.User.DiscordUserID == discordID))
             .ToListAsync();
-
-        public async Task<IEnumerable<ActivityUserStats>> GetActivityUserStatsAsync() =>
-            await _context.ActivityUserStats
-            .ToListAsync();
+        */
     }
 }
