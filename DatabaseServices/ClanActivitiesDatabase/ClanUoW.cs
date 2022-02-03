@@ -74,7 +74,7 @@ namespace ClanActivitiesDatabase
 
         public bool IsDiscordUserRegistered(ulong discordID) =>
             _context.Users
-            .Any(x => x.DiscordUserID == discordID);
+                .Any(x => x.DiscordUserID == discordID);
 
         public async Task<User?> GetUserByDiscordIdAsync(ulong discordID) =>
             await _context.Users
