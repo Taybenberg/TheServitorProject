@@ -51,13 +51,10 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
         {
             var option = command.Data.Options.FirstOrDefault();
 
-            if (option is not null)
-            {
-                var slashCommand = CommandHelper.SlashCommands.FirstOrDefault(x => x.CommandName == (string)option.Value);
+            var slashCommand = CommandHelper.SlashCommands.FirstOrDefault(x => x.CommandName == (string)option.Value);
 
-                if (slashCommand is not null)
-                    await slashCommand.ExecuteCommandHelpAsync(command);
-            }
+            if (slashCommand is not null)
+                await slashCommand.ExecuteCommandHelpAsync(command);
         }
     }
 }

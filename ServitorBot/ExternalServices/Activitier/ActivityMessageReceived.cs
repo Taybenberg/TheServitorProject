@@ -26,7 +26,7 @@ namespace ServitorDiscordBot
                             .WithOptions(Activity.QuickActivityTypes.Select(x =>
                                 new SelectMenuOptionBuilder
                                 {
-                                    Label = Translation.StatsActivityNames[x][0],
+                                    Label = Translation.ActivityNames[x][0],
                                     Value = $"QuickActivity_{x}",
                                     Emote = Emote.Parse(CommonData.DiscordEmoji.Emoji.GetActivityEmoji(x))
                                 }).ToList());

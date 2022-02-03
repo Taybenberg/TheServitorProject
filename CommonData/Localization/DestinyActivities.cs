@@ -7,9 +7,9 @@ namespace CommonData.Localization
     {
         public static DestinyActivityModeType GetActivityType(string mode)
         {
-            var pair = StatsActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
+            var pair = ActivityNames.FirstOrDefault(x => x.Value.Any(y => y.ToLower() == mode));
 
-            if (pair.Value is null)
+            if (pair.Equals(default(KeyValuePair<DestinyActivityModeType, string[]>)))
                 return DestinyActivityModeType.None;
 
             return pair.Key;
