@@ -96,6 +96,15 @@ namespace ClanActivitiesDatabase
             return true;
         }
 
+        public async Task SyncUsersAsync(IEnumerable<User> usersToDelete, IEnumerable<User> usersToUpdate, IEnumerable<User> usersToAdd)
+        {
+            _context.Users.RemoveRange(usersToDelete);
+            _context.Users.UpdateRange(usersToUpdate);
+            _context.Users.AddRange(usersToAdd);    
+
+            await _context.SaveChangesAsync();
+        }
+
         /*
         public async Task<IEnumerable<Activity>> GetUserNightfallsAsync(ulong discordID) =>
             await _context.Activities

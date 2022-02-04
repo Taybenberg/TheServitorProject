@@ -1,7 +1,10 @@
 ﻿using BungieSharper.Client;
+using BungieSharper.Entities.Destiny;
 using ClanActivitiesDatabase;
+using ClanActivitiesDatabase.ORM;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 
 namespace ClanActivitiesService
 {
@@ -15,123 +18,107 @@ namespace ClanActivitiesService
 
             var apiClient = scope.ServiceProvider.GetRequiredService<BungieApiClient>();
 
+            var membersTasks = _clanIDs.Select(x => apiClient.Api.GroupV2_GetMembersOfGroup(0, x));
+
             var activitiesDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
 
-            var tasks = _clanIDs.Select(x => Task.Run(async () =>
+            var dbUsers = await activitiesDB.GetUsersWithCharactersAsync();
+            var dbUsersDict = dbUsers.ToDictionary(x => x.UserID, x => x);
+
+            await Task.WhenAll(membersTasks);
+
+            var groupMembers = membersTasks.SelectMany(x => x.Result.Results);
+            var groupMembersDict = groupMembers.ToDictionary(x => x.DestinyUserInfo.MembershipId, x => x);
+
+            var usersToDelete = dbUsersDict.Where(x => !groupMembersDict.ContainsKey(x.Key)).Select(x => x.Value);
+            var usersToUpdate = new ConcurrentBag<User>();
+            var usersToAdd = new ConcurrentBag<User>();
+
+            var components = new DestinyComponentType[] 
+            { 
+                DestinyComponentType.Profiles, 
+                DestinyComponentType.Characters 
+            };
+
+            var chunks = groupMembersDict.Chunk(groupMembersDict.Count() / 8 + 1);
+
+            var tasks = chunks.Select(x => Task.Run(async () =>
             {
-                
+                foreach (var member in x)
+                {
+                    var profile = await apiClient.Api.Destiny2_GetProfile(member.Key, member.Value.DestinyUserInfo.MembershipType, components);
+
+                    var dbUser = dbUsersDict.GetValueOrDefault(member.Key);
+
+                    if (dbUser is null)
+                    {
+                        usersToAdd.Add(new User
+                        {
+                            UserID = member.Key,
+                            ClanID = member.Value.GroupId,
+                            ClanJoinDate = member.Value.JoinDate,
+                            UserName = $"{member.Value.DestinyUserInfo.BungieGlobalDisplayName}#{member.Value.DestinyUserInfo.BungieGlobalDisplayNameCode}",
+                            MembershipType = (int)member.Value.DestinyUserInfo.MembershipType,
+                            DateLastPlayed = profile.Profile.Data.DateLastPlayed,
+                            Characters = profile.Characters.Data
+                                .Select(y => new Character
+                                {
+                                    UserID = member.Key,
+                                    CharacterID = y.Key,
+                                    DateLastPlayed = y.Value.DateLastPlayed,
+                                    Class = (int)y.Value.ClassType,
+                                    Race = (int)y.Value.RaceType,
+                                    Gender = (int)y.Value.GenderType
+                                }).ToList()
+                        });
+                    }
+                    else (dbUser.DateLastPlayed < profile.Profile.Data.DateLastPlayed)
+                    {
+                        var profileChars = profile.Characters.Data;
+
+                        foreach (var diffChr in dbUser.Characters.Where(y => !profileChars.ContainsKey(y.CharacterID)))
+                            dbUser.Characters.Remove(diffChr);
+
+                        foreach (var chr in profileChars)
+                        {
+                            var dbChr = dbUser.Characters.FirstOrDefault(y => y.CharacterID == chr.Key);
+
+                            if (dbChr is null)
+                            {
+                                dbUser.Characters.Add(new Character
+                                {
+                                    UserID = member.Key,
+                                    CharacterID = chr.Key,
+                                    DateLastPlayed = chr.Value.DateLastPlayed,
+                                    Class = (int)chr.Value.ClassType,
+                                    Race = (int)chr.Value.RaceType,
+                                    Gender = (int)chr.Value.GenderType
+                                });
+                            }
+                            else if (dbChr.DateLastPlayed < chr.Value.DateLastPlayed)
+                            {
+                                dbChr.DateLastPlayed = chr.Value.DateLastPlayed;
+                                dbChr.Class = (int)chr.Value.ClassType;
+                                dbChr.Race = (int)chr.Value.RaceType;
+                                dbChr.Gender = (int)chr.Value.GenderType;
+                            }
+                        }
+
+                        dbUser.ClanID = member.Value.GroupId;
+                        dbUser.UserName = $"{member.Value.DestinyUserInfo.BungieGlobalDisplayName}#{member.Value.DestinyUserInfo.BungieGlobalDisplayNameCode}";
+                        dbUser.MembershipType = (int)member.Value.DestinyUserInfo.MembershipType;
+                        dbUser.DateLastPlayed = profile.Profile.Data.DateLastPlayed;
+
+                        usersToUpdate.Add(dbUser);
+                    }
+                }
             }));
 
             await Task.WhenAll(tasks);
+
+            await activitiesDB.SyncUsersAsync(usersToDelete, usersToUpdate, usersToAdd);
+
+            _logger.LogInformation($"{DateTime.Now} Users synced");
         }
     }
 }
-//      public async Task SyncUsersAsync()
-//        {
-//            _logger.LogInformation($"{DateTime.Now} Syncing Users");
-
-//            using var scope = _scopeFactory.CreateScope();
-
-//            var apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
-
-//            ConcurrentBag<IEnumerable<BungieNetApi.Entities.User>> clanUsersCollection = new();
-
-//            Parallel.ForEach(_configuration.GetSection("Destiny2:ClanIDs").Get<HashSet<long>>(), (clanID) =>
-//            {
-//                clanUsersCollection.Add(apiClient.GetClan(clanID).GetUsersAsync().Result);
-//            });
-
-//            var clanUsers = clanUsersCollection.SelectMany(x => x).ToDictionary(x => x.MembershipID, x => x);
-
-//            var dbUsers = await _context.Users.Include(c => c.Characters).ToDictionaryAsync(x => x.UserID, x => x);
-
-//            ConcurrentBag<User> newUsers = new();
-//            ConcurrentBag<User> updUsers = new();
-
-//            ConcurrentBag<Character> diffChars = new();
-//            ConcurrentBag<Character> newChars = new();
-//            ConcurrentBag<Character> updChars = new();
-
-//            var diffDbUsers = dbUsers.Where(x => !clanUsers.ContainsKey(x.Key)).Select(x => x.Value);
-
-//            Parallel.ForEach(clanUsers, (usr) =>
-//            {
-//                var dbUsr = dbUsers.GetValueOrDefault(usr.Key);
-
-//                if (dbUsr is null)
-//                {
-//                    newUsers.Add(new User
-//                    {
-//                        UserID = usr.Value.MembershipID,
-//                        ClanID = usr.Value.ClanID,
-//                        UserName = usr.Value.BungieName,
-//                        DateLastPlayed = usr.Value.DateLastPlayed,
-//                        ClanJoinDate = usr.Value.ClanJoinDate,
-//                        MembershipType = usr.Value.MembershipType,
-//                        Characters = usr.Value.Characters.Select(chr =>
-//                        new Character
-//                        {
-//                            CharacterID = chr.CharacterID,
-//                            DateLastPlayed = chr.DateLastPlayed,
-//                            Class = chr.Class,
-//                            Race = chr.Race,
-//                            Gender = chr.Gender,
-//                            UserID = chr.MembershipID
-//                        }).ToList()
-//                    });
-//                }
-//                else if (dbUsr.DateLastPlayed < usr.Value.DateLastPlayed)
-//                {
-//                    dbUsr.ClanID = usr.Value.ClanID;
-//                    dbUsr.UserName = usr.Value.BungieName;
-//                    dbUsr.DateLastPlayed = usr.Value.DateLastPlayed;
-//                    dbUsr.MembershipType = usr.Value.MembershipType;
-
-//                    updUsers.Add(dbUsr);
-
-//                    foreach (var diff in dbUsr.Characters.Where(x => !usr.Value.Characters.Any(y => y.CharacterID == x.CharacterID)))
-//                    {
-//                        diffChars.Add(diff);
-//                    }
-
-//                    foreach (var chr in usr.Value.Characters)
-//                    {
-//                        var dbChr = dbUsr.Characters.FirstOrDefault(x => x.CharacterID == chr.CharacterID);
-
-//                        if (dbChr is null)
-//                        {
-//                            newChars.Add(new Character
-//                            {
-//                                CharacterID = chr.CharacterID,
-//                                DateLastPlayed = chr.DateLastPlayed,
-//                                Class = chr.Class,
-//                                Race = chr.Race,
-//                                Gender = chr.Gender,
-//                                UserID = chr.MembershipID
-//                            });
-//                        }
-//                        else
-//                        {
-//                            dbChr.DateLastPlayed = chr.DateLastPlayed;
-//                            dbChr.Class = chr.Class;
-//                            dbChr.Race = chr.Race;
-//                            dbChr.Gender = chr.Gender;
-
-//                            updChars.Add(dbChr);
-//                        }
-//                    }
-//                }
-//            });
-
-//            _context.Users.RemoveRange(diffDbUsers);
-//            _context.Users.AddRange(newUsers);
-//            _context.Users.UpdateRange(updUsers);
-
-//            _context.Characters.RemoveRange(diffChars);
-//            _context.Characters.AddRange(newChars);
-//            _context.Characters.UpdateRange(updChars);
-
-//            await _context.SaveChangesAsync();
-
-//            _logger.LogInformation($"{DateTime.Now} Users synced");
-//        }
