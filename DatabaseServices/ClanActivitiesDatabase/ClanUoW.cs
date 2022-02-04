@@ -103,18 +103,30 @@ namespace ClanActivitiesDatabase
             return true;
         }
 
-        public async Task SyncUsersAsync(IEnumerable<User> usersToDelete, IEnumerable<User> usersToUpdate, IEnumerable<User> usersToAdd)
+        public async Task SyncUsersAsync(IEnumerable<User>? usersToDelete, IEnumerable<User>? usersToUpdate, IEnumerable<User>? usersToAdd)
         {
-            _context.Users.RemoveRange(usersToDelete);
-            _context.Users.UpdateRange(usersToUpdate);
-            _context.Users.AddRange(usersToAdd);    
+            if (usersToDelete is not null)
+                _context.Users.RemoveRange(usersToDelete);
+
+            if (usersToUpdate is not null)
+                _context.Users.UpdateRange(usersToUpdate);
+
+            if (usersToAdd is not null)
+                _context.Users.AddRange(usersToAdd);    
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task SyncActivitiesAsync(IEnumerable<Activity> activitiesToAdd)
+        public async Task SyncActivitiesAsync(IEnumerable<Activity>? activitiesToDelete, IEnumerable<Activity>? activitiesToUpdate, IEnumerable<Activity>? activitiesToAdd)
         {
-            _context.Activities.AddRange(activitiesToAdd);
+            if (activitiesToDelete is not null)
+                _context.Activities.RemoveRange(activitiesToDelete);
+
+            if (activitiesToUpdate is not null)
+                _context.Activities.UpdateRange(activitiesToUpdate);
+
+            if (activitiesToAdd is not null)
+                _context.Activities.AddRange(activitiesToAdd);
 
             await _context.SaveChangesAsync();
         }
