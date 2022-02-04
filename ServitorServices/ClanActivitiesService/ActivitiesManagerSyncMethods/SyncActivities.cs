@@ -1,7 +1,9 @@
 ﻿using BungieSharper.Client;
 using ClanActivitiesDatabase;
+using ClanActivitiesDatabase.ORM;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 
 namespace ClanActivitiesService
 {
@@ -11,34 +13,43 @@ namespace ClanActivitiesService
         {
             _logger.LogInformation($"{DateTime.Now} Syncing Activities");
 
+            var date = DateTime.UtcNow.AddDays(-7);
+
             using var scope = _scopeFactory.CreateScope();
 
             var apiClient = scope.ServiceProvider.GetRequiredService<BungieApiClient>();
 
             var activitiesDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
+
+            var users = await activitiesDB.GetUsersWithCharactersAndLastActivityAsync();
+
+            var userIDs = users.Select(x => x.UserID).ToHashSet();
+            var characterIDs = users.SelectMany(x => x.Characters.Select(y => y.CharacterID)).ToHashSet();
+
+            var lastCharactersWithActivities = users.SelectMany(x => x.Characters.Select(y => (y, y.ActivityUserStats.FirstOrDefault()?.Activity)));
+
+            var recentCharactersWithActivities = lastCharactersWithActivities.Where(x => x.y.DateLastPlayed > date);
+
+            ConcurrentDictionary<long, Activity> newActivitiesDictionary = new();
+
+            var chunks = recentCharactersWithActivities.Chunk(recentCharactersWithActivities.Count() / 8 + 1);
+
+            var tasks = chunks.Select(x => Task.Run(async () =>
+            {
+
+            }));
+
+            var lastDBActivities = await activitiesDB.GetActivitiesAsync(date);
+            var lastDBActivitiesIDs = lastDBActivities.Select(x => x.ActivityID).ToHashSet();
+
+            await Task.WhenAll(tasks);
+
+            await activitiesDB.SyncActivitiesAsync(newActivitiesDictionary.Where(x => !lastDBActivitiesIDs.Contains(x.Key)).Select(x => x.Value));
+
+            _logger.LogInformation($"{DateTime.Now} Activities synced");
         }
     }
 }
-//        public async Task SyncActivitiesAsync()
-//        {
-//            _logger.LogInformation($"{DateTime.Now} Syncing Activities");
-
-//            using var scope = _scopeFactory.CreateScope();
-
-//            var apiClient = scope.ServiceProvider.GetRequiredService<IApiClient>();
-
-//            var factory = apiClient.EntityFactory;
-
-//            DateTime date = DateTime.Now.AddDays(-7);
-
-//            var lastKnownActivities = await _context.Characters.Include(x => x.User).Select(c => new
-//            {
-//                Character = c,
-//                Activity = c.ActivityUserStats.OrderByDescending(a => a.Activity.Period).FirstOrDefault().Activity
-//            }).ToListAsync();
-
-//            var userIDs = lastKnownActivities.Select(x => x.Character.UserID).ToHashSet();
-//            var charIDs = lastKnownActivities.Select(x => x.Character.CharacterID).ToHashSet();
 
 //            ConcurrentDictionary<long, BungieNetApi.Entities.Activity> newActivitiesDictionary = new();
 
@@ -118,14 +129,3 @@ namespace ClanActivitiesService
 //                    }).ToList()
 //                });
 //            });
-
-//            var lastActivitiesIds = _context.Activities.Where(x => x.Period > date).Select(y => y.ActivityID).ToHashSet();
-
-//            _context.Activities.AddRange(newActivities.Where(x => !lastActivitiesIds.Contains(x.ActivityID)));
-
-//            await _context.SaveChangesAsync();
-
-//            _logger.LogInformation($"{DateTime.Now} Activities synced");
-//        }
-//    }
-//}

@@ -18,6 +18,13 @@ namespace ClanActivitiesDatabase
                 .Include(x => x.Characters)
                 .ToListAsync();
 
+        public async Task<IEnumerable<User>> GetUsersWithCharactersAndLastActivityAsync() =>
+           await _context.Users
+               .Include(x => x.Characters)
+               .ThenInclude(x => x.ActivityUserStats.OrderByDescending(y => y.Activity.Period).Take(1))
+               .ThenInclude(x => x.Activity)
+               .ToListAsync();
+
         public async Task<IEnumerable<Character>> GetCharactersAsync() =>
             await _context.Characters
                 .ToListAsync();
@@ -39,29 +46,29 @@ namespace ClanActivitiesDatabase
             period is null ?
             await _context.Users
                 .Include(x => x.Characters)
-                .ThenInclude(y => y.ActivityUserStats)
-                .ThenInclude(a => a.Activity)
-                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID) :
+                .ThenInclude(x => x.ActivityUserStats)
+                .ThenInclude(x => x.Activity)
+                .FirstOrDefaultAsync(x => x.DiscordUserID == discordID) :
             await _context.Users
                 .Include(x => x.Characters)
-                .ThenInclude(y => y.ActivityUserStats.Where(s => s.Activity.Period > period))
-                .ThenInclude(a => a.Activity)
-                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
+                .ThenInclude(x => x.ActivityUserStats.Where(y => y.Activity.Period > period))
+                .ThenInclude(x => x.Activity)
+                .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
         public async Task<User?> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID, DateTime? period) =>
             period is null ?
             await _context.Users
                 .Include(x => x.Characters)
-                .ThenInclude(y => y.ActivityUserStats)
-                .ThenInclude(a => a.Activity)
-                .ThenInclude(u => u.ActivityUserStats)
-                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID) :
+                .ThenInclude(x => x.ActivityUserStats)
+                .ThenInclude(x => x.Activity)
+                .ThenInclude(x => x.ActivityUserStats)
+                .FirstOrDefaultAsync(x => x.DiscordUserID == discordID) :
             await _context.Users
                 .Include(x => x.Characters)
-                .ThenInclude(y => y.ActivityUserStats.Where(s => s.Activity.Period > period))
-                .ThenInclude(a => a.Activity)
-                .ThenInclude(u => u.ActivityUserStats)
-                .FirstOrDefaultAsync(z => z.DiscordUserID == discordID);
+                .ThenInclude(x => x.ActivityUserStats.Where(y => y.Activity.Period > period))
+                .ThenInclude(x => x.Activity)
+                .ThenInclude(x => x.ActivityUserStats)
+                .FirstOrDefaultAsync(x => x.DiscordUserID == discordID);
 
         public async Task<IEnumerable<Activity>> GetSuspiciousActivitiesAsync(int? activityType, DateTime period) =>
             activityType is null ?
@@ -101,6 +108,13 @@ namespace ClanActivitiesDatabase
             _context.Users.RemoveRange(usersToDelete);
             _context.Users.UpdateRange(usersToUpdate);
             _context.Users.AddRange(usersToAdd);    
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SyncActivitiesAsync(IEnumerable<Activity> activitiesToAdd)
+        {
+            _context.Activities.AddRange(activitiesToAdd);
 
             await _context.SaveChangesAsync();
         }

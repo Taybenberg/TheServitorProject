@@ -8,6 +8,8 @@ namespace ClanActivitiesDatabase
 
         Task<IEnumerable<User>> GetUsersWithCharactersAsync();
 
+        Task<IEnumerable<User>> GetUsersWithCharactersAndLastActivityAsync();
+
         Task<IEnumerable<Character>> GetCharactersAsync();
 
         Task<IEnumerable<Character>> GetCharactersWithUsersAsync();
@@ -27,5 +29,7 @@ namespace ClanActivitiesDatabase
         Task<bool> RegisterUserAsync(long userID, ulong discordID);
 
         Task SyncUsersAsync(IEnumerable<User> usersToDelete, IEnumerable<User> usersToUpdate, IEnumerable<User> usersToAdd);
+
+        Task SyncActivitiesAsync(IEnumerable<Activity> activitiesToAdd);
     }
 }
