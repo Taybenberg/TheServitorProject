@@ -20,9 +20,9 @@ namespace ClanActivitiesService
 
         public async Task SyncDatabaseAsync()
         {
-            await SyncUsersAsync();
+            await SyncClanUsersAsync();
 
-            await SyncActivitiesAsync();
+            await FetchNewActivitiesAsync();
         }
     }
 }
