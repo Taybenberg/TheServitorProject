@@ -10,7 +10,7 @@ namespace ClanActivitiesService
 {
     public partial class ClanActivitiesManager
     {
-        public async Task SyncClanUsersAsync()
+        private async Task SyncClanUsersAsync()
         {
             _logger.LogInformation($"{DateTime.Now} Syncing Users");
 

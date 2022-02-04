@@ -16,6 +16,8 @@ namespace ClanActivitiesDatabase
 
         Task<IEnumerable<Activity>> GetActivitiesAsync(DateTime? period);
 
+        Task<IEnumerable<Activity>> GetActivitiesWithActivityUserStatsAsync(DateTime? period);
+
         Task<User?> GetUserWithActivitiesAsync(ulong discordID, DateTime? period);
 
         Task<User?> GetUserWithActivitiesAndOtherUserStatsAsync(ulong discordID, DateTime? period);

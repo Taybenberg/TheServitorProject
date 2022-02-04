@@ -1,4 +1,43 @@
-﻿
+﻿using BungieSharper.Client;
+using BungieSharper.Entities;
+using ClanActivitiesDatabase;
+using ClanActivitiesDatabase.ORM;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
+
+namespace ClanActivitiesService
+{
+    public partial class ClanActivitiesManager
+    {
+        private async Task FetchSuspiciousActivitiesAsync()
+        {
+            _logger.LogInformation($"{DateTime.Now} Fetching suspicious Activities");
+
+            var date = DateTime.UtcNow.AddDays(-7);
+
+            using var scope = _scopeFactory.CreateScope();
+
+            var apiClient = scope.ServiceProvider.GetRequiredService<BungieApiClient>();
+
+            var activitiesDB = scope.ServiceProvider.GetRequiredService<IClanActivitiesDB>();
+
+            var activities = await activitiesDB.GetActivitiesAsync(date);
+            var nonSuspicious = activities.Where(x => x.SuspicionIndex is null);
+
+            var chunks = nonSuspicious.Chunk(nonSuspicious.Count() / 8 + 1);
+
+            var tasks = chunks.Select(x => Task.Run(async () =>
+            {
+
+            }));
+
+            await Task.WhenAll(tasks);
+
+            _logger.LogInformation($"{DateTime.Now} Suspicious Activities fetched");
+        }
+    }
+}
 //            ConcurrentDictionary<long, BungieNetApi.Entities.Activity> newActivitiesDictionary = new();
 
 //            Parallel.ForEach(lastKnownActivities.Where(x => x.Character.DateLastPlayed > date), (last) =>

@@ -10,9 +10,9 @@ namespace ClanActivitiesService
 {
     public partial class ClanActivitiesManager
     {
-        public async Task FetchNewActivitiesAsync()
+        private async Task FetchNewActivitiesAsync()
         {
-            _logger.LogInformation($"{DateTime.Now} Fetching Activities");
+            _logger.LogInformation($"{DateTime.Now} Fetching new Activities");
 
             var date = DateTime.UtcNow.AddDays(-7);
 
@@ -99,7 +99,7 @@ namespace ClanActivitiesService
 
             await activitiesDB.SyncActivitiesAsync(null, null, activitiesToAdd.Select(x => x.Value));
 
-            _logger.LogInformation($"{DateTime.Now} Activities fetched");
+            _logger.LogInformation($"{DateTime.Now} New Activities fetched");
         }
     }
 }

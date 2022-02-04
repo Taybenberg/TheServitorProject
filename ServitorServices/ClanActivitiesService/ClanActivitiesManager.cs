@@ -23,6 +23,10 @@ namespace ClanActivitiesService
             await SyncClanUsersAsync();
 
             await FetchNewActivitiesAsync();
+
+            await DeleteGhostActivitiesAsync();
+
+            await FetchSuspiciousActivitiesAsync();
         }
     }
 }

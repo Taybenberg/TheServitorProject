@@ -42,6 +42,16 @@ namespace ClanActivitiesDatabase
                 .Where(x => x.Period > period)
                 .ToListAsync();
 
+        public async Task<IEnumerable<Activity>> GetActivitiesWithActivityUserStatsAsync(DateTime? period) =>
+            period is null ?
+            await _context.Activities
+                .Include(x => x.ActivityUserStats)
+                .ToListAsync() :
+            await _context.Activities
+                .Include(x => x.ActivityUserStats)
+                .Where(x => x.Period > period)
+                .ToListAsync();
+
         public async Task<User?> GetUserWithActivitiesAsync(ulong discordID, DateTime? period) =>
             period is null ?
             await _context.Users
