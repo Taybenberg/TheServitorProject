@@ -72,7 +72,7 @@ namespace ClanActivitiesService
                                 }).ToList()
                         });
                     }
-                    else (dbUser.DateLastPlayed < profile.Profile.Data.DateLastPlayed)
+                    else if (dbUser.DateLastPlayed < profile.Profile.Data.DateLastPlayed)
                     {
                         var profileChars = profile.Characters.Data;
 
