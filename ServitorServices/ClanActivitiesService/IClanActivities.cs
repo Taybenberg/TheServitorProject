@@ -16,5 +16,7 @@ namespace ClanActivitiesService
         Task<IEnumerable<ClanStat>> GetClanStatsAsync(ulong userID, DestinyActivityModeType activityType);
 
         Task<LeaderboardContainer> GetLeaderboardAsync(ulong userID, DestinyActivityModeType activityType);
+
+        Task<RegisterUserContainer> TryRegisterUserAsync(ulong userID, string userName);
     }
 }

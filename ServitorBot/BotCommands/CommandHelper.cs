@@ -18,7 +18,8 @@ namespace ServitorDiscordBot.BotCommands
                 new MyPartnersCommand(),
                 new SuspiciousActivitiesCommand(),
                 new ClanStatsCommand(),
-                new LeaderboardCommand()
+                new LeaderboardCommand(),
+                new RegisterCommand()
             };
 
         public static EmbedBuilder WaitResponceBuilder =>

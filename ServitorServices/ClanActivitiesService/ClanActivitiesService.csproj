@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BungieSharper" Version="0.8.6" />
+    <PackageReference Include="F23.StringSimilarity" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>

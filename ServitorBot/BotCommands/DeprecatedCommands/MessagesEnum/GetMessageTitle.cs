@@ -9,7 +9,6 @@ namespace ServitorDiscordBot
         {
             MyGrandmasters => $"Грандмайстри {userName}",
             MyRaids => $"Рейди {userName}",
-            Register or NotRegistered or AlreadyRegistered => $"Реєстрація",
             Reset => $"Тиждень {GetWeekNumber()}",
             Xur => $"Зур привіз свіжий крам",
             Raid => $"Рейд",

@@ -137,25 +137,6 @@ namespace ServitorDiscordBot
                     }
                     return;
 
-                case string c
-                when messageCommands[MessagesEnum.Register]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Register][0]}** " +
-                            $"призначена для того, щоб встановити, якому учаснику клану в Destiny 2 відповідає ваш профіль Discord.\n" +
-                            $"Це дозволить вам користуватися всіма перевагами бота.\n" +
-                            $"Якщо ваш нік в Discord такий самий, як і в грі, чи дуже на нього схожий (схожість понад 90%), " +
-                            $"то вас буде зареєстровано автоматично одразу після виклику команди **{messageCommands[MessagesEnum.Register][0]}**.\n" +
-                            $"Інакше вам потрібно буде уточнити свій нікнейм вручну у якості динамічного параметра " +
-                            $"для команди **{messageCommands[MessagesEnum.NotRegistered][0]}**.\n" +
-                            $"Потрібно вказувати глобальний нікнейм Bungie.";
-
-                        builder.ImageUrl = "https://i.imgur.com/tEsgGor.png";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
                 case "музика" or "music":
                     {
                         builder.Title = "Музика";
