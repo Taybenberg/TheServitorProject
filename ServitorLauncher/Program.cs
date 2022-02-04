@@ -45,9 +45,12 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
+var d =host.Services.CreateScope().ServiceProvider.GetRequiredService<IClanActivities>();
+await d.SyncDatabaseAsync();
+
 host.Services.UseScheduler(scheduler =>
 {
 
 });
 
-await host.RunAsync();
+//await host.RunAsync();
