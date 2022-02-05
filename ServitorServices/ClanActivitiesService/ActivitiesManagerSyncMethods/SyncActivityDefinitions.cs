@@ -27,8 +27,6 @@ namespace ClanActivitiesService
 
             var uniqueDirectorHashes = activityDirectorHashes.Except(activityReferenceIDs);
 
-            var manifest = await apiClient.Api.Destiny2_GetDestinyManifest();
-
             foreach (var u in uniqueDirectorHashes)
             {
                 var entity = await apiClient.Api.Destiny2_GetDestinyEntityDefinition("DestinyActivityDefinition", (uint)u);
