@@ -24,11 +24,11 @@ namespace ClanActivitiesService
 
             await FetchNewActivitiesAsync();
 
-            await SyncActivityDefinitionsAsync();
+            //await SyncActivityDefinitionsAsync();
 
             await DeleteGhostActivitiesAsync();
 
-            await FetchSuspiciousActivitiesAsync();
+            //await FetchSuspiciousActivitiesAsync();
         }
     }
 }
