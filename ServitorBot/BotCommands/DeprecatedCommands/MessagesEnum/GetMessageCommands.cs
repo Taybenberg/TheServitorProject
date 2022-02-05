@@ -11,7 +11,6 @@ namespace ServitorDiscordBot
             [Resources] = new string[] { "ресурси", "resources" },
             [MyGrandmasters] = new string[] { "мої грандмайстри", "my grandmasters" },
             [MyRaids] = new string[] { "мої рейди", "my raids" },
-            [Xur] = new string[] { "зур", "xur" },
             [Eververse] = new string[] { "еверверс", "eververse" },
             [EververseAll] = new string[] { "еверверс все", "eververse all" },
         };

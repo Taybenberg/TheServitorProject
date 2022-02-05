@@ -19,7 +19,9 @@ namespace ServitorDiscordBot.BotCommands
                 new SuspiciousActivitiesCommand(),
                 new ClanStatsCommand(),
                 new LeaderboardCommand(),
-                new RegisterCommand()
+                new RegisterCommand(),
+                new XurInfocardCommand(),
+                new LostSectorsInfocardCommand()
             };
 
         public static EmbedBuilder WaitResponceBuilder =>

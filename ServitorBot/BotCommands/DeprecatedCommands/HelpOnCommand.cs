@@ -30,24 +30,6 @@ namespace ServitorDiscordBot
                     return;
 
                 case string c
-                when messageCommands[MessagesEnum.Sectors]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Sectors][0]}** " +
-                            $"генерує інформаційну картку (дизайнер картки – <@679220982082174977>) " +
-                            $"з відомостями про загублені сектори складності \"легенда\" та \"майстер\" цього денного ресету.\n" +
-                            $"Вміст цієї картки є частиною інформаційної картки про денний ресет (дизайнер картки – <@356816080326361088>), " +
-                            $"яка надсилається автоматично на початку кожного дня у Destiny 2.\n" +
-                            $"На початку нового сезону або з появою нових секторів можливе виведення хибної інформації.\n" +
-                            $"Інформація підтягується з ресурсу https://www.todayindestiny.com/";
-
-                        builder.ImageUrl = "https://i.imgur.com/0hudBnh.png";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
                 when messageCommands[MessagesEnum.Resources]
                 .Contains(c):
                     {
@@ -59,24 +41,6 @@ namespace ServitorDiscordBot
                             $"Інформація підтягується з ресурсу https://www.todayindestiny.com/vendors";
 
                         builder.ImageUrl = "https://i.imgur.com/LroPcmY.png";
-
-                        await message.Channel.SendMessageAsync(embed: builder.Build());
-                    }
-                    return;
-
-                case string c
-                when messageCommands[MessagesEnum.Xur]
-                .Contains(c):
-                    {
-                        builder.Description = $"Команда **{messageCommands[MessagesEnum.Xur][0]}** " +
-                            $"генерує інформаційну картку (дизайнер картки – <@679220982082174977>) " +
-                            $"з відомостями про поточний асортимент Зура. Буде згенеровано порожню картку, " +
-                            $"якщо на момент виклику команди Зур відсутній, або сервери Destiny не працюють.\n" +
-                            $"Картка надсилається автоматично щоп'ятниці після денного ресету.\n" +
-                            $"З метою уникнення флуду команда користувача та попередньо згенерована картка видаляються.\n" +
-                            $"Місцеперебування Зура підтягується з ресурсу https://xur.wiki/";
-
-                        builder.ImageUrl = "https://i.imgur.com/QbdQyRp.png";
 
                         await message.Channel.SendMessageAsync(embed: builder.Build());
                     }
