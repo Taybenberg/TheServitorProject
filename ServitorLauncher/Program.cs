@@ -45,11 +45,16 @@ IHost host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
-var d = host.Services.CreateScope().ServiceProvider.GetRequiredService<IDestinyNotifications>();
-
 host.Services.UseScheduler(scheduler =>
 {
+    scheduler.ScheduleAsync(async () =>
+    {
+        using var scope = host.Services.CreateScope();
 
+        var clanActivities = scope.ServiceProvider.GetRequiredService<IClanActivities>();
+
+        await clanActivities.SyncDatabaseAsync();
+    }).DailyAtHour(5);
 });
 
-//await host.RunAsync();
+await host.RunAsync();
