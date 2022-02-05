@@ -45,7 +45,7 @@ namespace ServitorDiscordBot.BotCommands.SlashCommands
 
             var suspiciousActivities = option is null ?
                 await clanActivities.GetSuspiciousActivitiesAsync() :
-                await clanActivities.GetSuspiciousActivitiesAsync(Translation.GetActivityType((string)option.Value));
+                await clanActivities.GetSuspiciousActivitiesAsync(Translation.GetActivityType(((string)option.Value).ToLower()));
 
             var sb = new StringBuilder(1950);
             foreach (var a in suspiciousActivities)

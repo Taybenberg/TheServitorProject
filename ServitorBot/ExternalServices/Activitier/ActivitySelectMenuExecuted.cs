@@ -3,7 +3,6 @@ using Discord;
 using Discord.WebSocket;
 using System.Globalization;
 
-
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot

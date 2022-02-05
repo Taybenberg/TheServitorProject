@@ -11,35 +11,30 @@ namespace ServitorDiscordBot
         {
             switch (message.Content.ToLower())
             {
-                case "допомога":
-                    await GetHelpOnCommandAsync(message, "музика");
+                case "!help":
+                    {
+                        var builder = new EmbedBuilder()
+                            .WithColor(0xBE5BEF)
+                            .WithTitle("Допомога \"музика\"")
+                            .WithDescription("Відтворює аудіодоріжку із вказаного аудіо, відео чи плейлисту " +
+                                "YouTube, YouTube Music, Soundcloud або ж прямий аудіофайл з іншого ресурсу.\n" +
+                                "Перед використанням команд відтворення ви маєте бути під'єднані до голосового каналу, щоби бот знав, куди під'єднуватися.\n" +
+                                "Усіма іншими командами ви можете скористатися лише після того, як бот розпочне відтворення.\n" +
+                                "\nНаявні наступні команди:\n" +
+                                "**!play** ***%URL%*** – під'єднується до голосового каналу та відтворює вказане відео, аудіо чи плейлист.\n" +
+                                "**!playdirect** ***%URL%*** – під'єднується до голосового каналу та відтворює аудіо за прямим посиланням у обмеженому режимі.\n" +
+                                "**!add** ***%URL%*** – додає до черги відтворення вказане відео, аудіо чи плейлист.\n" +
+                                "**!queue** – виводить список черги відтворення.\n" +
+                                "\nВідтворення зупиняється автоматично після досягнення кінця черги.\n" +
+                                "Також ви можете зупинити відтворення перетягнувши бота у інший канал.\n" +
+                                "Зверніть увагу, що бот може відтворювати лише одне відео та перебувати лише у одному голосовому каналі за раз.\n" +
+                                "Не підтримуються живі етери YouTube та відео, які вимагають авторизації для підтвердження віку.");
+
+                        await message.Channel.SendMessageAsync(embed: builder.Build());
+                    }
                     break;
 
-                case "next":
-                    _musicPlayer.Next();
-                    break;
-
-                case "prev":
-                    _musicPlayer.Previous();
-                    break;
-
-                case "pause":
-                    _musicPlayer.Pause();
-                    break;
-
-                case "continue" or "resume":
-                    _musicPlayer.Continue();
-                    break;
-
-                case "stop":
-                    _musicPlayer.Stop();
-                    break;
-
-                case "shuffle":
-                    _musicPlayer.Shuffle();
-                    break;
-
-                case "queue":
+                case "!queue":
                     {
                         var queue = _musicPlayer.Queue?.Select((x, i) =>
                         {
@@ -66,15 +61,15 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("add "):
+                when c.StartsWith("!add "):
                     {
                         await SendTemporaryMessageAsync(message, "Доповнюю список…");
-                        await _musicPlayer.AddAsync(message.Content[4..]);
+                        await _musicPlayer.AddAsync(message.Content[5..]);
                     }
                     break;
 
                 case string c
-                when c.StartsWith("play "):
+                when c.StartsWith("!play "):
                     {
                         var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
 
@@ -94,7 +89,7 @@ namespace ServitorDiscordBot
                                 using (var audioClient = await voiceChannel.ConnectAsync())
                                 using (var voiceStream = audioClient.CreatePCMStream(AudioApplication.Music))
                                 {
-                                    await _musicPlayer.PlayAsync(message.Content[5..], voiceStream, msg.Id);
+                                    await _musicPlayer.PlayAsync(message.Content[6..], voiceStream, msg.Id);
                                 }
                             }
                             finally
@@ -107,7 +102,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("playdirect "):
+                when c.StartsWith("!playdirect "):
                     {
                         var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
 
@@ -127,7 +122,7 @@ namespace ServitorDiscordBot
                                 using (var audioClient = await voiceChannel.ConnectAsync())
                                 using (var voiceStream = audioClient.CreatePCMStream(AudioApplication.Music))
                                 {
-                                    await _musicPlayer.PlayDirectAsync(message.Content[11..], voiceStream);
+                                    await _musicPlayer.PlayDirectAsync(message.Content[12..], voiceStream);
                                 }
                             }
                             finally

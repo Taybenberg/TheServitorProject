@@ -67,11 +67,15 @@ namespace ServitorDiscordBot
                     }
                     break;
 
-                case "допомога":
-                    await GetHelpOnCommandAsync(message, "рейд");
+                case "!допомога":
+                    {
+                        var helpEmbeds = new BotCommands.SlashCommands.OrganizeActivity().HelpEmbeds;
+
+                        await message.Channel.SendMessageAsync(embeds: helpEmbeds);
+                    }
                     break;
 
-                case "скасувати":
+                case "!скасувати":
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
@@ -83,7 +87,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("передати"):
+                when c.StartsWith("!передати"):
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null && message.MentionedUserIds.Count == 2)
@@ -96,14 +100,14 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("перенести"):
+                when c.StartsWith("!перенести "):
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
                         {
                             try
                             {
-                                var date = DateTime.ParseExact(command.Replace("перенести ", string.Empty), "d.M-H:m", CultureInfo.CurrentCulture);
+                                var date = DateTime.ParseExact(command.Replace("!перенести ", string.Empty), "d.M-H:m", CultureInfo.CurrentCulture);
                                 if (date < DateTime.Now)
                                     date = date.AddYears(1);
 
@@ -116,7 +120,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("зарезервувати"):
+                when c.StartsWith("!зарезервувати"):
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
@@ -128,7 +132,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("виключити"):
+                when c.StartsWith("!виключити"):
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is not null)
@@ -140,7 +144,7 @@ namespace ServitorDiscordBot
                     break;
 
                 case string c
-                when c.StartsWith("змінити "):
+                when c.StartsWith("!змінити "):
                     {
                         var msgId = message?.Reference?.MessageId.Value;
                         if (msgId is null)
@@ -148,7 +152,7 @@ namespace ServitorDiscordBot
 
                         try
                         {
-                            var action = message.Content[8..];
+                            var action = message.Content[9..];
                             switch (action.ToLower())
                             {
                                 case string s
@@ -176,12 +180,12 @@ namespace ServitorDiscordBot
                                     break;
 
                                 case string s
-                                when s.StartsWith("активність "):
+                                when s.StartsWith("режим "):
                                     {
                                         var activity = await _activityManager.GetActivityAsync(msgId.Value);
                                         if (activity is not null)
                                         {
-                                            activity.ActivityType = Translation.GetActivityType(action[11..].ToLower());
+                                            activity.ActivityType = Translation.GetActivityType(action[6..].ToLower());
                                             await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
                                         }
                                     }
@@ -192,28 +196,6 @@ namespace ServitorDiscordBot
                             await DeleteMessageAsync(message);
                         }
                         catch { }
-                    }
-                    break;
-
-                case string c
-                when c.StartsWith('!'):
-                    {
-                        var container = TryParseActivityContainer(message);
-
-                        if (container is not null)
-                        {
-                            await InitActivityAsync(container);
-                            await DeleteMessageAsync(message);
-                        }
-                        else
-                        {
-                            var builder = new EmbedBuilder()
-                                .WithColor(new Color(0xD50000))
-                                .WithTitle("Збір у активність")
-                                .WithDescription($"Сталася помилка під час створення активності. Перевірте, чи формат команди коректний.\nЩоби переглянути довідку, скористайтеся командою **допомога**.");
-
-                            await SendTemporaryMessageAsync(message, builder);
-                        }
                     }
                     break;
 

@@ -1,56 +1,35 @@
 ﻿using ActivityService;
 using CommonData.Localization;
-using Discord;
+using Discord.WebSocket;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private ActivityContainer TryParseActivityContainer(IMessage message)
+        private ActivityContainer TryParseActivityContainer(SocketSlashCommand command)
         {
             try
             {
-                string activityName = null, description = null;
-                DateTime plannedDate;
+                var options = command.Data.Options;
 
-                var command = message.Content;
+                var modeOption = options.First(x => x.Name is "режим");
+                var activityType = Translation.GetActivityType(((string)modeOption.Value).ToLower());
 
-                var users = new ulong[] { message.Author.Id }
-                    .Concat(message.MentionedUserIds);
+                var dateOption = options.First(x => x.Name is "дата");
+                DateTime plannedDate = DateTime.ParseExact((string)dateOption.Value, "d.M-H:m", CultureInfo.CurrentCulture);
 
-                var index = command.IndexOf(' ');
-                var activityType = Translation.GetActivityType(command[1..index].Replace('_', ' ').ToLower());
-                command = command[index..].TrimStart();
+                var nameOption = options.FirstOrDefault(x => x.Name is "назва");
+                var activityName = nameOption?.Value.ToString();
 
-                index = command.IndexOf(' ');
-                if (index < 0)
-                    plannedDate = DateTime.ParseExact(command, "d.M-H:m", CultureInfo.CurrentCulture);
-                else
-                {
-                    plannedDate = DateTime.ParseExact(command[..index], "d.M-H:m", CultureInfo.CurrentCulture);
+                var descriptionOption = options.FirstOrDefault(x => x.Name is "опис");
+                var description = descriptionOption?.Value.ToString();
 
-                    command = command[index..].TrimStart();
-                    command = Regex.Replace(command, "<@\\D?\\d+>", string.Empty).TrimStart();
-
-                    index = command.IndexOf(' ');
-
-                    if (index < 0 && command.Length > 0)
-                        activityName = command.Replace('_', ' ');
-                    if (index > 0)
-                    {
-                        activityName = command[..index].Replace('_', ' ');
-                        description = command[index..].TrimStart();
-                    }
-                }
-
-                if (plannedDate < DateTime.Now)
-                    plannedDate = plannedDate.AddYears(1);
+                var users = new ulong[] { command.User.Id };
 
                 return new ActivityContainer
                 {
-                    ChannelID = message.Channel.Id,
+                    ChannelID = command.Channel.Id,
                     ActivityType = activityType,
                     ActivityName = activityName,
                     Description = description,

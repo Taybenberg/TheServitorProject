@@ -101,7 +101,7 @@ namespace ServitorDiscordBot
         {
             var builder = new EmbedBuilder();
 
-            builder.Title = GetTitle(messagesEnum, message, userName);
+            //builder.Title = GetTitle(messagesEnum, message, userName);
 
             builder.Color = GetColor(messagesEnum);
 

@@ -10,6 +10,7 @@ namespace ServitorDiscordBot.BotCommands
         public static ISlashCommand[] SlashCommands =>
             new ISlashCommand[]
             {
+                new OrganizeActivity(),
                 new HelpCommand(),
                 new BipCommand(),
                 new ModesCommand(),
@@ -29,6 +30,12 @@ namespace ServitorDiscordBot.BotCommands
                 .WithColor(0x76766B)
                 .WithTitle(CommonData.DiscordEmoji.Emoji.Loading)
                 .WithDescription(GetCommandExecutionImpression());
+
+        public static EmbedBuilder WrongChannelBuilder =>
+            new EmbedBuilder()
+                .WithColor(0xD50000)
+                .WithTitle("Хибний канал")
+                .WithDescription("Ґардіане, скористатися цією командою можна лише у відповідному каналі.");
 
         public static EmbedBuilder WrongActivityTypeBuilder =>
            new EmbedBuilder()

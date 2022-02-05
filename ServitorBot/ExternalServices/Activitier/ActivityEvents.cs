@@ -17,7 +17,7 @@ namespace ServitorDiscordBot
 
             await channel.ModifyMessageAsync(activity.ActivityID, msg =>
             {
-                msg.Content = $"<@&{_destinyRoleID}>";
+                msg.Content = string.Join(", ", _destinyRoleIDs.Select(x => $"<@&{x}>"));
                 msg.Embed = builder.Build();
                 msg.Components = componentBuilder.Build();
             });

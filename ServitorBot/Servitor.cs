@@ -15,7 +15,7 @@ namespace ServitorDiscordBot
         private readonly IServiceScopeFactory _scopeFactory;
 
         private readonly string _discordToken;
-        private readonly ulong _destinyRoleID;
+        private readonly ulong[] _destinyRoleIDs;
         private readonly ulong[] _mainChannelIDs;
         private readonly ulong[] _activityChannelIDs;
         private readonly ulong[] _musicChannelIDs;
@@ -28,8 +28,7 @@ namespace ServitorDiscordBot
 
             _discordToken = configuration["ApiKeys:DiscordToken"];
 
-            _destinyRoleID = configuration.GetSection("DiscordConfig:DestinyRoleID").Get<ulong>();
-
+            _destinyRoleIDs = configuration.GetSection("DiscordConfig:DestinyRoleID").Get<ulong[]>();
             _mainChannelIDs = configuration.GetSection("DiscordConfig:MainChannelID").Get<ulong[]>();
             _activityChannelIDs = configuration.GetSection("DiscordConfig:ActivityChannelID").Get<ulong[]>();
             _musicChannelIDs = configuration.GetSection("DiscordConfig:MusicChannelID").Get<ulong[]>();
