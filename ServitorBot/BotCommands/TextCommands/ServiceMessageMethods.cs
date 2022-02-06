@@ -5,17 +5,6 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private int GetWeekNumber() =>
-            1;
-
-        private (DateTime?, string) GetPeriod(string period) =>
-            period switch
-            {
-                "тиждень" => (DateTime.UtcNow.AddDays(-7), " за останній тиждень"),
-                "місяць" => (DateTime.UtcNow.AddMonths(-1), " за останній місяць"),
-                _ => (null, " за весь час")
-            };
-
         private bool CheckModerationRole(IUser user)
         {
             var sUser = user as SocketGuildUser;
