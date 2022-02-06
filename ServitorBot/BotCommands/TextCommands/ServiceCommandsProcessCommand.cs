@@ -17,7 +17,18 @@ namespace ServitorDiscordBot.BotCommands.TextCommands
                     return true;
 
                 case string c when c.StartsWith("!random"):
-                    await CommandRandom(message);
+                    await CommandRandomAsync(message);
+                    return true;
+
+                case string c when c.StartsWith("!delete_"):
+                    {
+                        await DeleteMessageAsync(message);
+
+                        if (!CheckDeleteMessagesPermission(message.Author))
+                            await SendTemporaryMessageAsync(message, NoPermissonForDeletionEmbedBuilder);
+                        else
+                            await CommandDeleteAsync(message);                    
+                    }
                     return true;
             }
 

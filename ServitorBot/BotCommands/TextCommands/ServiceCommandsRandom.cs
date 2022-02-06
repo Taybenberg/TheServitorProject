@@ -4,7 +4,7 @@ namespace ServitorDiscordBot.BotCommands.TextCommands
 {
     internal partial class ServiceCommandsManager
     {
-        private async Task CommandRandom(IMessage message)
+        private async Task CommandRandomAsync(IMessage message)
         {
             try
             {
