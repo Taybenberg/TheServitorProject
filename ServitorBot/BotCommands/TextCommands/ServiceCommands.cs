@@ -8,37 +8,6 @@ namespace ServitorDiscordBot
         {
             switch (message.Content.ToLower())
             {
-                case "!donate":
-                    await SendDonateMessageAsync(message.Channel);
-                    return true;
-
-                case "!my_id":
-                    await SendTemporaryMessageAsync(message, message.Author.Id.ToString());
-                    return true;
-
-                case "!channel_id":
-                    await SendTemporaryMessageAsync(message, message.Channel.Id.ToString());
-                    return true;
-
-                case "!message_id":
-                    try
-                    {
-                        var m = await message.Channel.GetMessageAsync(message.Reference.MessageId.Value);
-                        await SendTemporaryMessageAsync(message, m.GetJumpUrl());
-                    }
-                    catch { }
-
-                    return true;
-
-                case string c when c.StartsWith("!echo"):
-                    try
-                    {
-                        await SendTemporaryMessageAsync(message, c.Replace("!echo ", string.Empty));
-                    }
-                    catch { }
-
-                    return true;
-
                 case string c when c.StartsWith("!random"):
                     try
                     {

@@ -1,4 +1,5 @@
 ﻿using Discord;
+using ServitorDiscordBot.BotCommands.TextCommands;
 
 namespace ServitorDiscordBot
 {
@@ -14,7 +15,7 @@ namespace ServitorDiscordBot
 
             if (message.Author.IsBot)
                 return;
-            else if (await ServiceMessagesAsync(message))
+            else if (await new ServiceCommandsManager(_client).ProcessServiceCommandAsync(message))
                 return;
             else if (_lulzChannelIDs.Any(x => x == message.Channel.Id))
                 await LulzChannelManagerAsync(message);

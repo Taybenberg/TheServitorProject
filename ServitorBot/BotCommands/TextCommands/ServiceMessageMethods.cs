@@ -85,41 +85,5 @@ namespace ServitorDiscordBot
                 catch { }
             }
         }
-
-        private EmbedBuilder GetBuilder(MessagesEnum messagesEnum, IMessage message, bool getFooter = true, string userName = null)
-        {
-            var builder = new EmbedBuilder();
-
-            //builder.Title = GetTitle(messagesEnum, message, userName);
-
-            builder.Color = GetColor(messagesEnum);
-
-            if (getFooter)
-            {
-                var footer = new EmbedFooterBuilder();
-
-                footer.IconUrl = _client.CurrentUser.GetAvatarUrl();
-                footer.Text = $"Ваш відданий {_client.CurrentUser.Username} | !donate – підтримати автора";
-
-                builder.Footer = footer;
-            }
-
-            return builder;
-        }
-
-        private async Task SendDonateMessageAsync(IMessageChannel channel)
-        {
-            var builder = new EmbedBuilder();
-
-            builder.Color = Color.Gold;
-
-            builder.ThumbnailUrl = _client.GetUser(228896926991515649).GetAvatarUrl();
-
-            builder.Title = "Підтримати автора";
-
-            builder.Description = $"Ви завжди можете підтримати <@228896926991515649> чашкою кави на сервісі [Buy Me a Coffee](https://www.buymeacoffee.com/servitor).";
-
-            await channel.SendMessageAsync(embed: builder.Build());
-        }
     }
 }
