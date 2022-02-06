@@ -4,35 +4,12 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
+        /*
         public async Task<bool> ServiceMessagesAsync(IMessage message)
         {
+            return false;
             switch (message.Content.ToLower())
             {
-                case string c when c.StartsWith("!random"):
-                    try
-                    {
-                        if (message.MentionedRoleIds.Count == 1)
-                        {
-                            var members = _client.GetGuild((message.Channel as IGuildChannel).GuildId).GetRole(message.MentionedRoleIds.First()).Members.ToArray();
-
-                            var count = members.Length;
-
-                            await message.Channel.SendMessageAsync($"Серед {count} користувачів моє око побачило <@{members[new Random().Next(count)].Id}> <:Illuminati:891705606631727114>");
-                        }
-                        else
-                        {
-                            var strs = c.Split(' ');
-
-                            if (strs.Length == 2 && uint.TryParse(strs[1], out var next))
-                                await message.Channel.SendMessageAsync($"Віщую вам число **{new Random().Next((int)next)}** <:Illuminati:891705606631727114>");
-                            else
-                                await SendTemporaryMessageAsync(message, "Ви ввели команду в хибному форматі. Перевірте формат. Скористайтеся командою **допомога рандом**.");
-                        }
-                    }
-                    catch { }
-
-                    return true;
-
                 case string c when c.StartsWith("!delete_this"):
                     if (!CheckModerationRole(message.Author))
                         return await NoDeletePermissionsAsync(message);
@@ -178,5 +155,6 @@ namespace ServitorDiscordBot
                     await SendTemporaryMessageAsync(message, $"Сталася помилка під час виконання команди. Можливо вказане повідомлення більше не існує вбо формат команди хибний.");
             }
         }
+        */
     }
 }

@@ -4,7 +4,7 @@ namespace ServitorDiscordBot.BotCommands.TextCommands
 {
     internal partial class ServiceCommandsManager
     {
-        public Embed[] HelpEmbeds =>
+        private Embed[] HelpEmbeds =>
             new Embed[]
             {
                 new EmbedBuilder()

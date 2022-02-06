@@ -1,6 +1,7 @@
 ﻿using CommonData.Activities;
 using CommonData.Localization;
 using Discord;
+using ServitorDiscordBot.BotCommands.TextCommands;
 using System.Globalization;
 
 namespace ServitorDiscordBot
@@ -36,7 +37,7 @@ namespace ServitorDiscordBot
 
                         await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
 
-                        await DeleteMessageAsync(message);
+                        await ServiceCommandsManager.DeleteMessageAsync(message);
                     }
                     break;
 
@@ -63,7 +64,7 @@ namespace ServitorDiscordBot
 
                         await message.Channel.SendMessageAsync(embed: builder.Build(), components: component.Build());
 
-                        await DeleteMessageAsync(message);
+                        await ServiceCommandsManager.DeleteMessageAsync(message);
                     }
                     break;
 
@@ -81,7 +82,8 @@ namespace ServitorDiscordBot
                         if (msgId is not null)
                         {
                             await _activityManager.DisableActivityAsync(msgId.Value, message.Author.Id);
-                            await DeleteMessageAsync(message);
+
+                            await ServiceCommandsManager.DeleteMessageAsync(message);
                         }
                     }
                     break;
@@ -94,7 +96,8 @@ namespace ServitorDiscordBot
                         {
                             var receiverID = message.MentionedUserIds.Last();
                             await _activityManager.UserTransferPlaceAsync(msgId.Value, message.Author.Id, receiverID);
-                            await DeleteMessageAsync(message);
+
+                            await ServiceCommandsManager.DeleteMessageAsync(message);
                         }
                     }
                     break;
@@ -112,7 +115,8 @@ namespace ServitorDiscordBot
                                     date = date.AddYears(1);
 
                                 await _activityManager.RescheduleActivityAsync(msgId.Value, message.Author.Id, date.ToUniversalTime());
-                                await DeleteMessageAsync(message);
+
+                                await ServiceCommandsManager.DeleteMessageAsync(message);
                             }
                             catch { }
                         }
@@ -126,7 +130,8 @@ namespace ServitorDiscordBot
                         if (msgId is not null)
                         {
                             await _activityManager.UsersSubscribeAsync(msgId.Value, message.Author.Id, message.MentionedUserIds.Skip(1));
-                            await DeleteMessageAsync(message);
+
+                            await ServiceCommandsManager.DeleteMessageAsync(message);
                         }
                     }
                     break;
@@ -138,7 +143,8 @@ namespace ServitorDiscordBot
                         if (msgId is not null)
                         {
                             await _activityManager.UsersUnSubscribeAsync(msgId.Value, message.Author.Id, message.MentionedUserIds.Skip(1));
-                            await DeleteMessageAsync(message);
+
+                            await ServiceCommandsManager.DeleteMessageAsync(message);
                         }
                     }
                     break;
@@ -193,7 +199,8 @@ namespace ServitorDiscordBot
 
                                 default: break;
                             }
-                            await DeleteMessageAsync(message);
+
+                            await ServiceCommandsManager.DeleteMessageAsync(message);
                         }
                         catch { }
                     }

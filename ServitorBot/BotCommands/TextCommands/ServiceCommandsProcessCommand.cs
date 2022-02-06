@@ -15,6 +15,10 @@ namespace ServitorDiscordBot.BotCommands.TextCommands
                 case "!donate":
                     await message.Channel.SendMessageAsync(embed: DonateEmbedBuilder.Build());
                     return true;
+
+                case string c when c.StartsWith("!random"):
+                    await CommandRandom(message);
+                    return true;
             }
 
             return false;

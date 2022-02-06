@@ -8,6 +8,8 @@
 
         public static readonly string BumpTimer = "<:bump_timer:867070921452552213>";
 
+        public static readonly string ServitorIlluminati = "<:Illuminati:891705606631727114>";
+
         public static readonly string MusicPrevious = "<:Previous:932710779155791873>";
         public static readonly string MusicNext = "<:Next:932711403398242335>";
         public static readonly string MusicShuffle = "<:Shuffle:932710779034153080>";

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Audio;
 using MusicService;
+using ServitorDiscordBot.BotCommands.TextCommands;
 using System.Text;
 
 namespace ServitorDiscordBot
@@ -63,7 +64,12 @@ namespace ServitorDiscordBot
                 case string c
                 when c.StartsWith("!add "):
                     {
-                        await SendTemporaryMessageAsync(message, "Доповнюю список…");
+                        var builder = new EmbedBuilder()
+                            .WithColor(new Color(0x3BA55D))
+                            .WithDescription("Доповнюю список…");
+
+                        await message.Channel.SendMessageAsync(embed: builder.Build());
+
                         await _musicPlayer.AddAsync(message.Content[5..]);
                     }
                     break;
@@ -74,9 +80,22 @@ namespace ServitorDiscordBot
                         var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
 
                         if (voiceChannel is null)
-                            await SendTemporaryMessageAsync(message, "Спершу приєднайтеся до голосового каналу.");
+                        {
+                            var builder = new EmbedBuilder()
+                                .WithColor(new Color(0xFF8C67))
+                                .WithDescription("Спершу приєднайтеся до голосового каналу.");
+
+                            await ServiceCommandsManager.SendTemporaryMessageAsync(message, builder);
+                        }
                         else if (!_musicPlayer.Init())
-                            await SendTemporaryMessageAsync(message, "Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
+                        {
+                            var builder = new EmbedBuilder()
+                               .WithColor(new Color(0xFF8C67))
+                               .WithDescription("Наразі відтворення вже виконується. " +
+                               "Дочекайтесь його закінчення, або ж зупиніть його, якщо впевнені, що не перервете прослуховування іншого користувача.");
+
+                            await ServiceCommandsManager.SendTemporaryMessageAsync(message, builder);
+                        }
                         else
                         {
                             try
@@ -107,9 +126,22 @@ namespace ServitorDiscordBot
                         var voiceChannel = (message.Author as IGuildUser).VoiceChannel;
 
                         if (voiceChannel is null)
-                            await SendTemporaryMessageAsync(message, "Спершу приєднайтеся до голосового каналу.");
+                        {
+                            var builder = new EmbedBuilder()
+                                .WithColor(new Color(0xFF8C67))
+                                .WithDescription("Спершу приєднайтеся до голосового каналу.");
+
+                            await ServiceCommandsManager.SendTemporaryMessageAsync(message, builder);
+                        }
                         else if (!_musicPlayer.Init())
-                            await SendTemporaryMessageAsync(message, "Наразі відтворення вже виконується. Дочекайтесь його закінчення, або ж скористайтесь командою **stop**, якщо впевнені, що не перервете прослуховування іншого користувача.");
+                        {
+                            var builder = new EmbedBuilder()
+                               .WithColor(new Color(0xFF8C67))
+                               .WithDescription("Наразі відтворення вже виконується. " +
+                               "Дочекайтесь його закінчення, або ж зупиніть його, якщо впевнені, що не перервете прослуховування іншого користувача.");
+
+                            await ServiceCommandsManager.SendTemporaryMessageAsync(message, builder);
+                        }
                         else
                         {
                             try
