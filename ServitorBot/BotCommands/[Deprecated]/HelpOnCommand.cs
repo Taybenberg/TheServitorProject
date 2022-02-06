@@ -1,6 +1,4 @@
-﻿using CommonData.Activities;
-using CommonData.Localization;
-using Discord;
+﻿using Discord;
 
 namespace ServitorBot
 {

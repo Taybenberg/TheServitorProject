@@ -27,7 +27,7 @@ namespace ServitorBot.BotCommands.TextCommands
                         if (!CheckDeleteMessagesPermission(message.Author))
                             await SendTemporaryMessageAsync(message, NoPermissonForDeletionEmbedBuilder);
                         else
-                            await CommandDeleteAsync(message);                    
+                            await CommandDeleteAsync(message);
                     }
                     return true;
             }

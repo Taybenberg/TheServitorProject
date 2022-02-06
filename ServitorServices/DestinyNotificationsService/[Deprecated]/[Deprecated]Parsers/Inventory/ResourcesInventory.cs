@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DataProcessor.Parsers.Inventory
+﻿namespace DataProcessor.Parsers.Inventory
 {
     public record ResourcesInventory
     {

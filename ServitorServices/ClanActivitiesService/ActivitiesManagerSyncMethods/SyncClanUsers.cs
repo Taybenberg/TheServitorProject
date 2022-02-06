@@ -34,10 +34,10 @@ namespace ClanActivitiesService
             var usersToUpdate = new ConcurrentBag<User>();
             var usersToAdd = new ConcurrentBag<User>();
 
-            var components = new DestinyComponentType[] 
-            { 
-                DestinyComponentType.Profiles, 
-                DestinyComponentType.Characters 
+            var components = new DestinyComponentType[]
+            {
+                DestinyComponentType.Profiles,
+                DestinyComponentType.Characters
             };
 
             var chunks = groupMembersDict.Chunk(groupMembersDict.Count() / 8 + 1);

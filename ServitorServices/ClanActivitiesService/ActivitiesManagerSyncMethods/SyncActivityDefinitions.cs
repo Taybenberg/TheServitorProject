@@ -1,10 +1,7 @@
 ﻿using BungieSharper.Client;
-using BungieSharper.Entities;
 using ClanActivitiesDatabase;
-using ClanActivitiesDatabase.ORM;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Collections.Concurrent;
 
 namespace ClanActivitiesService
 {
@@ -31,7 +28,7 @@ namespace ClanActivitiesService
             {
                 var entity = await apiClient.Api.Destiny2_GetDestinyEntityDefinition("DestinyActivityDefinition", (uint)u);
             }
-            
+
             _logger.LogInformation($"{DateTime.Now} ActivityDefinitions synced");
         }
     }

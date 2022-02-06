@@ -122,7 +122,7 @@ namespace ClanActivitiesDatabase
                 _context.Users.UpdateRange(usersToUpdate);
 
             if (usersToAdd is not null)
-                _context.Users.AddRange(usersToAdd);    
+                _context.Users.AddRange(usersToAdd);
 
             await _context.SaveChangesAsync();
         }
