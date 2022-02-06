@@ -1,4 +1,4 @@
-﻿namespace ServitorDiscordBot
+﻿namespace ServitorBot
 {
     public enum MessagesEnum
     {

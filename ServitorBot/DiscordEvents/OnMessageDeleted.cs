@@ -1,6 +1,6 @@
-﻿namespace ServitorDiscordBot
+﻿namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task OnMessageDeletedAsync(ulong messageID, ulong channelID)
         {

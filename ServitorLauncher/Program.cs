@@ -10,7 +10,7 @@ using DestinyNotificationsDatabase;
 using DestinyNotificationsService;
 using Microsoft.EntityFrameworkCore;
 using MusicService;
-using ServitorDiscordBot;
+using ServitorBot;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
@@ -40,8 +40,8 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddSingleton<IMusicPlayer, MusicPlayer>();
 
-        services.AddSingleton<ServitorBot>();
-        services.AddHostedService(p => p.GetRequiredService<ServitorBot>());
+        services.AddSingleton<ServitorDiscordBot>();
+        services.AddHostedService(p => p.GetRequiredService<ServitorDiscordBot>());
     })
     .Build();
 

@@ -2,7 +2,7 @@
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ServitorDiscordBot.BotCommands
+namespace ServitorBot.BotCommands
 {
     internal interface ISlashCommand
     {

@@ -2,9 +2,9 @@
 using CommonData.Activities;
 using Discord;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task OnActivityUpdatedAsync(ActivityContainer activity)
         {

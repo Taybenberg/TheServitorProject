@@ -1,12 +1,12 @@
 ﻿using CommonData.Activities;
 using CommonData.Localization;
 using Discord;
-using ServitorDiscordBot.BotCommands.TextCommands;
+using ServitorBot.BotCommands.TextCommands;
 using System.Globalization;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task ActivityMessageReceivedAsync(IMessage message)
         {

@@ -3,7 +3,7 @@ using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ServitorDiscordBot.BotCommands.SlashCommands
+namespace ServitorBot.BotCommands.SlashCommands
 {
     internal class ModesCommand : ISlashCommand
     {

@@ -1,7 +1,7 @@
 ﻿using DestinyNotificationsService.Infocards;
 using Discord;
 
-namespace ServitorDiscordBot.BotCommands
+namespace ServitorBot.BotCommands
 {
     internal static class InfocardHelper
     {

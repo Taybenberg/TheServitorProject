@@ -5,7 +5,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
-namespace ServitorDiscordBot.BotCommands.SlashCommands
+namespace ServitorBot.BotCommands.SlashCommands
 {
     internal class ClanActivitiesCommand : ISlashCommand
     {

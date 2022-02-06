@@ -3,9 +3,9 @@ using BumperService;
 using Microsoft.Extensions.DependencyInjection;
 using MusicService;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private IBumpManager _bumper;
         private IActivityManager _activityManager;

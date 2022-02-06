@@ -1,8 +1,8 @@
 ﻿using Discord;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         public async Task GetWeeklyMilestoneAsync(IMessageChannel channel)
         {

@@ -1,9 +1,9 @@
 ﻿using BungieSharper.Entities.Destiny.HistoricalStats.Definitions;
 using CommonData.Localization;
 using Discord;
-using ServitorDiscordBot.BotCommands.SlashCommands;
+using ServitorBot.BotCommands.SlashCommands;
 
-namespace ServitorDiscordBot.BotCommands
+namespace ServitorBot.BotCommands
 {
     internal static class CommandHelper
     {

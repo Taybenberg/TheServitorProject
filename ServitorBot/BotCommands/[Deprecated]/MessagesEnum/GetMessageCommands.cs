@@ -1,8 +1,8 @@
-﻿using static ServitorDiscordBot.MessagesEnum;
+﻿using static ServitorBot.MessagesEnum;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private readonly static Dictionary<MessagesEnum, string[]> messageCommands = new()
         {

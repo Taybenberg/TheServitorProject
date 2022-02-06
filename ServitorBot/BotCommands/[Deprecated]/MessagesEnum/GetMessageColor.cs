@@ -1,9 +1,9 @@
 ﻿using Discord;
-using static ServitorDiscordBot.MessagesEnum;
+using static ServitorBot.MessagesEnum;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private Color GetColor(MessagesEnum messagesEnum) => messagesEnum switch
         {

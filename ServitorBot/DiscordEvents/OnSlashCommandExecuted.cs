@@ -1,10 +1,10 @@
 ﻿using Discord.WebSocket;
-using ServitorDiscordBot.BotCommands;
-using ServitorDiscordBot.BotCommands.SlashCommands;
+using ServitorBot.BotCommands;
+using ServitorBot.BotCommands.SlashCommands;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task OnSlashCommandExecutedAsync(SocketSlashCommand command)
         {

@@ -1,12 +1,12 @@
 ﻿using Discord;
 using Discord.Audio;
 using MusicService;
-using ServitorDiscordBot.BotCommands.TextCommands;
+using ServitorBot.BotCommands.TextCommands;
 using System.Text;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task MusicPlayerMessageReceivedAsync(IMessage message)
         {

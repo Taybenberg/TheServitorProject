@@ -1,8 +1,8 @@
-﻿using ServitorDiscordBot.BotCommands;
+﻿using ServitorBot.BotCommands;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task RegisterSlashCommandsAsync()
         {

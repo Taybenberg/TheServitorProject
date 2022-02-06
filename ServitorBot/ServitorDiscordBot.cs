@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot : IHostedService
+    public partial class ServitorDiscordBot : IHostedService
     {
         private DiscordSocketClient _client;
 
@@ -22,7 +22,7 @@ namespace ServitorDiscordBot
         private readonly ulong[] _lulzChannelIDs;
         private readonly ulong[] _bumpChannelIDs;
 
-        public ServitorBot(ILogger<ServitorBot> logger, IServiceScopeFactory scopeFactory, IConfiguration configuration)
+        public ServitorDiscordBot(ILogger<ServitorDiscordBot> logger, IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             (_logger, _scopeFactory) = (logger, scopeFactory);
 

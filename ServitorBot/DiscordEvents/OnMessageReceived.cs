@@ -1,9 +1,9 @@
 ﻿using Discord;
-using ServitorDiscordBot.BotCommands.TextCommands;
+using ServitorBot.BotCommands.TextCommands;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task OnMessageReceivedAsync(IMessage message)
         {

@@ -1,6 +1,6 @@
 ﻿using Discord.WebSocket;
 
-namespace ServitorDiscordBot.BotCommands.TextCommands
+namespace ServitorBot.BotCommands.TextCommands
 {
     internal partial class ServiceCommandsManager
     {

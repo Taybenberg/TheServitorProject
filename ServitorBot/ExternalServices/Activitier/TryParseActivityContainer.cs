@@ -3,9 +3,9 @@ using CommonData.Localization;
 using Discord.WebSocket;
 using System.Globalization;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private ActivityContainer TryParseActivityContainer(SocketSlashCommand command)
         {

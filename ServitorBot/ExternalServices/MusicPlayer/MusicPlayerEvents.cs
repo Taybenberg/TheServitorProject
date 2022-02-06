@@ -1,9 +1,9 @@
 ﻿using Discord;
 using MusicService;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task OnMusicPlayerUpdateAsync(ulong? messageID)
         {

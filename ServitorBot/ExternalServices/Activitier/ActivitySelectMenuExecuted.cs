@@ -3,9 +3,9 @@ using Discord;
 using Discord.WebSocket;
 using System.Globalization;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task ActivitySelectMenuExecutedAsync(SocketMessageComponent component)
         {

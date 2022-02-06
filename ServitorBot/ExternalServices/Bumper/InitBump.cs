@@ -1,9 +1,9 @@
 ﻿using Discord;
 using System.Text.RegularExpressions;
 
-namespace ServitorDiscordBot
+namespace ServitorBot
 {
-    public partial class ServitorBot
+    public partial class ServitorDiscordBot
     {
         private async Task InitBumpAsync(IMessage message)
         {
