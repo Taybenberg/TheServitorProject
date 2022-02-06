@@ -5,35 +5,6 @@ namespace ServitorDiscordBot
 {
     public partial class ServitorBot
     {
-        private bool CheckModerationRole(IUser user)
-        {
-            var sUser = user as SocketGuildUser;
-
-            return sUser.Roles.Any(x =>
-            x.Name.ToLower() is "administrator" ||
-            x.Name.ToLower() is "moderator" ||
-            x.Name.ToLower() is "raid lead") ||
-            sUser.Guild.OwnerId == user.Id;
-        }
-
-        private async Task LulzChannelManagerAsync(IMessage message)
-        {
-            await Task.Delay(1000);
-
-            try
-            {
-                var channel = await _client.Rest.GetChannelAsync(message.Channel.Id) as Discord.Rest.IRestMessageChannel;
-
-                var msg = await channel.GetMessageAsync(message.Id);
-
-                if (msg.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
-                    return;
-
-                await msg.DeleteAsync();
-            }
-            catch { }
-        }
-
         private async Task<(IGuild, IMessageChannel, IMessage)> GetChannelMessageAsync(string link)
         {
             var strs = link.Split('/');
