@@ -168,12 +168,12 @@ namespace ServitorDiscordBot
                                     break;
 
                                 case string s
-                                when s.StartsWith("заголовок "):
+                                when s.StartsWith("назву "):
                                     {
                                         var activity = await _activityManager.GetActivityAsync(msgId.Value);
                                         if (activity is not null)
                                         {
-                                            activity.ActivityName = action[10..];
+                                            activity.ActivityName = action[6..];
                                             await _activityManager.UpdateActivityAsync(activity, message.Author.Id);
                                         }
                                     }
