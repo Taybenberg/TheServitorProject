@@ -63,6 +63,36 @@ namespace DestinyInfocardsService.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] EververseInfocardHuge {
+            get {
+                object obj = ResourceManager.GetObject("EververseInfocardHuge", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] EververseInfocardRegular {
+            get {
+                object obj = ResourceManager.GetObject("EververseInfocardRegular", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] EververseInfocardSmall {
+            get {
+                object obj = ResourceManager.GetObject("EververseInfocardSmall", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] LostSectorsInfocard {
             get {
                 object obj = ResourceManager.GetObject("LostSectorsInfocard", resourceCulture);
