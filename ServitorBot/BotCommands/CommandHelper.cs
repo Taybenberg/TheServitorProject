@@ -21,7 +21,9 @@ namespace ServitorBot.BotCommands
                 new ClanStatsCommand(),
                 new LeaderboardCommand(),
                 new RegisterCommand(),
-                new XurInfocardCommand(),
+                //new MyRaidsCommand(),
+                //new MyGrandmastersCommand(),
+                //new XurInfocardCommand(),
                 new LostSectorsInfocardCommand()
             };
 
