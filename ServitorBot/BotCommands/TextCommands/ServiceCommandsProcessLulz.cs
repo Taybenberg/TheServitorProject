@@ -14,7 +14,7 @@ namespace ServitorBot.BotCommands.TextCommands
 
                 var msg = await channel.GetMessageAsync(message.Id);
 
-                if (msg.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0)
+                if (msg.Source != MessageSource.User || msg.Attachments.Count > 0 || msg.Embeds.Count > 0 || msg.Content.Contains("https://") || msg.Content.Contains("http://"))
                     return;
 
                 await msg.DeleteAsync();
