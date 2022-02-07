@@ -8,6 +8,7 @@ using ClanActivitiesService;
 using Coravel;
 using DestinyNotificationsDatabase;
 using DestinyNotificationsService;
+using Imgur.API.Authentication;
 using Microsoft.EntityFrameworkCore;
 using MusicService;
 using ServitorBot;
@@ -21,6 +22,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             ApiKey = hostContext.Configuration["ApiKeys:BungieApiKey"]
         }));
+
+        services.AddScoped(p => new ApiClient(hostContext.Configuration["ApiKeys:ImgurClientID"], hostContext.Configuration["ApiKeys:ImgurClientSecret"]));
 
         services.AddDbContext<ClanActivitiesContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("ClanActivitiesDatabase")));
         services.AddScoped<IClanActivitiesDB, ClanActivitiesUoW>();
