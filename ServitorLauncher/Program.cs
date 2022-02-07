@@ -29,7 +29,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IClanActivitiesDB, ClanActivitiesUoW>();
         services.AddScoped<IClanActivities, ClanActivitiesManager>();
 
-        services.AddDbContext<NotificationsContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("NotificationsDatabase")));
+        services.AddDbContext<NotificationsContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("InfocardsDatabase")));
         services.AddScoped<INotificationsDB, NotificationsUoW>();
         services.AddScoped<IDestinyInfocards, DestinyInfocardsManager>();
 
