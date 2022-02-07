@@ -14,12 +14,12 @@ namespace DestinyInfocardsService
 
             (var resetBegin, var resetEnd) = GetDailyResetInterval();
 
-            var dbSectors = await infocardsDB.GetLostSectorAsync(resetBegin, resetEnd);
-            var imageLink = dbSectors?.InfocardImageURL;
+            var sectors = await infocardsDB.GetLostSectorAsync(resetBegin, resetEnd);
+            var imageLink = sectors?.InfocardImageURL;
 
             if (imageLink is null)
             {
-                var sectors = await DataParser.ParseLostSectorsAsync(resetBegin, resetEnd);
+                sectors = await DataParser.ParseLostSectorsAsync(resetBegin, resetEnd);
 
                 using var image = await ImageGenerator.GetLostSectorsImageAsync(sectors);
 

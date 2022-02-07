@@ -12,7 +12,8 @@ namespace ServitorBot.BotCommands
         public static EmbedBuilder ParseInfocard(LostSectorsInfocard infocard) =>
             new EmbedBuilder()
                 .WithColor(0xE0F7FA)
-                .WithTitle($"Загублені сектори {infocard.ResetBegin.ToString("dd.MM.yyyy HH:mm")} - {infocard.ResetEnd.ToString("dd.MM.yyyy HH:mm")}")
+                .WithTitle($"Загублені сектори")
+                .WithDescription($"**{infocard.ResetBegin.ToString("dd.MM.yyyy HH:mm")} - {infocard.ResetEnd.ToString("dd.MM.yyyy HH:mm")}**")
                 .WithImageUrl(infocard.InfocardImageURL);
 
         public static EmbedBuilder ParseInfocard(EververseInfocard infocard) =>
