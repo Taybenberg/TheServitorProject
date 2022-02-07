@@ -43,7 +43,7 @@ namespace ServitorBot.BotCommands.SlashCommands
                 .AddField("Окрема подяка", $"<@679220982082174977> – дизайн інформаційних карток\n" +
                             $"<@356816080326361088> – дизайн інформаційних карток\n" +
                             $"<@326308954000850944> – інформаційний супровід");
-                            
+
 
             await command.RespondAsync(embed: builder.Build());
         }

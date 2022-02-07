@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Imgur.API.Authentication;
+using Imgur.API.Endpoints;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
-using Imgur.API.Authentication;
-using Imgur.API.Endpoints;
 
 namespace DestinyInfocardsService
 {
