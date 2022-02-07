@@ -2,6 +2,6 @@
 {
     public record EververseInfocard
     {
-
+        public string InfocardImageURL { get; internal set; }
     }
 }

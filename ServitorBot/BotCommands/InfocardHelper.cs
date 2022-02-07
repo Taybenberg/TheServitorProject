@@ -21,6 +21,8 @@ namespace ServitorBot.BotCommands
 
         public static EmbedBuilder ParseInfocard(EververseInfocard infocard) =>
             new EmbedBuilder()
-                .WithColor(0xE0F7FA);
+                .WithColor(0xE0F7FA)
+                .WithTitle("Еверверс")
+                .WithImageUrl(infocard.InfocardImageURL);
     }
 }
