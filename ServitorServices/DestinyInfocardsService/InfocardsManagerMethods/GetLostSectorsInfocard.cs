@@ -8,15 +8,29 @@ namespace DestinyInfocardsService
     {
         public async Task<LostSectorsInfocard> GetLostSectorsInfocardAsync()
         {
-            (var resetBegin, var resetEnd) = GetDailyResetInterval();
-
             using var scope = _scopeFactory.CreateScope();
 
             var infocardsDB = scope.ServiceProvider.GetRequiredService<IInfocardsDB>();
 
-            using var image = await ImageGenerator.GetLostSectorsImageAsync();
+            (var resetBegin, var resetEnd) = GetDailyResetInterval();
 
-            var imageLink = await UploadImageAsync(image);
+            string imageLink = null;//infocardsDB.Get;
+
+            if (imageLink is null)
+            {
+                var sectors = await DataParser.ParseLostSectorsAsync(resetBegin, resetEnd);
+
+                using var image = await ImageGenerator.GetLostSectorsImageAsync(sectors);
+
+                imageLink = await UploadImageAsync(image);
+
+                var s = sectors with
+                {
+                    InfocardImageURL = imageLink
+                };
+
+                //infocardsDB.Set;
+            }
 
             return new LostSectorsInfocard
             {
