@@ -1,14 +1,14 @@
 ﻿using CommonData.Localization;
-using DestinyNotificationsService.Infocards;
+using DestinyInfocardsService.Infocards;
 using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
 
-namespace DestinyNotificationsService
+namespace DestinyInfocardsService
 {
-    public partial class DestinyNotificationsManager
+    public partial class DestinyInfocardsManager
     {
         public async Task<LostSectorsInfocard> GetLostSectorsInfocardAsync()
         {

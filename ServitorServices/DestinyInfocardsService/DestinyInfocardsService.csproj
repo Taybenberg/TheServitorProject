@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CommonData\CommonData.csproj" />
-    <ProjectReference Include="..\..\DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj" />
+    <ProjectReference Include="..\..\DatabaseServices\DestinyNotificationsDatabase\DestinyInfocardsDatabase.csproj" />
   </ItemGroup>
 
   <ItemGroup>

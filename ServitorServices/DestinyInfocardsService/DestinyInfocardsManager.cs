@@ -5,14 +5,14 @@ using SixLabors.ImageSharp;
 using Imgur.API.Authentication;
 using Imgur.API.Endpoints;
 
-namespace DestinyNotificationsService
+namespace DestinyInfocardsService
 {
-    public partial class DestinyNotificationsManager : IDestinyNotifications
+    public partial class DestinyInfocardsManager : IDestinyInfocards
     {
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
-        public DestinyNotificationsManager(ILogger<DestinyNotificationsManager> logger, IServiceScopeFactory scopeFactory, IConfiguration configuration)
+        public DestinyInfocardsManager(ILogger<DestinyInfocardsManager> logger, IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             (_logger, _scopeFactory) = (logger, scopeFactory);
         }

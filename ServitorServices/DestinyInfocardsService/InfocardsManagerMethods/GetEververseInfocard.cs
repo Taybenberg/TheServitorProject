@@ -1,8 +1,8 @@
-﻿using DestinyNotificationsService.Infocards;
+﻿using DestinyInfocardsService.Infocards;
 
-namespace DestinyNotificationsService
+namespace DestinyInfocardsService
 {
-    public partial class DestinyNotificationsManager
+    public partial class DestinyInfocardsManager
     {
         public async Task<EververseInfocard> GetEververseInfocardAsync()
         {

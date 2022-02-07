@@ -1,8 +1,8 @@
-﻿using DestinyNotificationsService.Infocards;
+﻿using DestinyInfocardsService.Infocards;
 
-namespace DestinyNotificationsService
+namespace DestinyInfocardsService
 {
-    public interface IDestinyNotifications
+    public interface IDestinyInfocards
     {
         Task<XurInfocard> GetXurInfocardAsync();
 

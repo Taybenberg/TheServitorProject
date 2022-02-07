@@ -1,4 +1,4 @@
-﻿namespace DestinyNotificationsDatabase
+﻿namespace DestinyInfocardsDatabase
 {
     public class NotificationsUoW : INotificationsDB
     {

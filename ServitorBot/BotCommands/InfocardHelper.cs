@@ -1,4 +1,4 @@
-﻿using DestinyNotificationsService.Infocards;
+﻿using DestinyInfocardsService.Infocards;
 using Discord;
 
 namespace ServitorBot.BotCommands

@@ -6,8 +6,8 @@ using BungieSharper.Client;
 using ClanActivitiesDatabase;
 using ClanActivitiesService;
 using Coravel;
-using DestinyNotificationsDatabase;
-using DestinyNotificationsService;
+using DestinyInfocardsDatabase;
+using DestinyInfocardsService;
 using Imgur.API.Authentication;
 using Microsoft.EntityFrameworkCore;
 using MusicService;
@@ -31,7 +31,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddDbContext<NotificationsContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("NotificationsDatabase")));
         services.AddScoped<INotificationsDB, NotificationsUoW>();
-        services.AddScoped<IDestinyNotifications, DestinyNotificationsManager>();
+        services.AddScoped<IDestinyInfocards, DestinyInfocardsManager>();
 
         services.AddDbContext<BumperContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("BumperDatabase")));
         services.AddScoped<IBumperDB, BumperUoW>();

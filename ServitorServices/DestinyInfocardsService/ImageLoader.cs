@@ -3,7 +3,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Concurrent;
 
-namespace DestinyNotificationsService
+namespace DestinyInfocardsService
 {
     internal static class ImageLoader
     {

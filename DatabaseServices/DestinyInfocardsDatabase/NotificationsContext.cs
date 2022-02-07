@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DestinyNotificationsDatabase
+namespace DestinyInfocardsDatabase
 {
     public class NotificationsContext : DbContext
     {

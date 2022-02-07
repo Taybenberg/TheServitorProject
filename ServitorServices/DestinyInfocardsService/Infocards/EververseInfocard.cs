@@ -1,4 +1,4 @@
-﻿namespace DestinyNotificationsService.Infocards
+﻿namespace DestinyInfocardsService.Infocards
 {
     public record EververseInfocard
     {

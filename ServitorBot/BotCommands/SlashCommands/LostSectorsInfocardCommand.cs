@@ -1,4 +1,4 @@
-﻿using DestinyNotificationsService;
+﻿using DestinyInfocardsService;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,9 +34,9 @@ namespace ServitorBot.BotCommands.SlashCommands
 
             using var scope = scopeFactory.CreateScope();
 
-            var notifications = scope.ServiceProvider.GetRequiredService<IDestinyNotifications>();
+            var destinyInfocards = scope.ServiceProvider.GetRequiredService<IDestinyInfocards>();
 
-            var infocard = await notifications.GetLostSectorsInfocardAsync();
+            var infocard = await destinyInfocards.GetLostSectorsInfocardAsync();
 
             var builder = InfocardHelper.ParseInfocard(infocard);
 

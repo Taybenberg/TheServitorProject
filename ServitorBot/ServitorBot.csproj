@@ -18,7 +18,7 @@
     <ProjectReference Include="..\ServitorServices\BumperService\BumperService.csproj" />
     <ProjectReference Include="..\ServitorServices\ActivityService\ActivityService.csproj" />
     <ProjectReference Include="..\ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj" />
-    <ProjectReference Include="..\ServitorServices\DestinyNotificationsService\DestinyNotificationsService.csproj" />
+    <ProjectReference Include="..\ServitorServices\DestinyInfocardsService\DestinyInfocardsService.csproj" />
     <ProjectReference Include="..\ServitorServices\MusicService\MusicService.csproj" />
   </ItemGroup>
 

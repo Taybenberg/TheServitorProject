@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonData", "CommonData\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClanActivitiesService", "ServitorServices\ClanActivitiesService\ClanActivitiesService.csproj", "{A339BF23-782A-4792-9F00-992FB7C6A86F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DestinyNotificationsService", "ServitorServices\DestinyNotificationsService\DestinyNotificationsService.csproj", "{7A3C232B-7770-4BD0-82A9-6C2814556B96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DestinyInfocardsService", "ServitorServices\DestinyInfocardsService\DestinyInfocardsService.csproj", "{7A3C232B-7770-4BD0-82A9-6C2814556B96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DestinyNotificationsDatabase", "DatabaseServices\DestinyNotificationsDatabase\DestinyNotificationsDatabase.csproj", "{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DestinyInfocardsDatabase", "DatabaseServices\DestinyInfocardsDatabase\DestinyInfocardsDatabase.csproj", "{A1997DFA-8245-4338-81DA-2FB4DF8ECFEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
