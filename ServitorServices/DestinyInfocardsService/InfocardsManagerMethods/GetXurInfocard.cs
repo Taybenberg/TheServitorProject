@@ -18,7 +18,7 @@ namespace DestinyInfocardsService
 
             var dataParser = new DataParser(_scopeFactory);
 
-            var xurItems = await dataParser.ParseXurInventoryAsync(resetBegin, resetEnd);
+            var xurItems = await dataParser.ParseXurInventoryAsync();
 
             using var image = await ImageGenerator.GetXurImageAsync(xurItems);
 
@@ -26,13 +26,17 @@ namespace DestinyInfocardsService
 
             var xurLocation = await dataParser.ParseXurLocationAsync();
 
-            /*
-            await infocardsDB.AddXurInventoryAsync(xurItems with
+            if (!xurItems.XurItems.Any())
             {
-                XurLocation = xurLocation,
-                InfocardImageURL = imageLink
-            });
-            */
+                //await infocardsDB.AddXurInventoryAsync(xurItems with
+                //{
+                //    WeeklyResetBegin = resetBegin,
+                //    WeeklyResetEnd = resetEnd,
+                //    SeasonNumber = _seasonNumber,
+                //    XurLocation = xurLocation,
+                //    InfocardImageURL = imageLink
+                //});
+            }
 
             return new XurInfocard
             {

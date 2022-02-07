@@ -21,7 +21,7 @@ namespace DestinyInfocardsService
             return null;
         }
 
-        public async Task<XurInventory> ParseXurInventoryAsync(DateTime weeklyResetBegin, DateTime weeklyResetEnd)
+        public async Task<XurInventory> ParseXurInventoryAsync()
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -33,8 +33,6 @@ namespace DestinyInfocardsService
             {
                 return new XurInventory
                 {
-                    WeeklyResetBegin = weeklyResetBegin,
-                    WeeklyResetEnd = weeklyResetEnd,
                     XurItems = new List<XurItem>()
                 };
             }
@@ -57,8 +55,6 @@ namespace DestinyInfocardsService
 
             return new XurInventory
             {
-                WeeklyResetBegin = weeklyResetBegin,
-                WeeklyResetEnd = weeklyResetEnd,
                 XurItems = new List<XurItem>() //tasks.Select(x => x.Result).ToList()
             };
         }

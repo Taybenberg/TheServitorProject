@@ -8,6 +8,6 @@ namespace DestinyInfocardsService
 
         Task<LostSectorsInfocard> GetLostSectorsInfocardAsync();
 
-        Task<EververseInfocard> GetEververseInfocardAsync();
+        Task<EververseInfocard> GetEververseInfocardAsync(int? week = null);
     }
 }

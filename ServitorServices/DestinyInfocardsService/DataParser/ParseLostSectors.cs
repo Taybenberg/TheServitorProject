@@ -5,7 +5,7 @@ namespace DestinyInfocardsService
 {
     internal partial class DataParser
     {
-        public async Task<LostSectorsDailyReset> ParseLostSectorsAsync(DateTime dailyResetBegin, DateTime dailyResetEnd)
+        public async Task<LostSectorsDailyReset> ParseLostSectorsAsync()
         {
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
 
@@ -31,8 +31,6 @@ namespace DestinyInfocardsService
 
             return new LostSectorsDailyReset
             {
-                DailyResetBegin = dailyResetBegin,
-                DailyResetEnd = dailyResetEnd,
                 LostSectors = sectors.ToList()
             };
         }

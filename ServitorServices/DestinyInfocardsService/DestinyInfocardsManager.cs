@@ -12,10 +12,19 @@ namespace DestinyInfocardsService
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
 
+        private readonly int _seasonNumber;
+        private readonly DateTime _seasonStart;
+
         public DestinyInfocardsManager(ILogger<DestinyInfocardsManager> logger, IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             (_logger, _scopeFactory) = (logger, scopeFactory);
+
+            _seasonNumber = configuration.GetSection("Destiny2:SeasonNumber").Get<int>();
+            _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
         }
+
+        private int GetWeekNumber() =>
+            (int)(DateTime.UtcNow - _seasonStart).TotalDays / 7 + 1;
 
         private (DateTime DailyResetBegin, DateTime DailyResetEnd) GetDailyResetInterval()
         {

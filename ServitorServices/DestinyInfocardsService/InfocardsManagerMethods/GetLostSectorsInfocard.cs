@@ -21,7 +21,7 @@ namespace DestinyInfocardsService
             {
                 var dataParser = new DataParser(_scopeFactory);
 
-                sectors = await dataParser.ParseLostSectorsAsync(resetBegin, resetEnd);
+                sectors = await dataParser.ParseLostSectorsAsync();
 
                 using var image = await ImageGenerator.GetLostSectorsImageAsync(sectors);
 
@@ -29,6 +29,9 @@ namespace DestinyInfocardsService
 
                 await infocardsDB.AddLostSectorAsync(sectors with
                 {
+                    DailyResetBegin = resetBegin,
+                    DailyResetEnd = resetEnd,
+                    SeasonNumber = _seasonNumber,
                     InfocardImageURL = imageLink
                 });
             }

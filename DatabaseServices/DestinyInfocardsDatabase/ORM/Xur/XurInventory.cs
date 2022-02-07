@@ -7,6 +7,8 @@ namespace DestinyInfocardsDatabase.ORM.Xur
         [Key]
         public int WeeklyResetID { get; set; }
 
+        public int SeasonNumber { get; set; }
+
         public DateTime WeeklyResetBegin { get; set; }
 
         public DateTime WeeklyResetEnd { get; set; }

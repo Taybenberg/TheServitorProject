@@ -7,6 +7,8 @@ namespace DestinyInfocardsDatabase.ORM.LostSectors
         [Key]
         public int DailyResetID { get; set; }
 
+        public int SeasonNumber { get; set; }
+
         public DateTime DailyResetBegin { get; set; }
 
         public DateTime DailyResetEnd { get; set; }
