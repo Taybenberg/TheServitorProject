@@ -1,4 +1,5 @@
 ﻿using DestinyInfocardsDatabase.ORM.LostSectors;
+using DestinyInfocardsDatabase.ORM.Xur;
 using Microsoft.EntityFrameworkCore;
 
 namespace DestinyInfocardsDatabase
@@ -7,6 +8,9 @@ namespace DestinyInfocardsDatabase
     {
         public DbSet<LostSectorsDailyReset> LostSectorsDailyResets { get; set; }
         public DbSet<LostSector> LostSectors { get; set; }
+
+        public DbSet<XurInventory> XurInventories { get; set; }
+        public DbSet<XurItem> XurItems { get; set; }
 
         public InfocardsContext(DbContextOptions<InfocardsContext> options) : base(options)
         {

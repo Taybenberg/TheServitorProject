@@ -6,7 +6,11 @@ namespace DestinyInfocardsService
     {
         public async Task<XurInfocard> GetXurInfocardAsync()
         {
-            throw new NotImplementedException();
+            (var resetBegin, var resetEnd) = GetWeeklyResetInterval();
+
+            
+
+            return new XurInfocard();
         }
     }
 }

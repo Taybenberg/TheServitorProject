@@ -1,4 +1,53 @@
-﻿//using CommonData.Localization;
+﻿using CommonData.Localization;
+using DestinyInfocardsDatabase.ORM.Xur;
+using HtmlAgilityPack;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.Processing;
+
+namespace DestinyInfocardsService
+{
+    internal static partial class ImageGenerator
+    {
+        public static async Task<Image> GetXurImageAsync(XurInventory inventory)
+        {
+            //var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
+
+            Image image = Image.Load(Properties.Resources.LostSectorsInfocard);
+
+            /*
+            Font dateFont = new Font(SystemFonts.Find("Arial"), 32, FontStyle.Bold);
+            Font lightFont = new Font(SystemFonts.Find("Arial"), 32);
+            Font sectorFont = new Font(SystemFonts.Find("Arial"), 28);
+
+            int i = 0;
+
+            foreach (var sector in lostSectors.LostSectors)
+            {
+                using Image icon = await ImageLoader.GetImageAsync(sector.ImageURL);
+                icon.Mutate(m => m.Resize(362, 210));
+
+                image.Mutate(m =>
+                {
+                    m.DrawText(sector.LightLevel, lightFont, Color.Black, new Point(291 + i, 18));
+
+                    m.DrawImage(icon, new Point(12 + i, 59), 1);
+
+                    m.DrawText(sector.Name, sectorFont, Color.Black, new Point(18 + i, 308));
+
+                    m.DrawText(Translation.ItemNames[sector.Reward], sectorFont, Color.Black, new Point(18 + i, 380));
+                });
+
+                i += 376;
+            }
+            */
+
+            return image;
+        }
+    }
+}
+//using CommonData.Localization;
 //using DataProcessor.Parsers.Inventory;
 //using HtmlAgilityPack;
 //using SixLabors.Fonts;
@@ -9,53 +58,6 @@
 //using System.Linq;
 //using System.Threading.Tasks;
 //using System.Web;
-
-//namespace DataProcessor.Parsers
-//{
-//    public class XurParser : IInventoryParser<XurInventory>
-//    {
-//        private readonly IApiClient _apiClient;
-
-//        private readonly bool _getLocation;
-
-//        public XurParser(IApiClient apiClient, bool getLocation) =>
-//            (_apiClient, _getLocation) = (apiClient, getLocation);
-
-//        public async Task<XurInventory> GetInventoryAsync()
-//        {
-//            var inventory = new XurInventory();
-
-//            var items = await _apiClient.GetXurItemsAsync();
-
-//            string location = string.Empty;
-
-//            if (_getLocation)
-//            {
-//                var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://xur.wiki/");
-//                location = HttpUtility.HtmlEncode(htmlDoc.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div[1]/div/div/h1")?.InnerText.Trim() ?? string.Empty);
-//            }
-
-//            if (string.IsNullOrWhiteSpace(location))
-//                location = "Невизначено";
-
-//            inventory.Location = location;
-
-//            try
-//            {
-//                foreach (var item in items.Reverse())
-//                {
-//                    inventory.XurItems.Add(new XurItem
-//                    {
-//                        ItemName = item.ItemName,
-//                        ItemClass = Translation.ItemNames[item.ItemTypeAndTier],
-//                        ItemIconURL = item.ItemIconUrl
-//                    });
-//                }
-//            }
-//            catch { }
-
-//            return inventory;
-//        }
 
 //        public async Task<Stream> GetImageAsync()
 //        {

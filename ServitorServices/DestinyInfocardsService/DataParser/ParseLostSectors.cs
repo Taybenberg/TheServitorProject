@@ -3,9 +3,9 @@ using HtmlAgilityPack;
 
 namespace DestinyInfocardsService
 {
-    internal static partial class DataParser
+    internal partial class DataParser
     {
-        public static async Task<LostSectorsDailyReset> ParseLostSectorsAsync(DateTime dailyResetBegin, DateTime dailyResetEnd)
+        public async Task<LostSectorsDailyReset> ParseLostSectorsAsync(DateTime dailyResetBegin, DateTime dailyResetEnd)
         {
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
 

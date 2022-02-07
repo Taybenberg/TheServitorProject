@@ -19,7 +19,9 @@ namespace DestinyInfocardsService
 
             if (imageLink is null)
             {
-                sectors = await DataParser.ParseLostSectorsAsync(resetBegin, resetEnd);
+                var dataParser = new DataParser(_scopeFactory);
+
+                sectors = await dataParser.ParseLostSectorsAsync(resetBegin, resetEnd);
 
                 using var image = await ImageGenerator.GetLostSectorsImageAsync(sectors);
 

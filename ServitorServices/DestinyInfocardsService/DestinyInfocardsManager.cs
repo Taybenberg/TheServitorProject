@@ -17,14 +17,26 @@ namespace DestinyInfocardsService
             (_logger, _scopeFactory) = (logger, scopeFactory);
         }
 
-        private (DateTime DailyRestBegin, DateTime DailyResetEnd) GetDailyResetInterval()
+        private (DateTime DailyResetBegin, DateTime DailyResetEnd) GetDailyResetInterval()
         {
             var currDate = DateTime.UtcNow;
             var resetTime = currDate.Date.AddHours(17);
 
-            return currDate.Hour < 17 ?
+            return currDate < resetTime ?
                 (resetTime.AddDays(-1), resetTime) :
                 (resetTime, resetTime.AddDays(1));
+        }
+
+        private (DateTime WeeklyResetBegin, DateTime WeeklyResetEnd) GetWeeklyResetInterval()
+        {
+            var currDate = DateTime.UtcNow;
+            var resetTime = currDate.Date.AddHours(17);
+
+            var weeklyReset = resetTime.AddDays(2 - (int)currDate.DayOfWeek);
+
+            return currDate < weeklyReset ?
+                (weeklyReset.AddDays(-7), weeklyReset) :
+                (weeklyReset, weeklyReset.AddDays(7));
         }
 
         private async Task<string> UploadImageAsync(Image image)

@@ -7,7 +7,10 @@ namespace ServitorBot.BotCommands
     {
         public static EmbedBuilder ParseInfocard(XurInfocard infocard) =>
             new EmbedBuilder()
-                .WithColor(0xE0F7FA);
+                .WithColor(0xE0F7FA)
+                .WithTitle("Зур")
+                .WithDescription($"**Локація: {infocard.XurLocation ?? "Невизначено"}**")
+                .WithImageUrl(infocard.InfocardImageURL);
 
         public static EmbedBuilder ParseInfocard(LostSectorsInfocard infocard) =>
             new EmbedBuilder()
