@@ -1,6 +1,5 @@
 ﻿using CommonData.Localization;
 using DestinyInfocardsDatabase.ORM.LostSectors;
-using HtmlAgilityPack;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
@@ -12,8 +11,6 @@ namespace DestinyInfocardsService
     {
         public static async Task<Image> GetLostSectorsImageAsync(LostSectorsDailyReset lostSectors)
         {
-            var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
-
             Image image = Image.Load(Properties.Resources.LostSectorsInfocard);
 
             Font dateFont = new Font(SystemFonts.Find("Arial"), 32, FontStyle.Bold);
