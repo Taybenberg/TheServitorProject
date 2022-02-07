@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace DestinyInfocardsService
 {
-    internal static class ImageGenerator
+    internal static partial class ImageGenerator
     {
         public static async Task<Image> GetLostSectorsImageAsync()
         {

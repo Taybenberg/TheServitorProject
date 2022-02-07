@@ -1,6 +1,6 @@
 ﻿namespace DestinyInfocardsDatabase
 {
-    public interface INotificationsDB
+    public interface IInfocardsDB
     {
     }
 }

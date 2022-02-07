@@ -29,8 +29,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IClanActivitiesDB, ClanActivitiesUoW>();
         services.AddScoped<IClanActivities, ClanActivitiesManager>();
 
-        services.AddDbContext<NotificationsContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("InfocardsDatabase")));
-        services.AddScoped<INotificationsDB, NotificationsUoW>();
+        services.AddDbContext<InfocardsContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("InfocardsDatabase")));
+        services.AddScoped<IInfocardsDB, InfocardsUoW>();
         services.AddScoped<IDestinyInfocards, DestinyInfocardsManager>();
 
         services.AddDbContext<BumperContext>(options => options.UseSqlite(hostContext.Configuration.GetConnectionString("BumperDatabase")));

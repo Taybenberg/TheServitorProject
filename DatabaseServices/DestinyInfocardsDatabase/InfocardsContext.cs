@@ -2,9 +2,9 @@
 
 namespace DestinyInfocardsDatabase
 {
-    public class NotificationsContext : DbContext
+    public class InfocardsContext : DbContext
     {
-        public NotificationsContext(DbContextOptions<NotificationsContext> options) : base(options)
+        public InfocardsContext(DbContextOptions<InfocardsContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

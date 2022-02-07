@@ -1,4 +1,6 @@
-﻿using DestinyInfocardsService.Infocards;
+﻿using DestinyInfocardsDatabase;
+using DestinyInfocardsService.Infocards;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DestinyInfocardsService
 {
@@ -7,6 +9,10 @@ namespace DestinyInfocardsService
         public async Task<LostSectorsInfocard> GetLostSectorsInfocardAsync()
         {
             (var resetBegin, var resetEnd) = GetDailyResetInterval();
+
+            using var scope = _scopeFactory.CreateScope();
+
+            var infocardsDB = scope.ServiceProvider.GetRequiredService<IInfocardsDB>();
 
             using var image = await ImageGenerator.GetLostSectorsImageAsync();
 
