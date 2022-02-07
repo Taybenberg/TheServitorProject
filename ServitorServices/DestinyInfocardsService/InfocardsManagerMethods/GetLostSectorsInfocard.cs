@@ -14,7 +14,8 @@ namespace DestinyInfocardsService
 
             (var resetBegin, var resetEnd) = GetDailyResetInterval();
 
-            string imageLink = null;//infocardsDB.Get;
+            var dbSectors = await infocardsDB.GetLostSectorAsync(resetBegin, resetEnd);
+            var imageLink = dbSectors?.InfocardImageURL;
 
             if (imageLink is null)
             {
@@ -24,12 +25,10 @@ namespace DestinyInfocardsService
 
                 imageLink = await UploadImageAsync(image);
 
-                var s = sectors with
+                await infocardsDB.AddLostSectorAsync(sectors with
                 {
                     InfocardImageURL = imageLink
-                };
-
-                //infocardsDB.Set;
+                });
             }
 
             return new LostSectorsInfocard
