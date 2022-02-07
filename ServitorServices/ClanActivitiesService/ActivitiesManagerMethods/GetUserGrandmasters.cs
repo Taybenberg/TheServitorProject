@@ -1,4 +1,14 @@
-﻿//using ClanActivitiesDatabase;
+﻿namespace ClanActivitiesService
+{
+    public partial class ClanActivitiesManager
+    {
+        public async Task GetUserGrandmastersAsync(ulong userID)
+        {
+
+        }
+    }
+}
+//using ClanActivitiesDatabase;
 //using Microsoft.Extensions.Configuration;
 //using System;
 //using System.Collections.Generic;

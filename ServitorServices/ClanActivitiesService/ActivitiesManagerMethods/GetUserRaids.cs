@@ -1,4 +1,14 @@
-﻿//using ClanActivitiesDatabase;
+﻿namespace ClanActivitiesService
+{
+    public partial class ClanActivitiesManager
+    {
+        public async Task GetUserRaidsAsync(ulong userID)
+        {
+
+        }
+    }
+}
+//using ClanActivitiesDatabase;
 //using CommonData.Activities;
 //using CommonData.DiscordEmoji;
 //using CommonData.Localization;
