@@ -13,10 +13,10 @@ namespace DestinyInfocardsService
         {
             Image image = Image.Load(Properties.Resources.XurInfocard);
 
-            Font itemName = new Font(SystemFonts.Find("Arial"), 34);
-            Font itemType = new Font(SystemFonts.Find("Arial"), 23);
+            Font itemName = new Font(SystemFonts.Find("Futura PT Book"), 34);
+            Font itemType = new Font(SystemFonts.Find("Futura PT Book"), 23);
 
-            int Yi = 20, Yt1 = 33, Yt2 = 79;
+            int Yi = 20, Yt1 = 29, Yt2 = 76;
             int interval = 126;
 
             foreach (var item in inventory.XurItems)

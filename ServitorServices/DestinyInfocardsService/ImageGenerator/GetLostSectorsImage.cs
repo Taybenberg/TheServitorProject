@@ -13,9 +13,9 @@ namespace DestinyInfocardsService
         {
             Image image = Image.Load(Properties.Resources.LostSectorsInfocard);
 
-            Font dateFont = new Font(SystemFonts.Find("Arial"), 32, FontStyle.Bold);
-            Font lightFont = new Font(SystemFonts.Find("Arial"), 32);
-            Font sectorFont = new Font(SystemFonts.Find("Arial"), 28);
+            Font dateFont = new Font(SystemFonts.Find("Futura PT Book"), 32, FontStyle.Bold);
+            Font lightFont = new Font(SystemFonts.Find("Futura PT Book"), 32);
+            Font sectorFont = new Font(SystemFonts.Find("Futura PT Book"), 28);
 
             int i = 0;
 
@@ -26,13 +26,13 @@ namespace DestinyInfocardsService
 
                 image.Mutate(m =>
                 {
-                    m.DrawText(sector.LightLevel, lightFont, Color.Black, new Point(291 + i, 18));
+                    m.DrawText(sector.LightLevel, lightFont, Color.Black, new Point(291 + i, 14));
 
                     m.DrawImage(icon, new Point(12 + i, 59), 1);
 
-                    m.DrawText(sector.Name, sectorFont, Color.Black, new Point(18 + i, 308));
+                    m.DrawText(sector.Name, sectorFont, Color.Black, new Point(18 + i, 305));
 
-                    m.DrawText(Translation.ItemNames[sector.Reward], sectorFont, Color.Black, new Point(18 + i, 380));
+                    m.DrawText(Translation.ItemNames[sector.Reward], sectorFont, Color.Black, new Point(18 + i, 377));
                 });
 
                 i += 376;
