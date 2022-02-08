@@ -25,9 +25,9 @@ namespace ServitorBot.BotCommands
                 //new MyGrandmastersCommand(),
                 //new XurInfocardCommand(),
                 new LostSectorsInfocardCommand(),
-                //new EververseCommand(),
-                //new ResourcesCommand(),
-                //new WeeklyCommand()
+                new EververseCommand(),
+                new ResourcesCommand(),
+                //new WeeklyCommand(),
             };
 
         public static EmbedBuilder WaitResponceBuilder =>

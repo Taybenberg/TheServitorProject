@@ -12,7 +12,9 @@ namespace DestinyInfocardsService
 
             var infocardsDB = scope.ServiceProvider.GetRequiredService<IInfocardsDB>();
 
-            (var resetBegin, var resetEnd) = GetWeeklyResetInterval();
+            var weekNumber = GetWeekNumber();
+
+            (var resetBegin, var resetEnd) = GetWeeklyResetInterval(weekNumber);
 
             //var xurItems = await infocardsDB.GetXurInventoryAsync(resetBegin, resetEnd);
 
@@ -40,6 +42,7 @@ namespace DestinyInfocardsService
 
             return new XurInfocard
             {
+                WeekNumber = weekNumber,
                 XurLocation = xurLocation,
                 InfocardImageURL = imageLink
             };

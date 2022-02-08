@@ -34,13 +34,12 @@ namespace ServitorBot.BotCommands.SlashCommands
             using var scope = scopeFactory.CreateScope();
 
             var destinyInfocards = scope.ServiceProvider.GetRequiredService<IDestinyInfocards>();
-            /*
-            var infocard = await destinyInfocards.GetEververseInfocardAsync();
+
+            var infocard = await destinyInfocards.GetResourcesInfocardAsync();
 
             var builder = InfocardHelper.ParseInfocard(infocard);
 
             await command.ModifyOriginalResponseAsync(x => x.Embed = builder.Build());
-            */
         }
     }
 }

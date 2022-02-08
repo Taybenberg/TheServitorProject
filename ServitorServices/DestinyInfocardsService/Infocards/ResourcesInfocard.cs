@@ -1,9 +1,7 @@
 ﻿namespace DestinyInfocardsService.Infocards
 {
-    public record EververseInfocard
-    { 
-        public int WeekNumber { get; internal set; }
-   
+    public record ResourcesInfocard
+    {
         public DateTime ResetBegin { get; internal set; }
 
         public DateTime ResetEnd { get; internal set; }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
+using System.Globalization;
 
 namespace DestinyInfocardsService
 {
@@ -20,11 +21,14 @@ namespace DestinyInfocardsService
             (_logger, _scopeFactory) = (logger, scopeFactory);
 
             _seasonNumber = configuration.GetSection("Destiny2:SeasonNumber").Get<int>();
-            _seasonStart = configuration.GetSection("Destiny2:SeasonStart").Get<DateTime>();
+            _seasonStart = DateTime.Parse(configuration["Destiny2:SeasonStart"], CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
         }
 
         private int GetWeekNumber() =>
             (int)(DateTime.UtcNow - _seasonStart).TotalDays / 7 + 1;
+
+        private (DateTime WeeklyResetBegin, DateTime WeeklyResetEnd) GetWeeklyResetInterval(int weekNumber) =>
+            (_seasonStart.AddDays((weekNumber - 1) * 7), _seasonStart.AddDays(weekNumber * 7));
 
         private (DateTime DailyResetBegin, DateTime DailyResetEnd) GetDailyResetInterval()
         {
@@ -34,18 +38,6 @@ namespace DestinyInfocardsService
             return currDate < resetTime ?
                 (resetTime.AddDays(-1), resetTime) :
                 (resetTime, resetTime.AddDays(1));
-        }
-
-        private (DateTime WeeklyResetBegin, DateTime WeeklyResetEnd) GetWeeklyResetInterval()
-        {
-            var currDate = DateTime.UtcNow;
-            var resetTime = currDate.Date.AddHours(17);
-
-            var weeklyReset = resetTime.AddDays(2 - (int)currDate.DayOfWeek);
-
-            return currDate < weeklyReset ?
-                (weeklyReset.AddDays(-7), weeklyReset) :
-                (weeklyReset, weeklyReset.AddDays(7));
         }
 
         private async Task<string> UploadImageAsync(Image image)

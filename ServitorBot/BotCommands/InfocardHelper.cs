@@ -8,7 +8,7 @@ namespace ServitorBot.BotCommands
         public static EmbedBuilder ParseInfocard(XurInfocard infocard) =>
             new EmbedBuilder()
                 .WithColor(0xE0F7FA)
-                .WithTitle("Зур")
+                .WithTitle($"Зур | Тиждень {infocard.WeekNumber}")
                 .WithDescription($"**Локація: {infocard.XurLocation ?? "Невизначено"}**")
                 .WithImageUrl(infocard.InfocardImageURL);
 
@@ -19,10 +19,25 @@ namespace ServitorBot.BotCommands
                 .WithDescription($"**{infocard.ResetBegin.ToString("dd.MM.yyyy HH:mm")} - {infocard.ResetEnd.ToString("dd.MM.yyyy HH:mm")}**")
                 .WithImageUrl(infocard.InfocardImageURL);
 
+        public static EmbedBuilder ParseInfocard(ResourcesInfocard infocard) =>
+            new EmbedBuilder()
+                .WithColor(0xE0F7FA)
+                .WithTitle($"Ресурси вендорів")
+                .WithDescription($"**{infocard.ResetBegin.ToString("dd.MM.yyyy HH:mm")} - {infocard.ResetEnd.ToString("dd.MM.yyyy HH:mm")}**")
+                .WithImageUrl(infocard.InfocardImageURL);
+
         public static EmbedBuilder ParseInfocard(EververseInfocard infocard) =>
             new EmbedBuilder()
                 .WithColor(0xE0F7FA)
-                .WithTitle("Еверверс")
+                .WithTitle($"Еверверс | Тиждень {infocard.WeekNumber}")
+                .WithDescription($"**{infocard.ResetBegin.ToString("dd.MM.yyyy HH:mm")} - {infocard.ResetEnd.ToString("dd.MM.yyyy HH:mm")}**")
+                .WithImageUrl(infocard.InfocardImageURL);
+
+        public static EmbedBuilder ParseInfocard(WeeklyMilestoneInfocard infocard) =>
+            new EmbedBuilder()
+                .WithColor(0xE0F7FA)
+                .WithTitle($"Тиждень {infocard.WeekNumber}")
+                .WithDescription($"**{infocard.ResetBegin.ToString("dd.MM.yyyy HH:mm")} - {infocard.ResetEnd.ToString("dd.MM.yyyy HH:mm")}**")
                 .WithImageUrl(infocard.InfocardImageURL);
     }
 }

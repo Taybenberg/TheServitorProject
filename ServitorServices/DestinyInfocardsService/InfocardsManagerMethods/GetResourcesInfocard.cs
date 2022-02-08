@@ -6,21 +6,18 @@ namespace DestinyInfocardsService
 {
     public partial class DestinyInfocardsManager
     {
-        public async Task<EververseInfocard> GetEververseInfocardAsync(int? week = null)
+        public async Task<ResourcesInfocard> GetResourcesInfocardAsync()
         {
             using var scope = _scopeFactory.CreateScope();
 
             var infocardsDB = scope.ServiceProvider.GetRequiredService<IInfocardsDB>();
 
-            int weekNumber = week ?? GetWeekNumber();
+            (var resetBegin, var resetEnd) = GetDailyResetInterval();
 
-            (var resetBegin, var resetEnd) = GetWeeklyResetInterval(weekNumber);
-
-            return new EververseInfocard
+            return new ResourcesInfocard
             {
-                WeekNumber = weekNumber,
                 ResetBegin = resetBegin.ToLocalTime(),
-                ResetEnd = resetEnd.ToLocalTime()
+                ResetEnd = resetEnd.ToLocalTime(),
             };
         }
     }
