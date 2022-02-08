@@ -14,10 +14,33 @@ namespace DestinyInfocardsService
 
             (var resetBegin, var resetEnd) = GetDailyResetInterval();
 
+            var resources = await infocardsDB.GetVendorsInventoryAsync(resetBegin, resetEnd);
+            var imageLink = resources?.InfocardImageURL;
+
+            if (imageLink is null)
+            {
+                var dataParser = new DataParser(_scopeFactory);
+
+                resources = await dataParser.ParseResourcesAsync();
+
+                using var image = await ImageGenerator.GetResourcesImageAsync(resources);
+
+                imageLink = await UploadImageAsync(image);
+
+                await infocardsDB.AddVendorsInventoryAsync(resources with
+                {
+                    DailyResetBegin = resetBegin,
+                    DailyResetEnd = resetEnd,
+                    SeasonNumber = _seasonNumber,
+                    InfocardImageURL = imageLink
+                });
+            }
+
             return new ResourcesInfocard
             {
                 ResetBegin = resetBegin.ToLocalTime(),
                 ResetEnd = resetEnd.ToLocalTime(),
+                InfocardImageURL = imageLink
             };
         }
     }
