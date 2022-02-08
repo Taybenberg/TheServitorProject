@@ -103,6 +103,16 @@ namespace DestinyInfocardsService.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] ResourcesInfocard {
+            get {
+                object obj = ResourceManager.GetObject("ResourcesInfocard", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] XurInfocard {
             get {
                 object obj = ResourceManager.GetObject("XurInfocard", resourceCulture);
