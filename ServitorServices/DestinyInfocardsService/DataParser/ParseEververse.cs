@@ -5,7 +5,7 @@ namespace DestinyInfocardsService
 {
     internal partial class DataParser
     {
-        public async Task<EververseInventory> ParseEververseAsync()
+        public async Task<EververseInventory> ParseEververseAsync(int weekNumber)
         {
             var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/eververseCalendar");
 
@@ -32,41 +32,11 @@ namespace DestinyInfocardsService
 
 //namespace DataProcessor.Parsers
 //{
-//    public class EververseParser : IInventoryParser<EververseInventory>
-//    {
-//        private readonly Lazy<Task<HtmlDocument>> htmlDocument;
-
-//        private readonly string _seasonName;
-//        private readonly DateTime _seasonStart;
-//        private readonly int _weekNumber;
-
-//        public EververseParser(string seasonName, DateTime seasonStart, int weekNumber)
-//        {
-//            _seasonName = seasonName;
-
-//            _seasonStart = seasonStart;
-
-//            _weekNumber = weekNumber;
-
-//            htmlDocument = new Lazy<Task<HtmlDocument>>(async () => await new HtmlWeb()
-//           .LoadFromWebAsync("https://www.todayindestiny.com/eververseCalendar"));
-//        }
 
 //        public async Task<EververseInventory> GetInventoryAsync() => await GetInventoryAsync(null);
 
 //        public async Task<EververseInventory> GetInventoryAsync(int? weekNumber)
 //        {
-//            var inventory = new EververseInventory();
-
-//            var htmlDoc = await htmlDocument.Value;
-
-//            int week = weekNumber ?? _weekNumber;
-
-//            inventory.WeekBegin = _seasonStart.AddDays((week - 1) * 7).ToLocalTime();
-//            inventory.WeekEnd = inventory.WeekBegin.AddDays(7);
-
-//            inventory.Week = $"Тиждень {week}. Сезон \"{_seasonName}\"";
-
 //            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"/html/body/main/div[1]/div[{week - 15}]");
 
 //            if (eververseWeekly is not null)

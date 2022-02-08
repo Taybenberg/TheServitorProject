@@ -12,7 +12,12 @@ namespace ServitorBot.BotCommands.SlashCommands
         public SlashCommandBuilder SlashCommand =>
             new SlashCommandBuilder()
                 .WithName(CommandName)
-                .WithDescription("Переглянути асортимент Тесс Еверіс");
+                .WithDescription("Переглянути асортимент Тесс Еверіс")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("тиждень")
+                    .WithDescription("Номер тижня, за який бажаєте переглянути асортимент")
+                    .WithRequired(false)
+                    .WithType(ApplicationCommandOptionType.Integer));
 
         public async Task ExecuteCommandHelpAsync(SocketSlashCommand command)
         {
@@ -33,11 +38,15 @@ namespace ServitorBot.BotCommands.SlashCommands
         {
             await command.RespondAsync(embed: CommandHelper.WaitResponceBuilder.Build());
 
+            var option = command.Data.Options.FirstOrDefault();
+
             using var scope = scopeFactory.CreateScope();
 
             var destinyInfocards = scope.ServiceProvider.GetRequiredService<IDestinyInfocards>();
 
-            var infocard = await destinyInfocards.GetEververseInfocardAsync();
+            var infocard = option is null ?
+                await destinyInfocards.GetEververseInfocardAsync() :
+                await destinyInfocards.GetEververseInfocardAsync((int)(long)option.Value);
 
             var builder = InfocardHelper.ParseInfocard(infocard);
 
