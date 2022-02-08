@@ -1,4 +1,5 @@
-﻿using DestinyInfocardsDatabase.ORM.LostSectors;
+﻿using DestinyInfocardsDatabase.ORM.Eververse;
+using DestinyInfocardsDatabase.ORM.LostSectors;
 using DestinyInfocardsDatabase.ORM.Resources;
 using DestinyInfocardsDatabase.ORM.Xur;
 using Microsoft.EntityFrameworkCore;
@@ -61,5 +62,22 @@ namespace DestinyInfocardsDatabase
             await _context.VendorsDailyResets
                 .Include(x => x.ResourceItems)
                 .FirstOrDefaultAsync(x => x.DailyResetBegin == dailyResetBegin && x.DailyResetEnd == dailyResetEnd);
+
+        public async Task AddEververseInventoryAsync(EververseInventory inventory)
+        {
+            await _context.EververseInventories.AddAsync(inventory);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateEververseInventoryAsync(EververseInventory inventory)
+        {
+            _context.EververseInventories.Update(inventory);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<EververseInventory?> GetEververseInventoryAsync(DateTime weeklyResetBegin, DateTime weeklyResetEnd) =>
+             await _context.EververseInventories
+                .Include(x => x.EververseItems)
+                .FirstOrDefaultAsync(x => x.WeeklyResetBegin == weeklyResetBegin && x.WeeklyResetEnd == weeklyResetEnd);
     }
 }

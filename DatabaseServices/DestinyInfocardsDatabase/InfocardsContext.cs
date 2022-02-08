@@ -1,4 +1,5 @@
-﻿using DestinyInfocardsDatabase.ORM.LostSectors;
+﻿using DestinyInfocardsDatabase.ORM.Eververse;
+using DestinyInfocardsDatabase.ORM.LostSectors;
 using DestinyInfocardsDatabase.ORM.Resources;
 using DestinyInfocardsDatabase.ORM.Xur;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,9 @@ namespace DestinyInfocardsDatabase
 
         public DbSet<VendorsDailyReset> VendorsDailyResets { get; set; }
         public DbSet<ResourceItem> ResourceItems { get; set; }
+
+        public DbSet<EververseInventory> EververseInventories { get; set; }
+        public DbSet<EververseItem> EververseItems { get; set; }
 
         public InfocardsContext(DbContextOptions<InfocardsContext> options) : base(options)
         {

@@ -1,5 +1,5 @@
 ﻿using CommonData.Localization;
-using DestinyInfocardsDatabase.ORM.LostSectors;
+using DestinyInfocardsDatabase.ORM.Eververse;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
@@ -9,34 +9,15 @@ namespace DestinyInfocardsService
 {
     internal static partial class ImageGenerator
     {
-        public static async Task<Image> GetEververseImageAsync(LostSectorsDailyReset lostSectors)
+        public static async Task<Image> GetEververseImageAsync(EververseInventory inventory)
         {
-            Image image = Image.Load(Properties.Resources.LostSectorsInfocard);
+            var count = inventory.EververseItems.Where(x => x.ItemCategory == ItemCategory.ClassBased).Count();
 
-            Font dateFont = new Font(SystemFonts.Find("Futura PT Book"), 32, FontStyle.Bold);
-            Font lightFont = new Font(SystemFonts.Find("Futura PT Book"), 32);
-            Font sectorFont = new Font(SystemFonts.Find("Futura PT Book"), 28);
-
-            int i = 0;
-
-            foreach (var sector in lostSectors.LostSectors)
-            {
-                using Image icon = await ImageLoader.GetImageAsync(sector.ImageURL);
-                icon.Mutate(m => m.Resize(362, 210));
-
-                image.Mutate(m =>
-                {
-                    m.DrawText(sector.LightLevel, lightFont, Color.Black, new Point(291 + i, 14));
-
-                    m.DrawImage(icon, new Point(12 + i, 59), 1);
-
-                    m.DrawText(sector.Name, sectorFont, Color.Black, new Point(18 + i, 305));
-
-                    m.DrawText(Translation.ItemNames[sector.Reward], sectorFont, Color.Black, new Point(18 + i, 377));
-                });
-
-                i += 376;
-            }
+            Image image = count == 0 ?
+                Image.Load(Properties.Resources.EververseInfocardSmall) :
+                (count > 7 ?
+                    Image.Load(Properties.Resources.EververseInfocardHuge) :
+                    Image.Load(Properties.Resources.EververseInfocardRegular));
 
             return image;
         }
