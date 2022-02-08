@@ -11,27 +11,32 @@ namespace DestinyInfocardsService
 
             var sectorNodes = new string[] { "//*[contains(@id,'bl_lost_sector_legend')]", "//*[contains(@id,'bl_lost_sector_master')]" };
 
-            var sectors = sectorNodes.Select(x =>
+            List<LostSector> lostSectors = new();
+
+            foreach (var sectorNode in sectorNodes)
             {
-                var node = htmlDoc.DocumentNode.SelectSingleNode(x);
+                var node = htmlDoc.DocumentNode.SelectSingleNode(sectorNode);
 
-                var lightLevel = node.SelectSingleNode(".//*[@class='powerLevelText']").InnerText;
-                var sectorImageURL = node.SelectSingleNode(".//*[@class='d-block eventCardHeaderImage']").Attributes["src"].Value;
-                var sectorName = node.SelectSingleNode(".//*[@class='eventCardHeaderName']").InnerText;
-                var sectorReward = node.SelectSingleNode(".//*[@class='eventCardDatabaseItemName'][contains(text(),'IF SOLO')]").InnerText[10..^7];
-
-                return new LostSector
+                if (node is not null)
                 {
-                    Name = sectorName,
-                    Reward = sectorReward,
-                    LightLevel = lightLevel,
-                    ImageURL = sectorImageURL
-                };
-            });
+                    var lightLevel = node.SelectSingleNode(".//*[@class='powerLevelText']").InnerText;
+                    var sectorImageURL = node.SelectSingleNode(".//*[@class='d-block eventCardHeaderImage']").Attributes["src"].Value;
+                    var sectorName = node.SelectSingleNode(".//*[@class='eventCardHeaderName']").InnerText;
+                    var sectorReward = node.SelectSingleNode(".//*[@class='eventCardDatabaseItemName'][contains(text(),'IF SOLO')]").InnerText[10..^7];
+
+                    lostSectors.Add(new LostSector
+                    {
+                        Name = sectorName,
+                        Reward = sectorReward,
+                        LightLevel = lightLevel,
+                        ImageURL = sectorImageURL
+                    });
+                }
+            }
 
             return new LostSectorsDailyReset
             {
-                LostSectors = sectors.ToList()
+                LostSectors = lostSectors
             };
         }
     }

@@ -27,13 +27,16 @@ namespace DestinyInfocardsService
 
                 imageLink = await UploadImageAsync(image);
 
-                await infocardsDB.AddLostSectorAsync(sectors with
+                if (sectors.LostSectors.Any())
                 {
-                    DailyResetBegin = resetBegin,
-                    DailyResetEnd = resetEnd,
-                    SeasonNumber = _seasonNumber,
-                    InfocardImageURL = imageLink
-                });
+                    await infocardsDB.AddLostSectorAsync(sectors with
+                    {
+                        DailyResetBegin = resetBegin,
+                        DailyResetEnd = resetEnd,
+                        SeasonNumber = _seasonNumber,
+                        InfocardImageURL = imageLink
+                    });
+                }
             }
 
             return new LostSectorsInfocard

@@ -18,28 +18,31 @@ namespace DestinyInfocardsService
             {
                 var vendor = htmlDoc.GetElementbyId(vendorIDs[i]);
 
-                var materialsExchange = vendor.SelectSingleNode(".//div[@identifier='category_materials_exchange']");
-
-                for (int j = vendorsIntervals[0][i]; j <= vendorsIntervals[1][i]; j++)
+                if (vendor is not null)
                 {
-                    var vendorContainer = materialsExchange.SelectSingleNode($".//div[@class='vendorInventoryItemContainer'][{j}]");
+                    var materialsExchange = vendor.SelectSingleNode(".//div[@identifier='category_materials_exchange']");
 
-                    var resourceName = vendorContainer.SelectSingleNode($".//*[@class='itemTooltip_itemName']").InnerText.Replace("Purchase ", string.Empty);
-
-                    var resourceIconURL = vendorContainer.SelectSingleNode($".//*[@class='manifestItemIcon']").Attributes["src"].Value;
-
-                    var sesourceCurrencyQuantity = vendorContainer.SelectSingleNode($".//*[@class='tooltipCostQuantity']").InnerText;
-
-                    var resourceCurrencyIconURL = vendorContainer.SelectSingleNode($".//*[@class='tooltipCostImage']").Attributes["src"].Value;
-
-                    resourceItems.Add(new ResourceItem
+                    for (int j = vendorsIntervals[0][i]; j <= vendorsIntervals[1][i]; j++)
                     {
-                        DestinyVendor = (DestinyVendor)i,
-                        ResourceName = resourceName,
-                        ResourceIconURL = resourceIconURL,
-                        ResourceCurrencyQuantity = sesourceCurrencyQuantity,
-                        ResourceCurrencyIconURL = resourceCurrencyIconURL
-                    });
+                        var vendorContainer = materialsExchange.SelectSingleNode($".//div[@class='vendorInventoryItemContainer'][{j}]");
+
+                        var resourceName = vendorContainer.SelectSingleNode($".//*[@class='itemTooltip_itemName']").InnerText.Replace("Purchase ", string.Empty);
+
+                        var resourceIconURL = vendorContainer.SelectSingleNode($".//*[@class='manifestItemIcon']").Attributes["src"].Value;
+
+                        var sesourceCurrencyQuantity = vendorContainer.SelectSingleNode($".//*[@class='tooltipCostQuantity']").InnerText;
+
+                        var resourceCurrencyIconURL = vendorContainer.SelectSingleNode($".//*[@class='tooltipCostImage']").Attributes["src"].Value;
+
+                        resourceItems.Add(new ResourceItem
+                        {
+                            DestinyVendor = (DestinyVendor)i,
+                            ResourceName = resourceName,
+                            ResourceIconURL = resourceIconURL,
+                            ResourceCurrencyQuantity = sesourceCurrencyQuantity,
+                            ResourceCurrencyIconURL = resourceCurrencyIconURL
+                        });
+                    }
                 }
             }
 

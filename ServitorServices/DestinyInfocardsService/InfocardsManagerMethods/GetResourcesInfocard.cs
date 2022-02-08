@@ -27,13 +27,16 @@ namespace DestinyInfocardsService
 
                 imageLink = await UploadImageAsync(image);
 
-                await infocardsDB.AddVendorsInventoryAsync(resources with
+                if (resources.ResourceItems.Any())
                 {
-                    DailyResetBegin = resetBegin,
-                    DailyResetEnd = resetEnd,
-                    SeasonNumber = _seasonNumber,
-                    InfocardImageURL = imageLink
-                });
+                    await infocardsDB.AddVendorsInventoryAsync(resources with
+                    {
+                        DailyResetBegin = resetBegin,
+                        DailyResetEnd = resetEnd,
+                        SeasonNumber = _seasonNumber,
+                        InfocardImageURL = imageLink
+                    });
+                }
             }
 
             return new ResourcesInfocard
