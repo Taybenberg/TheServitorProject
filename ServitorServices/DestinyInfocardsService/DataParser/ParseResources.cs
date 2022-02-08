@@ -1,4 +1,71 @@
-﻿//using DataProcessor.Parsers.Inventory;
+﻿using DestinyInfocardsDatabase.ORM.LostSectors;
+using HtmlAgilityPack;
+
+namespace DestinyInfocardsService
+{
+    internal partial class DataParser
+    {
+        /*
+         * namespace DataProcessor.Parsers.Inventory
+{
+    public record ResourcesInventory
+    {
+        public DateTime ResetBegin { get; set; }
+
+        public DateTime ResetEnd { get; set; }
+
+        public List<ResourceItem> SpiderResources { get; set; } = new();
+
+        public List<ResourceItem> Banshee44Resources { get; set; } = new();
+
+        public List<ResourceItem> Ada1Resources { get; set; } = new();
+    }
+
+    public record ResourceItem
+    {
+        public string ResourceName { get; set; }
+
+        public string ResourceIconURL { get; set; }
+
+        public string ResourceCurrencyQuantity { get; set; }
+
+        public string ResourceCurrencyIconURL { get; set; }
+    }
+}
+*/
+
+        public async Task<LostSectorsDailyReset> ParseResourcesAsync()
+        {
+            var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
+
+            var sectorNodes = new string[] { "//*[contains(@id,'bl_lost_sector_legend')]", "//*[contains(@id,'bl_lost_sector_master')]" };
+
+            var sectors = sectorNodes.Select(x =>
+            {
+                var node = htmlDoc.DocumentNode.SelectSingleNode(x);
+
+                var lightLevel = node.SelectSingleNode("./div[14]/div[1]").InnerText;
+                var sectorImageURL = node.SelectSingleNode("./div[12]/div[1]/div/div/img").Attributes["src"].Value;
+                var sectorName = node.SelectSingleNode("./div[12]/div[3]/p[2]").InnerText;
+                var sectorReward = node.SelectSingleNode("./div[13]/div[4]/div[1]/p[1]").InnerText[10..^7];
+
+                return new LostSector
+                {
+                    Name = sectorName,
+                    Reward = sectorReward,
+                    LightLevel = lightLevel,
+                    ImageURL = sectorImageURL
+                };
+            });
+
+            return new LostSectorsDailyReset
+            {
+                LostSectors = sectors.ToList()
+            };
+        }
+    }
+}
+//using DataProcessor.Parsers.Inventory;
 //using HtmlAgilityPack;
 //using SixLabors.Fonts;
 //using SixLabors.ImageSharp;
@@ -90,75 +157,3 @@
 
 //            return inventory;
 //        }
-
-//        public async Task<Stream> GetImageAsync()
-//        {
-//            var inventory = await GetInventoryAsync();
-
-//            var loader = new ImageLoader();
-
-//            using Image image = Image.Load(ExtensionsRes.ResourcesBackground);
-
-//            Font dateFont = new Font(SystemFonts.Find("Arial"), 24, FontStyle.Bold);
-
-//            image.Mutate(m => m
-//                .DrawText($"{inventory.ResetBegin.ToString("dd.MM HH:mm")} – {inventory.ResetEnd.ToString("dd.MM HH:mm")}",
-//                dateFont, Color.White, new Point(21, 81)));
-
-//            Font font = new Font(SystemFonts.Find("Arial"), 23, FontStyle.Regular);
-
-//            int x = 22, y = 225;
-
-//            foreach (var item in inventory.SpiderResources)
-//            {
-//                await DrawItemAsync(item, loader, image, font, x, y);
-
-//                y += 135;
-//            }
-
-//            y = 263;
-
-//            foreach (var itemList in new List<List<ResourceItem>> { inventory.Ada1Resources, inventory.Banshee44Resources })
-//            {
-//                x = 459;
-
-//                foreach (var item in itemList)
-//                {
-//                    await DrawItemAsync(item, loader, image, font, x, y);
-
-//                    x += 433;
-//                }
-
-//                y += 281;
-//            }
-
-//            var ms = new MemoryStream();
-
-//            await image.SaveAsPngAsync(ms);
-
-//            ms.Position = 0;
-
-//            return ms;
-//        }
-
-//        internal static async Task DrawItemAsync(ResourceItem item, ImageLoader loader, Image image, Font font, int x, int y)
-//        {
-//            using Image currencyIcon = await loader.GetImageAsync(item.ResourceCurrencyIconURL);
-
-//            currencyIcon.Mutate(m => m.Resize(40, 40));
-
-//            using Image resIcon = await loader.GetImageAsync(item.ResourceIconURL);
-
-//            image.Mutate(m =>
-//            {
-//                m.DrawImage(resIcon, new Point(x, y), 1);
-
-//                m.DrawText(item.ResourceName, font, Color.Black, new Point(107 + x, 7 + y));
-
-//                m.DrawImage(currencyIcon, new Point(107 + x, 50 + y), 1);
-
-//                m.DrawText(item.ResourceCurrencyQuantity, font, Color.Black, new Point(156 + x, 58 + y));
-//            });
-//        }
-//    }
-//}
