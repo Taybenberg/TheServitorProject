@@ -1,4 +1,5 @@
 ﻿using DestinyInfocardsDatabase.ORM.LostSectors;
+using DestinyInfocardsDatabase.ORM.Resources;
 using DestinyInfocardsDatabase.ORM.Xur;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,5 +44,22 @@ namespace DestinyInfocardsDatabase
             await _context.XurInventories
                 .Include(x => x.XurItems)
                 .FirstOrDefaultAsync(x => x.WeeklyResetBegin == weeklyResetBegin && x.WeeklyResetEnd == weeklyResetEnd);
+
+        public async Task AddVendorsInventoryAsync(VendorsDailyReset dailyReset)
+        {
+            await _context.VendorsDailyResets.AddAsync(dailyReset);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateVendorsInventoryAsync(VendorsDailyReset dailyReset)
+        {
+            _context.VendorsDailyResets.Update(dailyReset);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<VendorsDailyReset?> GetVendorsInventoryAsync(DateTime dailyResetBegin, DateTime dailyResetEnd) =>
+            await _context.VendorsDailyResets
+                .Include(x => x.ResourceItems)
+                .FirstOrDefaultAsync(x => x.DailyResetBegin == dailyResetBegin && x.DailyResetEnd == dailyResetEnd);
     }
 }

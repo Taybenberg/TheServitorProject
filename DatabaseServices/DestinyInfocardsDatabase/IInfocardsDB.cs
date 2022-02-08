@@ -1,4 +1,5 @@
 ﻿using DestinyInfocardsDatabase.ORM.LostSectors;
+using DestinyInfocardsDatabase.ORM.Resources;
 using DestinyInfocardsDatabase.ORM.Xur;
 
 namespace DestinyInfocardsDatabase
@@ -12,5 +13,9 @@ namespace DestinyInfocardsDatabase
         Task AddXurInventoryAsync(XurInventory inventory);
         Task UpdateXurInventoryAsync(XurInventory inventory);
         Task<XurInventory?> GetXurInventoryAsync(DateTime weeklyResetBegin, DateTime weeklyResetEnd);
+
+        Task AddVendorsInventoryAsync(VendorsDailyReset dailyReset);
+        Task UpdateVendorsInventoryAsync(VendorsDailyReset dailyReset);
+        Task<VendorsDailyReset?> GetVendorsInventoryAsync(DateTime dailyResetBegin, DateTime dailyResetEnd);
     }
 }
