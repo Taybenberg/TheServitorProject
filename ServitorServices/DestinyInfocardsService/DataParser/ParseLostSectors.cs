@@ -15,10 +15,10 @@ namespace DestinyInfocardsService
             {
                 var node = htmlDoc.DocumentNode.SelectSingleNode(x);
 
-                var lightLevel = node.SelectSingleNode("./div[14]/div[1]").InnerText;
-                var sectorImageURL = node.SelectSingleNode("./div[12]/div[1]/div/div/img").Attributes["src"].Value;
-                var sectorName = node.SelectSingleNode("./div[12]/div[3]/p[2]").InnerText;
-                var sectorReward = node.SelectSingleNode("./div[13]/div[4]/div[1]/p[1]").InnerText[10..^7];
+                var lightLevel = node.SelectSingleNode(".//*[@class='powerLevelText']").InnerText;
+                var sectorImageURL = node.SelectSingleNode(".//*[@class='d-block eventCardHeaderImage']").Attributes["src"].Value;
+                var sectorName = node.SelectSingleNode(".//*[@class='eventCardHeaderName']").InnerText;
+                var sectorReward = node.SelectSingleNode(".//*[@class='eventCardDatabaseItemName'][contains(text(),'IF SOLO')]").InnerText[10..^7];
 
                 return new LostSector
                 {
