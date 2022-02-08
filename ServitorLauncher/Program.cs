@@ -57,7 +57,16 @@ host.Services.UseScheduler(scheduler =>
         var clanActivities = scope.ServiceProvider.GetRequiredService<IClanActivities>();
 
         await clanActivities.SyncDatabaseAsync();
-    }).DailyAtHour(5);
+    }).DailyAtHour(3);
+
+    scheduler.ScheduleAsync(async () =>
+    {
+        using var scope = host.Services.CreateScope();
+
+        var servitorBot = scope.ServiceProvider.GetRequiredService<ServitorDiscordBot>();
+
+        await servitorBot.SendNotificationAsync();
+    }).DailyAtHour(17);
 });
 
 await host.RunAsync();
