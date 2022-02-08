@@ -1,51 +1,29 @@
-﻿using DestinyInfocardsDatabase.ORM.LostSectors;
-using HtmlAgilityPack;
+﻿using BungieSharper.Client;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DestinyInfocardsService
 {
     internal partial class DataParser
     {
-        /*
-         * namespace DataProcessor.Parsers.Inventory
-{
-    public record RoadmapInventory
-    {
-        public byte[] RoadmapImage { get; set; }
-    }
-}
-*/
-
-        public async Task<LostSectorsDailyReset> ParseWeeklyMilestoneAsync()
+        public async Task ParseWeeklyMilestoneAsync()
         {
-            var htmlDoc = await new HtmlWeb().LoadFromWebAsync("https://www.todayindestiny.com/");
+            using var scope = _scopeFactory.CreateScope();
 
-            var sectorNodes = new string[] { "//*[contains(@id,'bl_lost_sector_legend')]", "//*[contains(@id,'bl_lost_sector_master')]" };
+            var apiClient = scope.ServiceProvider.GetRequiredService<BungieApiClient>();
 
-            var sectors = sectorNodes.Select(x =>
-            {
-                var node = htmlDoc.DocumentNode.SelectSingleNode(x);
-
-                var lightLevel = node.SelectSingleNode("./div[14]/div[1]").InnerText;
-                var sectorImageURL = node.SelectSingleNode("./div[12]/div[1]/div/div/img").Attributes["src"].Value;
-                var sectorName = node.SelectSingleNode("./div[12]/div[3]/p[2]").InnerText;
-                var sectorReward = node.SelectSingleNode("./div[13]/div[4]/div[1]/p[1]").InnerText[10..^7];
-
-                return new LostSector
-                {
-                    Name = sectorName,
-                    Reward = sectorReward,
-                    LightLevel = lightLevel,
-                    ImageURL = sectorImageURL
-                };
-            });
-
-            return new LostSectorsDailyReset
-            {
-                LostSectors = sectors.ToList()
-            };
+            var milestones = await apiClient.Api.Destiny2_GetPublicMilestones();
         }
     }
 }
+/*
+* namespace DataProcessor.Parsers.Inventory
+{
+public record RoadmapInventory
+{
+public byte[] RoadmapImage { get; set; }
+}
+}
+*/
 //using BungieNetApi;
 //using BungieNetApi.Enums;
 //using CommonData.Localization;
