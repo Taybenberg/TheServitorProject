@@ -21,8 +21,8 @@ namespace DestinyInfocardsService
                     Image.Load(Properties.Resources.EververseInfocardRegular));
 
             await DrawItemsAsync(image, silverItems, 69);
-            await DrawItemsAsync(image, dustItems, 242);
-            await DrawItemsAsync(image, classBasedItems, 521);
+            await DrawItemsAsync(image, dustItems, 246);
+            await DrawItemsAsync(image, classBasedItems, 529);
 
             return image;
         }
@@ -35,7 +35,7 @@ namespace DestinyInfocardsService
             {
                 await DrawItemAsync(image, item, x, y);
 
-                if (++counter > 7)
+                if (++counter > 6)
                 {
                     counter = 0;
 
@@ -51,6 +51,9 @@ namespace DestinyInfocardsService
         private static async Task DrawItemAsync(Image image, EververseItem item, int x, int y)
         {
             using var itemIcon = await ImageLoader.GetImageAsync(item.ItemIconURL);
+
+            if (itemIcon.Width > 96)
+                itemIcon.Mutate(m => m.Resize(96, 96));
 
             image.Mutate(m => m.DrawImage(itemIcon, new Point(x, y), 1));
 
