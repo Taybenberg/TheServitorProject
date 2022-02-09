@@ -16,14 +16,41 @@ namespace ServitorBot
 
             var destinyInfocards = scope.ServiceProvider.GetRequiredService<IDestinyInfocards>();
 
-            var sectors = await destinyInfocards.GetLostSectorsInfocardAsync();
-            var infocard = InfocardHelper.ParseInfocard(sectors).Build();
+            List<Task<Embed>> tasks = new();
 
-            foreach (var channeldID in _mainChannelIDs)
+            var currDate = DateTime.UtcNow;
+
+            if (currDate.DayOfWeek == DayOfWeek.Tuesday)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    var infocard = await destinyInfocards.GetEververseInfocardAsync();
+
+                    return InfocardHelper.ParseInfocard(infocard).Build();
+                }));
+            }
+
+            tasks.Add(Task.Run(async () =>
+            {
+                var infocard = await destinyInfocards.GetLostSectorsInfocardAsync();
+
+                return InfocardHelper.ParseInfocard(infocard).Build();
+            }));
+
+            tasks.Add(Task.Run(async () =>
+            {
+                var infocard = await destinyInfocards.GetResourcesInfocardAsync();
+
+                return InfocardHelper.ParseInfocard(infocard).Build();
+            }));
+
+            var embeds = await Task.WhenAll(tasks);
+
+            foreach (var channeldID in _mainChannelIDs.Take(1))
             {
                 var channel = _client.GetChannel(channeldID) as IMessageChannel;
 
-                await channel.SendMessageAsync(embed: infocard);
+                await channel.SendMessageAsync(embeds: embeds);
             }
         }
     }
