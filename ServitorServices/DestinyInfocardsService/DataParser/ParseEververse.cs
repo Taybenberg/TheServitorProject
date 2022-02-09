@@ -11,13 +11,13 @@ namespace DestinyInfocardsService
 
             List<EververseItem> eververseItems = new();
 
-            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"//*[contains(@id,'week{weekNumber}_content')]");
+            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"//*[contains(@id,'week{weekNumber - 15}_content')]");
 
             if (eververseWeekly is not null)
             {
                 for (int i = 1; i <= 5; i++)
                 {
-                    var container = eververseWeekly.SelectSingleNode($"//div[@class='eververseSeasonContainer'][{i}]//div[@class='eververseWeeklySeasonContentContainer']");
+                    var container = eververseWeekly.SelectSingleNode($".//div[@class='eververseSeasonContainer'][{i}]//div[@class='eververseWeeklySeasonContentContainer']");
 
                     if (container is null)
                         break;

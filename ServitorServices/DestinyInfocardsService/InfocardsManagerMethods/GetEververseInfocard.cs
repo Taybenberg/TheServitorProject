@@ -31,7 +31,6 @@ namespace DestinyInfocardsService
 
                 if (eververseItems.EververseItems.Any())
                 {
-                    /*
                     await infocardsDB.AddEververseInventoryAsync(eververseItems with
                     {
                         WeeklyResetBegin = resetBegin,
@@ -39,7 +38,6 @@ namespace DestinyInfocardsService
                         SeasonNumber = _seasonNumber,
                         InfocardImageURL = imageLink
                     });
-                    */
                 }
             }
 
