@@ -46,7 +46,7 @@ namespace ServitorBot
 
             var embeds = await Task.WhenAll(tasks);
 
-            foreach (var channeldID in _mainChannelIDs.Take(1))
+            foreach (var channeldID in _mainChannelIDs)
             {
                 var channel = _client.GetChannel(channeldID) as IMessageChannel;
 
