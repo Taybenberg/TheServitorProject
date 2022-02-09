@@ -11,8 +11,8 @@
     <PackageReference Include="BungieSharper" Version="0.8.6" />
     <PackageReference Include="Coravel" Version="4.1.0" />
     <PackageReference Include="Imgur.API" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
