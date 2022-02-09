@@ -6,9 +6,9 @@ namespace ServitorBot
     {
         private async Task RegisterSlashCommandsAsync()
         {
-            await _client.GetGuild(799280582512476210)
-                .BulkOverwriteApplicationCommandAsync(CommandHelper.SlashCommands
-                .Select(x => x.SlashCommand.Build()).ToArray());
+            await _client
+                .BulkOverwriteGlobalApplicationCommandsAsync(CommandHelper
+                .SlashCommands.Select(x => x.SlashCommand.Build()).ToArray());
         }
     }
 }
