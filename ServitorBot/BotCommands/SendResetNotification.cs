@@ -8,7 +8,7 @@ namespace ServitorBot
 {
     public partial class ServitorDiscordBot
     {
-        public async Task SendNotificationAsync()
+        public async Task SendResetNotificationAsync()
         {
             _logger.LogInformation($"{DateTime.Now} Servitor reset notification");
 

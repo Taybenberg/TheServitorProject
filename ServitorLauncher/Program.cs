@@ -65,7 +65,7 @@ host.Services.UseScheduler(scheduler =>
 
         var servitorBot = scope.ServiceProvider.GetRequiredService<ServitorDiscordBot>();
 
-        await servitorBot.SendNotificationAsync();
+        await servitorBot.SendResetNotificationAsync();
     }).DailyAt(17, 01);
 });
 
