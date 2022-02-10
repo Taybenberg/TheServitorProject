@@ -20,7 +20,7 @@ namespace ServitorBot
                     {
                         Name = "Кулдаун мають",
                         Value = string.Join('\n', container.UserCooldowns.OrderBy(x => x.Value)
-                        .Select(user => $"<@{user.Key}> – *{user.Value.ToString("HH:mm")}*"))
+                        .Select(user => $"<@{user.Key}> – {user.Value.ToString("HH:mm")}"))
                     }
                 };
 
