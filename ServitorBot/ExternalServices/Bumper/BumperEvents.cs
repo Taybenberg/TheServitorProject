@@ -13,7 +13,7 @@ namespace ServitorBot
                 .WithColor(0xFF6E00)
                 .WithDescription("Саме час **!bump**-нути :fire:");
 
-            if (container.UserCooldowns.Count == 0)
+            if (container.UserCooldowns.Any())
                 builder.Fields = new List<EmbedFieldBuilder>
                 {
                     new EmbedFieldBuilder
