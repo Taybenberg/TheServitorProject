@@ -11,7 +11,7 @@ namespace DestinyInfocardsService
 
             List<EververseItem> eververseItems = new();
 
-            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"//*[contains(@id,'week{weekNumber - 15}_content')]");
+            var eververseWeekly = htmlDoc.DocumentNode.SelectSingleNode($"//*[contains(@id,'week{weekNumber}_content')]");
 
             if (eververseWeekly is not null)
             {
