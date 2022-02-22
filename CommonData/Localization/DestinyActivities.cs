@@ -52,7 +52,8 @@ namespace CommonData.Localization
                 Dungeon or
                 Sundial or
                 TrialsOfOsiris or
-                Dares
+                Dares or
+                Offensive
                 ).ToDictionary(x => x.Key, x => x.Value);
             }
         }
@@ -136,7 +137,8 @@ namespace CommonData.Localization
             [Dungeon] = new[] { "Підземелля", "Dungeon" },
             [Sundial] = new[] { "Сонячний годинник", "Sundial" },
             [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" },
-            [Dares] = new[] { "Виклик вічності", "Dares Of Eternity" }
+            [Dares] = new[] { "Виклик вічності", "Dares Of Eternity" },
+            [Offensive] = new[] { "Наступ" }
         };
     }
 }

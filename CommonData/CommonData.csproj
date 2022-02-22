@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BungieSharper.Entities" Version="0.8.6" />
+    <PackageReference Include="BungieSharper.Entities" Version="0.9.0" />
   </ItemGroup>
 
 </Project>
