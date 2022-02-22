@@ -46,7 +46,8 @@ namespace CommonData.Activities
                 VexOffensive or
                 Momentum or
                 Sundial or
-                Dares => 6,
+                Dares or 
+                Offensive => 6,
 
                 TrialsOfTheNine or
                 Lockdown or
