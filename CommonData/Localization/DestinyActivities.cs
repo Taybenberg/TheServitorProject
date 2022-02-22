@@ -138,7 +138,7 @@ namespace CommonData.Localization
             [Sundial] = new[] { "Сонячний годинник", "Sundial" },
             [TrialsOfOsiris] = new[] { "Випробування Осіріса", "Trials Of Osiris" },
             [Dares] = new[] { "Виклик вічності", "Dares Of Eternity" },
-            [Offensive] = new[] { "Наступ" }
+            [Offensive] = new[] { "Наступ", "Offensive" }
         };
     }
 }
